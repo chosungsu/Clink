@@ -50,58 +50,58 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: BGColor(),
-        floatingActionButton: Speeddialmemo(
-            context,
-            usercode,
-            _controller,
-            searchNode,
-            scrollController,
-            isDialOpen,
-            uiset.pagelist.isEmpty ? '빈 스페이스' : uiset.pagelist[0].title),
-        body: SafeArea(
-          child: GetBuilder<navibool>(
-            builder: (_) => draw.navi == 0
-                ? (draw.drawopen == true
-                    ? Stack(
-                        children: [
-                          SizedBox(
-                            width: 80,
-                            child: DrawerScreen(
-                              index: Hive.box('user_setting').get('page_index'),
+    return GetBuilder<navibool>(
+        builder: (_) => Scaffold(
+            backgroundColor: draw.backgroundcolor,
+            floatingActionButton: Speeddialmemo(
+                context,
+                usercode,
+                _controller,
+                searchNode,
+                scrollController,
+                isDialOpen,
+                uiset.pagelist.isEmpty ? '빈 스페이스' : uiset.pagelist[0].title),
+            body: SafeArea(
+              child: draw.navi == 0
+                  ? (draw.drawopen == true
+                      ? Stack(
+                          children: [
+                            SizedBox(
+                              width: 80,
+                              child: DrawerScreen(
+                                index:
+                                    Hive.box('user_setting').get('page_index'),
+                              ),
                             ),
-                          ),
-                          GroupBody(context),
-                          uiset.loading == true
-                              ? const Loader(
-                                  wherein: 'route',
-                                )
-                              : Container()
-                        ],
-                      )
-                    : Stack(
-                        children: [
-                          GroupBody(context),
-                          uiset.loading == true
-                              ? const Loader(
-                                  wherein: 'route',
-                                )
-                              : Container()
-                        ],
-                      ))
-                : Stack(
-                    children: [
-                      GroupBody(context),
-                      uiset.loading == true
-                          ? const Loader(
-                              wherein: 'route',
-                            )
-                          : Container()
-                    ],
-                  ),
-          ),
-        ));
+                            GroupBody(context),
+                            uiset.loading == true
+                                ? const Loader(
+                                    wherein: 'route',
+                                  )
+                                : Container()
+                          ],
+                        )
+                      : Stack(
+                          children: [
+                            GroupBody(context),
+                            uiset.loading == true
+                                ? const Loader(
+                                    wherein: 'route',
+                                  )
+                                : Container()
+                          ],
+                        ))
+                  : Stack(
+                      children: [
+                        GroupBody(context),
+                        uiset.loading == true
+                            ? const Loader(
+                                wherein: 'route',
+                              )
+                            : Container()
+                      ],
+                    ),
+            )));
   }
 
   Widget GroupBody(BuildContext context) {
@@ -125,7 +125,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                 child: SizedBox(
                   height: height,
                   child: Container(
-                      color: BGColor(),
+                      color: draw.backgroundcolor,
                       child: Column(
                         children: [
                           GetBuilder<uisetting>(

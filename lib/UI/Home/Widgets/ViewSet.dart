@@ -833,8 +833,8 @@ FutureBuilder<QuerySnapshot<Object?>> stream3(
                                               doccollection: memosavelist[index]
                                                       .Collection ??
                                                   '',
-                                              doccolor:
-                                                  memosavelist[index].color,
+                                              doccolor: memosavelist[index]
+                                                  .backgroundcolor,
                                               doccolorfont:
                                                   memosavelist[index].colorfont,
                                               docindex: memosavelist[index]
@@ -878,8 +878,8 @@ FutureBuilder<QuerySnapshot<Object?>> stream3(
                                                     memosavelist[index]
                                                             .Collection ??
                                                         '',
-                                                doccolor:
-                                                    memosavelist[index].color,
+                                                doccolor: memosavelist[index]
+                                                    .backgroundcolor,
                                                 doccolorfont: memosavelist[index]
                                                     .colorfont,
                                                 docindex: memosavelist[index]
@@ -921,8 +921,8 @@ FutureBuilder<QuerySnapshot<Object?>> stream3(
                                                     memosavelist[index]
                                                             .Collection ??
                                                         '',
-                                                doccolor:
-                                                    memosavelist[index].color,
+                                                doccolor: memosavelist[index]
+                                                    .backgroundcolor,
                                                 doccolorfont: memosavelist[index]
                                                     .colorfont,
                                                 docindex: memosavelist[index]
@@ -964,8 +964,8 @@ FutureBuilder<QuerySnapshot<Object?>> stream3(
                                               doccollection: memosavelist[index]
                                                       .Collection ??
                                                   '',
-                                              doccolor:
-                                                  memosavelist[index].color,
+                                              doccolor: memosavelist[index]
+                                                  .backgroundcolor,
                                               doccolorfont:
                                                   memosavelist[index].colorfont,
                                               docindex: memosavelist[index]
@@ -1112,7 +1112,8 @@ FutureBuilder<QuerySnapshot<Object?>> stream4(
                                         doccollection:
                                             memotodaylist[index].Collection ??
                                                 '',
-                                        doccolor: memotodaylist[index].color,
+                                        doccolor: memotodaylist[index]
+                                            .backgroundcolor,
                                         doccolorfont:
                                             memotodaylist[index].colorfont,
                                         docindex:
@@ -1149,8 +1150,8 @@ FutureBuilder<QuerySnapshot<Object?>> stream4(
                                             doccollection: memotodaylist[index]
                                                     .Collection ??
                                                 '',
-                                            doccolor:
-                                                memotodaylist[index].color,
+                                            doccolor: memotodaylist[index]
+                                                .backgroundcolor,
                                             doccolorfont:
                                                 memotodaylist[index].colorfont,
                                             docindex: memotodaylist[index]
@@ -1191,8 +1192,8 @@ FutureBuilder<QuerySnapshot<Object?>> stream4(
                                             doccollection: memotodaylist[index]
                                                     .Collection ??
                                                 '',
-                                            doccolor:
-                                                memotodaylist[index].color,
+                                            doccolor: memotodaylist[index]
+                                                .backgroundcolor,
                                             doccolorfont:
                                                 memotodaylist[index].colorfont,
                                             docindex: memotodaylist[index]
@@ -1233,7 +1234,8 @@ FutureBuilder<QuerySnapshot<Object?>> stream4(
                                           doccollection:
                                               memotodaylist[index].Collection ??
                                                   '',
-                                          doccolor: memotodaylist[index].color,
+                                          doccolor: memotodaylist[index]
+                                              .backgroundcolor,
                                           doccolorfont:
                                               memotodaylist[index].colorfont,
                                           docindex:

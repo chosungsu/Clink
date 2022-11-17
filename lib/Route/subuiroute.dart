@@ -98,8 +98,8 @@ func2(BuildContext context) async {
 }
 
 func3() => Future.delayed(const Duration(seconds: 0), () {
-      if (linkspaceset.color == BGColor()) {
-        StatusBarControl.setColor(BGColor(), animated: true);
+      if (linkspaceset.color == draw.backgroundcolor) {
+        StatusBarControl.setColor(draw.backgroundcolor, animated: true);
       } else {
         StatusBarControl.setColor(linkspaceset.color, animated: true);
       }

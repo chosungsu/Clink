@@ -104,7 +104,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                 child: SizedBox(
                   height: height,
                   child: Container(
-                      color: BGColor(),
+                      color: draw.backgroundcolor,
                       //decoration: BoxDecoration(color: colorselection),
                       child: GetBuilder<uisetting>(
                         builder: (_) => Column(

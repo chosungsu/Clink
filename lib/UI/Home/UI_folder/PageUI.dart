@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names
 
+import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -46,7 +47,7 @@ PageUI1(String title, String id) {
                             style: NeumorphicStyle(
                               shape: NeumorphicShape.flat,
                               depth: 3,
-                              color: TextColor_shadowcolor(),
+                              color: draw.color_textstatus,
                             ),
                             textStyle: NeumorphicTextStyle(
                               fontWeight: FontWeight.bold,
@@ -71,13 +72,8 @@ PageUI1(String title, String id) {
                               ),
                               GestureDetector(
                                   onTap: () async {},
-                                  child: Container(
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.rectangle,
-                                        borderRadius: BorderRadius.circular(15),
-                                        color: Colors.grey.shade200,
-                                      ),
+                                  child: ContainerDesign(
+                                      color: draw.backgroundcolor,
                                       child: SizedBox(
                                           child: Column(
                                         children: [
@@ -94,36 +90,37 @@ PageUI1(String title, String id) {
                                                     linkspaceset.indexcnt[index]
                                                         .placestr,
                                                     style: TextStyle(
-                                                        color: Colors.black45,
+                                                        color: draw
+                                                            .color_textstatus,
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         fontSize:
                                                             contentTextsize()),
                                                   ),
                                                 ),
-                                                /*InkWell(
-                                                    onTap: () {
-                                                      linkmadetreeplace(
-                                                          context,
-                                                          usercode,
-                                                          uiset.pagelist[0]
-                                                              .title,
-                                                          linkspaceset
-                                                              .indexcnt[index]
-                                                              .placestr,
-                                                          index,
-                                                          linkspaceset
-                                                              .indexcnt[index]
-                                                              .uniquecode);
-                                                    },
-                                                    child: const Icon(
-                                                      Icons.add_circle_outline,
-                                                      color: Colors.black45,
-                                                    ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    linkmadetreeplace(
+                                                        context,
+                                                        usercode,
+                                                        uiset.pagelist[0].title,
+                                                        linkspaceset
+                                                            .indexcnt[index]
+                                                            .placestr,
+                                                        index,
+                                                        linkspaceset
+                                                            .indexcnt[index]
+                                                            .uniquecode);
+                                                  },
+                                                  child: Icon(
+                                                    Icons.add_circle_outline,
+                                                    color:
+                                                        draw.color_textstatus,
                                                   ),
-                                                  const SizedBox(
-                                                    width: 10,
-                                                  ),*/
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
                                                 InkWell(
                                                   onTap: () {
                                                     linkplacechangeoptions(
@@ -141,9 +138,10 @@ PageUI1(String title, String id) {
                                                             .indexcnt[index]
                                                             .type);
                                                   },
-                                                  child: const Icon(
+                                                  child: Icon(
                                                     Icons.more_horiz,
-                                                    color: Colors.black45,
+                                                    color:
+                                                        draw.color_textstatus,
                                                   ),
                                                 )
                                               ]),

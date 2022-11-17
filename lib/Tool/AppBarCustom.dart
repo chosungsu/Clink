@@ -43,7 +43,7 @@ class AppBarCustom extends StatelessWidget {
     final uiset = Get.put(uisetting());
     final draw = Get.put(navibool());
     bool serverstatus = Hive.box('user_info').get('server_status');
-    StatusBarControl.setColor(BGColor(), animated: true);
+    StatusBarControl.setColor(draw.backgroundcolor, animated: true);
 
     return StatefulBuilder(builder: ((context, setState) {
       return GetBuilder<navibool>(
@@ -84,7 +84,7 @@ class AppBarCustom extends StatelessWidget {
                                                 shape: NeumorphicShape.concave,
                                                 depth: 2,
                                                 surfaceIntensity: 0.5,
-                                                color: TextColor(),
+                                                color: draw.color_textstatus,
                                                 lightSource:
                                                     LightSource.topLeft),
                                           ),
@@ -109,7 +109,7 @@ class AppBarCustom extends StatelessWidget {
                                                 shape: NeumorphicShape.concave,
                                                 depth: 2,
                                                 surfaceIntensity: 0.5,
-                                                color: TextColor(),
+                                                color: draw.color_textstatus,
                                                 lightSource:
                                                     LightSource.topLeft),
                                           ),
@@ -143,8 +143,8 @@ class AppBarCustom extends StatelessWidget {
                                                                             .normal,
                                                                     fontSize:
                                                                         mainTitleTextsize(),
-                                                                    color:
-                                                                        TextColor_shadowcolor()),
+                                                                    color: draw
+                                                                        .color_textstatus),
                                                                 child: Row(
                                                                   children: [
                                                                     Text(
@@ -155,7 +155,7 @@ class AppBarCustom extends StatelessWidget {
                                                                           fontSize:
                                                                               mainTitleTextsize(),
                                                                           color:
-                                                                              TextColor()),
+                                                                              draw.color_textstatus),
                                                                     ),
                                                                     const SizedBox(
                                                                       width: 10,
@@ -163,8 +163,8 @@ class AppBarCustom extends StatelessWidget {
                                                                     Icon(
                                                                       Icons
                                                                           .swap_horiz,
-                                                                      color:
-                                                                          TextColor_shadowcolor(),
+                                                                      color: draw
+                                                                          .color_textstatus,
                                                                     ),
                                                                   ],
                                                                 ),
@@ -185,8 +185,8 @@ class AppBarCustom extends StatelessWidget {
                                                                             .normal,
                                                                     fontSize:
                                                                         mainTitleTextsize(),
-                                                                    color:
-                                                                        TextColor_shadowcolor()),
+                                                                    color: draw
+                                                                        .color_textstatus),
                                                                 child: Row(
                                                                   children: [
                                                                     Text(
@@ -201,8 +201,8 @@ class AppBarCustom extends StatelessWidget {
                                                                               .bold,
                                                                           fontSize:
                                                                               mainTitleTextsize(),
-                                                                          color:
-                                                                              TextColor(),
+                                                                          color: draw
+                                                                              .color_textstatus,
                                                                           overflow:
                                                                               TextOverflow.clip),
                                                                     ),
@@ -212,8 +212,8 @@ class AppBarCustom extends StatelessWidget {
                                                                     Icon(
                                                                       Icons
                                                                           .swap_horiz,
-                                                                      color:
-                                                                          TextColor_shadowcolor(),
+                                                                      color: draw
+                                                                          .color_textstatus,
                                                                     ),
                                                                   ],
                                                                 ),
@@ -229,7 +229,8 @@ class AppBarCustom extends StatelessWidget {
                                                         shape: NeumorphicShape
                                                             .flat,
                                                         depth: 3,
-                                                        color: TextColor()),
+                                                        color: draw
+                                                            .color_textstatus),
                                                     textStyle:
                                                         NeumorphicTextStyle(
                                                       fontWeight:
@@ -253,10 +254,11 @@ class AppBarCustom extends StatelessWidget {
                                                         depth: 5,
                                                         surfaceIntensity: 0.3,
                                                         border: NeumorphicBorder(
-                                                            color:
-                                                                TextColor_shadowcolor(),
+                                                            color: draw
+                                                                .backgroundcolor,
                                                             width: 0.5),
-                                                        color: TextColor(),
+                                                        color: draw
+                                                            .color_textstatus,
                                                         lightSource: LightSource
                                                             .topLeft),
                                                   ))
@@ -281,10 +283,11 @@ class AppBarCustom extends StatelessWidget {
                                                             surfaceIntensity:
                                                                 0.3,
                                                             border: NeumorphicBorder(
-                                                                color:
-                                                                    TextColor_shadowcolor(),
+                                                                color: draw
+                                                                    .backgroundcolor,
                                                                 width: 0.5),
-                                                            color: TextColor(),
+                                                            color: draw
+                                                                .color_textstatus,
                                                             lightSource:
                                                                 LightSource
                                                                     .topLeft),
@@ -349,15 +352,16 @@ class AppBarCustom extends StatelessWidget {
                                                                 surfaceIntensity:
                                                                     0.3,
                                                                 border: NeumorphicBorder(
-                                                                    color:
-                                                                        TextColor_shadowcolor(),
+                                                                    color: draw
+                                                                        .backgroundcolor,
                                                                     width: 0.5),
                                                                 color: iconname ==
                                                                         Icons
                                                                             .star
                                                                     ? Colors
                                                                         .yellow
-                                                                    : TextColor(),
+                                                                    : draw
+                                                                        .color_textstatus,
                                                                 lightSource:
                                                                     LightSource
                                                                         .topLeft),

@@ -14,11 +14,18 @@ class navibool extends GetxController {
   double yoffset = 0;
   double scalefactor = 1;
   int navi = Hive.box('user_setting').get('which_menu_pick') ?? 1;
-  Color color = Hive.box('user_setting').get('which_color_background') == null
-      ? MyTheme.colorWhite
-      : (Hive.box('user_setting').get('which_color_background') == 0
+  Color backgroundcolor =
+      Hive.box('user_setting').get('which_color_background') == null
           ? MyTheme.colorWhite
-          : MyTheme.colorblack);
+          : (Hive.box('user_setting').get('which_color_background') == 0
+              ? MyTheme.colorWhite
+              : MyTheme.colorblack);
+  Color color_textstatus =
+      Hive.box('user_setting').get('which_color_background') == null
+          ? MyTheme.colorblack
+          : (Hive.box('user_setting').get('which_color_background') == 0
+              ? MyTheme.colorblack
+              : MyTheme.colorWhite);
   var color_navi;
 
   void setpagecurrent(int what) {
@@ -59,11 +66,17 @@ class navibool extends GetxController {
 
   void setnavicolor() {
     Hive.box('user_setting').get('which_color_background') == null
-        ? color = MyTheme.colorWhite
+        ? backgroundcolor = MyTheme.colorWhite
         : (Hive.box('user_setting').get('which_color_background') == 0
-            ? color = MyTheme.colorWhite
-            : color = MyTheme.colorblack);
-    StatusBarControl.setColor(color, animated: true);
+            ? backgroundcolor = MyTheme.colorWhite
+            : backgroundcolor = MyTheme.colorblack);
+
+    Hive.box('user_setting').get('which_color_background') == null
+        ? color_textstatus = MyTheme.colorblackstatus
+        : (Hive.box('user_setting').get('which_color_background') == 0
+            ? color_textstatus = MyTheme.colorblackstatus
+            : color_textstatus = MyTheme.colorWhitestatus);
+    StatusBarControl.setColor(backgroundcolor, animated: true);
     update();
     notifyChildrens();
   }

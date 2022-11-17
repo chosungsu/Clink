@@ -119,7 +119,7 @@ class _mainrouteState extends State<mainroute>
     return GetBuilder<navibool>(
         builder: (_) => GetBuilder<uisetting>(builder: ((_) {
               return Scaffold(
-                backgroundColor: BGColor(),
+                backgroundColor: draw.backgroundcolor,
                 body: WillPopScope(
                     onWillPop: Hive.box('user_setting').get('page_index') == 0
                         ? _onWillPop
@@ -129,7 +129,8 @@ class _mainrouteState extends State<mainroute>
                     ? Container(
                         decoration: BoxDecoration(
                             border: Border(
-                                top: BorderSide(color: draw.color, width: 1))),
+                                top: BorderSide(
+                                    color: draw.backgroundcolor, width: 1))),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -151,13 +152,11 @@ class _mainrouteState extends State<mainroute>
 
                                 uiset.setloading(false);
                               },
-                              backgroundColor: draw.color,
+                              backgroundColor: draw.backgroundcolor,
                               selectedFontSize: 18,
                               unselectedFontSize: 18,
                               selectedItemColor: Colors.purple.shade300,
-                              unselectedItemColor: draw.color == Colors.white
-                                  ? Colors.black
-                                  : Colors.white,
+                              unselectedItemColor: Colors.grey.shade400,
                               showSelectedLabels: false,
                               showUnselectedLabels: false,
                               currentIndex: uiset.pagenumber,

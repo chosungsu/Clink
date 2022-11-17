@@ -13,7 +13,7 @@ class MyTheme {
   static Color userchatColor = Colors.white;
   static Color shimmer_home_basecolor = Colors.blueGrey.shade400;
   static Color shimmer_home_highlightcolor = Colors.blueGrey.shade100;
-  static Color colorWhite = Colors.white;
+  static Color colorWhite = Colors.grey.shade200;
   static Color colorblack = Colors.black;
   static Color colorWhitestatus = Colors.white60;
   static Color colorblackstatus = Colors.black45;

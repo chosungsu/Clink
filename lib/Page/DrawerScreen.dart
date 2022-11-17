@@ -48,7 +48,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
             border: Border(
-                right: BorderSide(color: BGColor_shadowcolor(), width: 1)),
+                right: BorderSide(color: draw.backgroundcolor, width: 1)),
             color: BGColor()),
         child: SingleChildScrollView(
           child: Column(
@@ -108,9 +108,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                           element['icon'],
                           color: selected
                               ? Colors.purple.shade300
-                              : (draw.color == Colors.white
-                                  ? Colors.black
-                                  : Colors.white),
+                              : Colors.grey.shade400,
                         ),
                         const SizedBox(
                           height: 20,

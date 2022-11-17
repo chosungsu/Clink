@@ -73,7 +73,7 @@ Se_Container0(double height, controller) {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ContainerDesign(
-              color: BGColor(),
+              color: draw.backgroundcolor,
               child: StatefulBuilder(
                 builder: ((context, setState) {
                   return TextField(
@@ -88,23 +88,23 @@ Se_Container0(double height, controller) {
                     textAlign: TextAlign.start,
                     textAlignVertical: TextAlignVertical.center,
                     style: TextStyle(
-                        color: TextColor(),
+                        color: draw.color_textstatus,
                         fontWeight: FontWeight.bold,
                         fontSize: 18),
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: BGColor(),
+                      fillColor: draw.backgroundcolor,
                       border: InputBorder.none,
                       hintMaxLines: 2,
                       hintText: '탐색하실 페이지 제목 입력',
                       hintStyle: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
-                          color: TextColor()),
+                          color: draw.color_textstatus),
                       isCollapsed: true,
                       prefixIcon: Icon(
                         Icons.search,
-                        color: TextColor_shadowcolor(),
+                        color: draw.color_textstatus,
                       ),
                     ),
                   );
@@ -165,7 +165,7 @@ Se_Container01(
                                       style: NeumorphicStyle(
                                         shape: NeumorphicShape.flat,
                                         depth: 3,
-                                        color: TextColor_shadowcolor(),
+                                        color: draw.color_textstatus,
                                       ),
                                       textStyle: NeumorphicTextStyle(
                                         fontWeight: FontWeight.bold,
@@ -175,7 +175,7 @@ Se_Container01(
                                     ),
                                   ),
                                 ),
-                                color: Colors.transparent)
+                                color: draw.backgroundcolor)
                           ],
                         )
                       : Column(
@@ -183,7 +183,7 @@ Se_Container01(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             ContainerDesign(
-                                color: Colors.transparent,
+                                color: draw.backgroundcolor,
                                 child: GetBuilder<uisetting>(
                                   builder: (_) => ListView.builder(
                                       physics: const BouncingScrollPhysics(),
@@ -247,8 +247,8 @@ Se_Container01(
                                                                     TextAlign
                                                                         .start,
                                                                 style: TextStyle(
-                                                                    color:
-                                                                        TextColor(),
+                                                                    color: draw
+                                                                        .color_textstatus,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .bold,
@@ -270,8 +270,8 @@ Se_Container01(
                                                                     TextAlign
                                                                         .start,
                                                                 style: TextStyle(
-                                                                    color:
-                                                                        TextColor(),
+                                                                    color: draw
+                                                                        .color_textstatus,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .bold,
@@ -285,12 +285,12 @@ Se_Container01(
                                                           )),
                                                       Icon(
                                                         Icons.chevron_right,
-                                                        color:
-                                                            TextColor_shadowcolor(),
+                                                        color: draw
+                                                            .color_textstatus,
                                                       ),
                                                     ],
                                                   ),
-                                                  color: BGColor(),
+                                                  color: draw.backgroundcolor,
                                                 )),
                                             SizedBox(
                                               height: 10,
@@ -311,7 +311,7 @@ Se_Container01(
                           style: NeumorphicStyle(
                             shape: NeumorphicShape.flat,
                             depth: 3,
-                            color: TextColor_shadowcolor(),
+                            color: draw.color_textstatus,
                           ),
                           textStyle: NeumorphicTextStyle(
                             fontWeight: FontWeight.bold,
@@ -321,7 +321,7 @@ Se_Container01(
                         ),
                       ),
                     ),
-                    color: Colors.transparent);
+                    color: draw.backgroundcolor);
               },
             ),
           ));
@@ -347,7 +347,7 @@ Se_Container1(
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: contentTitleTextsize(),
-                      color: TextColor()),
+                      color: draw.color_textstatus),
                 ),
               ),
             ],
@@ -398,7 +398,7 @@ Se_Container11(
                                 style: NeumorphicStyle(
                                   shape: NeumorphicShape.flat,
                                   depth: 3,
-                                  color: TextColor_shadowcolor(),
+                                  color: draw.color_textstatus,
                                 ),
                                 textStyle: NeumorphicTextStyle(
                                   fontWeight: FontWeight.bold,
@@ -408,7 +408,7 @@ Se_Container11(
                               ),
                             ),
                           ),
-                          color: Colors.transparent)
+                          color: draw.backgroundcolor)
                       : ContainerDesign(
                           child: ListView.builder(
                               physics: const BouncingScrollPhysics(),
@@ -439,7 +439,7 @@ Se_Container11(
                                                 .toString());
                                       },
                                       child: ContainerDesign(
-                                        color: Colors.transparent,
+                                        color: draw.backgroundcolor,
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
                                           mainAxisAlignment:
@@ -459,7 +459,8 @@ Se_Container11(
                                                       textAlign:
                                                           TextAlign.start,
                                                       style: TextStyle(
-                                                          color: TextColor(),
+                                                          color: draw
+                                                              .color_textstatus,
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           fontSize:
@@ -476,7 +477,8 @@ Se_Container11(
                                                       textAlign:
                                                           TextAlign.start,
                                                       style: TextStyle(
-                                                          color: TextColor(),
+                                                          color: draw
+                                                              .color_textstatus,
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           fontSize:
@@ -488,7 +490,7 @@ Se_Container11(
                                                 )),
                                             Icon(
                                               Icons.chevron_right,
-                                              color: TextColor_shadowcolor(),
+                                              color: draw.color_textstatus,
                                             ),
                                           ],
                                         ),
@@ -500,7 +502,7 @@ Se_Container11(
                                   ],
                                 );
                               }),
-                          color: Colors.transparent,
+                          color: draw.backgroundcolor,
                         );
                 }
                 return ContainerDesign(
@@ -512,7 +514,7 @@ Se_Container11(
                           style: NeumorphicStyle(
                             shape: NeumorphicShape.flat,
                             depth: 3,
-                            color: TextColor_shadowcolor(),
+                            color: draw.color_textstatus,
                           ),
                           textStyle: NeumorphicTextStyle(
                             fontWeight: FontWeight.bold,
@@ -522,7 +524,7 @@ Se_Container11(
                         ),
                       ),
                     ),
-                    color: Colors.transparent);
+                    color: draw.backgroundcolor);
               },
             ),
           ));
@@ -552,7 +554,7 @@ Se_Container3(
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: contentTitleTextsize(),
-                      color: TextColor()),
+                      color: draw.color_textstatus),
                 ),
               ),
             ],

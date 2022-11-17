@@ -20,6 +20,7 @@ import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 import 'package:outline_gradient_button/outline_gradient_button.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:status_bar_control/status_bar_control.dart';
+import 'Enums/Variables.dart';
 import 'Route/subuiroute.dart';
 import 'LocalNotiPlatform/NotificationApi.dart';
 import 'Tool/Getx/PeopleAdd.dart';
@@ -104,7 +105,7 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    StatusBarControl.setColor(BGColor(), animated: true);
+    StatusBarControl.setColor(draw.backgroundcolor, animated: true);
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: BGColor(),

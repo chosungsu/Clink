@@ -12,7 +12,9 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import '../DB/PageList.dart';
+import '../Enums/Variables.dart';
 import '../Route/subuiroute.dart';
+import '../Tool/AppBarCustom.dart';
 import '../Tool/Getx/category.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/Getx/uisetting.dart';
@@ -29,24 +31,14 @@ class AddTemplate extends StatefulWidget {
 
 class _AddTemplateState extends State<AddTemplate>
     with WidgetsBindingObserver, TickerProviderStateMixin {
-  double translateX = 0.0;
-  double translateY = 0.0;
-  double myWidth = 0.0;
-  String name = Hive.box('user_info').get('id');
-  String usercode = Hive.box('user_setting').get('usercode');
   final notilist = Get.put(notishow());
   final uiset = Get.put(uisetting());
   final draw = Get.put(navibool());
   final cg = Get.put(category());
   final linkspaceset = Get.put(linkspacesetting());
-  final readlist = [];
-  final listid = [];
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
   var _controller = TextEditingController();
   final searchNode = FocusNode();
   List spaceindata = [];
-  late Animation animation;
-  int currentstep = 0;
 
   @override
   void initState() {
@@ -70,7 +62,7 @@ class _AddTemplateState extends State<AddTemplate>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: BGColor(),
+        backgroundColor: draw.backgroundcolor,
         body: SafeArea(
           child: WillPopScope(
             onWillPop: _onWillPop,
@@ -100,16 +92,14 @@ class _AddTemplateState extends State<AddTemplate>
                 child: SizedBox(
                   height: height,
                   child: Container(
-                      color: BGColor(),
+                      color: draw.backgroundcolor,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          choosecategory(),
-                          const SizedBox(
-                            height: 20,
+                          AppBarCustom(
+                            title: '스페이스 추가',
+                            righticon: false,
+                            iconname: Icons.add_box,
                           ),
                           GetBuilder<uisetting>(
                             builder: (_) => Flexible(
@@ -136,251 +126,62 @@ class _AddTemplateState extends State<AddTemplate>
             )));
   }
 
-  choosecategory() {
-    List<StepperData> stepperData = [
-      StepperData(
-          title: "스페이스",
-          iconWidget: GestureDetector(
-            onTap: () {
-              uiset.setstepperindex(0);
-            },
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: const BoxDecoration(
-                  color: Colors.green,
-                  borderRadius: BorderRadius.all(Radius.circular(30))),
-              child: const Icon(Icons.looks_one, color: Colors.white),
-            ),
-          )),
-      StepperData(
-          title: "본문 작성",
-          iconWidget: GestureDetector(
-            onTap: () {
-              if (cg.categorypicknumber == 99) {
-              } else {
-                uiset.setstepperindex(1);
-              }
-            },
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: const BoxDecoration(
-                  color: Colors.green,
-                  borderRadius: BorderRadius.all(Radius.circular(30))),
-              child: const Icon(Icons.looks_two_sharp, color: Colors.white),
-            ),
-          )),
-      StepperData(
-          title: "게시",
-          iconWidget: GestureDetector(
-            onTap: () {
-              if (cg.categorypicknumber == 99) {
-              } else {
-                uiset.setstepperindex(2);
-              }
-            },
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: const BoxDecoration(
-                  color: Colors.green,
-                  borderRadius: BorderRadius.all(Radius.circular(30))),
-              child: const Icon(Icons.looks_3, color: Colors.white),
-            ),
-          )),
-    ];
-    return Container(
-      padding: const EdgeInsets.only(left: 20, right: 20),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ContainerDesign(
-              color: BGColor(),
-              child: GetBuilder<uisetting>(
-                builder: (_) => AnotherStepper(
-                  activeIndex: uiset.currentstepper,
-                  stepperList: stepperData,
-                  stepperDirection: Axis.horizontal,
-                  inverted: true,
-                  titleTextStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTextsize(),
-                      color: TextColor()),
-                ),
-              )),
-        ],
-      ),
-    );
-  }
-
   Pagination() {
-    return uiset.currentstepper == 0
-        ? Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                '선택',
-                style: TextStyle(
-                  fontSize: contentTitleTextsize(),
-                  color: TextColor(),
-                  fontWeight: FontWeight.bold,
+    return GetBuilder<navibool>(
+        builder: (_) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(
+                  height: 20,
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Text(
-                '아래 스페이스 중 원하시는 스페이스를 선택하시면 됩니다.',
-                style: TextStyle(
-                  fontSize: contentTextsize(),
-                  color: TextColor_shadowcolor(),
-                  fontWeight: FontWeight.normal,
+                Text(
+                  '아래 스페이스 중 원하시는 스페이스를 선택하시면 됩니다.',
+                  style: TextStyle(
+                    fontSize: contentTextsize(),
+                    color: draw.color_textstatus,
+                    fontWeight: FontWeight.normal,
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Page1(),
-              const SizedBox(
-                height: 50,
-              ),
-              cg.categorypicknumber != 99
-                  ? GetBuilder<linkspacesetting>(builder: (_) => Page1_2())
-                  : const SizedBox(),
-              cg.categorypicknumber != 99
-                  ? const SizedBox(
-                      height: 50,
-                    )
-                  : const SizedBox(),
-              moveaction(),
-              const SizedBox(
-                height: 50,
-              )
-            ],
-          )
-        : (uiset.currentstepper == 1
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    '작성',
-                    style: TextStyle(
-                      fontSize: contentTitleTextsize(),
-                      color: TextColor(),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  //Page2(),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  moveaction(),
-                ],
-              )
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    '게시',
-                    style: TextStyle(
-                      fontSize: contentTitleTextsize(),
-                      color: TextColor(),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  //Page3(),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  moveaction(),
-                ],
-              ));
+                const SizedBox(
+                  height: 20,
+                ),
+                Page1(),
+                const SizedBox(
+                  height: 50,
+                ),
+                moveaction(),
+                const SizedBox(
+                  height: 50,
+                )
+              ],
+            ));
   }
 
   moveaction() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Flexible(
             flex: 1,
-            child: GetBuilder<uisetting>(
-              builder: (_) => uiset.currentstepper == 0
-                  ? const SizedBox()
-                  : GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          uiset.currentstepper--;
-                        });
-                      },
-                      child: ContainerDesign(
-                          color: BGColor(),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(
-                                Icons.chevron_left,
-                                size: 25,
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                '이전',
-                                style: TextStyle(
-                                  fontSize: contentTextsize(),
-                                  color: TextColor(),
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          )),
-                    ),
-            )),
-        Flexible(
-            flex: 1,
-            child: GetBuilder<category>(
-              builder: (_) => uiset.currentstepper == 2
-                  ? const SizedBox()
-                  : GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          if (cg.categorypicknumber == 99) {
-                          } else {
-                            uiset.currentstepper++;
-                          }
-                        });
-                      },
-                      child: ContainerDesign(
-                          color: BGColor(),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                '다음',
-                                style: TextStyle(
-                                  fontSize: contentTextsize(),
-                                  color: TextColor(),
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              const Icon(
-                                Icons.chevron_right,
-                                size: 25,
-                              ),
-                            ],
-                          )),
-                    ),
-            )),
+            child: GestureDetector(
+              onTap: () {},
+              child: ContainerDesign(
+                  color: draw.backgroundcolor,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        '완료',
+                        style: TextStyle(
+                          fontSize: contentTextsize(),
+                          color: TextColor(),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  )),
+            ))
       ],
     );
   }
@@ -418,7 +219,7 @@ class _AddTemplateState extends State<AddTemplate>
                             child: ContainerDesign(
                                 color: cg.categorypicknumber == index
                                     ? Colors.blue.shade200
-                                    : BGColor(),
+                                    : draw.backgroundcolor,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   mainAxisSize: MainAxisSize.min,

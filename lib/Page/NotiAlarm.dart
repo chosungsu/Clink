@@ -84,7 +84,7 @@ class _NotiAlarmState extends State<NotiAlarm>
                 child: SizedBox(
                   height: height,
                   child: Container(
-                      color: BGColor(),
+                      color: draw.backgroundcolor,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -116,7 +116,7 @@ class _NotiAlarmState extends State<NotiAlarm>
 
   allread() {
     return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20),
+      padding: const EdgeInsets.only(left: 30, right: 20),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -190,7 +190,7 @@ class _NotiAlarmState extends State<NotiAlarm>
                     style: NeumorphicStyle(
                       shape: NeumorphicShape.flat,
                       depth: 3,
-                      color: TextColor_shadowcolor(),
+                      color: draw.color_textstatus,
                     ),
                     textStyle: NeumorphicTextStyle(
                       fontWeight: FontWeight.bold,
@@ -236,8 +236,8 @@ class _NotiAlarmState extends State<NotiAlarm>
                                 ),
                                 ContainerDesign(
                                   color: readlist[index] == 'no'
-                                      ? BGColor()
-                                      : Colors.grey.shade400,
+                                      ? draw.backgroundcolor
+                                      : draw.color_textstatus,
                                   child: Column(
                                     children: [
                                       SizedBox(
@@ -265,7 +265,13 @@ class _NotiAlarmState extends State<NotiAlarm>
                                                         textAlign:
                                                             TextAlign.center,
                                                         style: TextStyle(
-                                                            color: TextColor(),
+                                                            color: readlist[
+                                                                        index] ==
+                                                                    'no'
+                                                                ? draw
+                                                                    .color_textstatus
+                                                                : draw
+                                                                    .backgroundcolor,
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             fontSize:
@@ -283,7 +289,13 @@ class _NotiAlarmState extends State<NotiAlarm>
                                                     notilist.listad[index].url
                                                         .toString(),
                                                     style: TextStyle(
-                                                        color: TextColor(),
+                                                        color: readlist[
+                                                                    index] ==
+                                                                'no'
+                                                            ? draw
+                                                                .color_textstatus
+                                                            : draw
+                                                                .backgroundcolor,
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         fontSize:
@@ -322,10 +334,9 @@ class _NotiAlarmState extends State<NotiAlarm>
                 child: NeumorphicText(
                   '생성된 푸시알림이 아직 없습니다.',
                   style: NeumorphicStyle(
-                    shape: NeumorphicShape.flat,
-                    depth: 3,
-                    color: TextColor_shadowcolor(),
-                  ),
+                      shape: NeumorphicShape.flat,
+                      depth: 3,
+                      color: draw.color_textstatus),
                   textStyle: NeumorphicTextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: contentTitleTextsize(),

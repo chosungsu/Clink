@@ -93,7 +93,7 @@ class _SpaceapageState extends State<Spaceapage>
                 child: SizedBox(
                   height: height,
                   child: Container(
-                      color: BGColor(),
+                      color: draw.backgroundcolor,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
@@ -156,7 +156,7 @@ class _SpaceapageState extends State<Spaceapage>
                             style: NeumorphicStyle(
                               shape: NeumorphicShape.flat,
                               depth: 3,
-                              color: TextColor_shadowcolor(),
+                              color: draw.color_textstatus,
                             ),
                             textStyle: NeumorphicTextStyle(
                               fontWeight: FontWeight.bold,
@@ -190,7 +190,7 @@ class _SpaceapageState extends State<Spaceapage>
                                         Get.back();
                                       },
                                       child: ContainerDesign(
-                                          color: Colors.transparent,
+                                          color: draw.backgroundcolor,
                                           child: Column(children: [
                                             SizedBox(
                                                 child: Row(
@@ -207,7 +207,8 @@ class _SpaceapageState extends State<Spaceapage>
                                                       textAlign:
                                                           TextAlign.start,
                                                       style: TextStyle(
-                                                          color: TextColor(),
+                                                          color: draw
+                                                              .color_textstatus,
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           fontSize:
@@ -230,7 +231,7 @@ class _SpaceapageState extends State<Spaceapage>
                                                   child: Icon(
                                                     Icons.more_horiz,
                                                     color:
-                                                        TextColor_shadowcolor(),
+                                                        draw.color_textstatus,
                                                   ),
                                                 )
                                               ],
@@ -246,7 +247,7 @@ class _SpaceapageState extends State<Spaceapage>
                         );
                 }
                 return LinearProgressIndicator(
-                  backgroundColor: BGColor(),
+                  backgroundColor: draw.backgroundcolor,
                   valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
                 );
               },
