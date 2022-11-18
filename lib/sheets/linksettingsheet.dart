@@ -858,10 +858,10 @@ contentthird(
             controller.text = placestr;
             if (s == 'pinchannel') {
               func6(context, controller, searchNode, 'editnametemplate',
-                  uniquecode, type);
+                  uniquecode, type, 0);
             } else {
               func6(context, controller, searchNode, 'editnametemplatein',
-                  uniquecode, index);
+                  uniquecode, index, 0);
             }
           },
           child: Row(

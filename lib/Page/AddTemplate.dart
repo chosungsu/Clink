@@ -21,8 +21,9 @@ import '../Tool/TextSize.dart';
 import '../sheets/linksettingsheet.dart';
 
 class AddTemplate extends StatefulWidget {
-  const AddTemplate({Key? key, required this.id}) : super(key: key);
+  AddTemplate({Key? key, required this.id, indexcnt}) : super(key: key);
   final String id;
+  int indexcnt = linkspaceset.indexcnt.length;
   @override
   State<StatefulWidget> createState() => _AddTemplateState();
 }
@@ -173,7 +174,7 @@ class _AddTemplateState extends State<AddTemplate>
                       behavior: SnackBarBehavior.floating);
                 } else {
                   func6(context, _controller, searchNode, 'addtemplate',
-                      widget.id, cg.categorypicknumber);
+                      widget.id, cg.categorypicknumber, widget.indexcnt);
                 }
               },
               child: ContainerDesign(
@@ -363,7 +364,8 @@ class _AddTemplateState extends State<AddTemplate>
                                 searchNode,
                                 'addtemplate',
                                 widget.id,
-                                cg.categorypicknumber);
+                                cg.categorypicknumber,
+                                widget.indexcnt);
                           },
                           child: ContainerDesign(
                               color: BGColor(),
@@ -560,7 +562,8 @@ class _AddTemplateState extends State<AddTemplate>
                                 searchNode,
                                 'addtemplate',
                                 widget.id,
-                                cg.categorypicknumber);
+                                cg.categorypicknumber,
+                                widget.indexcnt);
                           },
                           child: ContainerDesign(
                               color: BGColor(),
@@ -655,7 +658,8 @@ class _AddTemplateState extends State<AddTemplate>
                                 searchNode,
                                 'addtemplate',
                                 widget.id,
-                                cg.categorypicknumber);
+                                cg.categorypicknumber,
+                                widget.indexcnt);
                           },
                           child: ContainerDesign(
                               color: BGColor(),

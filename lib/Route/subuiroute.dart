@@ -105,7 +105,7 @@ func3() => Future.delayed(const Duration(seconds: 0), () {
       }
       Get.back();
     });
-func4(BuildContext context) async {
+func4(BuildContext context, indexcnt) async {
   var checkid = '';
   if (Hive.box('user_setting').get('page_index') == 11 ||
       Hive.box('user_setting').get('page_index') == 21) {
@@ -154,6 +154,7 @@ func4(BuildContext context) async {
     Get.to(
         () => AddTemplate(
               id: checkid,
+              indexcnt: indexcnt,
             ),
         transition: Transition.upToDown);
   } else {
@@ -168,10 +169,16 @@ func4(BuildContext context) async {
 }
 
 func5() => Get.to(() => const Spaceapage(), transition: Transition.upToDown);
-func6(BuildContext context, TextEditingController textEditingController,
-    FocusNode searchnode, String where, String id, int categorypicknumber) {
+func6(
+    BuildContext context,
+    TextEditingController textEditingController,
+    FocusNode searchnode,
+    String where,
+    String id,
+    int categorypicknumber,
+    int indexcnt) {
   addmylink(context, usercode, textEditingController, searchnode, where, id,
-      categorypicknumber);
+      categorypicknumber, indexcnt);
 }
 
 func7(String title, String email, String origin, String id) async {

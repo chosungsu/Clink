@@ -32,11 +32,12 @@ PageUI1(String id, TextEditingController controller) {
                         type: sp.get('type'),
                         placestr: sp.get('spacename'),
                         uniquecode: sp.get('id'),
+                        index: sp.get('index'),
                         familycode: sp.id));
                   }
                 }
                 linkspaceset.indexcnt.sort(((a, b) {
-                  return a.placestr.compareTo(b.placestr);
+                  return a.index.compareTo(b.index);
                 }));
                 return linkspaceset.indexcnt.isEmpty
                     ? Flexible(

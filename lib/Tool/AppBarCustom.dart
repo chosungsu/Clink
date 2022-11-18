@@ -9,6 +9,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 
 import '../DB/PageList.dart';
+import '../Enums/Variables.dart';
 import '../Route/subuiroute.dart';
 import '../sheets/settingpageonly.dart';
 import 'Getx/linkspacesetting.dart';
@@ -18,21 +19,23 @@ import 'Getx/uisetting.dart';
 import 'TextSize.dart';
 
 class AppBarCustom extends StatelessWidget {
-  AppBarCustom({
-    Key? key,
-    required this.title,
-    required this.righticon,
-    required this.iconname,
-    textEditingController,
-    focusNode,
-    myindex,
-  }) : super(key: key);
+  AppBarCustom(
+      {Key? key,
+      required this.title,
+      required this.righticon,
+      required this.iconname,
+      textEditingController,
+      focusNode,
+      myindex,
+      indexcnt})
+      : super(key: key);
   final String title;
   final bool righticon;
   final IconData iconname;
   int myindex = 0;
   TextEditingController textEditingController = TextEditingController();
   FocusNode searchnode = FocusNode();
+  int indexcnt = linkspaceset.indexcnt.length;
 
   @override
   Widget build(BuildContext context) {
@@ -255,8 +258,9 @@ class AppBarCustom extends StatelessWidget {
                                                       0
                                                   ? ContainerDesign(
                                                       child: GestureDetector(
-                                                          onTap: () =>
-                                                              func4(context),
+                                                          onTap: () => func4(
+                                                              context,
+                                                              indexcnt),
                                                           child: NeumorphicIcon(
                                                             Icons.add_box,
                                                             size: 30,
@@ -289,8 +293,9 @@ class AppBarCustom extends StatelessWidget {
                                                       ? ContainerDesign(
                                                           child:
                                                               GestureDetector(
-                                                            onTap: () =>
-                                                                func4(context),
+                                                            onTap: () => func4(
+                                                                context,
+                                                                indexcnt),
                                                             child:
                                                                 NeumorphicIcon(
                                                               Icons.add_box,
@@ -340,7 +345,7 @@ class AppBarCustom extends StatelessWidget {
                                                                           ? func1()
                                                                           : (iconname == Icons.delete
                                                                               ? func2(context)
-                                                                              : (iconname == Icons.close ? func3() : (iconname == Icons.star_border || iconname == Icons.star ? func7(uiset.editpagelist[0].title, uiset.editpagelist[0].email.toString(), uiset.editpagelist[0].username.toString(), uiset.editpagelist[0].id.toString()) : (iconname == Icons.person_outline ? (Hive.box('user_info').get('id') == null ? GoToLogin('isnotfirst') : setUsers(context, searchnode, textEditingController, Hive.box('user_info').get('id'))) : func6(context, textEditingController, searchnode, 'addpage', '', 99))))),
+                                                                              : (iconname == Icons.close ? func3() : (iconname == Icons.star_border || iconname == Icons.star ? func7(uiset.editpagelist[0].title, uiset.editpagelist[0].email.toString(), uiset.editpagelist[0].username.toString(), uiset.editpagelist[0].id.toString()) : (iconname == Icons.person_outline ? (Hive.box('user_info').get('id') == null ? GoToLogin('isnotfirst') : setUsers(context, searchnode, textEditingController, Hive.box('user_info').get('id'))) : func6(context, textEditingController, searchnode, 'addpage', '', 99, indexcnt))))),
                                                                       child: NeumorphicIcon(
                                                                         iconname,
                                                                         size:

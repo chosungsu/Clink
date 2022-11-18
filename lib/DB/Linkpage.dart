@@ -7,6 +7,7 @@ class Linkpage {
 class Linkspacepage {
   final String placestr;
   final int type;
+  final int? index;
   final String uniquecode;
   final String familycode;
   final String? date;
@@ -14,6 +15,7 @@ class Linkspacepage {
   Linkspacepage({
     required this.placestr,
     required this.type,
+    this.index,
     required this.uniquecode,
     required this.familycode,
     this.date,

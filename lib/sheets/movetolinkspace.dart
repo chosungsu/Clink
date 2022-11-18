@@ -370,6 +370,7 @@ addmylink(
   String where,
   String id,
   int categorynumber,
+  int indexcnt,
 ) {
   Get.bottomSheet(
           Container(
@@ -404,7 +405,8 @@ addmylink(
                               username,
                               where,
                               id,
-                              categorynumber),
+                              categorynumber,
+                              indexcnt),
                         );
                       }),
                     ))),
@@ -436,6 +438,7 @@ linkstation(
   String where,
   String id,
   int categorynumber,
+  int indexcnt,
 ) {
   return SizedBox(
       child: Padding(
@@ -462,8 +465,15 @@ linkstation(
         const SizedBox(
           height: 20,
         ),
-        contentthird(context, textEditingControllerAddSheet,
-            searchNodeAddSection, username, where, id, categorynumber),
+        contentthird(
+            context,
+            textEditingControllerAddSheet,
+            searchNodeAddSection,
+            username,
+            where,
+            id,
+            categorynumber,
+            indexcnt),
         const SizedBox(
           height: 20,
         ),
@@ -504,6 +514,7 @@ contentthird(
   String where,
   String id,
   int categorynumber,
+  int indexcnt,
 ) {
   final updatelist = [];
   final uiset = Get.put(uisetting());
@@ -567,7 +578,8 @@ contentthird(
                         'spacename': textEditingControllerAddSheet.text,
                         'urllist': [],
                         'pagename': uiset.pagelist[uiset.mypagelistindex].title,
-                        'type': categorynumber
+                        'type': categorynumber,
+                        'index': indexcnt
                       }).whenComplete(() {
                         linkspaceset.setcompleted(true);
                         linkspaceset
@@ -580,7 +592,8 @@ contentthird(
                         'spacename': textEditingControllerAddSheet.text,
                         'calendarname': textEditingControllerAddSheet.text,
                         'pagename': uiset.pagelist[uiset.mypagelistindex].title,
-                        'type': categorynumber
+                        'type': categorynumber,
+                        'index': indexcnt
                       }).whenComplete(() {
                         linkspaceset.setcompleted(true);
                         linkspaceset
@@ -593,7 +606,8 @@ contentthird(
                         'spacename': textEditingControllerAddSheet.text,
                         'todolist': [],
                         'pagename': uiset.pagelist[uiset.mypagelistindex].title,
-                        'type': categorynumber
+                        'type': categorynumber,
+                        'index': indexcnt
                       }).whenComplete(() {
                         linkspaceset.setcompleted(true);
                         linkspaceset
@@ -606,7 +620,8 @@ contentthird(
                         'spacename': textEditingControllerAddSheet.text,
                         'memolist': [],
                         'pagename': uiset.pagelist[uiset.mypagelistindex].title,
-                        'type': categorynumber
+                        'type': categorynumber,
+                        'index': indexcnt
                       }).whenComplete(() {
                         linkspaceset.setcompleted(true);
                         linkspaceset
