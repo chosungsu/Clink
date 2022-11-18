@@ -925,8 +925,29 @@ contentthird(
                     }
                   }
                   firestore.collection('PageView').doc(id).delete();
-                }).whenComplete(() {
-                  linkspaceset.setcompleted(false);
+                }).whenComplete(() async {
+                  await firestore
+                      .collection('Pinchannelin')
+                      .get()
+                      .then((value) {
+                    for (int i = 0; i < value.docs.length; i++) {
+                      if (value.docs[i].get('uniquecode') == id) {
+                        updateid.add(value.docs[i].id);
+                      }
+                    }
+                    if (updateid.isEmpty) {
+                    } else {
+                      for (int j = 0; j < updateid.length; j++) {
+                        firestore
+                            .collection('Pinchannelin')
+                            .doc(updateid[j])
+                            .delete();
+                      }
+                    }
+                  }).whenComplete(() {
+                    linkspaceset.setcompleted(false);
+                  });
+
                   //updateid.clear();
                 });
               } else {

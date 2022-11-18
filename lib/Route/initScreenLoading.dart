@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../DB/PageList.dart';
+import '../Enums/Variables.dart';
 import '../LocalNotiPlatform/NotificationApi.dart';
 import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/memosetting.dart';
@@ -20,10 +21,6 @@ Future<Widget?> initScreen() async {
   final uiset = Get.put(uisetting());
   List updateid = [];
   bool isread = false;
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  String name = Hive.box('user_info').get('id') ?? '';
-  String usercode = Hive.box('user_setting').get('usercode') ?? '';
-  String useremail = Hive.box('user_info').get('email') ?? '';
   List defaulthomeviewlist = [
     '오늘의 일정',
     '공유된 오늘의 일정',
@@ -115,7 +112,6 @@ Future<Widget?> initScreen() async {
         }
       }
       if (updateid.isEmpty) {
-        uiset.pagelist.clear();
         await firestore.collection('Pinchannel').add({
           'username': usercode,
           'linkname': '빈 스페이스',
@@ -128,8 +124,7 @@ Future<Widget?> initScreen() async {
       }
     }).whenComplete(() {
       NotificationApi.runWhileAppIsTerminated();
-      Hive.box('user_setting').put(
-          'currentmypage', Hive.box('user_setting').get('currentmypage') ?? 0);
+      Hive.box('user_setting').put('currentmypage', 0);
       GoToMain();
     });
   }

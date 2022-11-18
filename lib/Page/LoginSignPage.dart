@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:clickbyme/Tool/Getx/navibool.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:sign_button/constants.dart';
 import 'package:sign_button/create_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../Auth/GoogleSignInController.dart';
+import '../Enums/Variables.dart';
 import '../Route/subuiroute.dart';
 import '../Tool/AndroidIOS.dart';
 import '../Tool/Loader.dart';
@@ -27,6 +29,7 @@ class _LoginSignPageState extends State<LoginSignPage>
   bool _ischecked = false;
   bool loading = false;
   late FToast fToast;
+  final draw = Get.put(navibool());
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
@@ -45,112 +48,116 @@ class _LoginSignPageState extends State<LoginSignPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: WillPopScope(
-        onWillPop: _onWillPop,
-        child: Stack(
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                makeBody(context, _ischecked),
-                const Divider(
-                  height: 30,
-                  color: Colors.grey,
-                  thickness: 0.5,
-                  indent: 30.0,
-                  endIndent: 30.0,
-                ),
-                const Text(
-                  '동의항목',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold, // bold
+    return SafeArea(
+        child: GetBuilder<navibool>(
+      builder: (_) => Scaffold(
+        backgroundColor: draw.backgroundcolor,
+        body: WillPopScope(
+          onWillPop: _onWillPop,
+          child: Stack(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  makeBody(context, _ischecked),
+                  Divider(
+                    height: 30,
+                    color: draw.color_textstatus,
+                    thickness: 0.5,
+                    indent: 30.0,
+                    endIndent: 30.0,
                   ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Checkbox(
-                            value: _ischecked,
-                            onChanged: (value) {
-                              setState(() {
-                                _ischecked = value!;
-                              });
-                            }),
-                        Flexible(
-                            fit: FlexFit.tight,
-                            child: Row(
-                              children: const [
-                                Text(
-                                  '(선택)자동 로그인 사용',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                      letterSpacing: 2),
-                                ),
-                              ],
-                            ))
-                      ],
+                  Text(
+                    '동의항목',
+                    style: TextStyle(
+                      color: draw.color_textstatus,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold, // bold
                     ),
-                    widget.first == 'first'
-                        ? Padding(
-                            padding: const EdgeInsets.only(left: 20, right: 20),
-                            child: RichText(
-                              text: TextSpan(
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Checkbox(
+                              value: _ischecked,
+                              onChanged: (value) {
+                                setState(() {
+                                  _ischecked = value!;
+                                });
+                              }),
+                          Flexible(
+                              fit: FlexFit.tight,
+                              child: Row(
                                 children: [
-                                  const TextSpan(
+                                  Text(
+                                    '(선택)자동 로그인 사용',
                                     style: TextStyle(
                                         fontWeight: FontWeight.normal,
                                         fontSize: 16,
-                                        color: Colors.black,
+                                        color: draw.color_textstatus,
                                         letterSpacing: 2),
-                                    text: '구글로그인(Google Login)을 클릭하여 로그인 시 ',
-                                  ),
-                                  TextSpan(
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 16,
-                                        color: Colors.blue.shade400,
-                                        letterSpacing: 2),
-                                    text: '앱의 개인정보처리방침',
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () async {
-                                        var url = Uri.parse(
-                                            'https://linkaiteam.github.io/LINKAITEAM/개인정보처리방침');
-
-                                        launchUrl(url);
-                                      },
-                                  ),
-                                  const TextSpan(
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        letterSpacing: 2),
-                                    text: '에 동의하는 것으로 간주합니다.',
                                   ),
                                 ],
+                              ))
+                        ],
+                      ),
+                      widget.first == 'first'
+                          ? Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 20, right: 20),
+                              child: RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 16,
+                                          color: draw.color_textstatus,
+                                          letterSpacing: 2),
+                                      text: '구글로그인(Google Login)을 클릭하여 로그인 시 ',
+                                    ),
+                                    TextSpan(
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 16,
+                                          color: Colors.blue.shade400,
+                                          letterSpacing: 2),
+                                      text: '앱의 개인정보처리방침',
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () async {
+                                          var url = Uri.parse(
+                                              'https://linkaiteam.github.io/LINKAITEAM/개인정보처리방침');
+
+                                          launchUrl(url);
+                                        },
+                                    ),
+                                    TextSpan(
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 16,
+                                          color: draw.color_textstatus,
+                                          letterSpacing: 2),
+                                      text: '에 동의하는 것으로 간주합니다.',
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          )
-                        : const SizedBox()
-                  ],
-                )
-              ],
-            ),
-            loading == true ? const Loader(wherein: 'login') : Container()
-          ],
+                            )
+                          : const SizedBox()
+                    ],
+                  )
+                ],
+              ),
+              loading == true ? const Loader(wherein: 'login') : Container()
+            ],
+          ),
         ),
       ),
-    );
+    ));
   }
 
   // 바디 만들기
@@ -174,10 +181,10 @@ class _LoginSignPageState extends State<LoginSignPage>
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Text(
+        Text(
           '간단 소셜 로그인',
           style: TextStyle(
-            color: Colors.blueGrey,
+            color: draw.color_textstatus,
             fontSize: 20,
             fontWeight: FontWeight.w600, // bold
           ),

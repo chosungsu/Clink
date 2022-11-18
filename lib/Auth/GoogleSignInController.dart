@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
 
+import '../Enums/Variables.dart';
 import '../Route/subuiroute.dart';
 import '../Route/initScreenLoading.dart';
 import '../mongoDB/mongodatabase.dart';
@@ -29,10 +30,6 @@ class GoogleSignInController extends GetxController {
     String code = '';
 
     //내부 저장으로 로그인 정보 저장
-    await Hive.box('user_info').put('id', nick);
-    await Hive.box('user_info').put('email', email);
-    await Hive.box('user_info').put('count', count);
-    await Hive.box('user_info').put('autologin', ischecked);
     code = Hive.box('user_info').get('email').toString().substring(0, 3) +
         Hive.box('user_info')
             .get('email')
@@ -44,15 +41,19 @@ class GoogleSignInController extends GetxController {
 
     //firestore 저장
 
-    firestore.collection('User').doc(nick).get().then((value) async {
+    await firestore.collection('User').doc(nick).get().then((value) async {
       if (value.exists) {
         await firestore.collection('User').doc(nick).update({
           'name': nick,
           'email': email,
           'login_where': 'google_user',
           'autologin': ischecked,
-        }).whenComplete(() {
-          firestore
+        }).whenComplete(() async {
+          await Hive.box('user_info').put('id', nick);
+          await Hive.box('user_info').put('email', email);
+          await Hive.box('user_info').put('count', count);
+          await Hive.box('user_info').put('autologin', ischecked);
+          await firestore
               .collection('User')
               .doc(Hive.box('user_info').get('id'))
               .get()
@@ -60,6 +61,10 @@ class GoogleSignInController extends GetxController {
             if (value.exists) {
               await Hive.box('user_setting')
                   .put('usercode', value.data()!['code']);
+              name = nick;
+              email = email;
+              usercode = value.data()!['code'];
+              initScreen();
             } else {}
           });
         });
@@ -69,16 +74,21 @@ class GoogleSignInController extends GetxController {
           'subname': nick,
           'email': email,
           'login_where': 'google_user',
-          'time': DateTime.now(),
           'autologin': ischecked,
           'code': code
         }, SetOptions(merge: true)).whenComplete(() async {
+          await Hive.box('user_info').put('id', nick);
+          await Hive.box('user_info').put('email', email);
+          await Hive.box('user_info').put('count', count);
+          await Hive.box('user_info').put('autologin', ischecked);
           await Hive.box('user_setting').put('usercode', code);
+          name = nick;
+          email = email;
+          usercode = code;
+          initScreen();
         });
       }
     });
-    await initScreen();
-    GoToMain();
 
     update();
     notifyChildrens();

@@ -35,7 +35,7 @@ SearchUI(scrollController, controller, double height, controller2) {
                                 SizedBox(
                                   height: 20,
                                 ),
-                                Se_Container01(height),
+                                Se_Container01(height, controller),
                                 SizedBox(
                                   height: 20,
                                 ),
@@ -77,9 +77,6 @@ Se_Container0(double height, controller) {
                 builder: ((context, setState) {
                   return TextField(
                     onChanged: ((value) {
-                      /*setState(() {
-                        textchangelistener = value;
-                      });*/
                       uiset.settextrecognizer(value);
                     }),
                     controller: controller,
@@ -116,9 +113,7 @@ Se_Container0(double height, controller) {
   );
 }
 
-Se_Container01(
-  double height,
-) {
+Se_Container01(double height, controller) {
   return GetBuilder<uisetting>(
       builder: (_) => Padding(
             padding: EdgeInsets.only(left: 20, right: 20),
@@ -200,6 +195,8 @@ Se_Container01(
                                             GestureDetector(
                                                 onTap: () {
                                                   searchNode.unfocus();
+                                                  controller.text = '';
+                                                  uiset.settextrecognizer('');
                                                   Hive.box('user_setting')
                                                       .put('page_index', 11);
                                                   uiset.setsearchpageindex(

@@ -18,6 +18,7 @@ import '../Tool/Getx/uisetting.dart';
 //Here are general Variables
 var usercode = Hive.box('user_setting').get('usercode') ?? '';
 var name = Hive.box('user_info').get('id') ?? '';
+var useremail = Hive.box('user_info').get('email') ?? '';
 final linkspaceset = Get.put(linkspacesetting());
 final uiset = Get.put(uisetting());
 final draw = Get.put(navibool());
