@@ -1,10 +1,10 @@
 // ignore_for_file: non_constant_identifier_names, camel_case_types
 
+import 'package:clickbyme/Enums/Variables.dart';
 import 'package:clickbyme/Page/MYPage.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
-import 'package:clickbyme/mongoDB/mongodatabase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -82,15 +82,9 @@ class _mainrouteState extends State<mainroute>
       );
     } else if (uiset.searchpagemove != '') {
       uiset.searchpagemove = '';
+      uiset.textrecognizer = '';
+      searchNode.unfocus();
       Hive.box('user_setting').put('page_index', 1);
-      Navigator.of(context).pushReplacement(
-        PageTransition(
-          type: PageTransitionType.leftToRight,
-          child: const mainroute(
-            index: 1,
-          ),
-        ),
-      );
     } else {
       Hive.box('user_setting').put('page_index', 0);
 
@@ -141,6 +135,7 @@ class _mainrouteState extends State<mainroute>
                                 //Handle button tap
                                 uiset.setloading(true);
                                 uiset.searchpagemove = '';
+                                uiset.textrecognizer = '';
                                 uiset.setmypagelistindex(
                                     Hive.box('user_setting')
                                             .get('currentmypage') ??

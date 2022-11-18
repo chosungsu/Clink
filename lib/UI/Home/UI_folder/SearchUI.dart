@@ -15,7 +15,8 @@ import '../../../Tool/TextSize.dart';
 import '../secondContentNet/ShowTips.dart';
 import 'PageUI.dart';
 
-SearchUI(scrollController, controller, double height, controller2) {
+SearchUI(scrollController, TextEditingController controller, double height,
+    TextEditingController controller2) {
   return uiset.searchpagemove == ''
       ? Flexible(
           fit: FlexFit.tight,
@@ -43,7 +44,7 @@ SearchUI(scrollController, controller, double height, controller2) {
                                 SizedBox(
                                   height: 20,
                                 ),
-                                Se_Container11(height),
+                                Se_Container11(height, controller),
                                 SizedBox(
                                   height: 20,
                                 ),
@@ -79,6 +80,7 @@ Se_Container0(double height, controller) {
                     onChanged: ((value) {
                       uiset.settextrecognizer(value);
                     }),
+                    autofocus: false,
                     controller: controller,
                     maxLines: 1,
                     focusNode: searchNode,
@@ -195,8 +197,7 @@ Se_Container01(double height, controller) {
                                             GestureDetector(
                                                 onTap: () {
                                                   searchNode.unfocus();
-                                                  controller.text = '';
-                                                  uiset.settextrecognizer('');
+                                                  controller.clear();
                                                   Hive.box('user_setting')
                                                       .put('page_index', 11);
                                                   uiset.setsearchpageindex(
@@ -358,6 +359,7 @@ Se_Container1(
 
 Se_Container11(
   double height,
+  TextEditingController controller,
 ) {
   return GetBuilder<uisetting>(
       builder: (_) => Padding(
@@ -422,8 +424,9 @@ Se_Container11(
                                     GestureDetector(
                                       onTap: () {
                                         searchNode.unfocus();
+                                        controller.clear();
                                         Hive.box('user_setting')
-                                            .put('page_index', 21);
+                                            .put('page_index', 12);
                                         uiset.setfavorpageindex(index);
                                         uiset.seteditpage(
                                             uiset.favorpagelist[index].title,

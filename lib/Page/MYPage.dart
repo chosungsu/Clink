@@ -146,7 +146,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                               child: PageUI1(
                                   uiset.pagelist[uiset.mypagelistindex].id
                                       .toString(),
-                                  _controller))
+                                  _controller)),
                         ],
                       )),
                 ),

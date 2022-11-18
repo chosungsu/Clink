@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -97,18 +98,32 @@ func2(BuildContext context) async {
   }
 }
 
-func3() => Future.delayed(const Duration(seconds: 0), () {
+func3(BuildContext context) => Future.delayed(const Duration(seconds: 0), () {
       if (linkspaceset.color == draw.backgroundcolor) {
         StatusBarControl.setColor(draw.backgroundcolor, animated: true);
       } else {
         StatusBarControl.setColor(linkspaceset.color, animated: true);
       }
-      Get.back();
+      if (Hive.box('user_setting').get('page_index') == 3 ||
+          Hive.box('user_setting').get('page_index') == 4) {
+        Hive.box('user_setting').put('page_index', 0);
+
+        Navigator.of(context).pushReplacement(
+          PageTransition(
+            type: PageTransitionType.bottomToTop,
+            child: const mainroute(
+              index: 0,
+            ),
+          ),
+        );
+      } else {
+        Get.back();
+      }
     });
 func4(BuildContext context, indexcnt) async {
   var checkid = '';
   if (Hive.box('user_setting').get('page_index') == 11 ||
-      Hive.box('user_setting').get('page_index') == 21) {
+      Hive.box('user_setting').get('page_index') == 12) {
     await firestore.collection('Favorplace').get().then((value) {
       checkid = '';
       if (value.docs.isEmpty) {
@@ -168,7 +183,11 @@ func4(BuildContext context, indexcnt) async {
   }
 }
 
-func5() => Get.to(() => const Spaceapage(), transition: Transition.upToDown);
+func5() {
+  Hive.box('user_setting').put('page_index', 3);
+  Get.to(() => const Spaceapage(), transition: Transition.upToDown);
+}
+
 func6(
     BuildContext context,
     TextEditingController textEditingController,

@@ -1,13 +1,10 @@
 // ignore_for_file: prefer_const_constructors, unused_local_variable
 
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:clickbyme/DB/PushNotification.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Route/initScreenLoading.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
-import 'package:clickbyme/mongoDB/mongodatabase.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';

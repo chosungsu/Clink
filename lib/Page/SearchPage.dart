@@ -22,6 +22,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
   var controller;
   var controller2;
   ScrollController scrollController = ScrollController();
+  final uiset = Get.put(uisetting());
 
   @override
   void initState() {
@@ -29,17 +30,6 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
     controller = TextEditingController();
     controller2 = TextEditingController();
     Hive.box('user_setting').put('page_index', 1);
-    docid = Hive.box('user_setting').get('usercode') ?? '';
-    uiset.searchpagemove = '';
-    /*firestore.collection('MemoAllAlarm').get().then((value) {
-      if (value.docs.isNotEmpty) {
-        for (int i = 0; i < value.docs.length; i++) {
-          //print(value.docs[i].data());
-          MongoDB.add(
-              collectionname: 'memoallalarm', addlist: value.docs[i].data());
-        }
-      }
-    });*/
   }
 
   @override
@@ -47,7 +37,6 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
     super.dispose();
     controller.dispose();
     controller2.dispose();
-    scrollController.dispose();
     searchNode.unfocus();
   }
 

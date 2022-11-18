@@ -40,7 +40,7 @@ class _NotiAlarmState extends State<NotiAlarm>
   void initState() {
     super.initState();
     draw.navi = 1;
-    Hive.box('user_setting').put('page_index', 3);
+    Hive.box('user_setting').put('page_index', 4);
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -91,7 +91,7 @@ class _NotiAlarmState extends State<NotiAlarm>
                           AppBarCustom(
                             title: '알림',
                             righticon: true,
-                            iconname: Icons.delete,
+                            iconname: Icons.keyboard_double_arrow_up,
                           ),
                           allread(),
                           Flexible(
