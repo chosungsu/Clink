@@ -8,7 +8,6 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../DB/PageList.dart';
 import '../../../Enums/Variables.dart';
-import '../../../Tool/BGColor.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/Getx/uisetting.dart';
 import '../../../Tool/NoBehavior.dart';
@@ -16,7 +15,7 @@ import '../../../Tool/TextSize.dart';
 import '../secondContentNet/ShowTips.dart';
 import 'PageUI.dart';
 
-SearchUI(scrollController, controller, double height) {
+SearchUI(scrollController, controller, double height, controller2) {
   return uiset.searchpagemove == ''
       ? Flexible(
           fit: FlexFit.tight,
@@ -59,8 +58,8 @@ SearchUI(scrollController, controller, double height) {
           ))
       : ScrollConfiguration(
           behavior: NoBehavior(),
-          child: Se_Container2(uiset.editpagelist[0].title,
-              uiset.editpagelist[0].id.toString()));
+          child: Se_Container2(uiset.editpagelist[0].id.toString(),
+              uiset.editpagelist[0].setting.toString(), controller2));
 }
 
 Se_Container0(double height, controller) {
@@ -78,9 +77,10 @@ Se_Container0(double height, controller) {
                 builder: ((context, setState) {
                   return TextField(
                     onChanged: ((value) {
-                      setState(() {
+                      /*setState(() {
                         textchangelistener = value;
-                      });
+                      });*/
+                      uiset.settextrecognizer(value);
                     }),
                     controller: controller,
                     maxLines: 1,
@@ -134,12 +134,13 @@ Se_Container01(
                     final messagetitle = sp.get('linkname');
                     final messageemail = sp.get('email');
                     final messagesetting = sp.get('setting');
-                    if (messageuser == usercode) {
-                      if (textchangelistener == '') {
-                      } else {
-                        if (messagetitle
-                            .toString()
-                            .contains(textchangelistener)) {
+                    if (uiset.textrecognizer == '') {
+                    } else {
+                      if (messagetitle
+                          .toString()
+                          .contains(uiset.textrecognizer)) {
+                        if (messagetitle == '빈 스페이스') {
+                        } else {
                           uiset.searchpagelist.add(PageList(
                               title: messagetitle,
                               username: messageuser,
@@ -530,8 +531,8 @@ Se_Container11(
           ));
 }
 
-Se_Container2(String title, String id) {
-  return PageUI1(title, id);
+Se_Container2(String id, String setting, TextEditingController controller) {
+  return PageUI1(id, controller);
 }
 
 Se_Container3(

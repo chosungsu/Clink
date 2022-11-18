@@ -20,9 +20,16 @@ class uisetting extends GetxController {
   int mypagelistindex = Hive.box('user_setting').get('currentmypage') ?? 0;
   int currentstepper = 0;
   String searchpagemove = '';
+  String textrecognizer = '';
 
   void setloading(bool what) {
     loading = what;
+    update();
+    notifyChildrens();
+  }
+
+  void settextrecognizer(String what) {
+    textrecognizer = what;
     update();
     notifyChildrens();
   }

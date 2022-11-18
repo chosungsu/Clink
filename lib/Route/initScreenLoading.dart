@@ -108,8 +108,10 @@ Future<Widget?> initScreen() async {
       for (var element in value.docs) {
         if (element.data()['username'] == usercode) {
           updateid.add(element.data()['linkname']);
-          uiset.pagelist
-              .add(PageList(title: element.data()['linkname'], id: element.id));
+          uiset.pagelist.add(PageList(
+              title: element.data()['linkname'],
+              id: element.id,
+              setting: element.data()['setting']));
         }
       }
       if (updateid.isEmpty) {
@@ -120,7 +122,8 @@ Future<Widget?> initScreen() async {
           'email': useremail,
           'setting': 'block'
         }).then((value1) {
-          uiset.pagelist.add(PageList(title: '빈 스페이스', id: value1.id));
+          uiset.pagelist
+              .add(PageList(title: '빈 스페이스', id: value1.id, setting: 'block'));
         });
       }
     }).whenComplete(() {

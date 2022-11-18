@@ -3,6 +3,7 @@
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 
 import '../../../DB/Linkpage.dart';
@@ -12,7 +13,7 @@ import '../../../Tool/Getx/linkspacesetting.dart';
 import '../../../Tool/TextSize.dart';
 import '../../../sheets/linksettingsheet.dart';
 
-PageUI1(String title, String id) {
+PageUI1(String id, TextEditingController controller) {
   return GetBuilder<linkspacesetting>(
       builder: (_) => StreamBuilder<QuerySnapshot>(
             stream: firestore.collection('PageView').snapshots(),
@@ -30,7 +31,8 @@ PageUI1(String title, String id) {
                     linkspaceset.indexcnt.add(Linkspacepage(
                         type: sp.get('type'),
                         placestr: sp.get('spacename'),
-                        uniquecode: sp.get('id')));
+                        uniquecode: sp.get('id'),
+                        familycode: sp.id));
                   }
                 }
                 linkspaceset.indexcnt.sort(((a, b) {
@@ -97,18 +99,67 @@ PageUI1(String title, String id) {
                                                   ),
                                                 ),
                                                 InkWell(
-                                                  onTap: () {
-                                                    linkmadetreeplace(
-                                                        context,
-                                                        usercode,
-                                                        uiset.pagelist[0].title,
-                                                        linkspaceset
-                                                            .indexcnt[index]
-                                                            .placestr,
-                                                        index,
-                                                        linkspaceset
-                                                            .indexcnt[index]
-                                                            .uniquecode);
+                                                  onTap: () async {
+                                                    await firestore
+                                                        .collection(
+                                                            'Pinchannel')
+                                                        .doc(id)
+                                                        .get()
+                                                        .then(
+                                                      (value) {
+                                                        if (value.get(
+                                                                'username') ==
+                                                            usercode) {
+                                                          linkmadetreeplace(
+                                                            context,
+                                                            usercode,
+                                                            uiset.pagelist[0]
+                                                                .title,
+                                                            linkspaceset
+                                                                .indexcnt[index]
+                                                                .placestr,
+                                                            linkspaceset
+                                                                .indextreetmp[
+                                                                    index]
+                                                                .length,
+                                                            linkspaceset
+                                                                .indexcnt[index]
+                                                                .familycode,
+                                                            linkspaceset
+                                                                .indexcnt[index]
+                                                                .type,
+                                                          );
+                                                        } else {
+                                                          if (value.get(
+                                                                  'setting') ==
+                                                              'block') {
+                                                          } else {
+                                                            linkmadetreeplace(
+                                                              context,
+                                                              usercode,
+                                                              uiset.pagelist[0]
+                                                                  .title,
+                                                              linkspaceset
+                                                                  .indexcnt[
+                                                                      index]
+                                                                  .placestr,
+                                                              linkspaceset
+                                                                  .indextreetmp[
+                                                                      index]
+                                                                  .length,
+                                                              linkspaceset
+                                                                  .indexcnt[
+                                                                      index]
+                                                                  .familycode,
+                                                              linkspaceset
+                                                                  .indexcnt[
+                                                                      index]
+                                                                  .type,
+                                                            );
+                                                          }
+                                                        }
+                                                      },
+                                                    );
                                                   },
                                                   child: Icon(
                                                     Icons.add_circle_outline,
@@ -120,21 +171,62 @@ PageUI1(String title, String id) {
                                                   width: 10,
                                                 ),
                                                 InkWell(
-                                                  onTap: () {
-                                                    linkplacechangeoptions(
-                                                        context,
-                                                        usercode,
-                                                        uiset.pagelist[0].title,
-                                                        index,
-                                                        linkspaceset
-                                                            .indexcnt[index]
-                                                            .placestr,
-                                                        linkspaceset
-                                                            .indexcnt[index]
-                                                            .uniquecode,
-                                                        linkspaceset
-                                                            .indexcnt[index]
-                                                            .type);
+                                                  onTap: () async {
+                                                    await firestore
+                                                        .collection(
+                                                            'Pinchannel')
+                                                        .doc(id)
+                                                        .get()
+                                                        .then(
+                                                      (value) {
+                                                        if (value.get(
+                                                                'username') ==
+                                                            usercode) {
+                                                          linkplacechangeoptions(
+                                                              context,
+                                                              index,
+                                                              linkspaceset
+                                                                  .indexcnt[
+                                                                      index]
+                                                                  .placestr,
+                                                              linkspaceset
+                                                                  .indexcnt[
+                                                                      index]
+                                                                  .uniquecode,
+                                                              linkspaceset
+                                                                  .indexcnt[
+                                                                      index]
+                                                                  .type,
+                                                              controller,
+                                                              searchNode,
+                                                              'pinchannel');
+                                                        } else {
+                                                          if (value.get(
+                                                                  'setting') ==
+                                                              'block') {
+                                                          } else {
+                                                            linkplacechangeoptions(
+                                                                context,
+                                                                index,
+                                                                linkspaceset
+                                                                    .indexcnt[
+                                                                        index]
+                                                                    .placestr,
+                                                                linkspaceset
+                                                                    .indexcnt[
+                                                                        index]
+                                                                    .uniquecode,
+                                                                linkspaceset
+                                                                    .indexcnt[
+                                                                        index]
+                                                                    .type,
+                                                                controller,
+                                                                searchNode,
+                                                                'pinchannel');
+                                                          }
+                                                        }
+                                                      },
+                                                    );
                                                   },
                                                   child: Icon(
                                                     Icons.more_horiz,
@@ -143,89 +235,53 @@ PageUI1(String title, String id) {
                                                   ),
                                                 )
                                               ]),
-                                          /*const SizedBox(
-                                              height: 10,
-                                            ),
-                                            FutureBuilder(
-                                                future: MongoDB.getData(
-                                                  collectionname: 'PageView',
-                                                ).then((value) {
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          StreamBuilder<QuerySnapshot>(
+                                              stream: firestore
+                                                  .collection('Pinchannelin')
+                                                  .snapshots(),
+                                              builder: ((context, snapshot) {
+                                                if (snapshot.hasData) {
                                                   linkspaceset
                                                       .indextreetmp[index]
                                                       .clear();
-                                                  if (value.isEmpty) {
-                                                  } else {
-                                                    for (var sp in value) {
-                                                      pagename =
-                                                          sp.get('pagename');
-                                                      spacename =
-                                                          sp.get('spacename');
-                                                      type = sp.get('type');
-                                                      spacein =
-                                                          sp.get('urllist');
-                                                          
-                                                      if (linkspaceset
-                                                                  .indexcnt[
-                                                                      index]
-                                                                  .type ==
-                                                              type &&
-                                                          linkspaceset
-                                                                  .indexcnt[
-                                                                      index]
-                                                                  .placestr ==
-                                                              spacename) {
-                                                        linkspaceset
-                                                            .indextreetmp[index]
-                                                            .add(Linkspacetreepage(
-                                                                subindex: linkspaceset
-                                                                    .indextreetmp[
-                                                                        index]
-                                                                    .length,
-                                                                placestr: sp[
-                                                                    'addname'],
-                                                                uniqueid: sp[
-                                                                    'id']));
-                                                      }
+                                                  final valuespace =
+                                                      snapshot.data!.docs;
+                                                  for (var sp in valuespace) {
+                                                    spacename =
+                                                        sp.get('addname');
+                                                    if (linkspaceset
+                                                            .indexcnt[index]
+                                                            .familycode ==
+                                                        sp.get('uniquecode')) {
+                                                      linkspaceset
+                                                          .indextreetmp[index]
+                                                          .add(Linkspacetreepage(
+                                                              subindex: sp
+                                                                  .get('index'),
+                                                              placestr:
+                                                                  spacename,
+                                                              uniqueid: sp.get(
+                                                                  'uniquecode')));
                                                     }
-                                                    linkspaceset
-                                                        .indextreetmp[index]
-                                                        .sort(((a, b) {
-                                                      return a.placestr
-                                                          .compareTo(
-                                                              b.placestr);
-                                                    }));
                                                   }
-                                                }),
-                                                builder: ((context, snapshot) {
+                                                  linkspaceset
+                                                      .indextreetmp[index]
+                                                      .sort(((a, b) {
+                                                    return a.subindex
+                                                        .compareTo(b.subindex);
+                                                  }));
                                                   if (linkspaceset
                                                       .indextreetmp[index]
                                                       .isNotEmpty) {
                                                     return SizedBox(
-                                                        height: linkspaceset
-                                                                    .indexcnt[
-                                                                        index]
-                                                                    .placestr ==
-                                                                'board'
-                                                            ? (linkspaceset
-                                                                    .indextreetmp[
-                                                                        index]
-                                                                    .length) *
-                                                                200
-                                                            : (linkspaceset
-                                                                        .indexcnt[
-                                                                            index]
-                                                                        .placestr ==
-                                                                    'card'
-                                                                ? (linkspaceset
-                                                                        .indextreetmp[
-                                                                            index]
-                                                                        .length) *
-                                                                    130
-                                                                : (linkspaceset
-                                                                        .indextreetmp[
-                                                                            index]
-                                                                        .length) *
-                                                                    130),
+                                                        height: (linkspaceset
+                                                                .indextreetmp[
+                                                                    index]
+                                                                .length) *
+                                                            140,
                                                         child: ListView.builder(
                                                             padding:
                                                                 const EdgeInsets
@@ -251,46 +307,54 @@ PageUI1(String title, String id) {
                                                                     height: 10,
                                                                   ),
                                                                   ContainerDesign(
-                                                                      color: Colors
-                                                                          .white,
+                                                                      color: draw
+                                                                          .backgroundcolor,
                                                                       child:
                                                                           SizedBox(
-                                                                        height: linkspaceset.indexcnt[index].placestr ==
-                                                                                'board'
-                                                                            ? 150
-                                                                            : (linkspaceset.indexcnt[index].placestr == 'card'
-                                                                                ? 80
-                                                                                : 80),
+                                                                        height:
+                                                                            100,
                                                                         child:
                                                                             Column(
+                                                                          mainAxisSize:
+                                                                              MainAxisSize.min,
                                                                           children: [
-                                                                            InkWell(
-                                                                              onTap: () {
-                                                                                _controller.text = linkspaceset.indextreetmp[index][index2].placestr == '' ? '' : linkspaceset.indextreetmp[index][index2].placestr;
-                                                                                linkplacenamechange(context, usercode, linkspaceset.indextreetmp[index][index2].uniqueid, index2, linkspaceset.indextreetmp[index][index2].placestr, searchNode, _controller, linkspaceset.indexcnt[index].placestr);
-                                                                              },
-                                                                              child: Row(
-                                                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                                                children: [
-                                                                                  Flexible(
-                                                                                    fit: FlexFit.tight,
-                                                                                    child: Text(
-                                                                                      linkspaceset.indextreetmp[index][index2].placestr == '' ? '제목없음' : linkspaceset.indextreetmp[index][index2].placestr,
-                                                                                      textAlign: TextAlign.start,
-                                                                                      style: TextStyle(color: Colors.black45, fontWeight: FontWeight.bold, fontSize: contentTextsize()),
-                                                                                      overflow: TextOverflow.ellipsis,
-                                                                                    ),
+                                                                            Row(
+                                                                              mainAxisSize: MainAxisSize.min,
+                                                                              children: [
+                                                                                Flexible(
+                                                                                  fit: FlexFit.tight,
+                                                                                  child: Text(
+                                                                                    linkspaceset.indextreetmp[index][index2].placestr,
+                                                                                    textAlign: TextAlign.start,
+                                                                                    style: TextStyle(color: draw.color_textstatus, fontWeight: FontWeight.bold, fontSize: contentTextsize()),
+                                                                                    overflow: TextOverflow.ellipsis,
                                                                                   ),
-                                                                                  const SizedBox(
-                                                                                    width: 10,
+                                                                                ),
+                                                                                const SizedBox(
+                                                                                  width: 10,
+                                                                                ),
+                                                                                InkWell(
+                                                                                  onTap: () async {
+                                                                                    await firestore.collection('Pinchannel').doc(id).get().then(
+                                                                                      (value) {
+                                                                                        if (value.get('username') == usercode) {
+                                                                                          linkplacechangeoptions(context, index2, linkspaceset.indextreetmp[index][index2].placestr, linkspaceset.indextreetmp[index][index2].uniqueid, 0, controller, searchNode, 'pinchannelin');
+                                                                                        } else {
+                                                                                          if (value.get('setting') == 'block') {
+                                                                                          } else {
+                                                                                            linkplacechangeoptions(context, index2, linkspaceset.indextreetmp[index][index2].placestr, linkspaceset.indextreetmp[index][index2].uniqueid, 0, controller, searchNode, 'pinchannelin');
+                                                                                          }
+                                                                                        }
+                                                                                      },
+                                                                                    );
+                                                                                  },
+                                                                                  child: Icon(
+                                                                                    Icons.more_horiz,
+                                                                                    color: draw.color_textstatus,
                                                                                   ),
-                                                                                  const Icon(
-                                                                                    Icons.edit,
-                                                                                    color: Colors.black45,
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                            )
+                                                                                )
+                                                                              ],
+                                                                            ),
                                                                           ],
                                                                         ),
                                                                       )),
@@ -302,7 +366,7 @@ PageUI1(String title, String id) {
                                                             })));
                                                   } else {
                                                     return SizedBox(
-                                                      height: 100,
+                                                      height: 150,
                                                       child: Column(
                                                         crossAxisAlignment:
                                                             CrossAxisAlignment
@@ -316,15 +380,19 @@ PageUI1(String title, String id) {
                                                               linkspaceset
                                                                           .indexcnt[
                                                                               index]
-                                                                          .placestr ==
-                                                                      'board'
-                                                                  ? '보드 공간은 이미지모음, 메모를 클립보드 형식으로 보여주는 공간입니다.'
+                                                                          .type ==
+                                                                      0
+                                                                  ? '이 공간은 이미지, 파일, URL링크를 클립보드 형식으로 보여주는 공간입니다.'
                                                                   : (linkspaceset
-                                                                              .indexcnt[index]
-                                                                              .placestr ==
-                                                                          'card'
-                                                                      ? '카드 공간은 링크 및 파일을 바로가기 카드뷰로 보여주는 공간입니다.'
-                                                                      : '캘린더 공간은 캘린더 형식만을 보여주는 공간입니다.'),
+                                                                              .indexcnt[
+                                                                                  index]
+                                                                              .type ==
+                                                                          1
+                                                                      ? '이 공간은 캘린더 바로가기를 보여주는 공간입니다.'
+                                                                      : (linkspaceset.indexcnt[index].type ==
+                                                                              2
+                                                                          ? '이 공간은 투두리스트를 보여주는 공간입니다.'
+                                                                          : '이 공간은 메모를 보여주는 공간입니다.')),
                                                               textAlign:
                                                                   TextAlign
                                                                       .center,
@@ -342,7 +410,87 @@ PageUI1(String title, String id) {
                                                       ),
                                                     );
                                                   }
-                                                }))*/
+                                                } else if (snapshot
+                                                        .connectionState ==
+                                                    ConnectionState.waiting) {
+                                                  return SizedBox(
+                                                    height: 150,
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Center(
+                                                          child:
+                                                              SpinKitThreeBounce(
+                                                            size: 25,
+                                                            itemBuilder:
+                                                                (BuildContext
+                                                                        context,
+                                                                    int index) {
+                                                              return DecoratedBox(
+                                                                decoration: BoxDecoration(
+                                                                    color: Colors
+                                                                        .blue
+                                                                        .shade200,
+                                                                    shape: BoxShape
+                                                                        .circle),
+                                                              );
+                                                            },
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  );
+                                                } else {
+                                                  return SizedBox(
+                                                    height: 150,
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Center(
+                                                          child: Text(
+                                                            linkspaceset
+                                                                        .indexcnt[
+                                                                            index]
+                                                                        .type ==
+                                                                    0
+                                                                ? '이 공간은 이미지, 파일, URL링크를 클립보드 형식으로 보여주는 공간입니다.'
+                                                                : (linkspaceset
+                                                                            .indexcnt[
+                                                                                index]
+                                                                            .type ==
+                                                                        1
+                                                                    ? '이 공간은 캘린더 바로가기를 보여주는 공간입니다.'
+                                                                    : (linkspaceset.indexcnt[index].type ==
+                                                                            2
+                                                                        ? '이 공간은 투두리스트를 보여주는 공간입니다.'
+                                                                        : '이 공간은 메모를 보여주는 공간입니다.')),
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black45,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize:
+                                                                    contentTextsize()),
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  );
+                                                }
+                                              }))
                                         ],
                                       )))),
                               const SizedBox(

@@ -176,7 +176,8 @@ content(
               await firestore.collection('Pinchannel').get().then((value) {
                 for (int i = 0; i < value.docs.length; i++) {
                   if (value.docs[i].get('username') == usercode &&
-                      value.docs[i].get('linkname') == pagelist[index].title) {
+                      value.docs[i].get('linkname') == pagelist[index].title &&
+                      value.docs[i].id == pagelist[index].id) {
                     id = value.docs[i].id;
                   }
                 }
@@ -185,34 +186,18 @@ content(
                 final idlist = [];
                 await firestore.collection('Pinchannelin').get().then((value) {
                   for (int i = 0; i < value.docs.length; i++) {
-                    if (value.docs[i].get('username') == usercode &&
-                        value.docs[i].get('linkname') ==
-                            pagelist[index].title) {
+                    if (value.docs[i].get('nodeid') == pagelist[index].id) {
                       id = value.docs[i].id;
                       uniquecodelist.add(value.docs[i].get('uniquecode'));
                       firestore.collection('Pinchannelin').doc(id).delete();
-                    }
-                  }
-                });
-
-                await firestore.collection('Linknet').get().then((value) async {
-                  for (int i = 0; i < value.docs.length; i++) {
-                    for (int i = 0; i < uniquecodelist.length; i++) {
-                      if (value.docs[i].get('uniquecode') ==
-                          uniquecodelist[i]) {
-                        id = value.docs[i].id;
-                        for (int j = 0; j < idlist.length; j++) {
-                          firestore.collection('Linknet').doc(id).delete();
-                        }
-                      } else {}
                     }
                   }
                 }).whenComplete(() {
                   uiset.setloading(false);
 
                   linkspaceset.resetspacelink();
-                  for (int k = 0; k < updatelist.length; k++) {
-                    linkspaceset.setspacelink(updatelist[k]);
+                  for (int k = 0; k < uniquecodelist.length; k++) {
+                    linkspaceset.setspacelink(uniquecodelist[k]);
                   }
                   Get.back();
                   linkspaceset.setcompleted(true);
@@ -496,7 +481,13 @@ titlethird(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(where == 'addtemplate' ? '스페이스 추가' : '페이지 추가',
+          Text(
+              where == 'addtemplate'
+                  ? '스페이스 추가'
+                  : (where == 'editnametemplate' ||
+                          where == 'editnametemplatein'
+                      ? '이름 변경'
+                      : '페이지 추가'),
               style: const TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -517,6 +508,8 @@ contentthird(
   final updatelist = [];
   final uiset = Get.put(uisetting());
   final linkspaceset = Get.put(linkspacesetting());
+  final initialtext = textEditingControllerAddSheet.text;
+  var updateid;
 
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
@@ -530,8 +523,12 @@ contentthird(
               contentPadding: const EdgeInsets.only(left: 10),
               border: InputBorder.none,
               isCollapsed: true,
-              hintText:
-                  where == 'addtemplate' ? '추가할 스페이스 제목 입력' : '추가할 페이지 제목 입력',
+              hintText: where == 'addtemplate'
+                  ? '추가할 스페이스 제목 입력'
+                  : (where == 'editnametemplate' ||
+                          where == 'editnametemplatein'
+                      ? '변경할 스페이스 이름 입력'
+                      : '추가할 페이지 제목 입력'),
               hintStyle:
                   TextStyle(fontSize: contentTextsize(), color: Colors.black45),
             ),
@@ -555,7 +552,10 @@ contentthird(
                       title: '알림',
                       content: where == 'addtemplate'
                           ? '추가할 스페이스 제목이 비어있어요!'
-                          : '추가할 페이지 제목이 비어있어요!',
+                          : (where == 'editnametemplate' ||
+                                  where == 'editnametemplatein'
+                              ? '변경할 스페이스 제목이 비어있어요!'
+                              : '추가할 페이지 제목이 비어있어요!'),
                       context: context,
                       snackType: SnackType.warning);
                 } else {
@@ -614,6 +614,47 @@ contentthird(
                         Get.back();
                       });
                     }
+                  } else if (where == 'editnametemplate') {
+                    firestore.collection('PageView').get().then((value) {
+                      for (int i = 0; i < value.docs.length; i++) {
+                        if (value.docs[i].get('id') == id &&
+                            value.docs[i].get('type') == categorynumber &&
+                            value.docs[i].get('spacename') == initialtext) {
+                          updateid = value.docs[i].id;
+                        }
+                      }
+                      firestore.collection('PageView').doc(updateid).update({
+                        'spacename': textEditingControllerAddSheet.text
+                      }).whenComplete(() {
+                        linkspaceset.setcompleted(true);
+                        linkspaceset
+                            .setspacelink(textEditingControllerAddSheet.text);
+                        Get.back();
+                      });
+                    });
+                  } else if (where == 'editnametemplatein') {
+                    firestore.collection('Pinchannelin').get().then((value) {
+                      if (value.docs.isNotEmpty) {
+                        for (int j = 0; j < value.docs.length; j++) {
+                          final messageuniquecode = value.docs[j]['uniquecode'];
+                          final messageindex = value.docs[j]['index'];
+                          if (messageindex == categorynumber &&
+                              messageuniquecode == id) {
+                            firestore
+                                .collection('Pinchannelin')
+                                .doc(value.docs[j].id)
+                                .update({
+                              'addname': textEditingControllerAddSheet.text
+                            });
+                          }
+                        }
+                      } else {}
+                    }).whenComplete(() {
+                      linkspaceset.setcompleted(true);
+                      linkspaceset
+                          .setspacelink(textEditingControllerAddSheet.text);
+                      Get.back();
+                    });
                   } else {
                     firestore.collection('Pinchannel').add({
                       'username': username,

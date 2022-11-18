@@ -488,9 +488,6 @@ class _AddTemplateState extends State<AddTemplate>
                                                       onTap: () {
                                                         linkplacechangeoptions(
                                                             context,
-                                                            usercode,
-                                                            uiset.pagelist[0]
-                                                                .title,
                                                             index,
                                                             uiset
                                                                 .pageviewlist[
@@ -503,7 +500,10 @@ class _AddTemplateState extends State<AddTemplate>
                                                             uiset
                                                                 .pageviewlist[
                                                                     index]
-                                                                .type);
+                                                                .type,
+                                                            _controller,
+                                                            searchNode,
+                                                            'pinchannel');
                                                       },
                                                       child: const Icon(
                                                         Icons.more_horiz,

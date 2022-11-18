@@ -8,12 +8,14 @@ class Linkspacepage {
   final String placestr;
   final int type;
   final String uniquecode;
+  final String familycode;
   final String? date;
 
   Linkspacepage({
     required this.placestr,
     required this.type,
     required this.uniquecode,
+    required this.familycode,
     this.date,
   });
   Map<String, dynamic> toMap() {

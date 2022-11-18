@@ -170,7 +170,6 @@ func4(BuildContext context) async {
 func5() => Get.to(() => const Spaceapage(), transition: Transition.upToDown);
 func6(BuildContext context, TextEditingController textEditingController,
     FocusNode searchnode, String where, String id, int categorypicknumber) {
-  String usercode = Hive.box('user_setting').get('usercode');
   addmylink(context, usercode, textEditingController, searchnode, where, id,
       categorypicknumber);
 }

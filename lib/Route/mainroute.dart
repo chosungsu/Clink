@@ -109,7 +109,7 @@ class _mainrouteState extends State<mainroute>
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    MongoDB.connect();
+
     List pages = [
       //HomePage(secondname: cal_share_person.secondname),
       const MYPage(),
@@ -156,7 +156,7 @@ class _mainrouteState extends State<mainroute>
                               selectedFontSize: 18,
                               unselectedFontSize: 18,
                               selectedItemColor: Colors.purple.shade300,
-                              unselectedItemColor: Colors.grey.shade400,
+                              unselectedItemColor: draw.color_textstatus,
                               showSelectedLabels: false,
                               showUnselectedLabels: false,
                               currentIndex: uiset.pagenumber,

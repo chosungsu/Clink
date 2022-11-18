@@ -144,9 +144,9 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                           ScrollConfiguration(
                               behavior: NoBehavior(),
                               child: PageUI1(
-                                  uiset.pagelist[uiset.mypagelistindex].title,
                                   uiset.pagelist[uiset.mypagelistindex].id
-                                      .toString()))
+                                      .toString(),
+                                  _controller))
                         ],
                       )),
                 ),

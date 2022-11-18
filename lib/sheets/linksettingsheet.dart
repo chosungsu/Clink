@@ -2,6 +2,7 @@
 
 import 'dart:math';
 
+import 'package:clickbyme/Tool/Getx/category.dart';
 import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,9 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import '../DB/Linkpage.dart';
+import '../Enums/Variables.dart';
+import '../Route/subuiroute.dart';
+import '../Tool/AndroidIOS.dart';
 import '../Tool/BGColor.dart';
 import '../Tool/ContainerDesign.dart';
 import '../Tool/FlushbarStyle.dart';
@@ -342,7 +346,7 @@ content(
   });
 }
 
-linkmadeplace(
+/*linkmadeplace(
   BuildContext context,
   String name,
   String link,
@@ -738,16 +742,17 @@ contentsecond(
       ],
     );
   });
-}
+}*/
 
 linkplacechangeoptions(
   BuildContext context,
-  String name,
-  String link,
   int index,
   String placestr,
   String uniquecode,
   int type,
+  TextEditingController controller,
+  FocusNode searchNode,
+  String s,
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -778,8 +783,8 @@ linkplacechangeoptions(
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
-                child: changeoptplace(
-                    context, name, link, index, placestr, uniquecode, type),
+                child: changeoptplace(context, index, placestr, uniquecode,
+                    type, controller, searchNode, s),
               )),
         );
       }).whenComplete(() {});
@@ -787,12 +792,13 @@ linkplacechangeoptions(
 
 changeoptplace(
   BuildContext context,
-  String name,
-  String link,
   int index,
   String placestr,
   String uniquecode,
   int type,
+  TextEditingController controller,
+  FocusNode searchNode,
+  String s,
 ) {
   return SizedBox(
       child: Padding(
@@ -816,8 +822,8 @@ changeoptplace(
               const SizedBox(
                 height: 20,
               ),
-              contentthird(
-                  context, name, link, index, placestr, uniquecode, type),
+              contentthird(context, index, placestr, uniquecode, type,
+                  controller, searchNode, s),
               const SizedBox(
                 height: 20,
               ),
@@ -827,15 +833,17 @@ changeoptplace(
 
 contentthird(
   BuildContext context,
-  String name,
-  String link,
   int index,
   String placestr,
   String uniquecode,
   int type,
+  TextEditingController controller,
+  FocusNode searchNode,
+  String s,
 ) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final linkspaceset = Get.put(linkspacesetting());
+  final cg = Get.put(category());
   final List<Linkspacepage> listspacepageset = [];
   var id;
   var updateid = [];
@@ -844,47 +852,16 @@ contentthird(
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
       children: [
-        /*GestureDetector(
+        GestureDetector(
           onTap: () async {
             Get.back();
-            linkplacenamechange(
-                context, name, link, index, changenamenode, controller);
-          },
-          child: Row(
-            children: [
-              Flexible(
-                  fit: FlexFit.tight,
-                  child: Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('카테고리 설정',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTitleTextsize())),
-                        ],
-                      ),
-                    ],
-                  )),
-              const Icon(
-                Icons.swap_horiz,
-                size: 30,
-                color: Colors.black,
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),*/
-        /*GestureDetector(
-          onTap: () async {
-            if (placestr == 'calendar') {
+            controller.text = placestr;
+            if (s == 'pinchannel') {
+              func6(context, controller, searchNode, 'editnametemplate',
+                  uniquecode, type);
             } else {
-              Get.back();
-              linkmadeplace(context, name, link, 'edit', index);
+              func6(context, controller, searchNode, 'editnametemplatein',
+                  uniquecode, index);
             }
           },
           child: Row(
@@ -896,7 +873,7 @@ contentthird(
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('필드 변경',
+                          Text('이름 변경',
                               style: TextStyle(
                                   color: placestr == 'calendar'
                                       ? Colors.grey.shade300
@@ -907,48 +884,67 @@ contentthird(
                       ),
                     ],
                   )),
-              Icon(
-                Icons.swap_horiz,
+              const Icon(
+                Icons.edit,
                 size: 30,
-                color: placestr == 'calendar'
-                    ? Colors.grey.shade300
-                    : Colors.black,
+                color: Colors.black,
               ),
             ],
           ),
         ),
         const SizedBox(
           height: 20,
-        ),*/
+        ),
         GestureDetector(
           onTap: () async {
             //linkspaceset.minusspacein(index);
-            Get.back();
-            await firestore.collection('PageView').get().then((value) {
-              for (int i = 0; i < value.docs.length; i++) {
-                if (value.docs[i].get('spacename') == placestr &&
-                    value.docs[i].get('id') == uniquecode &&
-                    value.docs[i].get('type') == type) {
-                  id = value.docs[i].id;
-                }
-                /*else if (value.docs[i].get('index') > index) {
-                  updateid.add(value.docs[i].id);
-                  updateindex.add(value.docs[i].get('index'));
-                }*/
+            final reloadpage = await Get.dialog(OSDialog(context, '경고', Builder(
+                  builder: (context) {
+                    return SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.85,
+                      child: SingleChildScrollView(
+                        child: Text('정말 이 링크를 삭제하시겠습니까?',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentTextsize(),
+                                color: Colors.blueGrey)),
+                      ),
+                    );
+                  },
+                ), pressed2)) ??
+                false;
+            if (reloadpage) {
+              Get.back();
+              if (s == 'pinchannel') {
+                await firestore.collection('PageView').get().then((value) {
+                  for (int i = 0; i < value.docs.length; i++) {
+                    if (value.docs[i].get('spacename') == placestr &&
+                        value.docs[i].get('id') == uniquecode &&
+                        value.docs[i].get('type') == type) {
+                      id = value.docs[i].id;
+                    }
+                  }
+                  firestore.collection('PageView').doc(id).delete();
+                }).whenComplete(() {
+                  linkspaceset.setcompleted(false);
+                  //updateid.clear();
+                });
+              } else {
+                await firestore.collection('Pinchannelin').get().then((value) {
+                  for (int i = 0; i < value.docs.length; i++) {
+                    if (value.docs[i].get('addname') == placestr &&
+                        value.docs[i].get('uniquecode') == uniquecode &&
+                        value.docs[i].get('index') == index) {
+                      id = value.docs[i].id;
+                    }
+                  }
+                  firestore.collection('Pinchannelin').doc(id).delete();
+                }).whenComplete(() {
+                  linkspaceset.setcompleted(false);
+                  //updateid.clear();
+                });
               }
-              firestore.collection('PageView').doc(id).delete();
-              /*if (updateid.isNotEmpty) {
-                for (int j = 0; j < updateid.length; j++) {
-                  firestore
-                      .collection('Pinchannelin')
-                      .doc(updateid[j])
-                      .update({'index': updateindex[j]--});
-                }
-              }*/
-            }).whenComplete(() {
-              linkspaceset.setcompleted(false);
-              //updateid.clear();
-            });
+            }
           },
           child: Row(
             children: [
@@ -959,7 +955,7 @@ contentthird(
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('이 플레이스 삭제',
+                          Text('삭제',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
@@ -1038,14 +1034,14 @@ linkplacenamechange(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
       .whenComplete(() {
-    final linkspaceset = Get.put(linkspacesetting());
+    /*final linkspaceset = Get.put(linkspacesetting());
     linkspaceset.setspecificspacein(
         index,
         Linkspacetreepage(
             subindex: linkspaceset.indextreecnt.length,
             placestr: placestr,
             uniqueid: code));
-    linkspaceset.minusspacein(index + 1);
+    linkspaceset.minusspacein(index + 1);*/
     controller.text == '';
   });
 }
@@ -1159,9 +1155,7 @@ contentforth(
                 primary: ButtonColor(),
               ),
               onPressed: () async {
-                setState(() {
-                  isloading = true;
-                });
+                linkspaceset.setcompleted(true);
                 if (controller.text.isEmpty) {
                   Snack.show(
                       context: context,
@@ -1170,32 +1164,39 @@ contentforth(
                       snackType: SnackType.warning,
                       behavior: SnackBarBehavior.floating);
                 } else {
-                  await firestore.collection('Linknet').get().then((value) {
+                  await firestore
+                      .collection('Pinchannelin')
+                      .get()
+                      .then((value) {
                     if (value.docs.isNotEmpty) {
                       for (int j = 0; j < value.docs.length; j++) {
-                        final messageuser = value.docs[j]['username'];
                         final messageuniquecode = value.docs[j]['uniquecode'];
                         final messageindex = value.docs[j]['index'];
-                        final messageid = value.docs[j].id;
+                        final messageplacestr = value.docs[j]['addname'];
                         if (messageindex == index &&
                             messageuniquecode == code &&
-                            messageuser == name) {
+                            messageplacestr == origintext) {
                           firestore
-                              .collection('Linknet')
-                              .doc(messageid)
+                              .collection('Pinchannelin')
+                              .doc(value.docs[j].id)
                               .update({'addname': controller.text});
                         }
                       }
+                    } else {
+                      firestore.collection('Pinchannelin').add({
+                        'addname': '빈 제목',
+                        'placestr': origintext,
+                        'index': index,
+                        'uniquecode': code
+                      });
                     }
                   });
                 }
-                setState(() {
-                  isloading = false;
-                });
+                linkspaceset.setcompleted(false);
                 Get.back();
               },
               child: Center(
-                child: isloading
+                child: linkspaceset.iscompleted
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -1246,66 +1247,22 @@ linkmadetreeplace(
   BuildContext context,
   String name,
   String link,
-  String s,
+  String parentnodename,
   int index,
   String uniquecode,
+  int type,
 ) async {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
   final linkspaceset = Get.put(linkspacesetting());
   final List<Linkspacepage> listspacepageset = [];
   var id;
-  if (s == 'board') {
-    await MongoDB.add(collectionname: 'linknet', addlist: {
-      'username': name,
-      'addname': '',
-      'placestr': 'board',
-      'index': index,
-      'uniquecode': uniquecode
-    });
-    await firestore.collection('Linknet').add({
-      'username': name,
-      'addname': '',
-      'placestr': 'board',
-      'index': index,
-      'uniquecode': uniquecode
-    });
-    linkspaceset.setspacetreein(Linkspacetreepage(
-        subindex: index, placestr: 'board', uniqueid: uniquecode));
-  } else if (s == 'card') {
-    await MongoDB.add(collectionname: 'linknet', addlist: {
-      'username': name,
-      'addname': '',
-      'placestr': 'card',
-      'index': index,
-      'uniquecode': uniquecode
-    });
-    await firestore.collection('Linknet').add({
-      'username': name,
-      'addname': '',
-      'placestr': 'card',
-      'index': index,
-      'uniquecode': uniquecode
-    });
-    linkspaceset.setspacetreein(Linkspacetreepage(
-        subindex: index, placestr: 'card', uniqueid: uniquecode));
-  } else {
-    await MongoDB.add(collectionname: 'linknet', addlist: {
-      'username': name,
-      'addname': '',
-      'placestr': 'calendar',
-      'index': index,
-      'uniquecode': uniquecode
-    });
-    await firestore.collection('Linknet').add({
-      'username': name,
-      'addname': '',
-      'placestr': 'calendar',
-      'index': index,
-      'uniquecode': uniquecode
-    });
-    linkspaceset.setspacetreein(Linkspacetreepage(
-        subindex: index, placestr: 'calendar', uniqueid: uniquecode));
-  }
+  await firestore.collection('Pinchannelin').add({
+    'addname': '빈 제목',
+    'placestr': parentnodename,
+    'index': index,
+    'uniquecode': uniquecode
+  });
+  linkspaceset.setspacetreein(Linkspacetreepage(
+      subindex: index, placestr: '빈 제목', uniqueid: uniquecode));
 }
 
 treeplace(

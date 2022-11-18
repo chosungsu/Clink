@@ -22,10 +22,10 @@ class navibool extends GetxController {
               : MyTheme.colorblack);
   Color color_textstatus =
       Hive.box('user_setting').get('which_color_background') == null
-          ? MyTheme.colorblack
+          ? MyTheme.colorblack_drawer
           : (Hive.box('user_setting').get('which_color_background') == 0
-              ? MyTheme.colorblack
-              : MyTheme.colorWhite);
+              ? MyTheme.colorblack_drawer
+              : MyTheme.colorWhite_drawer);
   var color_navi;
 
   void setpagecurrent(int what) {
@@ -72,10 +72,10 @@ class navibool extends GetxController {
             : backgroundcolor = MyTheme.colorblack);
 
     Hive.box('user_setting').get('which_color_background') == null
-        ? color_textstatus = MyTheme.colorblackstatus
+        ? color_textstatus = MyTheme.colorblack_drawer
         : (Hive.box('user_setting').get('which_color_background') == 0
-            ? color_textstatus = MyTheme.colorblackstatus
-            : color_textstatus = MyTheme.colorWhitestatus);
+            ? color_textstatus = MyTheme.colorblack_drawer
+            : color_textstatus = MyTheme.colorWhite_drawer);
     StatusBarControl.setColor(backgroundcolor, animated: true);
     update();
     notifyChildrens();

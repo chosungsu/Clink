@@ -516,7 +516,8 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                             })
                   ],
                 ))
-        : GetBuilder<linkspacesetting>(
+        : SizedBox();
+    /*GetBuilder<linkspacesetting>(
             builder: (_) => FutureBuilder(
               future:
                   MongoDB.getData(collectionname: 'pinchannelin').then((value) {
@@ -689,6 +690,6 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                       );
               },
             ),
-          );
+          );*/
   }
 }

@@ -20,12 +20,14 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
   var controller;
+  var controller2;
   ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     controller = TextEditingController();
+    controller2 = TextEditingController();
     Hive.box('user_setting').put('page_index', 1);
     docid = Hive.box('user_setting').get('usercode') ?? '';
     uiset.searchpagemove = '';
@@ -44,6 +46,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
   void dispose() {
     super.dispose();
     controller.dispose();
+    controller2.dispose();
     scrollController.dispose();
     searchNode.unfocus();
   }
@@ -146,20 +149,35 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                         }),
                                         builder: ((context, snapshot) {
                                           if (checkid != '') {
-                                            return AppBarCustom(
-                                              title: uiset.searchpagemove,
-                                              righticon: true,
-                                              iconname: Icons.star,
+                                            return Column(
+                                              children: [
+                                                AppBarCustom(
+                                                  title: uiset.searchpagemove,
+                                                  righticon: true,
+                                                  iconname: Icons.star,
+                                                ),
+                                                const SizedBox(
+                                                  height: 20,
+                                                ),
+                                              ],
                                             );
                                           } else {
-                                            return AppBarCustom(
-                                              title: uiset.searchpagemove,
-                                              righticon: true,
-                                              iconname: Icons.star_border,
+                                            return Column(
+                                              children: [
+                                                AppBarCustom(
+                                                  title: uiset.searchpagemove,
+                                                  righticon: true,
+                                                  iconname: Icons.star_border,
+                                                ),
+                                                const SizedBox(
+                                                  height: 20,
+                                                ),
+                                              ],
                                             );
                                           }
                                         }))),
-                            SearchUI(scrollController, controller, height)
+                            SearchUI(scrollController, controller, height,
+                                controller2)
                           ],
                         ),
                       )),

@@ -56,66 +56,67 @@ class _DrawerScreenState extends State<DrawerScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: drawerItems.map((element) {
               selected = drawerItems.indexOf(element) == widget.index;
-              return Padding(
-                  padding: const EdgeInsets.only(top: 30, bottom: 30),
-                  child: InkWell(
-                    onTap: () {
-                      if (element.containsValue(Icons.view_stream)) {
-                        draw.setclose();
-                        Hive.box('user_setting').put('page_index', 0);
-                        uiset.setmypagelistindex(0);
-                        Navigator.of(context).pushReplacement(
-                          PageTransition(
-                            type: PageTransitionType.rightToLeft,
-                            child: const mainroute(
-                              index: 0,
-                            ),
-                          ),
-                        );
-                      } else if (element.containsValue(Icons.search)) {
-                        //draw.setclose();
-                        /*addWhole_update(context, searchNode, controller, name,
+              return GetBuilder<navibool>(
+                  builder: (_) => Padding(
+                      padding: const EdgeInsets.only(top: 30, bottom: 30),
+                      child: InkWell(
+                        onTap: () {
+                          if (element.containsValue(Icons.view_stream)) {
+                            draw.setclose();
+                            Hive.box('user_setting').put('page_index', 0);
+                            uiset.setmypagelistindex(0);
+                            Navigator.of(context).pushReplacement(
+                              PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: const mainroute(
+                                  index: 0,
+                                ),
+                              ),
+                            );
+                          } else if (element.containsValue(Icons.search)) {
+                            //draw.setclose();
+                            /*addWhole_update(context, searchNode, controller, name,
                             Date, 'home', fToast);*/
-                        draw.setclose();
-                        Hive.box('user_setting').put('page_index', 1);
-                        uiset.setmypagelistindex(1);
-                        Navigator.of(context).pushReplacement(
-                          PageTransition(
-                            type: PageTransitionType.rightToLeft,
-                            child: const mainroute(
-                              index: 1,
+                            draw.setclose();
+                            Hive.box('user_setting').put('page_index', 1);
+                            uiset.setmypagelistindex(1);
+                            Navigator.of(context).pushReplacement(
+                              PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: const mainroute(
+                                  index: 1,
+                                ),
+                              ),
+                            );
+                          } else if (element.containsValue(Icons.settings)) {
+                            //draw.setclose();
+                            draw.setclose();
+                            Hive.box('user_setting').put('page_index', 2);
+                            uiset.setmypagelistindex(2);
+                            Navigator.of(context).pushReplacement(
+                              PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: const mainroute(
+                                  index: 2,
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                        child: Column(
+                          children: [
+                            Icon(
+                              element['icon'],
+                              color: selected
+                                  ? Colors.purple.shade300
+                                  : draw.color_textstatus,
                             ),
-                          ),
-                        );
-                      } else if (element.containsValue(Icons.settings)) {
-                        //draw.setclose();
-                        draw.setclose();
-                        Hive.box('user_setting').put('page_index', 2);
-                        uiset.setmypagelistindex(2);
-                        Navigator.of(context).pushReplacement(
-                          PageTransition(
-                            type: PageTransitionType.rightToLeft,
-                            child: const mainroute(
-                              index: 2,
+                            const SizedBox(
+                              height: 20,
                             ),
-                          ),
-                        );
-                      }
-                    },
-                    child: Column(
-                      children: [
-                        Icon(
-                          element['icon'],
-                          color: selected
-                              ? Colors.purple.shade300
-                              : Colors.grey.shade400,
+                          ],
                         ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                      ],
-                    ),
-                  ));
+                      )));
             }).toList(),
           ),
         ));
