@@ -380,72 +380,28 @@ ADSHOW() {
   );
 }
 
-Speeddialspace(BuildContext context, String mainid, int type) {
-  return GetBuilder<uisetting>(
-      builder: (_) => Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              SpeedDial(
-                  openCloseDial: isDialOpen,
-                  activeIcon: Icons.close,
-                  icon: Icons.add,
-                  backgroundColor: Colors.blue,
-                  overlayColor: BGColor(),
-                  overlayOpacity: 0.4,
-                  spacing: 10,
-                  spaceBetweenChildren: 10,
-                  children: [
-                    SpeedDialChild(
-                      child: Icon(
-                        Icons.photo,
-                        size: 30,
-                        color: draw.color_textstatus,
-                      ),
-                      backgroundColor: Colors.orange.shade200,
-                      onTap: () {
-                        //linkmadeplace(context, type);
-                      },
-                      label: '사진 및 영상',
-                      labelStyle: TextStyle(
-                          color: Colors.black45,
-                          fontWeight: FontWeight.bold,
-                          fontSize: contentTextsize()),
-                    ),
-                    SpeedDialChild(
-                      child: Icon(
-                        Icons.picture_as_pdf,
-                        size: 30,
-                        color: draw.color_textstatus,
-                      ),
-                      backgroundColor: Colors.orange.shade200,
-                      onTap: () async {
-                        final result =
-                            await FilePicker.platform.pickFiles().then((value) {
-                          searchfiles(context, type, value);
-                        });
-                      },
-                      label: '파일',
-                      labelStyle: TextStyle(
-                          color: Colors.black45,
-                          fontWeight: FontWeight.bold,
-                          fontSize: contentTextsize()),
-                    ),
-                  ]),
-            ],
-          ));
-}
-
-searchfiles(
-  BuildContext context,
-  int type,
-  FilePickerResult? result,
-) async {
+searchfiles(BuildContext context, int type, FilePickerResult? result, res2,
+    int pick) async {
   final linkspaceset = Get.put(linkspacesetting());
-  if (result != null) {
-    linkspaceset.setsearchfile(result.files.first);
-    if (linkspaceset.pickedFile != null) {
-      linkplaceshowbeforeadd(context, linkspaceset.pickedFile!.name);
+  if (pick == 0) {
+    //pictures
+    if (res2 != null) {
+      linkspaceset.setsearchimage(res2.path);
+      if (linkspaceset.pickedFile != null) {
+        linkplaceshowbeforeadd(context, linkspaceset.pickedimg);
+      }
+    } else {
+      return;
+    }
+  } else {
+    //all files
+    if (result != null) {
+      linkspaceset.setsearchfile(result.files.first);
+      if (linkspaceset.pickedFile != null) {
+        linkplaceshowbeforeadd(context, linkspaceset.pickedFile!.name);
+      }
+    } else {
+      return;
     }
   }
 }

@@ -35,7 +35,6 @@ var spacepagename;
 //Here are MYPage Variables
 final List<Linkpage> listpinlink = [];
 final List<CompanyPageList> listcompanytousers = [];
-ValueNotifier<bool> isDialOpen = ValueNotifier(false);
 //Here are SearchPage Variables
 bool isbought = false;
 var textchangelistener = '';

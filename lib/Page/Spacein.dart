@@ -1,16 +1,21 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names
 
 import 'package:clickbyme/Tool/Getx/uisetting.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import '../Enums/Variables.dart';
 import '../Route/mainroute.dart';
 import '../Route/subuiroute.dart';
+import '../Tool/BGColor.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/NoBehavior.dart';
 import '../Tool/AppBarCustom.dart';
+import '../Tool/TextSize.dart';
 import '../UI/SpaceinUI.dart';
 
 class Spacein extends StatefulWidget {
@@ -25,6 +30,7 @@ class Spacein extends StatefulWidget {
 
 class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
   var scrollController;
+  ValueNotifier<bool> isDialOpen = ValueNotifier(false);
 
   @override
   void initState() {
@@ -101,7 +107,7 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
   }
 
   Future<bool> _onWillPop() async {
-    Future.delayed(const Duration(seconds: 0), () {
+    Future.delayed(const Duration(seconds: 0), () async {
       if (isDialOpen.value == true) {
         isDialOpen.value = false;
       } else {
@@ -118,5 +124,76 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
       //Get.back();
     });
     return false;
+  }
+
+  Speeddialspace(
+    BuildContext context,
+    String mainid,
+    int type,
+  ) {
+    FilePickerResult? res;
+    final imagePicker = ImagePicker();
+
+    return GetBuilder<uisetting>(
+        builder: (_) => Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                SpeedDial(
+                    openCloseDial: isDialOpen,
+                    activeIcon: Icons.close,
+                    icon: Icons.add,
+                    backgroundColor: Colors.blue,
+                    overlayColor: BGColor(),
+                    overlayOpacity: 0.4,
+                    spacing: 10,
+                    spaceBetweenChildren: 10,
+                    children: [
+                      SpeedDialChild(
+                        child: Icon(
+                          Icons.photo,
+                          size: 30,
+                          color: draw.color_textstatus,
+                        ),
+                        backgroundColor: Colors.orange.shade200,
+                        onTap: () async {
+                          final image = await imagePicker.pickImage(
+                              source: ImageSource.gallery);
+                          searchfiles(context, type, null, image, 0);
+                        },
+                        label: '사진 및 영상',
+                        labelStyle: TextStyle(
+                            color: Colors.black45,
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTextsize()),
+                      ),
+                      SpeedDialChild(
+                        child: Icon(
+                          Icons.picture_as_pdf,
+                          size: 30,
+                          color: draw.color_textstatus,
+                        ),
+                        backgroundColor: Colors.orange.shade200,
+                        onTap: () async {
+                          res = await FilePicker.platform.pickFiles(
+                              onFileLoading: (status) {
+                                if (status == FilePickerStatus.done) {
+                                  print('FilePickerStatus: $status');
+                                } else {
+                                  print('FilePickerStatus: $status');
+                                }
+                              },
+                              lockParentWindow: true);
+                          searchfiles(context, type, res, null, 1);
+                        },
+                        label: '파일',
+                        labelStyle: TextStyle(
+                            color: Colors.black45,
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTextsize()),
+                      ),
+                    ]),
+              ],
+            ));
   }
 }

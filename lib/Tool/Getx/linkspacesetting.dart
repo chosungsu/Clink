@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../DB/Linkpage.dart';
 import '../BGColor.dart';
 
@@ -15,6 +16,7 @@ class linkspacesetting extends GetxController {
   List<Linkspacepageenter> inindextreetmp = [];
   bool iscompleted = false;
   PlatformFile? pickedFile;
+  String pickedimg = '';
   Color color = Hive.box('user_setting').get('colorlinkpage') != null
       ? Color(Hive.box('user_setting').get('colorlinkpage'))
       : BGColor();
@@ -27,6 +29,12 @@ class linkspacesetting extends GetxController {
 
   void setsearchfile(PlatformFile? what) {
     pickedFile = what;
+    update();
+    notifyChildrens();
+  }
+
+  void setsearchimage(String what) {
+    pickedimg = what;
     update();
     notifyChildrens();
   }
