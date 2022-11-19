@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
@@ -374,34 +375,14 @@ ADSHOW() {
   );
 }
 
-Speeddialmemo(
-    BuildContext context,
-    String usercode,
-    TextEditingController controller,
-    FocusNode searchNode,
-    ScrollController scrollController,
-    ValueNotifier<bool> isDialOpen,
-    String name) {
+Speeddialmemo(BuildContext context, String mainid) {
   final uiset = Get.put(uisetting());
   return GetBuilder<uisetting>(
       builder: (_) => Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              uiset.showtopbutton == false
-                  ? const SizedBox()
-                  : FloatingActionButton(
-                      onPressed: () {
-                        scrollToTop(scrollController);
-                      },
-                      backgroundColor: BGColor(),
-                      child: Icon(
-                        Icons.arrow_upward,
-                        color: TextColor(),
-                      ),
-                    ),
-              //const SizedBox(width: 10),
-              /*SpeedDial(
+              SpeedDial(
                   openCloseDial: isDialOpen,
                   activeIcon: Icons.close,
                   icon: Icons.add,
@@ -411,28 +392,6 @@ Speeddialmemo(
                   spacing: 10,
                   spaceBetweenChildren: 10,
                   children: [
-                    /*SpeedDialChild(
-              child: NeumorphicIcon(
-                Icons.local_offer,
-                size: 30,
-                style: NeumorphicStyle(
-                    shape: NeumorphicShape.convex,
-                    depth: 2,
-                    surfaceIntensity: 0.5,
-                    color: TextColor(),
-                    lightSource: LightSource.topLeft),
-              ),
-              backgroundColor: Colors.blue.shade200,
-              onTap: () {
-                addhashtagcollector(context, usercode, controller, searchNode,
-                    'outside', scollection, isresponsive);
-              },
-              label: '해시태그 추가',
-              labelStyle: TextStyle(
-                  color: Colors.black45,
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentTextsize()),
-            ),*/
                     SpeedDialChild(
                       child: NeumorphicIcon(
                         Icons.add,
@@ -446,15 +405,15 @@ Speeddialmemo(
                       ),
                       backgroundColor: Colors.orange.shade200,
                       onTap: () {
-                        linkmadeplace(context, usercode, name, 'add', -1);
+                        //linkmadeplace(context, usercode, name, 'add', -1);
                       },
-                      label: '필드 추가',
+                      label: '추가',
                       labelStyle: TextStyle(
                           color: Colors.black45,
                           fontWeight: FontWeight.bold,
                           fontSize: contentTextsize()),
                     ),
-                  ]),*/
+                  ]),
             ],
           ));
 }

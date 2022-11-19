@@ -34,12 +34,14 @@ class Linkspacetreepage {
   final String placestr;
   final String uniqueid;
   final int? subindex;
+  final String? mainid;
   final String? date;
 
   Linkspacetreepage({
     required this.placestr,
     required this.uniqueid,
     this.subindex,
+    this.mainid,
     this.date,
   });
   Map<String, dynamic> toMap() {

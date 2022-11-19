@@ -12,9 +12,10 @@ import '../../../Tool/BGColor.dart';
 import '../../../Tool/Getx/linkspacesetting.dart';
 import '../../../Tool/TextSize.dart';
 import '../../../sheets/linksettingsheet.dart';
-import '../Page/Spacein.dart';
 
-PageUI1(String id, TextEditingController controller) {
+SpaceinUI(
+  String id,
+) {
   final searchNode = FocusNode();
   return GetBuilder<linkspacesetting>(
       builder: (_) => StreamBuilder<QuerySnapshot>(
@@ -184,63 +185,7 @@ PageUI1(String id, TextEditingController controller) {
                                                       width: 10,
                                                     ),
                                                     InkWell(
-                                                      onTap: () async {
-                                                        await firestore
-                                                            .collection(
-                                                                'Pinchannel')
-                                                            .doc(id)
-                                                            .get()
-                                                            .then(
-                                                          (value) {
-                                                            if (value.get(
-                                                                    'username') ==
-                                                                usercode) {
-                                                              linkplacechangeoptions(
-                                                                  context,
-                                                                  index,
-                                                                  linkspaceset
-                                                                      .indexcnt[
-                                                                          index]
-                                                                      .placestr,
-                                                                  linkspaceset
-                                                                      .indexcnt[
-                                                                          index]
-                                                                      .uniquecode,
-                                                                  linkspaceset
-                                                                      .indexcnt[
-                                                                          index]
-                                                                      .type,
-                                                                  controller,
-                                                                  searchNode,
-                                                                  'pinchannel');
-                                                            } else {
-                                                              if (value.get(
-                                                                      'setting') ==
-                                                                  'block') {
-                                                              } else {
-                                                                linkplacechangeoptions(
-                                                                    context,
-                                                                    index,
-                                                                    linkspaceset
-                                                                        .indexcnt[
-                                                                            index]
-                                                                        .placestr,
-                                                                    linkspaceset
-                                                                        .indexcnt[
-                                                                            index]
-                                                                        .uniquecode,
-                                                                    linkspaceset
-                                                                        .indexcnt[
-                                                                            index]
-                                                                        .type,
-                                                                    controller,
-                                                                    searchNode,
-                                                                    'pinchannel');
-                                                              }
-                                                            }
-                                                          },
-                                                        );
-                                                      },
+                                                      onTap: () async {},
                                                       child: Icon(
                                                         Icons.more_horiz,
                                                         color: draw
@@ -332,9 +277,7 @@ PageUI1(String id, TextEditingController controller) {
                                                                           ),
                                                                           GestureDetector(
                                                                             onTap:
-                                                                                () {
-                                                                              Get.to(() => Spacein(id: linkspaceset.indextreetmp[index][index2].mainid), transition: Transition.downToUp);
-                                                                            },
+                                                                                () {},
                                                                             child: ContainerDesign(
                                                                                 color: draw.backgroundcolor,
                                                                                 child: SizedBox(
@@ -358,20 +301,7 @@ PageUI1(String id, TextEditingController controller) {
                                                                                             width: 10,
                                                                                           ),
                                                                                           InkWell(
-                                                                                            onTap: () async {
-                                                                                              await firestore.collection('Pinchannel').doc(id).get().then(
-                                                                                                (value) {
-                                                                                                  if (value.get('username') == usercode) {
-                                                                                                    linkplacechangeoptions(context, index2, linkspaceset.indextreetmp[index][index2].placestr, linkspaceset.indextreetmp[index][index2].uniqueid, 0, controller, searchNode, 'pinchannelin');
-                                                                                                  } else {
-                                                                                                    if (value.get('setting') == 'block') {
-                                                                                                    } else {
-                                                                                                      linkplacechangeoptions(context, index2, linkspaceset.indextreetmp[index][index2].placestr, linkspaceset.indextreetmp[index][index2].uniqueid, 0, controller, searchNode, 'pinchannelin');
-                                                                                                    }
-                                                                                                  }
-                                                                                                },
-                                                                                              );
-                                                                                            },
+                                                                                            onTap: () async {},
                                                                                             child: Icon(
                                                                                               Icons.more_horiz,
                                                                                               color: draw.color_textstatus,

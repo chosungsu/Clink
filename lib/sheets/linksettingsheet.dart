@@ -915,6 +915,7 @@ contentthird(
                 false;
             if (reloadpage) {
               Get.back();
+              var changeindex;
               if (s == 'pinchannel') {
                 await firestore.collection('PageView').get().then((value) {
                   for (int i = 0; i < value.docs.length; i++) {
@@ -922,6 +923,7 @@ contentthird(
                         value.docs[i].get('id') == uniquecode &&
                         value.docs[i].get('type') == type) {
                       id = value.docs[i].id;
+                      changeindex = value.docs[i].get('index');
                     }
                   }
                   firestore.collection('PageView').doc(id).delete();
@@ -944,11 +946,28 @@ contentthird(
                             .delete();
                       }
                     }
-                  }).whenComplete(() {
+                  }).whenComplete(() async {
+                    updateid.clear();
+                    updateindex.clear();
+                    await firestore.collection('PageView').get().then((value) {
+                      for (int i = 0; i < value.docs.length; i++) {
+                        if (value.docs[i].get('index') > changeindex) {
+                          updateid.add(value.docs[i].id);
+                          updateindex.add(value.docs[i].get('index'));
+                        }
+                      }
+                      if (updateid.isEmpty) {
+                      } else {
+                        for (int j = 0; j < updateid.length; j++) {
+                          firestore
+                              .collection('PageView')
+                              .doc(updateid[j])
+                              .update({'index': updateindex[j] - 1});
+                        }
+                      }
+                    });
                     linkspaceset.setcompleted(false);
                   });
-
-                  //updateid.clear();
                 });
               } else {
                 await firestore.collection('Pinchannelin').get().then((value) {
@@ -957,12 +976,36 @@ contentthird(
                         value.docs[i].get('uniquecode') == uniquecode &&
                         value.docs[i].get('index') == index) {
                       id = value.docs[i].id;
+                      changeindex = value.docs[i].get('index');
                     }
                   }
                   firestore.collection('Pinchannelin').doc(id).delete();
-                }).whenComplete(() {
-                  linkspaceset.setcompleted(false);
-                  //updateid.clear();
+                }).whenComplete(() async {
+                  updateid.clear();
+                  updateindex.clear();
+                  await firestore
+                      .collection('Pinchannelin')
+                      .get()
+                      .then((value) {
+                    for (int i = 0; i < value.docs.length; i++) {
+                      if (value.docs[i].get('uniquecode') == uniquecode &&
+                          value.docs[i].get('index') > changeindex) {
+                        updateid.add(value.docs[i].id);
+                        updateindex.add(value.docs[i].get('index'));
+                      }
+                    }
+                    if (updateid.isEmpty) {
+                    } else {
+                      for (int j = 0; j < updateid.length; j++) {
+                        firestore
+                            .collection('Pinchannelin')
+                            .doc(updateid[j])
+                            .update({'index': updateindex[j] - 1});
+                      }
+                    }
+                  }).whenComplete(() async {
+                    linkspaceset.setcompleted(false);
+                  });
                 });
               }
             }

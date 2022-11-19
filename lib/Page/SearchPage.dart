@@ -38,7 +38,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
     super.dispose();
     controller.dispose();
     controller2.dispose();
-    searchNode.unfocus();
+    searchNode.dispose();
   }
 
   @override
@@ -167,7 +167,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                           }
                                         }))),
                             SearchUI(scrollController, controller, height,
-                                controller2)
+                                controller2, searchNode)
                           ],
                         ),
                       )),

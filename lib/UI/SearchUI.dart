@@ -16,7 +16,7 @@ import 'Home/secondContentNet/ShowTips.dart';
 import 'PageUI.dart';
 
 SearchUI(scrollController, TextEditingController controller, double height,
-    TextEditingController controller2) {
+    TextEditingController controller2, searchNode) {
   return uiset.searchpagemove == ''
       ? Flexible(
           fit: FlexFit.tight,
@@ -32,11 +32,11 @@ SearchUI(scrollController, TextEditingController controller, double height,
                                 SizedBox(
                                   height: 20,
                                 ),
-                                Se_Container0(height, controller),
+                                Se_Container0(height, controller, searchNode),
                                 SizedBox(
                                   height: 20,
                                 ),
-                                Se_Container01(height, controller),
+                                Se_Container01(height, controller, searchNode),
                                 SizedBox(
                                   height: 20,
                                 ),
@@ -44,7 +44,7 @@ SearchUI(scrollController, TextEditingController controller, double height,
                                 SizedBox(
                                   height: 20,
                                 ),
-                                Se_Container11(height, controller),
+                                Se_Container11(height, controller, searchNode),
                                 SizedBox(
                                   height: 20,
                                 ),
@@ -63,8 +63,7 @@ SearchUI(scrollController, TextEditingController controller, double height,
               uiset.editpagelist[0].setting.toString(), controller2));
 }
 
-Se_Container0(double height, controller) {
-  final searchNode = FocusNode();
+Se_Container0(double height, controller, searchNode) {
   return Padding(
     padding: const EdgeInsets.only(left: 20, right: 20),
     child: SizedBox(
@@ -115,8 +114,7 @@ Se_Container0(double height, controller) {
   );
 }
 
-Se_Container01(double height, controller) {
-  final searchNode = FocusNode();
+Se_Container01(double height, controller, searchNode) {
   return GetBuilder<uisetting>(
       builder: (_) => Padding(
             padding: EdgeInsets.only(left: 20, right: 20),
@@ -197,8 +195,6 @@ Se_Container01(double height, controller) {
                                             ),
                                             GestureDetector(
                                                 onTap: () {
-                                                  FocusScope.of(context)
-                                                      .unfocus();
                                                   searchNode.unfocus();
                                                   controller.clear();
                                                   Hive.box('user_setting')
@@ -360,10 +356,7 @@ Se_Container1(
   );
 }
 
-Se_Container11(
-  double height,
-  TextEditingController controller,
-) {
+Se_Container11(double height, TextEditingController controller, searchNode) {
   return GetBuilder<uisetting>(
       builder: (_) => Padding(
             padding: EdgeInsets.only(left: 20, right: 20),
@@ -426,7 +419,7 @@ Se_Container11(
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        FocusScope.of(context).unfocus();
+                                        searchNode.unfocus();
                                         controller.clear();
                                         Hive.box('user_setting')
                                             .put('page_index', 12);

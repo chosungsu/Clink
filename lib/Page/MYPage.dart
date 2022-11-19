@@ -54,14 +54,6 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
     return GetBuilder<navibool>(
         builder: (_) => Scaffold(
             backgroundColor: draw.backgroundcolor,
-            floatingActionButton: Speeddialmemo(
-                context,
-                usercode,
-                _controller,
-                searchNode,
-                scrollController,
-                isDialOpen,
-                uiset.pagelist.isEmpty ? '빈 스페이스' : uiset.pagelist[0].title),
             body: SafeArea(
               child: draw.navi == 0
                   ? (draw.drawopen == true
