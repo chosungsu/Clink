@@ -105,17 +105,22 @@ func3(BuildContext context) => Future.delayed(const Duration(seconds: 0), () {
         StatusBarControl.setColor(linkspaceset.color, animated: true);
       }
       if (Hive.box('user_setting').get('page_index') == 3 ||
-          Hive.box('user_setting').get('page_index') == 4) {
+          Hive.box('user_setting').get('page_index') == 4 ||
+          Hive.box('user_setting').get('page_index') == 5) {
         Hive.box('user_setting').put('page_index', 0);
-
-        Navigator.of(context).pushReplacement(
+        Get.to(
+            () => const mainroute(
+                  index: 0,
+                ),
+            transition: Transition.downToUp);
+        /*Navigator.of(context).pushReplacement(
           PageTransition(
-            type: PageTransitionType.bottomToTop,
+            type: PageTransitionType.fade,
             child: const mainroute(
               index: 0,
             ),
           ),
-        );
+        );*/
       } else {
         Get.back();
       }
@@ -184,8 +189,7 @@ func4(BuildContext context, indexcnt) async {
 }
 
 func5() {
-  Hive.box('user_setting').put('page_index', 3);
-  Get.to(() => const Spaceapage(), transition: Transition.upToDown);
+  Get.to(() => const Spacepage(), transition: Transition.upToDown);
 }
 
 func6(

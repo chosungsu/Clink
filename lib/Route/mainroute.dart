@@ -11,6 +11,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:status_bar_control/status_bar_control.dart';
 import 'subuiroute.dart';
 import '../Page/SearchPage.dart';
 import '../Page/ProfilePage.dart';
@@ -30,6 +31,7 @@ class _mainrouteState extends State<mainroute>
   final uiset = Get.put(uisetting());
   final peopleadd = Get.put(PeopleAdd());
   final draw = Get.put(navibool());
+  final searchNode = FocusNode();
 
   @override
   void initState() {
@@ -37,6 +39,8 @@ class _mainrouteState extends State<mainroute>
     uiset.mypagelistindex = Hive.box('user_setting').get('currentmypage') ?? 0;
     WidgetsBinding.instance.addObserver(this);
     uiset.pagenumber = widget.index;
+    uiset.searchpagemove = '';
+    uiset.textrecognizer = '';
   }
 
   @override
@@ -63,6 +67,7 @@ class _mainrouteState extends State<mainroute>
   }
 
   Future<bool> _onWillPop2() async {
+    StatusBarControl.setColor(draw.backgroundcolor, animated: true);
     uiset
         .setmypagelistindex(Hive.box('user_setting').get('currentmypage') ?? 0);
     if (draw.drawopen == true) {
@@ -74,7 +79,7 @@ class _mainrouteState extends State<mainroute>
       Hive.box('user_setting').put('page_index', 2);
       Navigator.of(context).pushReplacement(
         PageTransition(
-          type: PageTransitionType.leftToRight,
+          type: PageTransitionType.fade,
           child: const mainroute(
             index: 2,
           ),
@@ -90,7 +95,7 @@ class _mainrouteState extends State<mainroute>
 
       Navigator.of(context).pushReplacement(
         PageTransition(
-          type: PageTransitionType.leftToRight,
+          type: PageTransitionType.fade,
           child: const mainroute(
             index: 0,
           ),

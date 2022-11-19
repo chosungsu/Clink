@@ -67,7 +67,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                             uiset.setmypagelistindex(0);
                             Navigator.of(context).pushReplacement(
                               PageTransition(
-                                type: PageTransitionType.rightToLeft,
+                                type: PageTransitionType.fade,
                                 child: const mainroute(
                                   index: 0,
                                 ),
@@ -82,7 +82,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                             uiset.setmypagelistindex(1);
                             Navigator.of(context).pushReplacement(
                               PageTransition(
-                                type: PageTransitionType.rightToLeft,
+                                type: PageTransitionType.fade,
                                 child: const mainroute(
                                   index: 1,
                                 ),
@@ -95,7 +95,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                             uiset.setmypagelistindex(2);
                             Navigator.of(context).pushReplacement(
                               PageTransition(
-                                type: PageTransitionType.rightToLeft,
+                                type: PageTransitionType.fade,
                                 child: const mainroute(
                                   index: 2,
                                 ),

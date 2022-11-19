@@ -9,6 +9,8 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import '../DB/PageList.dart';
+import '../Enums/Variables.dart';
+import '../Route/mainroute.dart';
 import '../Route/subuiroute.dart';
 import '../Tool/AppBarCustom.dart';
 import '../Tool/ContainerDesign.dart';
@@ -18,35 +20,26 @@ import '../Tool/Getx/uisetting.dart';
 import '../Tool/NoBehavior.dart';
 import '../Tool/TextSize.dart';
 
-class Spaceapage extends StatefulWidget {
-  const Spaceapage({
+class Spacepage extends StatefulWidget {
+  const Spacepage({
     Key? key,
   }) : super(key: key);
   @override
-  State<StatefulWidget> createState() => _SpaceapageState();
+  State<StatefulWidget> createState() => _SpacepageState();
 }
 
-class _SpaceapageState extends State<Spaceapage>
+class _SpacepageState extends State<Spacepage>
     with WidgetsBindingObserver, TickerProviderStateMixin {
-  double translateX = 0.0;
-  double translateY = 0.0;
-  double myWidth = 0.0;
-  String name = Hive.box('user_info').get('id');
-  String usercode = Hive.box('user_setting').get('usercode');
   final notilist = Get.put(notishow());
   final uiset = Get.put(uisetting());
   final draw = Get.put(navibool());
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
   var _controller = TextEditingController();
   final searchNode = FocusNode();
-  late Animation animation;
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController();
-    draw.navi = 1;
-    uiset.currentstepper = 0;
     Hive.box('user_setting').put('page_index', 3);
     WidgetsBinding.instance.addObserver(this);
   }
@@ -261,7 +254,12 @@ class _SpaceapageState extends State<Spaceapage>
       StatusBarControl.setColor(draw.backgroundcolor, animated: true);
       draw.setnavi();
       Hive.box('user_setting').put('page_index', 0);
-      Get.back();
+      Get.to(
+          () => const mainroute(
+                index: 0,
+              ),
+          transition: Transition.downToUp);
+      //Get.back();
     });
     return false;
   }

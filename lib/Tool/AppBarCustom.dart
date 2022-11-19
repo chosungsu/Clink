@@ -342,35 +342,29 @@ class AppBarCustom extends StatelessWidget {
                                                                             lightSource: LightSource.topLeft),
                                                                       )),
                                                               color: draw.backgroundcolor)
-                                                          : (
-                                                            Hive.box('user_setting').get('page_index') == 4 ? 
-                                                            ContainerDesign(
-                                                              child: GestureDetector(
-                                                                  onTap: () => func2(context),
-                                                                  child: NeumorphicIcon(
-                                                                    Icons
-                                                                        .delete,
-                                                                    size: 30,
-                                                                    style: NeumorphicStyle(
-                                                                        shape: NeumorphicShape
-                                                                            .flat,
-                                                                        depth:
-                                                                            5,
-                                                                        surfaceIntensity:
-                                                                            0.3,
-                                                                        border: NeumorphicBorder(
-                                                                            color: draw
-                                                                                .backgroundcolor,
-                                                                            width:
-                                                                                0.5),
-                                                                        color: draw
-                                                                            .color_textstatus,
-                                                                        lightSource:
-                                                                            LightSource.topLeft),
-                                                                  )),
-                                                              color: draw.backgroundcolor) :
-                                                              const SizedBox()
-                                                          ))),
+                                                          : (Hive.box('user_setting').get('page_index') == 5
+                                                              ? ContainerDesign(
+                                                                  child: GestureDetector(
+                                                                      onTap: () => func2(context),
+                                                                      child: NeumorphicIcon(
+                                                                        Icons
+                                                                            .delete,
+                                                                        size:
+                                                                            30,
+                                                                        style: NeumorphicStyle(
+                                                                            shape: NeumorphicShape
+                                                                                .flat,
+                                                                            depth:
+                                                                                5,
+                                                                            surfaceIntensity:
+                                                                                0.3,
+                                                                            border:
+                                                                                NeumorphicBorder(color: draw.backgroundcolor, width: 0.5),
+                                                                            color: draw.color_textstatus,
+                                                                            lightSource: LightSource.topLeft),
+                                                                      )),
+                                                                  color: draw.backgroundcolor)
+                                                              : const SizedBox()))),
                                               Hive.box('user_setting').get(
                                                               'page_index') ==
                                                           0 ||
@@ -381,7 +375,7 @@ class AppBarCustom extends StatelessWidget {
                                                       Hive.box('user_setting')
                                                               .get(
                                                                   'page_index') ==
-                                                          4
+                                                          5
                                                   ? const SizedBox(
                                                       width: 10,
                                                     )

@@ -21,6 +21,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
   var controller;
   var controller2;
+  final searchNode = FocusNode();
   ScrollController scrollController = ScrollController();
   final uiset = Get.put(uisetting());
 

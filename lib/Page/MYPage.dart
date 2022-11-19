@@ -25,6 +25,7 @@ class MYPage extends StatefulWidget {
 
 class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
   var scrollController;
+  final searchNode = FocusNode();
   var _controller = TextEditingController();
 
   @override

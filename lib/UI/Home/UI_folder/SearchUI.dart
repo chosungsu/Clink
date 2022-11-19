@@ -64,7 +64,7 @@ SearchUI(scrollController, TextEditingController controller, double height,
 }
 
 Se_Container0(double height, controller) {
-  //프로버전 구매시 보이지 않게 함
+  final searchNode = FocusNode();
   return Padding(
     padding: const EdgeInsets.only(left: 20, right: 20),
     child: SizedBox(
@@ -116,6 +116,7 @@ Se_Container0(double height, controller) {
 }
 
 Se_Container01(double height, controller) {
+  final searchNode = FocusNode();
   return GetBuilder<uisetting>(
       builder: (_) => Padding(
             padding: EdgeInsets.only(left: 20, right: 20),
@@ -196,6 +197,8 @@ Se_Container01(double height, controller) {
                                             ),
                                             GestureDetector(
                                                 onTap: () {
+                                                  FocusScope.of(context)
+                                                      .unfocus();
                                                   searchNode.unfocus();
                                                   controller.clear();
                                                   Hive.box('user_setting')
@@ -423,7 +426,7 @@ Se_Container11(
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        searchNode.unfocus();
+                                        FocusScope.of(context).unfocus();
                                         controller.clear();
                                         Hive.box('user_setting')
                                             .put('page_index', 12);

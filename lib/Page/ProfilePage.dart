@@ -36,6 +36,7 @@ class _ProfilePageState extends State<ProfilePage>
   late final PageController _pController2;
   ScrollController scrollController = ScrollController();
   late FToast fToast;
+  final searchNode = FocusNode();
   final draw = Get.put(navibool());
 
   @override

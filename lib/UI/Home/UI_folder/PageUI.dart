@@ -14,6 +14,7 @@ import '../../../Tool/TextSize.dart';
 import '../../../sheets/linksettingsheet.dart';
 
 PageUI1(String id, TextEditingController controller) {
+  final searchNode = FocusNode();
   return GetBuilder<linkspacesetting>(
       builder: (_) => StreamBuilder<QuerySnapshot>(
             stream: firestore.collection('PageView').snapshots(),

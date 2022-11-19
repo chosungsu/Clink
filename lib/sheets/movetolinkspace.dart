@@ -525,8 +525,12 @@ contentthird(
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
       children: [
-        ContainerDesign(
-          color: Colors.white,
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              border: Border.all(color: draw.backgroundcolor, width: 2)),
           child: TextField(
             focusNode: searchNodeAddSection,
             style: TextStyle(fontSize: contentTextsize(), color: Colors.black),

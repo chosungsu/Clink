@@ -8,6 +8,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:status_bar_control/status_bar_control.dart';
+import '../Route/mainroute.dart';
 import '../Route/subuiroute.dart';
 import '../Tool/AppBarCustom.dart';
 import '../Tool/Getx/navibool.dart';
@@ -40,7 +41,7 @@ class _NotiAlarmState extends State<NotiAlarm>
   void initState() {
     super.initState();
     draw.navi = 1;
-    Hive.box('user_setting').put('page_index', 4);
+    Hive.box('user_setting').put('page_index', 5);
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -356,7 +357,12 @@ class _NotiAlarmState extends State<NotiAlarm>
       StatusBarControl.setColor(draw.backgroundcolor, animated: true);
       draw.setnavi();
       Hive.box('user_setting').put('page_index', 0);
-      Get.back();
+      Get.to(
+          () => const mainroute(
+                index: 0,
+              ),
+          transition: Transition.downToUp);
+      //Get.back();
     });
     return false;
   }

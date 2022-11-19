@@ -25,7 +25,6 @@ final draw = Get.put(navibool());
 final notilist = Get.put(notishow());
 final peopleadd = Get.put(PeopleAdd());
 final scollection = Get.put(selectcollection());
-final searchNode = FocusNode();
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 //Here are PageUI Variables
 var pagename;

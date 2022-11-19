@@ -45,7 +45,7 @@ class _AddTemplateState extends State<AddTemplate>
     draw.navi = 1;
     uiset.currentstepper = 0;
     cg.categorypicknumber = 99;
-    Hive.box('user_setting').put('page_index', 3);
+    Hive.box('user_setting').put('page_index', 4);
     WidgetsBinding.instance.addObserver(this);
     _controller = TextEditingController();
   }
@@ -756,8 +756,10 @@ class _AddTemplateState extends State<AddTemplate>
     Future.delayed(const Duration(seconds: 0), () {
       StatusBarControl.setColor(draw.backgroundcolor, animated: true);
       draw.setnavi();
-      if (uiset.searchpagemove != '') {
-        Hive.box('user_setting').put('page_index', 11);
+      if (Hive.box('user_setting').get('page_index') == 11) {
+        Hive.box('user_setting').put('page_index', 1);
+      } else if (Hive.box('user_setting').get('page_index') == 12) {
+        Hive.box('user_setting').put('page_index', 1);
       } else {
         Hive.box('user_setting').put('page_index', 0);
       }
