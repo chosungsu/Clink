@@ -1,18 +1,16 @@
-import 'package:another_flushbar/flushbar.dart';
+// ignore_for_file: non_constant_identifier_names, prefer_typing_uninitialized_variables, unused_local_variable
+
 import 'package:clickbyme/Tool/ContainerDesign.dart';
-import 'package:clickbyme/Tool/Getx/memosetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 
 import '../Tool/BGColor.dart';
 import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/PeopleAdd.dart';
-import '../Tool/IconBtn.dart';
 
 sheetmultiprofile(
   BuildContext context,
@@ -155,21 +153,10 @@ content(
         const SizedBox(
           height: 10,
         ),
-        ContainerDesign(
-          color: Colors.white,
-          child: TextField(
-            focusNode: node,
-            style: TextStyle(fontSize: contentTextsize(), color: Colors.black),
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.only(left: 10),
-              border: InputBorder.none,
-              isCollapsed: true,
-              hintText: '다른 사용자에게 보일 이름 작성',
-              hintStyle:
-                  TextStyle(fontSize: contentTextsize(), color: Colors.black45),
-            ),
-            controller: controller,
-          ),
+        ContainerTextFieldDesign(
+          searchNodeAddSection: node,
+          string: '다른 사용자에게 보일 이름 작성',
+          textEditingControllerAddSheet: controller,
         ),
         const SizedBox(
           height: 10,
@@ -215,7 +202,7 @@ content(
                 });
                 if (controller.text.isEmpty) {
                   if (_ischecked) {
-                    await firestore
+                    /*await firestore
                         .collection('CalendarSheetHome_update')
                         .get()
                         .then((value) {
@@ -329,13 +316,13 @@ content(
                         }
                         changepeople.clear();
                       }
-                    });
-                    await firestore.collection('User').get().then((value) {
-                      if (value.docs.isEmpty) {
-                      } else {
-                        cal_share_person.secondnameset(
-                            value.docs[0]['name'], value.docs[0].get('code'));
-                      }
+                    });*/
+                    await firestore
+                        .collection('User')
+                        .doc(name)
+                        .get()
+                        .then((value) {
+                      cal_share_person.secondnameset(name, value.get('code'));
                     });
 
                     setState(() {
@@ -354,7 +341,7 @@ content(
                   }
                 } else {
                   if (_ischecked) {
-                    await firestore
+                    /*await firestore
                         .collection('CalendarSheetHome_update')
                         .get()
                         .then((value) {
@@ -468,16 +455,16 @@ content(
                         }
                         changepeople.clear();
                       }
-                    });
-                    await firestore.collection('User').get().then((value) {
-                      if (value.docs.isEmpty) {
-                      } else {
-                        cal_share_person.secondnameset(
-                            value.docs[0]['name'], value.docs[0].get('code'));
-                      }
+                    });*/
+                    await firestore
+                        .collection('User')
+                        .doc(name)
+                        .get()
+                        .then((value) {
+                      cal_share_person.secondnameset(name, value.get('code'));
                     });
                   } else {
-                    await firestore
+                    /*await firestore
                         .collection('CalendarSheetHome_update')
                         .get()
                         .then((value) {
@@ -568,13 +555,14 @@ content(
                         }
                         changepeople.clear();
                       }
-                    });
-                    await firestore.collection('User').get().then((value) {
-                      if (value.docs.isEmpty) {
-                      } else {
-                        cal_share_person.secondnameset(
-                            controller.text, value.docs[0].get('code'));
-                      }
+                    });*/
+                    await firestore
+                        .collection('User')
+                        .doc(name)
+                        .get()
+                        .then((value) {
+                      cal_share_person.secondnameset(
+                          controller.text, value.get('code'));
                     });
                   }
 

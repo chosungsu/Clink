@@ -525,30 +525,14 @@ contentthird(
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
       children: [
-        Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-              border: Border.all(color: draw.backgroundcolor, width: 2)),
-          child: TextField(
-            focusNode: searchNodeAddSection,
-            style: TextStyle(fontSize: contentTextsize(), color: Colors.black),
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.only(left: 10),
-              border: InputBorder.none,
-              isCollapsed: true,
-              hintText: where == 'addtemplate'
-                  ? '추가할 스페이스 제목 입력'
-                  : (where == 'editnametemplate' ||
-                          where == 'editnametemplatein'
-                      ? '변경할 스페이스 이름 입력'
-                      : '추가할 페이지 제목 입력'),
-              hintStyle:
-                  TextStyle(fontSize: contentTextsize(), color: Colors.black45),
-            ),
-            controller: textEditingControllerAddSheet,
-          ),
+        ContainerTextFieldDesign(
+          searchNodeAddSection: searchNodeAddSection,
+          string: where == 'addtemplate'
+              ? '추가할 스페이스 제목 입력'
+              : (where == 'editnametemplate' || where == 'editnametemplatein'
+                  ? '변경할 스페이스 이름 입력'
+                  : '추가할 페이지 제목 입력'),
+          textEditingControllerAddSheet: textEditingControllerAddSheet,
         ),
         const SizedBox(
           height: 30,
@@ -840,21 +824,10 @@ contentforth(BuildContext context, FocusNode searchNode,
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ContainerDesign(
-          color: Colors.white,
-          child: TextField(
-            focusNode: searchNode,
-            style: TextStyle(fontSize: contentTextsize(), color: Colors.black),
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.only(left: 10),
-              border: InputBorder.none,
-              isCollapsed: true,
-              hintText: '변경할 제목입력',
-              hintStyle:
-                  TextStyle(fontSize: contentTextsize(), color: Colors.black45),
-            ),
-            controller: controller,
-          ),
+        ContainerTextFieldDesign(
+          searchNodeAddSection: searchNode,
+          string: '변경할 제목입력',
+          textEditingControllerAddSheet: controller,
         ),
         const SizedBox(
           height: 20,

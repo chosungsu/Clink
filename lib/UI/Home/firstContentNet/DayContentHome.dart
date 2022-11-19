@@ -1,19 +1,13 @@
+import 'package:clickbyme/Route/subuiroute.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
-import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
-import 'package:clickbyme/UI/Events/ADEvents.dart';
-import 'package:clickbyme/UI/Home/firstContentNet/DayScript.dart';
-import 'package:clickbyme/Route/initScreenLoading.dart';
-import 'package:clickbyme/sheets/settingCalendarHome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../../../DB/Event.dart';
 import '../../../Tool/Getx/PeopleAdd.dart';
@@ -247,7 +241,7 @@ class _DayContentHomeState extends State<DayContentHome>
                                   const SizedBox(
                                     height: 20,
                                   ),
-                                  ADView(),
+                                  ADSHOW(),
                                   const SizedBox(
                                     height: 20,
                                   ),
@@ -263,13 +257,6 @@ class _DayContentHomeState extends State<DayContentHome>
                   )),
             ],
           )),
-    );
-  }
-
-  ADView() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [ADEvents(context)],
     );
   }
 

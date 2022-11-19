@@ -12,7 +12,7 @@ import '../Tool/Getx/navibool.dart';
 import '../Tool/Loader.dart';
 import '../Tool/NoBehavior.dart';
 import '../Tool/AppBarCustom.dart';
-import '../UI/Home/UI_folder/PageUI.dart';
+import '../UI/PageUI.dart';
 import 'DrawerScreen.dart';
 
 class MYPage extends StatefulWidget {

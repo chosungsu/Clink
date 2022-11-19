@@ -4,6 +4,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 
 import 'MyTheme.dart';
+import 'TextSize.dart';
 
 class ContainerDesign extends StatelessWidget {
   const ContainerDesign({Key? key, required this.child, required this.color})
@@ -35,5 +36,43 @@ class ContainerDesign extends StatelessWidget {
                     ),
                   ]),
             ));
+  }
+}
+
+class ContainerTextFieldDesign extends StatelessWidget {
+  const ContainerTextFieldDesign(
+      {Key? key,
+      required this.searchNodeAddSection,
+      required this.string,
+      required this.textEditingControllerAddSheet})
+      : super(key: key);
+  final FocusNode searchNodeAddSection;
+  final String string;
+  final TextEditingController textEditingControllerAddSheet;
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<navibool>(
+      builder: (_) => Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(color: draw.backgroundcolor, width: 2)),
+        child: TextField(
+          focusNode: searchNodeAddSection,
+          style: TextStyle(fontSize: contentTextsize(), color: Colors.black),
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.only(left: 10),
+            border: InputBorder.none,
+            isCollapsed: true,
+            hintText: string,
+            hintStyle:
+                TextStyle(fontSize: contentTextsize(), color: Colors.black45),
+          ),
+          controller: textEditingControllerAddSheet,
+        ),
+      ),
+    );
   }
 }

@@ -338,13 +338,21 @@ CompanyNotice(
 }
 
 ADSHOW() {
-  //프로버전 구매시 보이지 않게 함
-  /*Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        //ADEvents(context)
-      ],
-    )*/
+  /*TargetPlatform os = Theme.of(context).platform;
+
+  BannerAd banner = BannerAd(
+    listener: BannerAdListener(
+      onAdFailedToLoad: (Ad ad, LoadAdError error) {},
+      onAdLoaded: (_) {},
+    ),
+    size: AdSize.banner,
+    adUnitId: UNIT_ID[os == TargetPlatform.iOS ? 'ios' : 'android']!,
+    request: const AdRequest(),
+  )..load();
+  return Container(
+    height: 50,
+    child: AdWidget(ad: banner),
+  );*/
   return SizedBox(
     height: 60,
     child: Column(

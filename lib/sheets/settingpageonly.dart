@@ -117,7 +117,9 @@ content(
   TextEditingController controller,
   String name,
 ) {
+  final peopleadd = Get.put(PeopleAdd());
   String usercode = Hive.box('user_setting').get('usercode');
+  String subname = peopleadd.secondname;
 
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
@@ -127,28 +129,44 @@ content(
           child: Row(
             children: [
               Flexible(
-                  fit: FlexFit.tight,
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.vpn_key,
-                        size: 30,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('고유 코드',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTextsize())),
-                        ],
-                      ),
-                    ],
-                  )),
+                fit: FlexFit.tight,
+                child: Text('현재 닉네임',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTextsize())),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Text(subname,
+                  maxLines: 2,
+                  style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTextsize(),
+                      overflow: TextOverflow.ellipsis)),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 30,
+        ),
+        GestureDetector(
+          onTap: () {},
+          child: Row(
+            children: [
+              Flexible(
+                fit: FlexFit.tight,
+                child: Text('고유 코드',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTextsize())),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
               SelectableText(usercode,
                   style: TextStyle(
                       color: Colors.blue,
@@ -157,8 +175,12 @@ content(
             ],
           ),
         ),
-        const SizedBox(
-          height: 30,
+        const Divider(
+          height: 20,
+          color: Colors.grey,
+          thickness: 0.5,
+          indent: 0,
+          endIndent: 0,
         ),
         GestureDetector(
           onTap: () {

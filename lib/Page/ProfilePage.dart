@@ -2,7 +2,6 @@
 
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
-import 'package:clickbyme/UI/Events/ADEvents.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -18,7 +17,7 @@ import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/NoBehavior.dart';
 import '../Tool/AppBarCustom.dart';
-import '../UI/Setting/ShowLicense.dart';
+import '../UI/ShowLicense.dart';
 import '../sheets/addgroupmember.dart';
 import '../sheets/readycontent.dart';
 import '../sheets/userinfotalk.dart';
@@ -757,14 +756,6 @@ class _ProfilePageState extends State<ProfilePage>
               )),
         ],
       ),
-    );
-  }
-
-  S_Container2() {
-    //프로버전 구매시 보이지 않게 함
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [ADEvents(context)],
     );
   }
 

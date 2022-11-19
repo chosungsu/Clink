@@ -3,12 +3,12 @@
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/AppBarCustom.dart';
-import 'package:clickbyme/UI/Home/UI_folder/SearchUI.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import '../Enums/Variables.dart';
 import '../Tool/Getx/navibool.dart';
+import '../UI/SearchUI.dart';
 import 'DrawerScreen.dart';
 
 class SearchPage extends StatefulWidget {
