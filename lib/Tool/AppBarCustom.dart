@@ -10,7 +10,7 @@ import 'package:status_bar_control/status_bar_control.dart';
 import '../DB/PageList.dart';
 import '../Enums/Variables.dart';
 import '../Route/subuiroute.dart';
-import '../sheets/settingpageonly.dart';
+import '../sheets/settingpagesheets.dart';
 import 'Getx/linkspacesetting.dart';
 import 'Getx/navibool.dart';
 import 'Getx/notishow.dart';

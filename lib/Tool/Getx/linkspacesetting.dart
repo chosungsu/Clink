@@ -1,8 +1,10 @@
 // ignore_for_file: camel_case_types
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import '../../DB/Linkpage.dart';
 import '../BGColor.dart';
 
 class linkspacesetting extends GetxController {
@@ -10,13 +12,21 @@ class linkspacesetting extends GetxController {
   List indexcnt = [];
   List indextreecnt = [];
   List<List> indextreetmp = [];
+  List<Linkspacepageenter> inindextreetmp = [];
   bool iscompleted = false;
+  PlatformFile? pickedFile;
   Color color = Hive.box('user_setting').get('colorlinkpage') != null
       ? Color(Hive.box('user_setting').get('colorlinkpage'))
       : BGColor();
 
   void setindextreetmp() {
     indextreetmp.add(List.empty(growable: true));
+    update();
+    notifyChildrens();
+  }
+
+  void setsearchfile(PlatformFile? what) {
+    pickedFile = what;
     update();
     notifyChildrens();
   }

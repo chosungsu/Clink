@@ -9,16 +9,16 @@ import '../Enums/Variables.dart';
 import '../Route/mainroute.dart';
 import '../Route/subuiroute.dart';
 import '../Tool/Getx/navibool.dart';
-import '../Tool/Loader.dart';
 import '../Tool/NoBehavior.dart';
 import '../Tool/AppBarCustom.dart';
-import '../UI/PageUI.dart';
 import '../UI/SpaceinUI.dart';
-import 'DrawerScreen.dart';
 
 class Spacein extends StatefulWidget {
-  const Spacein({Key? key, required this.id}) : super(key: key);
+  const Spacein({Key? key, required this.id, required this.type})
+      : super(key: key);
   final String id;
+  final int type;
+
   @override
   State<StatefulWidget> createState() => _SpaceinState();
 }
@@ -43,8 +43,11 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return GetBuilder<navibool>(
         builder: (_) => Scaffold(
+            bottomNavigationBar: ADSHOW(),
             backgroundColor: draw.backgroundcolor,
-            floatingActionButton: Speeddialmemo(context, widget.id),
+            floatingActionButton: widget.type == 1
+                ? null
+                : Speeddialspace(context, widget.id, widget.type),
             body: SafeArea(
               child: WillPopScope(
                 onWillPop: _onWillPop,

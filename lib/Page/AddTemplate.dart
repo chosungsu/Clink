@@ -210,7 +210,7 @@ class _AddTemplateState extends State<AddTemplate>
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             primary: false,
-            physics: const NeverScrollableScrollPhysics(),
+            physics: const ScrollPhysics(),
             itemCount: listdata.length,
             itemBuilder: ((context, index) {
               return Column(

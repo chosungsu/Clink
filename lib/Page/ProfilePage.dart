@@ -19,7 +19,7 @@ import '../Tool/NoBehavior.dart';
 import '../Tool/AppBarCustom.dart';
 import '../UI/ShowLicense.dart';
 import '../sheets/addgroupmember.dart';
-import '../sheets/readycontent.dart';
+import '../sheets/settingpagesheets.dart';
 import '../sheets/userinfotalk.dart';
 import 'DrawerScreen.dart';
 

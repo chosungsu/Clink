@@ -346,12 +346,9 @@ content(
   });
 }
 
-/*linkmadeplace(
+linkmadeplace(
   BuildContext context,
-  String name,
-  String link,
-  String s,
-  int index,
+  int type,
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -382,7 +379,7 @@ content(
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
-                child: place(context, name, link, s, index),
+                child: place(context, type),
               )),
         );
       }).whenComplete(() {
@@ -391,13 +388,7 @@ content(
   });
 }
 
-place(
-  BuildContext context,
-  String name,
-  String link,
-  String s,
-  int index,
-) {
+place(BuildContext context, int type) {
   return SizedBox(
       child: Padding(
           padding:
@@ -420,17 +411,11 @@ place(
               const SizedBox(
                 height: 20,
               ),
-              titlesecond(context, s),
+              titlesecond(context),
               const SizedBox(
                 height: 20,
               ),
-              contentsecond(
-                context,
-                name,
-                link,
-                s,
-                index,
-              ),
+              contentsecond(context, type),
               const SizedBox(
                 height: 20,
               ),
@@ -440,309 +425,75 @@ place(
 
 titlesecond(
   BuildContext context,
-  String s,
 ) {
   return SizedBox(
       child: Row(
     mainAxisSize: MainAxisSize.min,
     mainAxisAlignment: MainAxisAlignment.start,
-    children: [
-      Text(s == 'add' ? '생성하기' : '무엇으로 변경할까요?',
-          style: const TextStyle(
+    children: const [
+      Text('선택',
+          style: TextStyle(
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 25)),
     ],
   ));
 }
 
-contentsecond(
-  BuildContext context,
-  String name,
-  String link,
-  String s,
-  int index,
-) {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  String usercode = Hive.box('user_setting').get('usercode');
+contentsecond(BuildContext context, int type) {
   final linkspaceset = Get.put(linkspacesetting());
+  final List listin1 = ['링크', '이미지 및 파일'];
+  final List listin3 = ['링크', '이미지 및 파일'];
+  final List listin4 = ['링크', '이미지 및 파일'];
   final List<Linkspacepage> listspacepageset = [];
   var id;
-  const chars =
-      'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-  final Random rnd = Random();
-  String code = '';
 
   return StatefulBuilder(builder: (_, StateSetter setState) {
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: () async {
-            code = String.fromCharCodes(Iterable.generate(
-                5, (_) => chars.codeUnitAt(rnd.nextInt(chars.length))));
-            if (s == 'add') {
-              await MongoDB.add(collectionname: 'pinchannelin', addlist: {
-                'username': usercode,
-                'linkname': link,
-                'placestr': 'board',
-                'index': linkspaceset.indexcnt.length,
-                'uniquecode': code
-              });
-              await firestore.collection('Pinchannelin').add({
-                'username': usercode,
-                'linkname': link,
-                'placestr': 'board',
-                'index': linkspaceset.indexcnt.length,
-                'uniquecode': code
-              });
-              linkspaceset.setspacein(Linkspacepage(
-                  type: linkspaceset.indexcnt.length,
-                  placestr: 'board',
-                  uniquecode: code));
-            } else {
-              await firestore.collection('Pinchannelin').get().then((value) {
-                for (int i = 0; i < value.docs.length; i++) {
-                  if (value.docs[i].get('username') == usercode &&
-                      value.docs[i].get('linkname') == link &&
-                      value.docs[i].get('index') == index) {
-                    id = value.docs[i].id;
-                  }
-                }
-                firestore
-                    .collection('Pinchannelin')
-                    .doc(id)
-                    .update({'placestr': 'board'});
-              });
-              linkspaceset.setspacein(Linkspacepage(
-                  type: index, placestr: 'board', uniquecode: code));
-            }
-
-            Get.back();
-          },
-          child: Row(
+    return ListView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        primary: false,
+        physics: const NeverScrollableScrollPhysics(),
+        //itemCount: listdata.length,
+        itemBuilder: ((context, index) {
+          return Column(
             children: [
-              Flexible(
-                  fit: FlexFit.tight,
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.table_chart,
-                        size: 30,
-                        color: Colors.black,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(s == 'add' ? '보드형 플레이스 추가' : '보드형 플레이스',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTitleTextsize())),
-                        ],
-                      ),
-                    ],
-                  )),
-              Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade400)
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        GestureDetector(
-          onTap: () async {
-            code = String.fromCharCodes(Iterable.generate(
-                5, (_) => chars.codeUnitAt(rnd.nextInt(chars.length))));
-            if (s == 'add') {
-              await MongoDB.add(collectionname: 'pinchannelin', addlist: {
-                'username': usercode,
-                'linkname': link,
-                'placestr': 'card',
-                'index': linkspaceset.indexcnt.length,
-                'uniquecode': code
-              });
-              await firestore.collection('Pinchannelin').add({
-                'username': usercode,
-                'linkname': link,
-                'placestr': 'card',
-                'index': linkspaceset.indexcnt.length,
-                'uniquecode': code
-              });
-              linkspaceset.setspacein(Linkspacepage(
-                  type: linkspaceset.indexcnt.length,
-                  placestr: 'card',
-                  uniquecode: code));
-            } else {
-              await firestore.collection('Pinchannelin').get().then((value) {
-                for (int i = 0; i < value.docs.length; i++) {
-                  if (value.docs[i].get('username') == usercode &&
-                      value.docs[i].get('linkname') == link &&
-                      value.docs[i].get('index') == index) {
-                    id = value.docs[i].id;
-                  }
-                }
-                firestore
-                    .collection('Pinchannelin')
-                    .doc(id)
-                    .update({'placestr': 'card'});
-              });
-              linkspaceset.setspacein(Linkspacepage(
-                  type: index, placestr: 'card', uniquecode: code));
-            }
-
-            Get.back();
-          },
-          child: Row(
-            children: [
-              Flexible(
-                  fit: FlexFit.tight,
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.view_stream,
-                        size: 30,
-                        color: Colors.black,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(s == 'add' ? '링크형 플레이스 추가' : '링크형 플레이스',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTitleTextsize())),
-                        ],
-                      ),
-                    ],
-                  )),
-              Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade400)
-            ],
-          ),
-        ),
-        s == 'add'
-            ? Column(
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  GestureDetector(
-                    onTap: () async {
-                      code = String.fromCharCodes(Iterable.generate(5,
-                          (_) => chars.codeUnitAt(rnd.nextInt(chars.length))));
-                      if (s == 'add') {
-                        await MongoDB.add(
-                            collectionname: 'pinchannelin',
-                            addlist: {
-                              'username': usercode,
-                              'linkname': link,
-                              'placestr': 'calendar',
-                              'index': linkspaceset.indexcnt.length,
-                              'uniquecode': code
-                            });
-                        await firestore.collection('Pinchannelin').add({
-                          'username': usercode,
-                          'linkname': link,
-                          'placestr': 'calendar',
-                          'index': linkspaceset.indexcnt.length,
-                          'uniquecode': code
-                        });
-                        linkspaceset.setspacein(Linkspacepage(
-                            type: linkspaceset.indexcnt.length,
-                            placestr: 'calendar',
-                            uniquecode: code));
-                        linkspaceset.indextreetmp
-                            .add(List.empty(growable: true));
-                        await MongoDB.add(collectionname: 'linknet', addlist: {
-                          'username': name,
-                          'addname': '',
-                          'placestr': 'calendar',
-                          'index': linkspaceset
-                              .indextreetmp[linkspaceset.indexcnt.length - 1]
-                              .length,
-                          'uniquecode': code
-                        });
-                        await firestore.collection('Linknet').add({
-                          'username': name,
-                          'addname': '',
-                          'placestr': 'calendar',
-                          'index': linkspaceset
-                              .indextreetmp[linkspaceset.indexcnt.length - 1]
-                              .length,
-                          'uniquecode': code
-                        });
-                        linkspaceset.setspacetreein(Linkspacetreepage(
-                            subindex: linkspaceset
-                                .indextreetmp[linkspaceset.indexcnt.length - 1]
-                                .length,
-                            placestr: 'calendar',
-                            uniqueid: code));
-                      } else {
-                        await firestore
-                            .collection('Pinchannelin')
-                            .get()
-                            .then((value) {
-                          for (int i = 0; i < value.docs.length; i++) {
-                            if (value.docs[i].get('username') == usercode &&
-                                value.docs[i].get('linkname') == link &&
-                                value.docs[i].get('index') == index) {
-                              id = value.docs[i].id;
-                            }
-                          }
-                          firestore
-                              .collection('Pinchannelin')
-                              .doc(id)
-                              .update({'placestr': 'calendar'});
-                        });
-                        linkspaceset.setspacein(Linkspacepage(
-                            type: index,
-                            placestr: 'calendar',
-                            uniquecode: code));
-                      }
-
-                      Get.back();
-                    },
-                    child: Row(
-                      children: [
-                        Flexible(
-                            fit: FlexFit.tight,
-                            child: Row(
+              GestureDetector(
+                onTap: () async {},
+                child: Row(
+                  children: [
+                    Flexible(
+                        fit: FlexFit.tight,
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.table_chart,
+                              size: 30,
+                              color: Colors.black,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Icon(
-                                  Icons.calendar_month,
-                                  size: 30,
-                                  color: Colors.black,
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('캘린더형 플레이스 추가',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: contentTitleTextsize())),
-                                  ],
-                                ),
+                                Text('보드형 플레이스',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentTitleTextsize())),
                               ],
-                            )),
-                        Icon(Icons.keyboard_arrow_right,
-                            color: Colors.grey.shade400)
-                      ],
-                    ),
-                  )
-                ],
-              )
-            : const SizedBox()
-      ],
-    );
+                            ),
+                          ],
+                        )),
+                    Icon(Icons.keyboard_arrow_right,
+                        color: Colors.grey.shade400)
+                  ],
+                ),
+              ),
+            ],
+          );
+        }));
   });
-}*/
+}
 
 linkplacechangeoptions(
   BuildContext context,
@@ -1329,13 +1080,54 @@ linkmadetreeplace(
       subindex: index, placestr: '빈 제목', uniqueid: uniquecode));
 }
 
+linkplaceshowbeforeadd(
+  BuildContext context,
+  String name,
+) {
+  Get.bottomSheet(
+          Container(
+            margin: const EdgeInsets.only(
+                left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+            child: Padding(
+                padding: MediaQuery.of(context).viewInsets,
+                child: Container(
+                    decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                          bottomLeft: Radius.circular(20),
+                          bottomRight: Radius.circular(20),
+                        )),
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
+                    ),
+                    child: StatefulBuilder(
+                      builder: ((context, setState) {
+                        return Container(
+                          decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                                bottomLeft: Radius.circular(20),
+                                bottomRight: Radius.circular(20),
+                              )),
+                          child: treeplace(context, name),
+                        );
+                      }),
+                    ))),
+          ),
+          backgroundColor: Colors.transparent,
+          isScrollControlled: true,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
+      .whenComplete(() {});
+}
+
 treeplace(
   BuildContext context,
   String name,
-  String link,
-  String s,
-  int index,
-  String uniquecode,
 ) {
   return SizedBox(
       child: Padding(
@@ -1359,11 +1151,11 @@ treeplace(
               const SizedBox(
                 height: 20,
               ),
-              titlefifth(context, s),
+              titlefifth(context),
               const SizedBox(
                 height: 20,
               ),
-              contentfifth(context, name, link, s, index, uniquecode),
+              contentfifth(context, name),
               const SizedBox(
                 height: 20,
               ),
@@ -1373,14 +1165,13 @@ treeplace(
 
 titlefifth(
   BuildContext context,
-  String s,
 ) {
   return SizedBox(
       child: Row(
     mainAxisSize: MainAxisSize.min,
     mainAxisAlignment: MainAxisAlignment.start,
     children: const [
-      Text('생성하기',
+      Text('업로드',
           style: TextStyle(
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 25)),
     ],
@@ -1390,13 +1181,7 @@ titlefifth(
 contentfifth(
   BuildContext context,
   String name,
-  String link,
-  String s,
-  int index,
-  String uniquecode,
 ) {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  String usercode = Hive.box('user_setting').get('usercode');
   final linkspaceset = Get.put(linkspacesetting());
   final List<Linkspacepage> listspacepageset = [];
   var id;
@@ -1405,94 +1190,24 @@ contentfifth(
     return Column(
       children: [
         GestureDetector(
-          onTap: () async {
-            if (s == 'board') {
-              await MongoDB.add(collectionname: 'linknet', addlist: {
-                'username': usercode,
-                'addname': '',
-                'placestr': 'board',
-                'index': linkspaceset.indextreecnt.length,
-                'uniquecode': uniquecode
-              });
-              await firestore.collection('Linknet').add({
-                'username': usercode,
-                'addname': '',
-                'placestr': 'board',
-                'index': linkspaceset.indextreecnt.length,
-                'uniquecode': uniquecode
-              });
-              linkspaceset.setspacetreein(Linkspacetreepage(
-                  subindex: linkspaceset.indextreecnt.length,
-                  placestr: 'board',
-                  uniqueid: uniquecode));
-            } else if (s == 'card') {
-              await MongoDB.add(collectionname: 'linknet', addlist: {
-                'username': usercode,
-                'addname': '',
-                'placestr': 'card',
-                'index': linkspaceset.indextreecnt.length,
-                'uniquecode': uniquecode
-              });
-              await firestore.collection('Linknet').add({
-                'username': usercode,
-                'addname': '',
-                'placestr': 'card',
-                'index': linkspaceset.indextreecnt.length,
-                'uniquecode': uniquecode
-              });
-              linkspaceset.setspacetreein(Linkspacetreepage(
-                  subindex: linkspaceset.indextreecnt.length,
-                  placestr: 'card',
-                  uniqueid: uniquecode));
-            } else {
-              await MongoDB.add(collectionname: 'linknet', addlist: {
-                'username': usercode,
-                'addname': '',
-                'placestr': 'calendar',
-                'index': linkspaceset.indextreecnt.length,
-                'uniquecode': uniquecode
-              });
-              await firestore.collection('Linknet').add({
-                'username': usercode,
-                'addname': '',
-                'placestr': 'calendar',
-                'index': linkspaceset.indextreecnt.length,
-                'uniquecode': uniquecode
-              });
-              linkspaceset.setspacetreein(Linkspacetreepage(
-                  subindex: linkspaceset.indextreecnt.length,
-                  placestr: 'calendar',
-                  uniqueid: uniquecode));
-            }
-
-            Get.back();
-          },
+          onTap: () async {},
           child: Row(
             children: [
               Flexible(
-                  fit: FlexFit.tight,
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.add_circle_outline,
-                        size: 30,
-                        color: Colors.black,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('이 타입 추가하기',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTitleTextsize())),
-                        ],
-                      ),
-                    ],
-                  )),
+                fit: FlexFit.tight,
+                child: Text(
+                  name,
+                  maxLines: 3,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTitleTextsize()),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
               Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade400)
             ],
           ),

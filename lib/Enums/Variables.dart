@@ -30,6 +30,8 @@ FirebaseFirestore firestore = FirebaseFirestore.instance;
 var pagename;
 var spacename;
 var type;
+//Here are SpaceinUI Variables
+var spacepagename;
 //Here are MYPage Variables
 final List<Linkpage> listpinlink = [];
 final List<CompanyPageList> listcompanytousers = [];

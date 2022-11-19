@@ -4,6 +4,14 @@ class Linkpage {
   Linkpage({required this.link});
 }
 
+class Linkspacepageenter {
+  final String placestr;
+
+  Linkspacepageenter({
+    required this.placestr,
+  });
+}
+
 class Linkspacepage {
   final String placestr;
   final int type;
@@ -20,14 +28,6 @@ class Linkspacepage {
     required this.familycode,
     this.date,
   });
-  Map<String, dynamic> toMap() {
-    return {
-      'placestr': placestr,
-      'index': type,
-      'subindex': uniquecode,
-      'date': date
-    };
-  }
 }
 
 class Linkspacetreepage {
@@ -44,12 +44,4 @@ class Linkspacetreepage {
     this.mainid,
     this.date,
   });
-  Map<String, dynamic> toMap() {
-    return {
-      'placestr': placestr,
-      'index': uniqueid,
-      'subindex': subindex,
-      'date': date
-    };
-  }
 }

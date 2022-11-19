@@ -332,8 +332,12 @@ PageUI1(String id, TextEditingController controller) {
                                                                           ),
                                                                           GestureDetector(
                                                                             onTap:
-                                                                                () {
-                                                                              Get.to(() => Spacein(id: linkspaceset.indextreetmp[index][index2].mainid), transition: Transition.downToUp);
+                                                                                () async {
+                                                                              await firestore.collection('PageView').doc(linkspaceset.indextreetmp[index][index2].uniqueid).get().then(
+                                                                                (value) {
+                                                                                  Get.to(() => Spacein(id: linkspaceset.indextreetmp[index][index2].mainid, type: value.get('type')), transition: Transition.downToUp);
+                                                                                },
+                                                                              );
                                                                             },
                                                                             child: ContainerDesign(
                                                                                 color: draw.backgroundcolor,
@@ -405,10 +409,10 @@ PageUI1(String id, TextEditingController controller) {
                                                                 child: Text(
                                                                   linkspaceset.indexcnt[index].type ==
                                                                           0
-                                                                      ? '이 공간은 이미지, 파일, URL링크를 클립보드 형식으로 보여주는 공간입니다.'
+                                                                      ? '이 공간은 이미지, 파일을 보여주는 공간입니다.'
                                                                       : (linkspaceset.indexcnt[index].type ==
                                                                               1
-                                                                          ? '이 공간은 캘린더 바로가기를 보여주는 공간입니다.'
+                                                                          ? '이 공간은 캘린더 일정을 보여주는 공간입니다.'
                                                                           : (linkspaceset.indexcnt[index].type == 2
                                                                               ? '이 공간은 투두리스트를 보여주는 공간입니다.'
                                                                               : '이 공간은 메모를 보여주는 공간입니다.')),

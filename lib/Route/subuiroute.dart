@@ -3,12 +3,15 @@
 import 'dart:async';
 import 'package:clickbyme/Enums/Variables.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:package_info/package_info.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:status_bar_control/status_bar_control.dart';
@@ -21,12 +24,14 @@ import '../Page/Spacepage.dart';
 import '../Tool/AndroidIOS.dart';
 import '../Tool/BGColor.dart';
 import '../Tool/FlushbarStyle.dart';
+import '../Tool/Getx/linkspacesetting.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/Getx/notishow.dart';
 import '../Tool/Getx/uisetting.dart';
 import '../Tool/NoBehavior.dart';
 import '../Tool/TextSize.dart';
 import '../mongoDB/mongodatabase.dart';
+import '../sheets/linksettingsheet.dart';
 import '../sheets/movetolinkspace.dart';
 import 'mainroute.dart';
 
@@ -375,8 +380,7 @@ ADSHOW() {
   );
 }
 
-Speeddialmemo(BuildContext context, String mainid) {
-  final uiset = Get.put(uisetting());
+Speeddialspace(BuildContext context, String mainid, int type) {
   return GetBuilder<uisetting>(
       builder: (_) => Row(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -393,21 +397,35 @@ Speeddialmemo(BuildContext context, String mainid) {
                   spaceBetweenChildren: 10,
                   children: [
                     SpeedDialChild(
-                      child: NeumorphicIcon(
-                        Icons.add,
+                      child: Icon(
+                        Icons.photo,
                         size: 30,
-                        style: NeumorphicStyle(
-                            shape: NeumorphicShape.convex,
-                            depth: 2,
-                            surfaceIntensity: 0.5,
-                            color: TextColor(),
-                            lightSource: LightSource.topLeft),
+                        color: draw.color_textstatus,
                       ),
                       backgroundColor: Colors.orange.shade200,
                       onTap: () {
-                        //linkmadeplace(context, usercode, name, 'add', -1);
+                        //linkmadeplace(context, type);
                       },
-                      label: '추가',
+                      label: '사진 및 영상',
+                      labelStyle: TextStyle(
+                          color: Colors.black45,
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTextsize()),
+                    ),
+                    SpeedDialChild(
+                      child: Icon(
+                        Icons.picture_as_pdf,
+                        size: 30,
+                        color: draw.color_textstatus,
+                      ),
+                      backgroundColor: Colors.orange.shade200,
+                      onTap: () async {
+                        final result =
+                            await FilePicker.platform.pickFiles().then((value) {
+                          searchfiles(context, type, value);
+                        });
+                      },
+                      label: '파일',
                       labelStyle: TextStyle(
                           color: Colors.black45,
                           fontWeight: FontWeight.bold,
@@ -416,4 +434,26 @@ Speeddialmemo(BuildContext context, String mainid) {
                   ]),
             ],
           ));
+}
+
+searchfiles(
+  BuildContext context,
+  int type,
+  FilePickerResult? result,
+) async {
+  final linkspaceset = Get.put(linkspacesetting());
+  if (result != null) {
+    linkspaceset.setsearchfile(result.files.first);
+    if (linkspaceset.pickedFile != null) {
+      linkplaceshowbeforeadd(context, linkspaceset.pickedFile!.name);
+    }
+  }
+}
+
+uploadfiles(BuildContext context, int type, String s) async {
+  final result = await FilePicker.platform.pickFiles();
+  if (result == null) {
+    return;
+  }
+  linkspaceset.setsearchfile(result.files.first);
 }
