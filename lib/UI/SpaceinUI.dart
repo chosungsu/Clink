@@ -43,7 +43,15 @@ SpaceinUI(
                             i++) {
                           linkspaceset.inindextreetmp.add(Linkspacepageenter(
                               placeentercode:
-                                  sp.get('spaceentercontent')[i].toString()));
+                                  sp.get('spaceentercontent')[i].toString(),
+                              substrcode: sp
+                                  .get('spaceentercontent')[i]
+                                  .toString()
+                                  .replaceAll(
+                                      RegExp(
+                                          'https://firebasestorage.googleapis.com/v0/b/habit-tracker-8dad1.appspot.com/o/${id}%2F'),
+                                      '')
+                                  .split('?')[0]));
                         }
                       }
                     }

@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:clickbyme/Enums/Variables.dart';
+import 'package:clickbyme/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:external_path/external_path.dart';
@@ -436,35 +437,22 @@ Future<void> downloadFileExample(String mainid, BuildContext context) async {
   List downloadfile = [];
   List checkedindex = [];
   var httpsReference;
-  var path;
+  File path;
   String downloadname = '';
-  final tempDir = await getTemporaryDirectory();
-  checkedindex.add(linkspaceset.ischecked.indexOf(true));
-  print('temp : ' + tempDir.path);
+  final storageRef = FirebaseStorage.instance.ref();
 
-  Directory appDocDir = await getApplicationDocumentsDirectory();
-  print('appDocDir : ' + appDocDir.path);
+  checkedindex.add(linkspaceset.ischecked.indexOf(true));
   var path2 = await ExternalPath.getExternalStoragePublicDirectory(
       ExternalPath.DIRECTORY_DOWNLOADS);
-  print('ExternalPath : ' + path2);
-  /*for (int i = 0; i < checkedindex.length; i++) {
-    downloadfile
-        .add(linkspaceset.inindextreetmp[checkedindex[i]].placeentercode);
-    httpsReference = FirebaseStorage.instance.refFromURL(downloadfile[i]);
-    downloadname = downloadfile[i]
-        .toString()
-        .replaceAll(
-            RegExp(
-                'https://firebasestorage.googleapis.com/v0/b/habit-tracker-8dad1.appspot.com/o/$mainid%2F'),
-            '')
-        .split('?')[0];
-    path = File('${tempDir.path}/' + downloadname);
-    try {
-      await httpsReference.writeToFile(path);
-    } on FirebaseException catch (e) {
-      // e.g, e.code == 'canceled'
-    }
-  }*/
+  for (int i = 0; i < checkedindex.length; i++) {
+    downloadfile.add(linkspaceset.inindextreetmp[checkedindex[i]].substrcode);
+    downloadname = downloadfile[i];
+    httpsReference = storageRef.child(mainid + "/$downloadname");
+    //httpsReference = FirebaseStorage.instance.refFromURL(downloadfile[i]);
 
-  //Directory appDocDir = await getApplicationDocumentsDirectory();
+    path = File(path2 + '/' + downloadname);
+    httpsReference.writeToFile(path);
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(downloadname + '다운로드 중입니다.')));
+  }
 }

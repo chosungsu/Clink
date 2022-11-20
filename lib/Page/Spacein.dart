@@ -42,6 +42,7 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     Hive.box('user_setting').put('page_index', 6);
+    Hive.box('user_setting').put('widgetid', widget.id);
     scrollController = ScrollController();
   }
 

@@ -36,7 +36,7 @@ class AppBarCustom extends StatelessWidget {
   TextEditingController textEditingController = TextEditingController();
   FocusNode searchnode = FocusNode();
   int indexcnt = linkspaceset.indexcnt.length;
-  String mainid = '';
+  String mainid = Hive.box('user_setting').get('widgetid') ?? '';
 
   @override
   Widget build(BuildContext context) {
