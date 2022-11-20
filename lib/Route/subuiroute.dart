@@ -1,19 +1,17 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:async';
+import 'dart:io';
 import 'package:clickbyme/Enums/Variables.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:package_info/package_info.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../DB/PageList.dart';
@@ -28,9 +26,7 @@ import '../Tool/Getx/linkspacesetting.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/Getx/notishow.dart';
 import '../Tool/Getx/uisetting.dart';
-import '../Tool/NoBehavior.dart';
 import '../Tool/TextSize.dart';
-import '../mongoDB/mongodatabase.dart';
 import '../sheets/linksettingsheet.dart';
 import '../sheets/movetolinkspace.dart';
 import 'mainroute.dart';
@@ -380,36 +376,48 @@ ADSHOW() {
   );
 }
 
-searchfiles(BuildContext context, int type, FilePickerResult? result, res2,
-    int pick) async {
+searchfiles(
+    BuildContext context, String mainid, FilePickerResult? result) async {
   final linkspaceset = Get.put(linkspacesetting());
-  if (pick == 0) {
-    //pictures
-    if (res2 != null) {
-      linkspaceset.setsearchimage(res2.path);
-      if (linkspaceset.pickedFile != null) {
-        linkplaceshowbeforeadd(context, linkspaceset.pickedimg);
+  final filenames = [];
+  if (linkspaceset.selectedfile!.isEmpty) {
+    if (result != null) {
+      for (int i = 0; i < result.files.length; i++) {
+        linkspaceset.selectedfile!.add({
+          'name': result.files[i].name,
+          'size': result.files[i].size,
+          'path': result.files[i].path,
+        });
       }
+      linkspaceset.pickedFilefirst = result.files.first;
     } else {
       return;
     }
   } else {
-    //all files
     if (result != null) {
-      linkspaceset.setsearchfile(result.files.first);
-      if (linkspaceset.pickedFile != null) {
-        linkplaceshowbeforeadd(context, linkspaceset.pickedFile!.name);
+      for (int i = 0; i < result.files.length; i++) {
+        linkspaceset.selectedfile!.add({
+          'name': result.files[i].name,
+          'size': result.files[i].size,
+          'path': result.files[i].path,
+        });
       }
+      linkspaceset.pickedFilefirst = result.files.first;
     } else {
       return;
     }
   }
 }
 
-uploadfiles(BuildContext context, int type, String s) async {
-  final result = await FilePicker.platform.pickFiles();
-  if (result == null) {
-    return;
+uploadfiles(String mainid) async {
+  final linkspaceset = Get.put(linkspacesetting());
+  final path = mainid + '/';
+  var ref;
+  for (int i = 0; i < linkspaceset.selectedfile!.length; i++) {
+    ref = FirebaseStorage.instance
+        .ref()
+        .child(path + linkspaceset.selectedfile![i]['name']);
+    await ref.putFile(File(linkspaceset.selectedfile![i]['path']));
   }
-  linkspaceset.setsearchfile(result.files.first);
+  Get.back();
 }

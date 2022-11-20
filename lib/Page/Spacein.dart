@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names
 
+import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
 import 'package:clickbyme/Tool/Getx/uisetting.dart';
+import 'package:clickbyme/sheets/linksettingsheet.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -13,6 +15,7 @@ import '../Route/mainroute.dart';
 import '../Route/subuiroute.dart';
 import '../Tool/BGColor.dart';
 import '../Tool/Getx/navibool.dart';
+import '../Tool/Loader.dart';
 import '../Tool/NoBehavior.dart';
 import '../Tool/AppBarCustom.dart';
 import '../Tool/TextSize.dart';
@@ -55,11 +58,21 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
                 ? null
                 : Speeddialspace(context, widget.id, widget.type),
             body: SafeArea(
-              child: WillPopScope(
+                child: GetBuilder<linkspacesetting>(
+              builder: (_) => WillPopScope(
                 onWillPop: _onWillPop,
-                child: UI(),
+                child: Stack(
+                  children: [
+                    UI(),
+                    linkspaceset.iscompleted == true
+                        ? const Loader(
+                            wherein: 'spaceupload',
+                          )
+                        : Container()
+                  ],
+                ),
               ),
-            )));
+            ))));
   }
 
   Widget UI() {
@@ -140,15 +153,19 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 SpeedDial(
-                    openCloseDial: isDialOpen,
-                    activeIcon: Icons.close,
-                    icon: Icons.add,
-                    backgroundColor: Colors.blue,
-                    overlayColor: BGColor(),
-                    overlayOpacity: 0.4,
-                    spacing: 10,
-                    spaceBetweenChildren: 10,
-                    children: [
+                  openCloseDial: isDialOpen,
+                  activeIcon: Icons.close,
+                  icon: Icons.add,
+                  backgroundColor: Colors.blue,
+                  overlayColor: BGColor(),
+                  overlayOpacity: 0.4,
+                  spacing: 10,
+                  spaceBetweenChildren: 10,
+                  onPress: () {
+                    linkspaceset.resetsearchfile();
+                    linkplaceshowaddaction(context, mainid);
+                  },
+                  /*children: [
                       SpeedDialChild(
                         child: Icon(
                           Icons.photo,
@@ -159,7 +176,8 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
                         onTap: () async {
                           final image = await imagePicker.pickImage(
                               source: ImageSource.gallery);
-                          searchfiles(context, type, null, image, 0);
+                          linkspaceset.setcompleted(true);
+                          searchfiles(context, mainid, null, image, 0);
                         },
                         label: '사진 및 영상',
                         labelStyle: TextStyle(
@@ -178,13 +196,28 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
                           res = await FilePicker.platform.pickFiles(
                               onFileLoading: (status) {
                                 if (status == FilePickerStatus.done) {
-                                  print('FilePickerStatus: $status');
+                                  linkspaceset.setcompleted(false);
                                 } else {
-                                  print('FilePickerStatus: $status');
+                                  linkspaceset.setcompleted(true);
                                 }
                               },
                               lockParentWindow: true);
-                          searchfiles(context, type, res, null, 1);
+                          searchfiles(context, mainid, res, null, 1);
+                          /*
+                          return Center(
+                                                            child:
+                                                                CircularProgressIndicator(
+                                                              value: loadingProgress
+                                                                          .expectedTotalBytes !=
+                                                                      null
+                                                                  ? loadingProgress
+                                                                          .cumulativeBytesLoaded /
+                                                                      loadingProgress
+                                                                          .expectedTotalBytes!
+                                                                  : null,
+                                                            ),
+                                                          );
+                          */
                         },
                         label: '파일',
                         labelStyle: TextStyle(
@@ -192,7 +225,8 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
                             fontWeight: FontWeight.bold,
                             fontSize: contentTextsize()),
                       ),
-                    ]),
+                    ]*/
+                ),
               ],
             ));
   }

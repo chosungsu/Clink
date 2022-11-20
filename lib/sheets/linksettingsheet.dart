@@ -1,16 +1,21 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable
 
+import 'dart:io';
 import 'dart:math';
 
 import 'package:clickbyme/Tool/Getx/category.dart';
 import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:outline_gradient_button/outline_gradient_button.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import '../DB/Linkpage.dart';
 import '../Enums/Variables.dart';
@@ -1081,9 +1086,328 @@ linkmadetreeplace(
       subindex: index, placestr: '빈 제목', uniqueid: uniquecode));
 }
 
+linkplaceshowaddaction(
+  BuildContext context,
+  String mainid,
+) {
+  Get.bottomSheet(
+          Container(
+            margin: const EdgeInsets.only(top: 30),
+            child: Padding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: Container(
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      )),
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: GetBuilder<linkspacesetting>(
+                      builder: (_) => SingleChildScrollView(
+                          physics: const ScrollPhysics(),
+                          child: addaction(context, mainid)))
+                  /*StatefulBuilder(
+                      builder: ((context, setState) {
+                        return Container(
+                          decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                              )),
+                          child: addaction(context, mainid),
+                        );
+                      }),
+                    )*/
+                  ),
+            ),
+          ),
+          backgroundColor: Colors.transparent,
+          isScrollControlled: true,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
+      .whenComplete(() {
+    final linkspaceset = Get.put(linkspacesetting());
+    linkspaceset.resetsearchfile();
+  });
+}
+
+addaction(
+  BuildContext context,
+  String mainid,
+) {
+  return SizedBox(
+      child: Padding(
+          padding:
+              const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                  height: 5,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                          width: (MediaQuery.of(context).size.width - 40) * 0.2,
+                          alignment: Alignment.topCenter,
+                          color: Colors.black45),
+                    ],
+                  )),
+              const SizedBox(
+                height: 20,
+              ),
+              contentaddaction(context, mainid),
+              linkspaceset.selectedfile!.isEmpty
+                  ? const SizedBox()
+                  : bottomaddaction(
+                      context, linkspaceset.selectedfile!.length, mainid),
+              const SizedBox(
+                height: 50,
+              ),
+            ],
+          )));
+}
+
+contentaddaction(
+  BuildContext context,
+  String mainid,
+) {
+  final linkspaceset = Get.put(linkspacesetting());
+  final List<Linkspacepage> listspacepageset = [];
+  var id;
+  FilePickerResult? res;
+
+  return StatefulBuilder(builder: (_, StateSetter setState) {
+    return GetBuilder<linkspacesetting>(
+        builder: (_) => Column(
+              children: [
+                GestureDetector(
+                  onTap: () async {
+                    if (linkspaceset.selectedfile!.isEmpty) {
+                      linkspaceset.resetsearchfile();
+                    } else {}
+                    res = await FilePicker.platform.pickFiles(
+                        allowMultiple: true,
+                        onFileLoading: (status) {
+                          if (status == FilePickerStatus.done) {
+                            linkspaceset.setcompleted(false);
+                          } else {
+                            linkspaceset.setcompleted(true);
+                          }
+                        },
+                        lockParentWindow: true);
+                    searchfiles(context, mainid, res);
+                  },
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 40.0, vertical: 20.0),
+                      child: DottedBorder(
+                        borderType: BorderType.RRect,
+                        radius: const Radius.circular(10),
+                        dashPattern: [10, 4],
+                        strokeCap: StrokeCap.round,
+                        color: Colors.blue.shade400,
+                        child: Container(
+                          width: double.infinity,
+                          height: 150,
+                          decoration: BoxDecoration(
+                              color: Colors.blue.shade50.withOpacity(.3),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.folder_open,
+                                color: Colors.blue,
+                                size: 30,
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              Text(
+                                'Select your file',
+                                style: TextStyle(
+                                    fontSize: 15, color: Colors.grey.shade400),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )),
+                ),
+                linkspaceset.selectedfile!.isNotEmpty
+                    ? Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Flexible(
+                                  fit: FlexFit.tight,
+                                  child: Text(
+                                    'Selected File',
+                                    style: TextStyle(
+                                      color: Colors.grey.shade400,
+                                      fontSize: 15,
+                                    ),
+                                  )),
+                              Text(
+                                linkspaceset.selectedfile!.length.toString(),
+                                style: TextStyle(
+                                  color: Colors.grey.shade400,
+                                  fontSize: 15,
+                                ),
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: linkspaceset.selectedfile!.length,
+                              itemBuilder: ((context, index) {
+                                return Column(
+                                  children: [
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: Colors.white,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey.shade200,
+                                                offset: const Offset(0, 1),
+                                                blurRadius: 3,
+                                                spreadRadius: 2,
+                                              )
+                                            ]),
+                                        child: Row(
+                                          children: [
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    linkspaceset.selectedfile![
+                                                        index]['name'],
+                                                    maxLines: 1,
+                                                    style: const TextStyle(
+                                                        fontSize: 13,
+                                                        color: Colors.black),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  Text(
+                                                    '${(linkspaceset.selectedfile![index]['size'] / 1024).ceil()} KB',
+                                                    style: TextStyle(
+                                                        fontSize: 13,
+                                                        color: Colors
+                                                            .grey.shade500),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            InkWell(
+                                              onTap: () {
+                                                linkspaceset
+                                                    .removesearchfile(index);
+                                              },
+                                              child: const Icon(
+                                                Icons.close,
+                                                color: Colors.red,
+                                                size: 30,
+                                              ),
+                                            )
+                                          ],
+                                        )),
+                                  ],
+                                );
+                              })),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          // MaterialButton(
+                          //   minWidth: double.infinity,
+                          //   height: 45,
+                          //   onPressed: () {},
+                          //   color: Colors.black,
+                          //   child: Text('Upload', style: TextStyle(color: Colors.white),),
+                          // )
+                        ],
+                      )
+                    : Container(),
+              ],
+            ));
+  });
+}
+
+bottomaddaction(BuildContext context, int numberfileslen, String mainid) {
+  return Column(
+    children: [
+      const SizedBox(
+        height: 50,
+      ),
+      SizedBox(
+        height: 60,
+        child: OutlineGradientButton(
+          child: SizedBox(
+              width: 80.w,
+              child: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(numberfileslen.toString() + '개의 파일 업로드 시작',
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20)),
+                  ],
+                ),
+              )),
+          gradient: const LinearGradient(
+            colors: [Colors.white, Colors.grey],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          strokeWidth: 2,
+          backgroundColor: Colors.blue.shade300,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          radius: const Radius.circular(10),
+          onTap: () {
+            uploadfiles(mainid);
+          },
+        ),
+      ),
+    ],
+  );
+}
+
 linkplaceshowbeforeadd(
   BuildContext context,
   String name,
+  String? path,
+  String mainid,
 ) {
   Get.bottomSheet(
           Container(
@@ -1114,7 +1438,7 @@ linkplaceshowbeforeadd(
                                 bottomLeft: Radius.circular(20),
                                 bottomRight: Radius.circular(20),
                               )),
-                          child: treeplace(context, name),
+                          child: treeplace(context, name, path, mainid),
                         );
                       }),
                     ))),
@@ -1129,6 +1453,8 @@ linkplaceshowbeforeadd(
 treeplace(
   BuildContext context,
   String name,
+  String? path,
+  String mainid,
 ) {
   return SizedBox(
       child: Padding(
@@ -1156,7 +1482,7 @@ treeplace(
               const SizedBox(
                 height: 20,
               ),
-              contentfifth(context, name),
+              contentfifth(context, name, path, mainid),
               const SizedBox(
                 height: 20,
               ),
@@ -1182,6 +1508,8 @@ titlefifth(
 contentfifth(
   BuildContext context,
   String name,
+  String? path,
+  String mainid,
 ) {
   final linkspaceset = Get.put(linkspacesetting());
   final List<Linkspacepage> listspacepageset = [];
@@ -1191,7 +1519,9 @@ contentfifth(
     return Column(
       children: [
         GestureDetector(
-          onTap: () async {},
+          onTap: () async {
+            //uploadfiles(path, mainid);
+          },
           child: Row(
             children: [
               Flexible(
@@ -1206,7 +1536,7 @@ contentfifth(
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade400)

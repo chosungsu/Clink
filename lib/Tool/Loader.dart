@@ -82,21 +82,37 @@ class Loader extends StatelessWidget {
                                   overflow: TextOverflow.clip),
                             ),
                           )
-                        : SizedBox(
-                            width: MediaQuery.of(context).size.width - 40,
-                            child: const Center(
-                              child: Text('당신의 메모를 편집하는중...',
-                                  maxLines: 2,
-                                  softWrap: true,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                    color: Colors.blueAccent,
-                                  ),
-                                  overflow: TextOverflow.clip),
-                            ),
-                          )))
+                        : (wherein == 'noteeach'
+                            ? SizedBox(
+                                width: MediaQuery.of(context).size.width - 40,
+                                child: const Center(
+                                  child: Text('당신의 메모를 편집하는중...',
+                                      maxLines: 2,
+                                      softWrap: true,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Colors.blueAccent,
+                                      ),
+                                      overflow: TextOverflow.clip),
+                                ),
+                              )
+                            : SizedBox(
+                                width: MediaQuery.of(context).size.width - 40,
+                                child: const Center(
+                                  child: Text('업로드 준비중입니다...',
+                                      maxLines: 2,
+                                      softWrap: true,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Colors.blueAccent,
+                                      ),
+                                      overflow: TextOverflow.clip),
+                                ),
+                              ))))
           ],
         )),
       ],

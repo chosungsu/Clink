@@ -1,5 +1,7 @@
 // ignore_for_file: camel_case_types
 
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,7 +17,8 @@ class linkspacesetting extends GetxController {
   List<List> indextreetmp = [];
   List<Linkspacepageenter> inindextreetmp = [];
   bool iscompleted = false;
-  PlatformFile? pickedFile;
+  PlatformFile? pickedFilefirst;
+  List? selectedfile;
   String pickedimg = '';
   Color color = Hive.box('user_setting').get('colorlinkpage') != null
       ? Color(Hive.box('user_setting').get('colorlinkpage'))
@@ -27,8 +30,25 @@ class linkspacesetting extends GetxController {
     notifyChildrens();
   }
 
-  void setsearchfile(PlatformFile? what) {
-    pickedFile = what;
+  void setsearchfile(
+    PlatformFile first,
+    List filenames,
+  ) {
+    pickedFilefirst = first;
+    selectedfile = filenames;
+    update();
+    notifyChildrens();
+  }
+
+  void removesearchfile(int index) {
+    selectedfile!.removeAt(index);
+    update();
+    notifyChildrens();
+  }
+
+  void resetsearchfile() {
+    pickedFilefirst = null;
+    selectedfile = [];
     update();
     notifyChildrens();
   }
