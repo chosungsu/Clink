@@ -8,6 +8,7 @@ import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -1080,7 +1081,9 @@ linkmadetreeplace(
     'addname': '빈 제목',
     'placestr': parentnodename,
     'index': index,
-    'uniquecode': uniquecode
+    'uniquecode': uniquecode,
+    'type': type,
+    'spaceentercontent': type == 1 ? '' : []
   });
   linkspaceset.setspacetreein(Linkspacetreepage(
       subindex: index, placestr: '빈 제목', uniqueid: uniquecode));
@@ -1209,7 +1212,7 @@ contentaddaction(
                       child: DottedBorder(
                         borderType: BorderType.RRect,
                         radius: const Radius.circular(10),
-                        dashPattern: [10, 4],
+                        dashPattern: const [10, 4],
                         strokeCap: StrokeCap.round,
                         color: Colors.blue.shade400,
                         child: Container(
@@ -1292,53 +1295,61 @@ contentaddaction(
                                                 spreadRadius: 2,
                                               )
                                             ]),
-                                        child: Row(
+                                        child: Column(
                                           children: [
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    linkspaceset.selectedfile![
-                                                        index]['name'],
-                                                    maxLines: 1,
-                                                    style: const TextStyle(
-                                                        fontSize: 13,
-                                                        color: Colors.black),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                            Row(
+                                              children: [
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        linkspaceset
+                                                                .selectedfile![
+                                                            index]['name'],
+                                                        maxLines: 1,
+                                                        style: const TextStyle(
+                                                            fontSize: 13,
+                                                            color:
+                                                                Colors.black),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Text(
+                                                        '${(linkspaceset.selectedfile![index]['size'] / 1024).ceil()} KB',
+                                                        style: TextStyle(
+                                                            fontSize: 13,
+                                                            color: Colors
+                                                                .grey.shade500),
+                                                      ),
+                                                    ],
                                                   ),
-                                                  const SizedBox(
-                                                    height: 5,
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    linkspaceset
+                                                        .removesearchfile(
+                                                            index);
+                                                  },
+                                                  child: const Icon(
+                                                    Icons.close,
+                                                    color: Colors.red,
+                                                    size: 30,
                                                   ),
-                                                  Text(
-                                                    '${(linkspaceset.selectedfile![index]['size'] / 1024).ceil()} KB',
-                                                    style: TextStyle(
-                                                        fontSize: 13,
-                                                        color: Colors
-                                                            .grey.shade500),
-                                                  ),
-                                                ],
-                                              ),
+                                                )
+                                              ],
                                             ),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            InkWell(
-                                              onTap: () {
-                                                linkspaceset
-                                                    .removesearchfile(index);
-                                              },
-                                              child: const Icon(
-                                                Icons.close,
-                                                color: Colors.red,
-                                                size: 30,
-                                              ),
-                                            )
                                           ],
                                         )),
                                   ],
@@ -1363,44 +1374,65 @@ contentaddaction(
 }
 
 bottomaddaction(BuildContext context, int numberfileslen, String mainid) {
-  return Column(
-    children: [
-      const SizedBox(
-        height: 50,
-      ),
-      SizedBox(
-        height: 60,
-        child: OutlineGradientButton(
-          child: SizedBox(
-              width: 80.w,
-              child: Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(numberfileslen.toString() + '개의 파일 업로드 시작',
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20)),
-                  ],
+  return GetBuilder<linkspacesetting>(
+      builder: (_) => Column(
+            children: [
+              const SizedBox(
+                height: 50,
+              ),
+              SizedBox(
+                height: 60,
+                child: OutlineGradientButton(
+                  child: SizedBox(
+                      width: 80.w,
+                      child: Center(
+                        child: !linkspaceset.iscompleted
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                      numberfileslen.toString() +
+                                          '개의 파일 업로드 시작',
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20)),
+                                ],
+                              )
+                            : Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Text('업로드 중...',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20)),
+                                ],
+                              ),
+                      )),
+                  gradient: const LinearGradient(
+                    colors: [Colors.white, Colors.grey],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  strokeWidth: 2,
+                  backgroundColor: Colors.blue.shade300,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  radius: const Radius.circular(10),
+                  onTap: () {
+                    !linkspaceset.iscompleted ? uploadfiles(mainid) : null;
+                  },
                 ),
-              )),
-          gradient: const LinearGradient(
-            colors: [Colors.white, Colors.grey],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          strokeWidth: 2,
-          backgroundColor: Colors.blue.shade300,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          radius: const Radius.circular(10),
-          onTap: () {
-            uploadfiles(mainid);
-          },
-        ),
-      ),
-    ],
-  );
+              ),
+            ],
+          ));
 }
 
 linkplaceshowbeforeadd(

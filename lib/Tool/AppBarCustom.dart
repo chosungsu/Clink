@@ -18,16 +18,17 @@ import 'Getx/uisetting.dart';
 import 'TextSize.dart';
 
 class AppBarCustom extends StatelessWidget {
-  AppBarCustom(
-      {Key? key,
-      required this.title,
-      required this.righticon,
-      required this.iconname,
-      textEditingController,
-      focusNode,
-      myindex,
-      indexcnt})
-      : super(key: key);
+  AppBarCustom({
+    Key? key,
+    required this.title,
+    required this.righticon,
+    required this.iconname,
+    textEditingController,
+    focusNode,
+    myindex,
+    indexcnt,
+    mainid,
+  }) : super(key: key);
   final String title;
   final bool righticon;
   final IconData iconname;
@@ -35,6 +36,7 @@ class AppBarCustom extends StatelessWidget {
   TextEditingController textEditingController = TextEditingController();
   FocusNode searchnode = FocusNode();
   int indexcnt = linkspaceset.indexcnt.length;
+  String mainid = '';
 
   @override
   Widget build(BuildContext context) {
@@ -225,23 +227,20 @@ class AppBarCustom extends StatelessWidget {
                                                           draw.backgroundcolor)
                                               : (title.toString() == ''
                                                   ? const SizedBox()
-                                                  : NeumorphicText(
+                                                  : Text(
                                                       title.toString(),
+                                                      maxLines: 1,
                                                       textAlign:
                                                           TextAlign.start,
-                                                      style: NeumorphicStyle(
-                                                          shape: NeumorphicShape
-                                                              .flat,
-                                                          depth: 3,
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize:
+                                                              mainTitleTextsize(),
                                                           color: draw
                                                               .color_textstatus),
-                                                      textStyle:
-                                                          NeumorphicTextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize:
-                                                            mainTitleTextsize(),
-                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
                                                     )),
                                           Row(
                                             children: [
@@ -366,7 +365,7 @@ class AppBarCustom extends StatelessWidget {
                                                                                 context)
                                                                             : (iconname == Icons.star_border || iconname == Icons.star
                                                                                 ? func7(uiset.editpagelist[0].title, uiset.editpagelist[0].email.toString(), uiset.editpagelist[0].username.toString(), uiset.editpagelist[0].id.toString())
-                                                                                : (iconname == Icons.person_outline ? (Hive.box('user_info').get('id') == null ? GoToLogin('isnotfirst') : setUsers(context, searchnode, textEditingController, Hive.box('user_info').get('id'))) : func6(context, textEditingController, searchnode, 'addpage', '', 99, indexcnt))))),
+                                                                                : (iconname == Icons.person_outline ? (Hive.box('user_info').get('id') == null ? GoToLogin('isnotfirst') : setUsers(context, searchnode, textEditingController, Hive.box('user_info').get('id'))) : (iconname == Icons.download ? downloadFileExample(mainid, context) : func6(context, textEditingController, searchnode, 'addpage', '', 99, indexcnt)))))),
                                                                 child: Icon(
                                                                   iconname,
                                                                   size: 30,

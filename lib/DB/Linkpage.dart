@@ -5,10 +5,10 @@ class Linkpage {
 }
 
 class Linkspacepageenter {
-  final String placestr;
+  final String placeentercode;
 
   Linkspacepageenter({
-    required this.placestr,
+    required this.placeentercode,
   });
 }
 

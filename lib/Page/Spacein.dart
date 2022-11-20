@@ -22,10 +22,12 @@ import '../Tool/TextSize.dart';
 import '../UI/SpaceinUI.dart';
 
 class Spacein extends StatefulWidget {
-  const Spacein({Key? key, required this.id, required this.type})
+  const Spacein(
+      {Key? key, required this.id, required this.type, required this.spacename})
       : super(key: key);
   final String id;
   final int type;
+  final String spacename;
 
   @override
   State<StatefulWidget> createState() => _SpaceinState();
@@ -34,6 +36,7 @@ class Spacein extends StatefulWidget {
 class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
   var scrollController;
   ValueNotifier<bool> isDialOpen = ValueNotifier(false);
+  final linkspaceset = Get.put(linkspacesetting());
 
   @override
   void initState() {
@@ -101,9 +104,10 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
                         children: [
                           GetBuilder<uisetting>(
                             builder: (_) => AppBarCustom(
-                              title: '',
-                              righticon: false,
-                              iconname: Icons.notifications_none,
+                              title: widget.spacename,
+                              righticon: true,
+                              iconname: Icons.download,
+                              mainid: widget.id,
                             ),
                           ),
                           const SizedBox(
@@ -111,7 +115,7 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
                           ),
                           ScrollConfiguration(
                               behavior: NoBehavior(),
-                              child: SpaceinUI(widget.id)),
+                              child: SpaceinUI(widget.id, widget.type)),
                         ],
                       )),
                 ),
@@ -165,67 +169,6 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
                     linkspaceset.resetsearchfile();
                     linkplaceshowaddaction(context, mainid);
                   },
-                  /*children: [
-                      SpeedDialChild(
-                        child: Icon(
-                          Icons.photo,
-                          size: 30,
-                          color: draw.color_textstatus,
-                        ),
-                        backgroundColor: Colors.orange.shade200,
-                        onTap: () async {
-                          final image = await imagePicker.pickImage(
-                              source: ImageSource.gallery);
-                          linkspaceset.setcompleted(true);
-                          searchfiles(context, mainid, null, image, 0);
-                        },
-                        label: '사진 및 영상',
-                        labelStyle: TextStyle(
-                            color: Colors.black45,
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTextsize()),
-                      ),
-                      SpeedDialChild(
-                        child: Icon(
-                          Icons.picture_as_pdf,
-                          size: 30,
-                          color: draw.color_textstatus,
-                        ),
-                        backgroundColor: Colors.orange.shade200,
-                        onTap: () async {
-                          res = await FilePicker.platform.pickFiles(
-                              onFileLoading: (status) {
-                                if (status == FilePickerStatus.done) {
-                                  linkspaceset.setcompleted(false);
-                                } else {
-                                  linkspaceset.setcompleted(true);
-                                }
-                              },
-                              lockParentWindow: true);
-                          searchfiles(context, mainid, res, null, 1);
-                          /*
-                          return Center(
-                                                            child:
-                                                                CircularProgressIndicator(
-                                                              value: loadingProgress
-                                                                          .expectedTotalBytes !=
-                                                                      null
-                                                                  ? loadingProgress
-                                                                          .cumulativeBytesLoaded /
-                                                                      loadingProgress
-                                                                          .expectedTotalBytes!
-                                                                  : null,
-                                                            ),
-                                                          );
-                          */
-                        },
-                        label: '파일',
-                        labelStyle: TextStyle(
-                            color: Colors.black45,
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTextsize()),
-                      ),
-                    ]*/
                 ),
               ],
             ));

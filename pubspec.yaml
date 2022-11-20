@@ -65,6 +65,7 @@ dependencies:
   get: 
   async:
   http:
+  external_path:
   mongo_dart:
   #image picker
   image_picker: 

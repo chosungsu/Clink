@@ -1,12 +1,9 @@
 // ignore_for_file: camel_case_types
 
-import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 import '../../DB/Linkpage.dart';
 import '../BGColor.dart';
 
@@ -16,9 +13,12 @@ class linkspacesetting extends GetxController {
   List indextreecnt = [];
   List<List> indextreetmp = [];
   List<Linkspacepageenter> inindextreetmp = [];
+  List changeurllist = [];
+  List setloadingfile = [];
   bool iscompleted = false;
   PlatformFile? pickedFilefirst;
   List? selectedfile;
+  List<bool> ischecked = List.filled(10000, false);
   String pickedimg = '';
   Color color = Hive.box('user_setting').get('colorlinkpage') != null
       ? Color(Hive.box('user_setting').get('colorlinkpage'))
@@ -26,6 +26,18 @@ class linkspacesetting extends GetxController {
 
   void setindextreetmp() {
     indextreetmp.add(List.empty(growable: true));
+    update();
+    notifyChildrens();
+  }
+
+  void setindexofcheckbox(int index, bool what) {
+    ischecked[index] = what;
+    update();
+    notifyChildrens();
+  }
+
+  void resetindexofcheckbox() {
+    ischecked = List.filled(10000, false);
     update();
     notifyChildrens();
   }

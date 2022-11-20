@@ -4,6 +4,8 @@ import 'dart:async';
 import 'dart:io';
 import 'package:clickbyme/Enums/Variables.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
+import 'package:external_path/external_path.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +14,10 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../DB/Linkpage.dart';
 import '../DB/PageList.dart';
 import '../Page/AddTemplate.dart';
 import '../Page/LoginSignPage.dart';
@@ -380,32 +384,17 @@ searchfiles(
     BuildContext context, String mainid, FilePickerResult? result) async {
   final linkspaceset = Get.put(linkspacesetting());
   final filenames = [];
-  if (linkspaceset.selectedfile!.isEmpty) {
-    if (result != null) {
-      for (int i = 0; i < result.files.length; i++) {
-        linkspaceset.selectedfile!.add({
-          'name': result.files[i].name,
-          'size': result.files[i].size,
-          'path': result.files[i].path,
-        });
-      }
-      linkspaceset.pickedFilefirst = result.files.first;
-    } else {
-      return;
+  if (result != null) {
+    for (int i = 0; i < result.files.length; i++) {
+      linkspaceset.selectedfile!.add({
+        'name': result.files[i].name,
+        'size': result.files[i].size,
+        'path': result.files[i].path,
+      });
     }
+    linkspaceset.pickedFilefirst = result.files.first;
   } else {
-    if (result != null) {
-      for (int i = 0; i < result.files.length; i++) {
-        linkspaceset.selectedfile!.add({
-          'name': result.files[i].name,
-          'size': result.files[i].size,
-          'path': result.files[i].path,
-        });
-      }
-      linkspaceset.pickedFilefirst = result.files.first;
-    } else {
-      return;
-    }
+    return;
   }
 }
 
@@ -413,11 +402,69 @@ uploadfiles(String mainid) async {
   final linkspaceset = Get.put(linkspacesetting());
   final path = mainid + '/';
   var ref;
+  var snapshot;
+  final urllist = [];
+  linkspaceset.setcompleted(true);
   for (int i = 0; i < linkspaceset.selectedfile!.length; i++) {
     ref = FirebaseStorage.instance
         .ref()
         .child(path + linkspaceset.selectedfile![i]['name']);
-    await ref.putFile(File(linkspaceset.selectedfile![i]['path']));
+    snapshot = await ref.putFile(File(linkspaceset.selectedfile![i]['path']));
+    urllist.add(await snapshot.ref.getDownloadURL());
   }
+  await firestore
+      .collection('Pinchannelin')
+      .doc(mainid)
+      .get()
+      .then((value) async {
+    linkspaceset.changeurllist.clear();
+    for (int j = 0; j < value.data()!['spaceentercontent'].length; j++) {
+      linkspaceset.changeurllist.add(value.data()!['spaceentercontent'][j]);
+    }
+    for (int k = 0; k < urllist.length; k++) {
+      linkspaceset.changeurllist.add(urllist[k]);
+    }
+    await firestore.collection('Pinchannelin').doc(mainid).update(
+        {'spaceentercontent': linkspaceset.changeurllist}).whenComplete(() {
+      linkspaceset.setcompleted(false);
+    });
+  });
   Get.back();
+}
+
+Future<void> downloadFileExample(String mainid, BuildContext context) async {
+  List downloadfile = [];
+  List checkedindex = [];
+  var httpsReference;
+  var path;
+  String downloadname = '';
+  final tempDir = await getTemporaryDirectory();
+  checkedindex.add(linkspaceset.ischecked.indexOf(true));
+  print('temp : ' + tempDir.path);
+
+  Directory appDocDir = await getApplicationDocumentsDirectory();
+  print('appDocDir : ' + appDocDir.path);
+  var path2 = await ExternalPath.getExternalStoragePublicDirectory(
+      ExternalPath.DIRECTORY_DOWNLOADS);
+  print('ExternalPath : ' + path2);
+  /*for (int i = 0; i < checkedindex.length; i++) {
+    downloadfile
+        .add(linkspaceset.inindextreetmp[checkedindex[i]].placeentercode);
+    httpsReference = FirebaseStorage.instance.refFromURL(downloadfile[i]);
+    downloadname = downloadfile[i]
+        .toString()
+        .replaceAll(
+            RegExp(
+                'https://firebasestorage.googleapis.com/v0/b/habit-tracker-8dad1.appspot.com/o/$mainid%2F'),
+            '')
+        .split('?')[0];
+    path = File('${tempDir.path}/' + downloadname);
+    try {
+      await httpsReference.writeToFile(path);
+    } on FirebaseException catch (e) {
+      // e.g, e.code == 'canceled'
+    }
+  }*/
+
+  //Directory appDocDir = await getApplicationDocumentsDirectory();
 }

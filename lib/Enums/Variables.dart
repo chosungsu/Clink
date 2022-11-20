@@ -31,7 +31,9 @@ var pagename;
 var spacename;
 var type;
 //Here are SpaceinUI Variables
-var spacepagename;
+var spacefamilyid;
+var spacefamilytype;
+var spacefamilyindex;
 //Here are MYPage Variables
 final List<Linkpage> listpinlink = [];
 final List<CompanyPageList> listcompanytousers = [];
