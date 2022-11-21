@@ -30,12 +30,8 @@ class GoogleSignInController extends GetxController {
     String code = '';
 
     //내부 저장으로 로그인 정보 저장
-    code = Hive.box('user_info').get('email').toString().substring(0, 3) +
-        Hive.box('user_info')
-            .get('email')
-            .toString()
-            .split('@')[1]
-            .substring(0, 2) +
+    code = email.toString().substring(0, 3) +
+        email.toString().split('@')[1].substring(0, 2) +
         String.fromCharCodes(Iterable.generate(
             5, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
 

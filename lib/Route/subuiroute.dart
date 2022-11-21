@@ -3,10 +3,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:clickbyme/Enums/Variables.dart';
-import 'package:clickbyme/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dio/dio.dart';
-import 'package:external_path/external_path.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -15,12 +12,10 @@ import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../DB/Linkpage.dart';
 import '../DB/PageList.dart';
 import '../Page/AddTemplate.dart';
 import '../Page/LoginSignPage.dart';
@@ -34,7 +29,6 @@ import '../Tool/Getx/navibool.dart';
 import '../Tool/Getx/notishow.dart';
 import '../Tool/Getx/uisetting.dart';
 import '../Tool/TextSize.dart';
-import '../sheets/linksettingsheet.dart';
 import '../sheets/movetolinkspace.dart';
 import 'mainroute.dart';
 
@@ -442,14 +436,16 @@ Future<void> downloadFileExample(String mainid, BuildContext context) async {
   String downloadurl = '';
   var pathseveral;
 
-  Directory? appDocDir = await getExternalStorageDirectory();
-  List folders = appDocDir!.path.split('/');
-  String newpath = '';
   var httpsReference;
 
   final storageRef = FirebaseStorage.instance.ref();
   final linkspaceset = Get.put(linkspacesetting());
-  if (await _requestPermission(Permission.storage)) {
+  await _requestPermission(context);
+  var status = await Permission.storage.status;
+  if (status.isGranted) {
+    Directory? appDocDir = await getExternalStorageDirectory();
+    List folders = appDocDir!.path.split('/');
+    String newpath = '';
     for (int x = 1; x < folders.length; x++) {
       String folder = folders[x];
       if (folder != 'Android') {
@@ -485,6 +481,8 @@ Future<void> downloadFileExample(String mainid, BuildContext context) async {
                 SnackBar(content: Text(downloadname + ' 다운로드 완료됨.')));
           });
     }
+  } else {
+    await _requestPermission(context);
   }
 }
 
@@ -523,23 +521,22 @@ Future<void> deleteFileExample(String mainid, BuildContext context) async {
   });
 }
 
-Future<bool> _requestPermission(Permission permission) async {
-  //ask for permission
-  await Permission.manageExternalStorage.request();
-  var status = await Permission.manageExternalStorage.status;
+Future<void> _requestPermission(BuildContext context) async {
+  var status = await Permission.storage.status;
   if (status.isDenied) {
+    print('1');
     // We didn't ask for permission yet or the permission has been denied   before but not permanently.
-    return false;
+    ScaffoldMessenger.of(context)
+        .showSnackBar(const SnackBar(content: Text('권한 허용하여야 정상 다운로드가능합니다.')));
+    await Permission.storage.request();
+  } else if (status.isPermanentlyDenied) {
+    print('2');
+    await openAppSettings();
+  } else {
+    print('3');
+    if (status.isGranted) {
+    } else {
+      await Permission.storage.request();
+    }
   }
-
-// You can can also directly ask the permission about its status.
-  if (await Permission.storage.isRestricted) {
-    // The OS restricts access, for example because of parental controls.
-    return false;
-  }
-  if (status.isGranted) {
-//here you add the code to store the file
-    return true;
-  }
-  return false;
 }
