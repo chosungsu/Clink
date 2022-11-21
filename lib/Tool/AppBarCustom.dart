@@ -23,6 +23,7 @@ class AppBarCustom extends StatelessWidget {
     required this.title,
     required this.righticon,
     required this.iconname,
+    required this.doubleicon,
     textEditingController,
     focusNode,
     myindex,
@@ -32,6 +33,7 @@ class AppBarCustom extends StatelessWidget {
   final String title;
   final bool righticon;
   final IconData iconname;
+  final bool doubleicon;
   int myindex = 0;
   TextEditingController textEditingController = TextEditingController();
   FocusNode searchnode = FocusNode();
@@ -131,60 +133,19 @@ class AppBarCustom extends StatelessWidget {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Hive.box('user_setting')
-                                                      .get('page_index') ==
-                                                  0
-                                              ? uiset.pagelist.isEmpty
-                                                  ? ContainerDesign(
-                                                      child: GestureDetector(
-                                                        onTap: (() => func5()),
-                                                        child: RichText(
-                                                            text: TextSpan(
-                                                                children: [
-                                                              WidgetSpan(
-                                                                style: TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .normal,
-                                                                    fontSize:
-                                                                        contentTitleTextsize(),
-                                                                    color: draw
-                                                                        .color_textstatus),
-                                                                child: Row(
-                                                                  children: [
-                                                                    Text(
-                                                                      '빈 스페이스',
-                                                                      style: TextStyle(
-                                                                          fontWeight: FontWeight
-                                                                              .bold,
-                                                                          fontSize:
-                                                                              contentTitleTextsize(),
-                                                                          color:
-                                                                              draw.color_textstatus),
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      width: 10,
-                                                                    ),
-                                                                    Icon(
-                                                                      Icons
-                                                                          .swap_horiz,
-                                                                      color: draw
-                                                                          .color_textstatus,
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ])),
-                                                      ),
-                                                      color:
-                                                          draw.backgroundcolor)
-                                                  : ContainerDesign(
-                                                      child: GestureDetector(
-                                                        onTap: (() => func5()),
-                                                        child: RichText(
-                                                            softWrap: true,
-                                                            text: TextSpan(
-                                                                children: [
+                                          title.toString() == ''
+                                              ? Hive.box('user_setting')
+                                                          .get('page_index') ==
+                                                      0
+                                                  ? uiset.pagelist.isEmpty
+                                                      ? ContainerDesign(
+                                                          child:
+                                                              GestureDetector(
+                                                            onTap: (() =>
+                                                                func5()),
+                                                            child: RichText(
+                                                                text: TextSpan(
+                                                                    children: [
                                                                   WidgetSpan(
                                                                     style: TextStyle(
                                                                         fontWeight:
@@ -197,16 +158,11 @@ class AppBarCustom extends StatelessWidget {
                                                                     child: Row(
                                                                       children: [
                                                                         Text(
-                                                                          uiset
-                                                                              .pagelist[uiset.mypagelistindex]
-                                                                              .title,
-                                                                          maxLines:
-                                                                              1,
+                                                                          '빈 스페이스',
                                                                           style: TextStyle(
                                                                               fontWeight: FontWeight.bold,
                                                                               fontSize: contentTitleTextsize(),
-                                                                              color: draw.color_textstatus,
-                                                                              overflow: TextOverflow.clip),
+                                                                              color: draw.color_textstatus),
                                                                         ),
                                                                         const SizedBox(
                                                                           width:
@@ -222,167 +178,205 @@ class AppBarCustom extends StatelessWidget {
                                                                     ),
                                                                   ),
                                                                 ])),
-                                                      ),
-                                                      color:
-                                                          draw.backgroundcolor)
-                                              : (title.toString() == ''
-                                                  ? const SizedBox()
-                                                  : Text(
-                                                      title.toString(),
-                                                      maxLines: 1,
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize:
-                                                              mainTitleTextsize(),
-                                                          color: draw
-                                                              .color_textstatus),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    )),
-                                          Row(
-                                            children: [
-                                              Hive.box('user_setting')
-                                                          .get('page_index') ==
-                                                      0
-                                                  ? ContainerDesign(
-                                                      child: GestureDetector(
-                                                        onTap: () => func4(
-                                                            context, indexcnt),
-                                                        child: Icon(
-                                                          Icons.add_outlined,
-                                                          size: 30,
-                                                          color: draw
-                                                              .color_textstatus,
-                                                        ),
-                                                      ),
-                                                      color:
-                                                          draw.backgroundcolor)
-                                                  : (Hive.box('user_setting').get(
-                                                                  'page_index') ==
-                                                              11 ||
-                                                          Hive.box('user_setting')
-                                                                  .get(
-                                                                      'page_index') ==
-                                                              12
-                                                      ? ContainerDesign(
-                                                          child:
-                                                              GestureDetector(
-                                                            onTap: () => func4(
-                                                                context,
-                                                                indexcnt),
-                                                            child: Icon(
-                                                              Icons
-                                                                  .add_outlined,
-                                                              size: 30,
-                                                              color: draw
-                                                                  .color_textstatus,
-                                                            ),
                                                           ),
                                                           color: draw
                                                               .backgroundcolor)
-                                                      : (Hive.box('user_setting')
-                                                                  .get(
-                                                                      'page_index') ==
-                                                              3
-                                                          ? ContainerDesign(
-                                                              child:
-                                                                  GestureDetector(
-                                                                onTap: () => func6(
-                                                                    context,
-                                                                    textEditingController,
-                                                                    searchnode,
-                                                                    'addpage',
-                                                                    '',
-                                                                    99,
-                                                                    indexcnt),
-                                                                child: Icon(
-                                                                  Icons
-                                                                      .add_outlined,
-                                                                  size: 30,
-                                                                  color: draw
-                                                                      .color_textstatus,
-                                                                ),
-                                                              ),
-                                                              color: draw
-                                                                  .backgroundcolor)
-                                                          : (Hive.box('user_setting')
-                                                                      .get('page_index') ==
-                                                                  5
-                                                              ? ContainerDesign(
-                                                                  child: GestureDetector(
-                                                                    onTap: () =>
-                                                                        func2(
-                                                                            context),
-                                                                    child: Icon(
-                                                                      Icons
-                                                                          .delete_outline,
-                                                                      size: 30,
-                                                                      color: draw
-                                                                          .color_textstatus,
-                                                                    ),
-                                                                  ),
-                                                                  color: draw.backgroundcolor)
-                                                              : const SizedBox()))),
-                                              Hive.box('user_setting').get(
-                                                              'page_index') ==
-                                                          0 ||
-                                                      Hive.box('user_setting')
-                                                              .get(
-                                                                  'page_index') ==
-                                                          3 ||
-                                                      Hive.box('user_setting')
-                                                              .get(
-                                                                  'page_index') ==
-                                                          5
-                                                  ? const SizedBox(
-                                                      width: 10,
-                                                    )
-                                                  : (uiset.searchpagemove != ''
-                                                      ? const SizedBox(
-                                                          width: 10,
-                                                        )
-                                                      : const SizedBox()),
-                                              righticon == true
-                                                  ? GetBuilder<uisetting>(
-                                                      builder: (_) =>
-                                                          ContainerDesign(
-                                                              child:
-                                                                  GestureDetector(
-                                                                onTap: () => iconname ==
-                                                                        Icons
-                                                                            .notifications_none
-                                                                    ? func1()
-                                                                    : (iconname ==
-                                                                            Icons
-                                                                                .delete
-                                                                        ? func2(
-                                                                            context)
-                                                                        : (iconname == Icons.keyboard_double_arrow_up
-                                                                            ? func3(
-                                                                                context)
-                                                                            : (iconname == Icons.star_border || iconname == Icons.star
-                                                                                ? func7(uiset.editpagelist[0].title, uiset.editpagelist[0].email.toString(), uiset.editpagelist[0].username.toString(), uiset.editpagelist[0].id.toString())
-                                                                                : (iconname == Icons.person_outline ? (Hive.box('user_info').get('id') == null ? GoToLogin('isnotfirst') : setUsers(context, searchnode, textEditingController, Hive.box('user_info').get('id'))) : (iconname == Icons.download ? downloadFileExample(mainid, context) : func6(context, textEditingController, searchnode, 'addpage', '', 99, indexcnt)))))),
-                                                                child: Icon(
-                                                                  iconname,
-                                                                  size: 30,
-                                                                  color: iconname ==
-                                                                          Icons
-                                                                              .star
-                                                                      ? Colors
-                                                                          .yellow
-                                                                      : draw
-                                                                          .color_textstatus,
-                                                                ),
-                                                              ),
-                                                              color: draw
-                                                                  .backgroundcolor))
+                                                      : ContainerDesign(
+                                                          child:
+                                                              GestureDetector(
+                                                            onTap: (() =>
+                                                                func5()),
+                                                            child: RichText(
+                                                                softWrap: true,
+                                                                text: TextSpan(
+                                                                    children: [
+                                                                      WidgetSpan(
+                                                                        style: TextStyle(
+                                                                            fontWeight: FontWeight
+                                                                                .normal,
+                                                                            fontSize:
+                                                                                contentTitleTextsize(),
+                                                                            color:
+                                                                                draw.color_textstatus),
+                                                                        child:
+                                                                            Row(
+                                                                          children: [
+                                                                            Text(
+                                                                              uiset.pagelist[uiset.mypagelistindex].title,
+                                                                              maxLines: 1,
+                                                                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: contentTitleTextsize(), color: draw.color_textstatus, overflow: TextOverflow.clip),
+                                                                            ),
+                                                                            const SizedBox(
+                                                                              width: 10,
+                                                                            ),
+                                                                            Icon(
+                                                                              Icons.swap_horiz,
+                                                                              color: draw.color_textstatus,
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ])),
+                                                          ),
+                                                          color: draw
+                                                              .backgroundcolor)
                                                   : const SizedBox()
-                                            ],
-                                          )
+                                              : Text(
+                                                  title.toString(),
+                                                  maxLines: 1,
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          mainTitleTextsize(),
+                                                      color: draw
+                                                          .color_textstatus),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                          righticon == true
+                                              ? Row(
+                                                  children: [
+                                                    doubleicon == true
+                                                        ? Hive.box('user_setting')
+                                                                    .get(
+                                                                        'page_index') ==
+                                                                0
+                                                            ? ContainerDesign(
+                                                                child:
+                                                                    GestureDetector(
+                                                                  onTap: () => func4(
+                                                                      context,
+                                                                      indexcnt),
+                                                                  child: Icon(
+                                                                    Icons
+                                                                        .add_outlined,
+                                                                    size: 30,
+                                                                    color: draw
+                                                                        .color_textstatus,
+                                                                  ),
+                                                                ),
+                                                                color: draw
+                                                                    .backgroundcolor)
+                                                            : (Hive.box('user_setting').get(
+                                                                            'page_index') ==
+                                                                        11 ||
+                                                                    Hive.box('user_setting').get(
+                                                                            'page_index') ==
+                                                                        12
+                                                                ? ContainerDesign(
+                                                                    child:
+                                                                        GestureDetector(
+                                                                      onTap: () => func4(
+                                                                          context,
+                                                                          indexcnt),
+                                                                      child:
+                                                                          Icon(
+                                                                        Icons
+                                                                            .add_outlined,
+                                                                        size:
+                                                                            30,
+                                                                        color: draw
+                                                                            .color_textstatus,
+                                                                      ),
+                                                                    ),
+                                                                    color: draw
+                                                                        .backgroundcolor)
+                                                                : (Hive.box('user_setting').get(
+                                                                            'page_index') ==
+                                                                        3
+                                                                    ? ContainerDesign(
+                                                                        child:
+                                                                            GestureDetector(
+                                                                          onTap: () => func6(
+                                                                              context,
+                                                                              textEditingController,
+                                                                              searchnode,
+                                                                              'addpage',
+                                                                              '',
+                                                                              99,
+                                                                              indexcnt),
+                                                                          child:
+                                                                              Icon(
+                                                                            Icons.add_outlined,
+                                                                            size:
+                                                                                30,
+                                                                            color:
+                                                                                draw.color_textstatus,
+                                                                          ),
+                                                                        ),
+                                                                        color: draw
+                                                                            .backgroundcolor)
+                                                                    : (Hive.box('user_setting').get('page_index') ==
+                                                                            5
+                                                                        ? ContainerDesign(
+                                                                            child: GestureDetector(
+                                                                              onTap: () => func2(context),
+                                                                              child: Icon(
+                                                                                Icons.delete_outline,
+                                                                                size: 30,
+                                                                                color: draw.color_textstatus,
+                                                                              ),
+                                                                            ),
+                                                                            color: draw.backgroundcolor)
+                                                                        : const SizedBox())))
+                                                        : const SizedBox(),
+                                                    Hive.box('user_setting')
+                                                                    .get(
+                                                                        'page_index') ==
+                                                                0 ||
+                                                            Hive.box('user_setting')
+                                                                    .get(
+                                                                        'page_index') ==
+                                                                3 ||
+                                                            Hive.box('user_setting')
+                                                                    .get(
+                                                                        'page_index') ==
+                                                                5
+                                                        ? const SizedBox(
+                                                            width: 10,
+                                                          )
+                                                        : (uiset.searchpagemove !=
+                                                                ''
+                                                            ? const SizedBox(
+                                                                width: 10,
+                                                              )
+                                                            : const SizedBox()),
+                                                    GetBuilder<uisetting>(
+                                                        builder: (_) =>
+                                                            ContainerDesign(
+                                                                child:
+                                                                    GestureDetector(
+                                                                  onTap: () => iconname ==
+                                                                          Icons
+                                                                              .notifications_none
+                                                                      ? func1()
+                                                                      : (iconname ==
+                                                                              Icons
+                                                                                  .delete
+                                                                          ? func2(
+                                                                              context)
+                                                                          : (iconname == Icons.keyboard_double_arrow_up
+                                                                              ? func3(context)
+                                                                              : (iconname == Icons.star_border || iconname == Icons.star ? func7(uiset.editpagelist[0].title, uiset.editpagelist[0].email.toString(), uiset.editpagelist[0].username.toString(), uiset.editpagelist[0].id.toString()) : (iconname == Icons.person_outline ? (Hive.box('user_info').get('id') == null ? GoToLogin('isnotfirst') : setUsers(context, searchnode, textEditingController, Hive.box('user_info').get('id'))) : (iconname == Icons.download ? downloadFileExample(mainid, context) : func6(context, textEditingController, searchnode, 'addpage', '', 99, indexcnt)))))),
+                                                                  child: Icon(
+                                                                    iconname,
+                                                                    size: 30,
+                                                                    color: iconname ==
+                                                                            Icons
+                                                                                .star
+                                                                        ? Colors
+                                                                            .yellow
+                                                                        : draw
+                                                                            .color_textstatus,
+                                                                  ),
+                                                                ),
+                                                                color: draw
+                                                                    .backgroundcolor))
+                                                  ],
+                                                )
+                                              : const SizedBox()
                                         ],
                                       ),
                                     ))),

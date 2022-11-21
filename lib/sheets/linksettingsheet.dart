@@ -1143,36 +1143,40 @@ addaction(
   BuildContext context,
   String mainid,
 ) {
+  final linkspaceset = Get.put(linkspacesetting());
   return SizedBox(
       child: Padding(
           padding:
               const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                  height: 5,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                          width: (MediaQuery.of(context).size.width - 40) * 0.2,
-                          alignment: Alignment.topCenter,
-                          color: Colors.black45),
-                    ],
-                  )),
-              const SizedBox(
-                height: 20,
-              ),
-              contentaddaction(context, mainid),
-              linkspaceset.selectedfile!.isEmpty
-                  ? const SizedBox()
-                  : bottomaddaction(
-                      context, linkspaceset.selectedfile!.length, mainid),
-              const SizedBox(
-                height: 50,
-              ),
-            ],
+          child: GetBuilder<linkspacesetting>(
+            builder: (_) => Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                    height: 5,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                            width:
+                                (MediaQuery.of(context).size.width - 40) * 0.2,
+                            alignment: Alignment.topCenter,
+                            color: Colors.black45),
+                      ],
+                    )),
+                const SizedBox(
+                  height: 20,
+                ),
+                contentaddaction(context, mainid),
+                linkspaceset.selectedfile!.isEmpty
+                    ? const SizedBox()
+                    : bottomaddaction(
+                        context, linkspaceset.selectedfile!.length, mainid),
+                const SizedBox(
+                  height: 50,
+                ),
+              ],
+            ),
           )));
 }
 

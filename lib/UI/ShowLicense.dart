@@ -77,6 +77,7 @@ class _ShowLicenseState extends State<ShowLicense> {
                       AppBarCustom(
                         title: 'License',
                         righticon: false,
+                        doubleicon: false,
                         iconname: Icons.close,
                       ),
                       Flexible(

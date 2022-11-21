@@ -98,6 +98,7 @@ class _AddTemplateState extends State<AddTemplate>
                           AppBarCustom(
                             title: '스페이스 리스트',
                             righticon: false,
+                            doubleicon: false,
                             iconname: Icons.add_box,
                           ),
                           GetBuilder<uisetting>(

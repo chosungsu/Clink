@@ -123,8 +123,9 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                         children: [
                           GetBuilder<uisetting>(
                             builder: (_) => AppBarCustom(
-                              title: 'MY',
+                              title: '',
                               righticon: true,
+                              doubleicon: true,
                               iconname: Icons.notifications_none,
                               textEditingController: _controller,
                               focusNode: searchNode,

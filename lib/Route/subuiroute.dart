@@ -440,19 +440,58 @@ Future<void> downloadFileExample(String mainid, BuildContext context) async {
   File path;
   String downloadname = '';
   final storageRef = FirebaseStorage.instance.ref();
-
-  checkedindex.add(linkspaceset.ischecked.indexOf(true));
+  final linkspaceset = Get.put(linkspacesetting());
+  /*checkedindex
+      .add(linkspaceset.ischecked.indexWhere((element) => element == true));
+  print(checkedindex);*/
   var path2 = await ExternalPath.getExternalStoragePublicDirectory(
       ExternalPath.DIRECTORY_DOWNLOADS);
-  for (int i = 0; i < checkedindex.length; i++) {
-    downloadfile.add(linkspaceset.inindextreetmp[checkedindex[i]].substrcode);
-    downloadname = downloadfile[i];
-    httpsReference = storageRef.child(mainid + "/$downloadname");
-    //httpsReference = FirebaseStorage.instance.refFromURL(downloadfile[i]);
+  for (int i = 0; i < linkspaceset.inindextreetmp.length; i++) {
+    if (linkspaceset.ischecked[i] == true) {
+      downloadfile.add(linkspaceset.inindextreetmp[i].substrcode);
+      downloadname = downloadfile[i];
+      httpsReference = storageRef.child(mainid + "/$downloadname");
+      //httpsReference = FirebaseStorage.instance.refFromURL(downloadfile[i]);
 
-    path = File(path2 + '/' + downloadname);
-    httpsReference.writeToFile(path);
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(downloadname + '다운로드 중입니다.')));
+      path = File(path2 + '/' + downloadname);
+      httpsReference.writeToFile(path);
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(downloadname + ' 다운로드 중입니다.')));
+    } else {}
   }
+}
+
+Future<void> deleteFileExample(String mainid, BuildContext context) async {
+  List downloadfile = [];
+  List checkedindex = [];
+  var httpsReference;
+  String downloadname = '';
+  final storageRef = FirebaseStorage.instance.ref();
+  final linkspaceset = Get.put(linkspacesetting());
+  downloadfile.add(linkspaceset
+      .inindextreetmp[linkspaceset.islongchecked.indexOf(true)].substrcode);
+  downloadname = downloadfile[0];
+  httpsReference =
+      storageRef.child(mainid + "/$downloadname").delete().whenComplete(() {
+    firestore.collection('Pinchannelin').doc(mainid).get().then((value) async {
+      linkspaceset.changeurllist.clear();
+      for (int j = 0; j < value.data()!['spaceentercontent'].length; j++) {
+        linkspaceset.changeurllist.add(value.data()!['spaceentercontent'][j]);
+      }
+      if (linkspaceset.changeurllist.contains(linkspaceset
+          .inindextreetmp[linkspaceset.islongchecked.indexOf(true)]
+          .placeentercode)) {
+        linkspaceset.changeurllist.removeAt(linkspaceset.changeurllist.indexOf(
+            linkspaceset
+                .inindextreetmp[linkspaceset.islongchecked.indexOf(true)]
+                .placeentercode));
+      }
+      await firestore.collection('Pinchannelin').doc(mainid).update(
+          {'spaceentercontent': linkspaceset.changeurllist}).whenComplete(() {
+        linkspaceset.setcompleted(false);
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(downloadname + ' 삭제가 완료되었습니다.')));
+      });
+    });
+  });
 }

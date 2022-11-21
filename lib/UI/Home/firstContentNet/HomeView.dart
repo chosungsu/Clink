@@ -103,6 +103,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
               AppBarCustom(
                 title: '',
                 righticon: true,
+                doubleicon: false,
                 iconname: Icons.close,
               ),
               Flexible(

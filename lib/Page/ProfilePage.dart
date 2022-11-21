@@ -126,6 +126,7 @@ class _ProfilePageState extends State<ProfilePage>
                           AppBarCustom(
                             title: '',
                             righticon: true,
+                            doubleicon: false,
                             iconname: Icons.person_outline,
                           ),
                           Flexible(

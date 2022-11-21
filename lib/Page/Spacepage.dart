@@ -92,6 +92,7 @@ class _SpacepageState extends State<Spacepage>
                           AppBarCustom(
                             title: 'MY',
                             righticon: true,
+                            doubleicon: true,
                             iconname: Icons.keyboard_double_arrow_up,
                           ),
                           const SizedBox(

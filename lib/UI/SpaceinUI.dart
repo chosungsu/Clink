@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names
 
+import 'package:clickbyme/Route/subuiroute.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 
@@ -11,7 +11,6 @@ import '../../../Enums/Variables.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/Getx/linkspacesetting.dart';
 import '../../../Tool/TextSize.dart';
-import '../Route/subuiroute.dart';
 
 SpaceinUI(
   String id,
@@ -20,6 +19,7 @@ SpaceinUI(
   final searchNode = FocusNode();
   final linkspaceset = Get.put(linkspacesetting());
   linkspaceset.ischecked = List.filled(10000, false);
+  linkspaceset.islongchecked = List.filled(10000, false);
 
   return StatefulBuilder(builder: ((context, setState) {
     return GetBuilder<linkspacesetting>(
@@ -111,30 +111,76 @@ SpaceinUI(
                                         GetBuilder<linkspacesetting>(
                                             builder: (_) => GestureDetector(
                                                 onTap: () {
+                                                  if (linkspaceset
+                                                              .islongchecked[
+                                                          index] ==
+                                                      true) {
+                                                    setState(() {
+                                                      linkspaceset.islongchecked[
+                                                              index] =
+                                                          !linkspaceset
+                                                                  .islongchecked[
+                                                              index];
+                                                    });
+                                                  } else {
+                                                    setState(() {
+                                                      linkspaceset.ischecked[
+                                                              index] =
+                                                          !linkspaceset
+                                                              .ischecked[index];
+                                                    });
+                                                  }
+                                                },
+                                                onLongPress: () {
+                                                  if (linkspaceset
+                                                          .ischecked[index] ==
+                                                      true) {
+                                                    setState(() {
+                                                      linkspaceset.ischecked[
+                                                              index] =
+                                                          !linkspaceset
+                                                              .ischecked[index];
+                                                    });
+                                                  } else {}
                                                   setState(() {
-                                                    linkspaceset
-                                                            .ischecked[index] =
+                                                    linkspaceset.islongchecked[
+                                                            index] =
                                                         !linkspaceset
-                                                            .ischecked[index];
+                                                                .islongchecked[
+                                                            index];
                                                   });
                                                 },
                                                 child: Row(
                                                   children: [
-                                                    Checkbox(
-                                                        activeColor:
-                                                            Colors.blue,
-                                                        value: linkspaceset
-                                                            .ischecked[index],
-                                                        onChanged: (value) {
-                                                          setState(() {
-                                                            linkspaceset
+                                                    linkspaceset.ischecked[
+                                                                index] ==
+                                                            true
+                                                        ? Checkbox(
+                                                            activeColor:
+                                                                Colors.blue,
+                                                            value: linkspaceset
                                                                     .ischecked[
-                                                                index] = value!;
-                                                          });
-                                                        }),
-                                                    SizedBox(
-                                                      width: 10,
-                                                    ),
+                                                                index],
+                                                            onChanged: (value) {
+                                                              setState(() {
+                                                                linkspaceset.ischecked[
+                                                                        index] =
+                                                                    value!;
+                                                              });
+                                                            })
+                                                        /*const Icon(
+                                                      Icons.info_outline,
+                                                      color: Colors.white,
+                                                      size: 25,
+                                                    )*/
+                                                        : const SizedBox(),
+                                                    linkspaceset.ischecked[
+                                                                index] ==
+                                                            true
+                                                        ? const SizedBox(
+                                                            width: 10,
+                                                          )
+                                                        : const SizedBox(),
                                                     Flexible(
                                                         fit: FlexFit.tight,
                                                         child: ContainerDesign(
@@ -144,8 +190,13 @@ SpaceinUI(
                                                                     true
                                                                 ? Colors.blue
                                                                     .shade300
-                                                                : draw
-                                                                    .backgroundcolor,
+                                                                : (linkspaceset.islongchecked[
+                                                                            index] ==
+                                                                        true
+                                                                    ? Colors.red
+                                                                        .shade300
+                                                                    : draw
+                                                                        .backgroundcolor),
                                                             child: SizedBox(
                                                               child: Text(
                                                                 linkspaceset
@@ -175,7 +226,29 @@ SpaceinUI(
                                                                         TextOverflow
                                                                             .ellipsis),
                                                               ),
-                                                            )))
+                                                            ))),
+                                                    linkspaceset.islongchecked[
+                                                                index] ==
+                                                            true
+                                                        ? const SizedBox(
+                                                            width: 10,
+                                                          )
+                                                        : const SizedBox(),
+                                                    linkspaceset.islongchecked[
+                                                                index] ==
+                                                            true
+                                                        ? InkWell(
+                                                            onTap: () {
+                                                              deleteFileExample(
+                                                                  id, context);
+                                                            },
+                                                            child: const Icon(
+                                                              Icons.close,
+                                                              color: Colors.red,
+                                                              size: 25,
+                                                            ),
+                                                          )
+                                                        : const SizedBox(),
                                                   ],
                                                 ))),
                                         index ==

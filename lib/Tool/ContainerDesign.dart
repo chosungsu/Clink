@@ -27,11 +27,9 @@ class ContainerDesign extends StatelessWidget {
                       offset: const Offset(2, 2),
                       blurRadius: 2,
                     ),
-                    BoxShadow(
-                      color: draw.backgroundcolor == MyTheme.colorWhite
-                          ? Colors.white
-                          : Colors.black,
-                      offset: const Offset(-2, -2),
+                    const BoxShadow(
+                      color: Colors.white,
+                      offset: Offset(-2, -2),
                       blurRadius: 2,
                     ),
                   ]),

@@ -19,6 +19,7 @@ class linkspacesetting extends GetxController {
   PlatformFile? pickedFilefirst;
   List? selectedfile;
   List<bool> ischecked = List.filled(10000, false);
+  List<bool> islongchecked = List.filled(10000, false);
   String pickedimg = '';
   Color color = Hive.box('user_setting').get('colorlinkpage') != null
       ? Color(Hive.box('user_setting').get('colorlinkpage'))

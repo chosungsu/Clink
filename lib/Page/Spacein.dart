@@ -11,14 +11,12 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import '../Enums/Variables.dart';
-import '../Route/mainroute.dart';
 import '../Route/subuiroute.dart';
 import '../Tool/BGColor.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/Loader.dart';
 import '../Tool/NoBehavior.dart';
 import '../Tool/AppBarCustom.dart';
-import '../Tool/TextSize.dart';
 import '../UI/SpaceinUI.dart';
 
 class Spacein extends StatefulWidget {
@@ -41,7 +39,6 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    Hive.box('user_setting').put('page_index', 6);
     Hive.box('user_setting').put('widgetid', widget.id);
     scrollController = ScrollController();
   }
@@ -103,14 +100,25 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
                       color: draw.backgroundcolor,
                       child: Column(
                         children: [
-                          GetBuilder<uisetting>(
-                            builder: (_) => AppBarCustom(
-                              title: widget.spacename,
-                              righticon: true,
-                              iconname: Icons.download,
-                              mainid: widget.id,
-                            ),
-                          ),
+                          widget.type == 1
+                              ? GetBuilder<uisetting>(
+                                  builder: (_) => AppBarCustom(
+                                    title: widget.spacename,
+                                    righticon: false,
+                                    doubleicon: false,
+                                    iconname: Icons.download,
+                                    mainid: widget.id,
+                                  ),
+                                )
+                              : GetBuilder<uisetting>(
+                                  builder: (_) => AppBarCustom(
+                                    title: widget.spacename,
+                                    righticon: true,
+                                    doubleicon: false,
+                                    iconname: Icons.download,
+                                    mainid: widget.id,
+                                  ),
+                                ),
                           const SizedBox(
                             height: 20,
                           ),
@@ -131,12 +139,8 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
       } else {
         StatusBarControl.setColor(draw.backgroundcolor, animated: true);
         draw.setnavi();
-        Hive.box('user_setting').put('page_index', 0);
-        Get.to(
-            () => const mainroute(
-                  index: 0,
-                ),
-            transition: Transition.upToDown);
+        Hive.box('user_setting').put('widgetid', null);
+        Get.back();
       }
 
       //Get.back();

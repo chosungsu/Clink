@@ -92,6 +92,7 @@ class _NotiAlarmState extends State<NotiAlarm>
                           AppBarCustom(
                             title: '알림',
                             righticon: true,
+                            doubleicon: true,
                             iconname: Icons.keyboard_double_arrow_up,
                           ),
                           allread(),

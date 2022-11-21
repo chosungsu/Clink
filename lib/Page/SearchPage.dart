@@ -107,6 +107,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                 ? AppBarCustom(
                                     title: '',
                                     righticon: false,
+                                    doubleicon: false,
                                     iconname: Icons.notifications_none,
                                   )
                                 : GetBuilder<uisetting>(
@@ -144,6 +145,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                                 AppBarCustom(
                                                   title: uiset.searchpagemove,
                                                   righticon: true,
+                                                  doubleicon: true,
                                                   iconname: Icons.star,
                                                 ),
                                                 const SizedBox(
@@ -157,6 +159,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                                 AppBarCustom(
                                                   title: uiset.searchpagemove,
                                                   righticon: true,
+                                                  doubleicon: true,
                                                   iconname: Icons.star_border,
                                                 ),
                                                 const SizedBox(
