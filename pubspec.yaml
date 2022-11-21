@@ -72,6 +72,7 @@ dependencies:
   multi_image_picker2: 
   file_picker:
   dotted_border: 
+  flutter_file_downloader:
   #permission 허용여부 묻기
   permission_handler: 
   flutter_email_sender: 

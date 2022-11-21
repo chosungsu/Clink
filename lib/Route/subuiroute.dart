@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, prefer_typing_uninitialized_variables
 
 import 'dart:async';
 import 'dart:io';
@@ -11,11 +11,13 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../DB/Linkpage.dart';
@@ -435,29 +437,54 @@ uploadfiles(String mainid) async {
 
 Future<void> downloadFileExample(String mainid, BuildContext context) async {
   List downloadfile = [];
-  List checkedindex = [];
-  var httpsReference;
-  File path;
+  List downloadfilesubname = [];
   String downloadname = '';
+  String downloadurl = '';
+  var pathseveral;
+
+  Directory? appDocDir = await getExternalStorageDirectory();
+  List folders = appDocDir!.path.split('/');
+  String newpath = '';
+  var httpsReference;
+
   final storageRef = FirebaseStorage.instance.ref();
   final linkspaceset = Get.put(linkspacesetting());
-  /*checkedindex
-      .add(linkspaceset.ischecked.indexWhere((element) => element == true));
-  print(checkedindex);*/
-  var path2 = await ExternalPath.getExternalStoragePublicDirectory(
-      ExternalPath.DIRECTORY_DOWNLOADS);
-  for (int i = 0; i < linkspaceset.inindextreetmp.length; i++) {
-    if (linkspaceset.ischecked[i] == true) {
-      downloadfile.add(linkspaceset.inindextreetmp[i].substrcode);
-      downloadname = downloadfile[i];
+  if (await _requestPermission(Permission.storage)) {
+    for (int x = 1; x < folders.length; x++) {
+      String folder = folders[x];
+      if (folder != 'Android') {
+        newpath += '/' + folder;
+      } else {
+        break;
+      }
+    }
+    newpath = newpath + '/LinkAI';
+    appDocDir = Directory(newpath);
+    if (!await appDocDir.exists()) {
+      await appDocDir.create(recursive: true);
+    } else {}
+    for (int i = 0; i < linkspaceset.inindextreetmp.length; i++) {
+      if (linkspaceset.ischecked[i] == true) {
+        downloadfile.add(linkspaceset.inindextreetmp[i].placeentercode);
+        downloadfilesubname.add(linkspaceset.inindextreetmp[i].substrcode);
+      } else {}
+    }
+    for (int j = 0; j < downloadfile.length; j++) {
+      downloadurl = downloadfile[j];
+      downloadname = downloadfilesubname[j];
       httpsReference = storageRef.child(mainid + "/$downloadname");
       //httpsReference = FirebaseStorage.instance.refFromURL(downloadfile[i]);
+      pathseveral = File(appDocDir.path + '/' + downloadname);
 
-      path = File(path2 + '/' + downloadname);
-      httpsReference.writeToFile(path);
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(downloadname + ' 다운로드 중입니다.')));
-    } else {}
+      FileDownloader.downloadFile(
+          url: downloadurl,
+          name: downloadname,
+          onDownloadCompleted: (path) {
+            httpsReference.writeToFile(pathseveral);
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(downloadname + ' 다운로드 완료됨.')));
+          });
+    }
   }
 }
 
@@ -494,4 +521,25 @@ Future<void> deleteFileExample(String mainid, BuildContext context) async {
       });
     });
   });
+}
+
+Future<bool> _requestPermission(Permission permission) async {
+  //ask for permission
+  await Permission.manageExternalStorage.request();
+  var status = await Permission.manageExternalStorage.status;
+  if (status.isDenied) {
+    // We didn't ask for permission yet or the permission has been denied   before but not permanently.
+    return false;
+  }
+
+// You can can also directly ask the permission about its status.
+  if (await Permission.storage.isRestricted) {
+    // The OS restricts access, for example because of parental controls.
+    return false;
+  }
+  if (status.isGranted) {
+//here you add the code to store the file
+    return true;
+  }
+  return false;
 }
