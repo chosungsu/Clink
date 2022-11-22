@@ -979,12 +979,11 @@ contentforth(
               onPressed: () async {
                 linkspaceset.setcompleted(true);
                 if (controller.text.isEmpty) {
-                  Snack.show(
+                  Snack.snackbars(
                       context: context,
-                      title: '알림',
-                      content: '변경할 이름이 비어있어요!',
-                      snackType: SnackType.warning,
-                      behavior: SnackBarBehavior.floating);
+                      title: '변경할 이름이 비어있어요',
+                      backgroundcolor: Colors.red,
+                      bordercolor: draw.backgroundcolor);
                 } else {
                   await firestore
                       .collection('Pinchannelin')
@@ -1093,6 +1092,7 @@ linkplaceshowaddaction(
   BuildContext context,
   String mainid,
 ) {
+  final linkspaceset = Get.put(linkspacesetting());
   Get.bottomSheet(
           Container(
             margin: const EdgeInsets.only(top: 30),
@@ -1112,30 +1112,22 @@ linkplaceshowaddaction(
                   child: GetBuilder<linkspacesetting>(
                       builder: (_) => SingleChildScrollView(
                           physics: const ScrollPhysics(),
-                          child: addaction(context, mainid)))
-                  /*StatefulBuilder(
-                      builder: ((context, setState) {
-                        return Container(
-                          decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              )),
-                          child: addaction(context, mainid),
-                        );
-                      }),
-                    )*/
-                  ),
+                          child: addaction(context, mainid)))),
             ),
           ),
+          enableDrag: false,
+          isDismissible: linkspaceset.iscompleted ? false : true,
           backgroundColor: Colors.transparent,
           isScrollControlled: true,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
       .whenComplete(() {
     final linkspaceset = Get.put(linkspacesetting());
-    linkspaceset.resetsearchfile();
+    if (linkspaceset.iscompleted) {
+      linkplaceshowaddaction(context, mainid);
+    } else {
+      linkspaceset.resetsearchfile();
+    }
   });
 }
 
@@ -1378,6 +1370,7 @@ contentaddaction(
 }
 
 bottomaddaction(BuildContext context, int numberfileslen, String mainid) {
+  final linkspaceset = Get.put(linkspacesetting());
   return GetBuilder<linkspacesetting>(
       builder: (_) => Column(
             children: [
@@ -1426,7 +1419,9 @@ bottomaddaction(BuildContext context, int numberfileslen, String mainid) {
                     end: Alignment.bottomRight,
                   ),
                   strokeWidth: 2,
-                  backgroundColor: Colors.blue.shade300,
+                  backgroundColor: !linkspaceset.iscompleted
+                      ? Colors.blue.shade300
+                      : Colors.grey.shade300,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   radius: const Radius.circular(10),

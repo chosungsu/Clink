@@ -125,7 +125,7 @@ PageUI1(String id, TextEditingController controller) {
                                                                 linkspaceset
                                                                     .indexcnt[
                                                                         index]
-                                                                    .placeentercode,
+                                                                    .placestr,
                                                                 linkspaceset
                                                                     .indextreetmp[
                                                                         index]
@@ -154,7 +154,7 @@ PageUI1(String id, TextEditingController controller) {
                                                                   linkspaceset
                                                                       .indexcnt[
                                                                           index]
-                                                                      .placeentercode,
+                                                                      .placestr,
                                                                   linkspaceset
                                                                       .indextreetmp[
                                                                           index]
@@ -201,7 +201,7 @@ PageUI1(String id, TextEditingController controller) {
                                                                   linkspaceset
                                                                       .indexcnt[
                                                                           index]
-                                                                      .placeentercode,
+                                                                      .placestr,
                                                                   linkspaceset
                                                                       .indexcnt[
                                                                           index]
@@ -224,7 +224,7 @@ PageUI1(String id, TextEditingController controller) {
                                                                     linkspaceset
                                                                         .indexcnt[
                                                                             index]
-                                                                        .placeentercode,
+                                                                        .placestr,
                                                                     linkspaceset
                                                                         .indexcnt[
                                                                             index]
@@ -366,11 +366,11 @@ PageUI1(String id, TextEditingController controller) {
                                                                                               await firestore.collection('Pinchannel').doc(id).get().then(
                                                                                                 (value) {
                                                                                                   if (value.get('username') == usercode) {
-                                                                                                    linkplacechangeoptions(context, index2, linkspaceset.indextreetmp[index][index2].placeentercode, linkspaceset.indextreetmp[index][index2].uniqueid, 0, controller, searchNode, 'pinchannelin');
+                                                                                                    linkplacechangeoptions(context, index2, linkspaceset.indextreetmp[index][index2].placestr, linkspaceset.indextreetmp[index][index2].uniqueid, 0, controller, searchNode, 'pinchannelin');
                                                                                                   } else {
                                                                                                     if (value.get('setting') == 'block') {
                                                                                                     } else {
-                                                                                                      linkplacechangeoptions(context, index2, linkspaceset.indextreetmp[index][index2].placeentercode, linkspaceset.indextreetmp[index][index2].uniqueid, 0, controller, searchNode, 'pinchannelin');
+                                                                                                      linkplacechangeoptions(context, index2, linkspaceset.indextreetmp[index][index2].placestr, linkspaceset.indextreetmp[index][index2].uniqueid, 0, controller, searchNode, 'pinchannelin');
                                                                                                     }
                                                                                                   }
                                                                                                 },

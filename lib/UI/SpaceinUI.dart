@@ -152,35 +152,6 @@ SpaceinUI(
                                                 },
                                                 child: Row(
                                                   children: [
-                                                    linkspaceset.ischecked[
-                                                                index] ==
-                                                            true
-                                                        ? Checkbox(
-                                                            activeColor:
-                                                                Colors.blue,
-                                                            value: linkspaceset
-                                                                    .ischecked[
-                                                                index],
-                                                            onChanged: (value) {
-                                                              setState(() {
-                                                                linkspaceset.ischecked[
-                                                                        index] =
-                                                                    value!;
-                                                              });
-                                                            })
-                                                        /*const Icon(
-                                                      Icons.info_outline,
-                                                      color: Colors.white,
-                                                      size: 25,
-                                                    )*/
-                                                        : const SizedBox(),
-                                                    linkspaceset.ischecked[
-                                                                index] ==
-                                                            true
-                                                        ? const SizedBox(
-                                                            width: 10,
-                                                          )
-                                                        : const SizedBox(),
                                                     Flexible(
                                                         fit: FlexFit.tight,
                                                         child: ContainerDesign(
@@ -198,57 +169,86 @@ SpaceinUI(
                                                                     : draw
                                                                         .backgroundcolor),
                                                             child: SizedBox(
-                                                              child: Text(
-                                                                linkspaceset
-                                                                    .inindextreetmp[
-                                                                        index]
-                                                                    .placeentercode
-                                                                    .toString()
-                                                                    .replaceAll(
-                                                                        RegExp(
-                                                                            'https://firebasestorage.googleapis.com/v0/b/habit-tracker-8dad1.appspot.com/o/${id}%2F'),
-                                                                        '')
-                                                                    .split(
-                                                                        '?')[0],
-                                                                maxLines: 1,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                style: TextStyle(
-                                                                    color: draw
-                                                                        .color_textstatus,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontSize:
-                                                                        contentTextsize(),
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis),
-                                                              ),
-                                                            ))),
-                                                    linkspaceset.islongchecked[
-                                                                index] ==
-                                                            true
-                                                        ? const SizedBox(
-                                                            width: 10,
-                                                          )
-                                                        : const SizedBox(),
-                                                    linkspaceset.islongchecked[
-                                                                index] ==
-                                                            true
-                                                        ? InkWell(
-                                                            onTap: () {
-                                                              deleteFileExample(
-                                                                  id, context);
-                                                            },
-                                                            child: const Icon(
-                                                              Icons.close,
-                                                              color: Colors.red,
-                                                              size: 25,
-                                                            ),
-                                                          )
-                                                        : const SizedBox(),
+                                                                height: 100,
+                                                                child: Row(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                  children: [
+                                                                    linkspaceset.ischecked[index] ==
+                                                                            true
+                                                                        ? Checkbox(
+                                                                            activeColor:
+                                                                                Colors.blue.shade300,
+                                                                            value: linkspaceset.ischecked[index],
+                                                                            onChanged: (value) {
+                                                                              setState(() {
+                                                                                linkspaceset.ischecked[index] = value!;
+                                                                              });
+                                                                            })
+                                                                        : const SizedBox(),
+                                                                    linkspaceset.ischecked[index] ==
+                                                                            true
+                                                                        ? const SizedBox(
+                                                                            width:
+                                                                                10,
+                                                                          )
+                                                                        : const SizedBox(),
+                                                                    Flexible(
+                                                                      fit: FlexFit
+                                                                          .tight,
+                                                                      child:
+                                                                          Text(
+                                                                        linkspaceset
+                                                                            .inindextreetmp[
+                                                                                index]
+                                                                            .placeentercode
+                                                                            .toString()
+                                                                            .replaceAll(RegExp('https://firebasestorage.googleapis.com/v0/b/habit-tracker-8dad1.appspot.com/o/${id}%2F'),
+                                                                                '')
+                                                                            .split('?')[0],
+                                                                        maxLines:
+                                                                            1,
+                                                                        textAlign:
+                                                                            TextAlign.start,
+                                                                        style: TextStyle(
+                                                                            color: draw
+                                                                                .color_textstatus,
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontSize:
+                                                                                contentTextsize(),
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis),
+                                                                      ),
+                                                                    ),
+                                                                    linkspaceset.islongchecked[index] ==
+                                                                            true
+                                                                        ? const SizedBox(
+                                                                            width:
+                                                                                10,
+                                                                          )
+                                                                        : const SizedBox(),
+                                                                    linkspaceset.islongchecked[index] ==
+                                                                            true
+                                                                        ? InkWell(
+                                                                            onTap:
+                                                                                () {
+                                                                              deleteFileExample(id, context);
+                                                                            },
+                                                                            child:
+                                                                                CircleAvatar(
+                                                                              backgroundColor: Colors.red.shade300,
+                                                                              radius: 20,
+                                                                              child: const Icon(
+                                                                                Icons.close,
+                                                                                color: Colors.white,
+                                                                                size: 25,
+                                                                              ),
+                                                                            ))
+                                                                        : const SizedBox(),
+                                                                  ],
+                                                                )))),
                                                   ],
                                                 ))),
                                         index ==

@@ -335,14 +335,14 @@ class _ProfilePageState extends State<ProfilePage>
                                                       if (eventstates[index]
                                                               .toString() ==
                                                           'workingnow') {
-                                                        Snack.toast(
+                                                        Snack.snackbars(
+                                                            context: context,
                                                             title:
                                                                 '다음 업데이트를 기대해주세요',
-                                                            color: Colors.white,
                                                             backgroundcolor:
-                                                                Colors
-                                                                    .greenAccent,
-                                                            fToast: fToast);
+                                                                Colors.green,
+                                                            bordercolor: draw
+                                                                .backgroundcolor);
                                                       } else {
                                                         StoreRedirect.redirect(
                                                           androidAppId:
@@ -365,13 +365,13 @@ class _ProfilePageState extends State<ProfilePage>
                                                   )
                                                 : InkWell(
                                                     onTap: () {
-                                                      Snack.toast(
-                                                          title: '현재 버전입니다.',
-                                                          color: Colors.white,
+                                                      Snack.snackbars(
+                                                          context: context,
+                                                          title: '현재 버전입니다',
                                                           backgroundcolor:
-                                                              Colors
-                                                                  .greenAccent,
-                                                          fToast: fToast);
+                                                              Colors.green,
+                                                          bordercolor: draw
+                                                              .backgroundcolor);
                                                     },
                                                     child: Container(
                                                         alignment:

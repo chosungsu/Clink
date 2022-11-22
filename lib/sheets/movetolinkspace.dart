@@ -416,16 +416,9 @@ addmylink(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
       .whenComplete(() {
-    final linkspaceset = Get.put(linkspacesetting());
-    if (linkspaceset.iscompleted) {
+    if (!linkspaceset.iscompleted) {
       textEditingControllerAddSheet.clear();
       linkspaceset.resetcompleted();
-      Snack.show(
-          context: context,
-          title: '알림',
-          content: '정상적으로 추가되었습니다.',
-          snackType: SnackType.info,
-          behavior: SnackBarBehavior.floating);
     } else {}
   });
 }
@@ -547,18 +540,18 @@ contentthird(
               ),
               onPressed: () async {
                 if (textEditingControllerAddSheet.text.isEmpty) {
-                  Snack.show(
-                      title: '알림',
-                      content: where == 'addtemplate'
+                  Snack.snackbars(
+                      context: context,
+                      title: where == 'addtemplate'
                           ? '추가할 스페이스 제목이 비어있어요!'
                           : (where == 'editnametemplate' ||
                                   where == 'editnametemplatein'
                               ? '변경할 스페이스 제목이 비어있어요!'
                               : '추가할 페이지 제목이 비어있어요!'),
-                      context: context,
-                      snackType: SnackType.warning);
+                      backgroundcolor: Colors.red,
+                      bordercolor: draw.backgroundcolor);
                 } else {
-                  linkspaceset.setcompleted(false);
+                  linkspaceset.setcompleted(true);
                   if (where == 'addtemplate') {
                     if (categorynumber == 0) {
                       firestore.collection('PageView').add({
@@ -569,10 +562,15 @@ contentthird(
                         'type': categorynumber,
                         'index': indexcnt
                       }).whenComplete(() {
-                        linkspaceset.setcompleted(true);
+                        Snack.snackbars(
+                            context: context,
+                            title: '정상적으로 처리되었어요',
+                            backgroundcolor: Colors.green,
+                            bordercolor: draw.backgroundcolor);
+                        linkspaceset.setcompleted(false);
                         linkspaceset
                             .setspacelink(textEditingControllerAddSheet.text);
-                        Get.back();
+                        Get.back(result: true);
                       });
                     } else if (categorynumber == 1) {
                       firestore.collection('PageView').add({
@@ -583,10 +581,15 @@ contentthird(
                         'type': categorynumber,
                         'index': indexcnt
                       }).whenComplete(() {
-                        linkspaceset.setcompleted(true);
+                        Snack.snackbars(
+                            context: context,
+                            title: '정상적으로 처리되었어요',
+                            backgroundcolor: Colors.green,
+                            bordercolor: draw.backgroundcolor);
+                        linkspaceset.setcompleted(false);
                         linkspaceset
                             .setspacelink(textEditingControllerAddSheet.text);
-                        Get.back();
+                        Get.back(result: true);
                       });
                     } else if (categorynumber == 2) {
                       firestore.collection('PageView').add({
@@ -597,10 +600,15 @@ contentthird(
                         'type': categorynumber,
                         'index': indexcnt
                       }).whenComplete(() {
-                        linkspaceset.setcompleted(true);
+                        Snack.snackbars(
+                            context: context,
+                            title: '정상적으로 처리되었어요',
+                            backgroundcolor: Colors.green,
+                            bordercolor: draw.backgroundcolor);
+                        linkspaceset.setcompleted(false);
                         linkspaceset
                             .setspacelink(textEditingControllerAddSheet.text);
-                        Get.back();
+                        Get.back(result: true);
                       });
                     } else if (categorynumber == 3) {
                       firestore.collection('PageView').add({
@@ -611,10 +619,15 @@ contentthird(
                         'type': categorynumber,
                         'index': indexcnt
                       }).whenComplete(() {
-                        linkspaceset.setcompleted(true);
+                        Snack.snackbars(
+                            context: context,
+                            title: '정상적으로 처리되었어요',
+                            backgroundcolor: Colors.green,
+                            bordercolor: draw.backgroundcolor);
+                        linkspaceset.setcompleted(false);
                         linkspaceset
                             .setspacelink(textEditingControllerAddSheet.text);
-                        Get.back();
+                        Get.back(result: true);
                       });
                     }
                   } else if (where == 'editnametemplate') {
@@ -629,10 +642,15 @@ contentthird(
                       firestore.collection('PageView').doc(updateid).update({
                         'spacename': textEditingControllerAddSheet.text
                       }).whenComplete(() {
-                        linkspaceset.setcompleted(true);
+                        Snack.snackbars(
+                            context: context,
+                            title: '정상적으로 처리되었어요',
+                            backgroundcolor: Colors.green,
+                            bordercolor: draw.backgroundcolor);
+                        linkspaceset.setcompleted(false);
                         linkspaceset
                             .setspacelink(textEditingControllerAddSheet.text);
-                        Get.back();
+                        Get.back(result: true);
                       });
                     });
                   } else if (where == 'editnametemplatein') {
@@ -653,10 +671,15 @@ contentthird(
                         }
                       } else {}
                     }).whenComplete(() {
-                      linkspaceset.setcompleted(true);
+                      Snack.snackbars(
+                          context: context,
+                          title: '정상적으로 처리되었어요',
+                          backgroundcolor: Colors.green,
+                          bordercolor: draw.backgroundcolor);
+                      linkspaceset.setcompleted(false);
                       linkspaceset
                           .setspacelink(textEditingControllerAddSheet.text);
-                      Get.back();
+                      Get.back(result: true);
                     });
                   } else {
                     firestore.collection('Pinchannel').add({
@@ -664,10 +687,15 @@ contentthird(
                       'linkname': textEditingControllerAddSheet.text,
                       'setting': 'block'
                     }).whenComplete(() {
-                      linkspaceset.setcompleted(true);
+                      Snack.snackbars(
+                          context: context,
+                          title: '정상적으로 처리되었어요',
+                          backgroundcolor: Colors.green,
+                          bordercolor: draw.backgroundcolor);
+                      linkspaceset.setcompleted(false);
                       linkspaceset
                           .setspacelink(textEditingControllerAddSheet.text);
-                      Get.back();
+                      Get.back(result: true);
                     });
                   }
                 }
@@ -748,12 +776,11 @@ SetChangeLink(
     final linkspaceset = Get.put(linkspacesetting());
     if (linkspaceset.iscompleted) {
       linkspaceset.resetcompleted();
-      Snack.show(
+      Snack.snackbars(
           context: context,
-          title: '알림',
-          content: '정상적으로 처리되었습니다.',
-          snackType: SnackType.info,
-          behavior: SnackBarBehavior.floating);
+          title: '정상적으로 처리되었어요',
+          backgroundcolor: Colors.green,
+          bordercolor: draw.backgroundcolor);
     } else {}
   });
 }
@@ -846,12 +873,11 @@ contentforth(BuildContext context, FocusNode searchNode,
                       ),
                       onPressed: () async {
                         if (controller.text.isEmpty) {
-                          Snack.show(
+                          Snack.snackbars(
                               context: context,
-                              title: '알림',
-                              content: '변경할 이름이 비어있어요!',
-                              snackType: SnackType.warning,
-                              behavior: SnackBarBehavior.floating);
+                              title: '변경할 이름이 비어있어요',
+                              backgroundcolor: Colors.red,
+                              bordercolor: draw.backgroundcolor);
                         } else {
                           updatelist.clear();
                           uiset.setloading(true);

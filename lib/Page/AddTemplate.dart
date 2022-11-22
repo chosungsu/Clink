@@ -167,12 +167,11 @@ class _AddTemplateState extends State<AddTemplate>
             child: GestureDetector(
               onTap: () {
                 if (cg.categorypicknumber == 99) {
-                  Snack.show(
+                  Snack.snackbars(
                       context: context,
-                      title: '알림',
-                      content: '스페이스 선택해주세요!',
-                      snackType: SnackType.info,
-                      behavior: SnackBarBehavior.floating);
+                      title: '스페이스 선택해주세요!',
+                      backgroundcolor: Colors.black,
+                      bordercolor: draw.backgroundcolor);
                 } else {
                   func6(context, _controller, searchNode, 'addtemplate',
                       widget.id, cg.categorypicknumber, widget.indexcnt);

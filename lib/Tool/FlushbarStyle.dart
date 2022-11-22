@@ -9,6 +9,35 @@ import 'TextSize.dart';
 const kPadding = 8.0; // up to you
 
 class Snack {
+  static snackbars({
+    required BuildContext context,
+    required String title,
+    required Color backgroundcolor,
+    required Color bordercolor,
+  }) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+        title,
+        maxLines: 1,
+        style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: contentTextsize(),
+            overflow: TextOverflow.ellipsis),
+      ),
+      duration: const Duration(milliseconds: 1000),
+      behavior: SnackBarBehavior.fixed,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(0),
+        side: BorderSide(
+          color: bordercolor,
+          width: 2,
+        ),
+      ),
+      backgroundColor: backgroundcolor,
+    ));
+  }
+
   static toast(
       {required String title,
       required Color color,

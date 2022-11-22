@@ -181,13 +181,11 @@ func4(BuildContext context, indexcnt) async {
             ),
         transition: Transition.upToDown);
   } else {
-    Snack.show(
+    Snack.snackbars(
         context: context,
-        title: '알림',
-        content: '접근권한이 없습니다!',
-        snackType: SnackType.info,
-        behavior: SnackBarBehavior.floating,
-        position: SnackPosition.TOP);
+        title: '접근권한이 없어요!',
+        backgroundcolor: Colors.red,
+        bordercolor: draw.backgroundcolor);
   }
 }
 
@@ -459,27 +457,38 @@ Future<void> downloadFileExample(String mainid, BuildContext context) async {
     if (!await appDocDir.exists()) {
       await appDocDir.create(recursive: true);
     } else {}
-    for (int i = 0; i < linkspaceset.inindextreetmp.length; i++) {
-      if (linkspaceset.ischecked[i] == true) {
-        downloadfile.add(linkspaceset.inindextreetmp[i].placeentercode);
-        downloadfilesubname.add(linkspaceset.inindextreetmp[i].substrcode);
-      } else {}
-    }
-    for (int j = 0; j < downloadfile.length; j++) {
-      downloadurl = downloadfile[j];
-      downloadname = downloadfilesubname[j];
-      httpsReference = storageRef.child(mainid + "/$downloadname");
-      //httpsReference = FirebaseStorage.instance.refFromURL(downloadfile[i]);
-      pathseveral = File(appDocDir.path + '/' + downloadname);
+    if (linkspaceset.ischecked.any((element) => element == true) == true) {
+      for (int i = 0; i < linkspaceset.inindextreetmp.length; i++) {
+        if (linkspaceset.ischecked[i] == true) {
+          downloadfile.add(linkspaceset.inindextreetmp[i].placeentercode);
+          downloadfilesubname.add(linkspaceset.inindextreetmp[i].substrcode);
+        } else {}
+      }
+      for (int j = 0; j < downloadfile.length; j++) {
+        downloadurl = downloadfile[j];
+        downloadname = downloadfilesubname[j];
+        httpsReference = storageRef.child(mainid + "/$downloadname");
+        //httpsReference = FirebaseStorage.instance.refFromURL(downloadfile[i]);
+        pathseveral = File(appDocDir.path + '/' + downloadname);
 
-      FileDownloader.downloadFile(
-          url: downloadurl,
-          name: downloadname,
-          onDownloadCompleted: (path) {
-            httpsReference.writeToFile(pathseveral);
-            ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(downloadname + ' 다운로드 완료됨.')));
-          });
+        FileDownloader.downloadFile(
+            url: downloadurl,
+            name: downloadname,
+            onDownloadCompleted: (path) {
+              httpsReference.writeToFile(pathseveral);
+              Snack.snackbars(
+                  context: context,
+                  title: '다운로드 완료됨.',
+                  backgroundcolor: Colors.green,
+                  bordercolor: draw.backgroundcolor);
+            });
+      }
+    } else {
+      Snack.snackbars(
+          context: context,
+          title: '선택된 항목이 없습니다.',
+          backgroundcolor: Colors.black,
+          bordercolor: draw.backgroundcolor);
     }
   } else {
     await _requestPermission(context);
@@ -514,8 +523,11 @@ Future<void> deleteFileExample(String mainid, BuildContext context) async {
       await firestore.collection('Pinchannelin').doc(mainid).update(
           {'spaceentercontent': linkspaceset.changeurllist}).whenComplete(() {
         linkspaceset.setcompleted(false);
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(downloadname + ' 삭제가 완료되었습니다.')));
+        Snack.snackbars(
+            context: context,
+            title: '삭제가 완료됨.',
+            backgroundcolor: Colors.red,
+            bordercolor: draw.backgroundcolor);
       });
     });
   });
@@ -524,16 +536,15 @@ Future<void> deleteFileExample(String mainid, BuildContext context) async {
 Future<void> _requestPermission(BuildContext context) async {
   var status = await Permission.storage.status;
   if (status.isDenied) {
-    print('1');
-    // We didn't ask for permission yet or the permission has been denied   before but not permanently.
-    ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('권한 허용하여야 정상 다운로드가능합니다.')));
+    Snack.snackbars(
+        context: context,
+        title: '권한 허용하여야 정상 다운로드가능합니다.',
+        backgroundcolor: Colors.black,
+        bordercolor: draw.backgroundcolor);
     await Permission.storage.request();
   } else if (status.isPermanentlyDenied) {
-    print('2');
     await openAppSettings();
   } else {
-    print('3');
     if (status.isGranted) {
     } else {
       await Permission.storage.request();

@@ -412,11 +412,11 @@ content2() {
                 setState(() {
                   isloading = true;
                 });
-                Snack.show(
-                    title: '로딩중',
-                    snackType: SnackType.waiting,
-                    content: '회원탈퇴 중입니다.잠시만 기다려주세요',
-                    context: context);
+                Snack.snackbars(
+                    context: context,
+                    title: '회원탈퇴 중...',
+                    backgroundcolor: Colors.red,
+                    bordercolor: draw.backgroundcolor);
                 await NotificationApi.cancelAll();
                 GoogleSignInController().Deletelogout(context, name);
                 await firestore
@@ -845,11 +845,11 @@ content3(
                     setState(() {
                       isloading = false;
                     });
-                    Snack.show(
-                        title: '경고',
-                        content: '변경할 닉네임 작성바랍니다.',
+                    Snack.snackbars(
                         context: context,
-                        snackType: SnackType.warning);
+                        title: '변경할 닉네임 작성해주세요',
+                        backgroundcolor: Colors.red,
+                        bordercolor: draw.backgroundcolor);
                   }
                 } else {
                   if (_ischecked) {
