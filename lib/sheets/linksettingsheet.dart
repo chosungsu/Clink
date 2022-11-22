@@ -707,6 +707,11 @@ contentthird(
                   }).whenComplete(() async {
                     updateid.clear();
                     updateindex.clear();
+                    Snack.snackbars(
+                        context: context,
+                        title: '삭제완료!',
+                        backgroundcolor: Colors.red,
+                        bordercolor: draw.backgroundcolor);
                     await firestore.collection('PageView').get().then((value) {
                       for (int i = 0; i < value.docs.length; i++) {
                         if (value.docs[i].get('index') > changeindex) {
@@ -762,6 +767,11 @@ contentthird(
                       }
                     }
                   }).whenComplete(() async {
+                    Snack.snackbars(
+                        context: context,
+                        title: '삭제완료!',
+                        backgroundcolor: Colors.red,
+                        bordercolor: draw.backgroundcolor);
                     linkspaceset.setcompleted(false);
                   });
                 });
@@ -1083,6 +1093,12 @@ linkmadetreeplace(
     'uniquecode': uniquecode,
     'type': type,
     'spaceentercontent': type == 1 ? '' : []
+  }).whenComplete(() {
+    Snack.snackbars(
+        context: context,
+        title: '성공적으로 추가되었습니다',
+        backgroundcolor: Colors.green,
+        bordercolor: draw.backgroundcolor);
   });
   linkspaceset.setspacetreein(Linkspacetreepage(
       subindex: index, placestr: '빈 제목', uniqueid: uniquecode));

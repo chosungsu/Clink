@@ -1,10 +1,10 @@
 class CompanyPageList {
   final String title;
-  final String url;
+  final String date;
 
   CompanyPageList({
     required this.title,
-    required this.url,
+    required this.date,
   });
 }
 

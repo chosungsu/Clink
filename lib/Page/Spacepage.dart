@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:clickbyme/BACKENDPART/FIREBASE/PersonalVP.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/Getx/notishow.dart';
 import 'package:clickbyme/sheets/movetolinkspace.dart';
@@ -129,21 +130,10 @@ class _SpacepageState extends State<Spacepage>
   choosecategory() {
     return GetBuilder<linkspacesetting>(
         builder: (_) => StreamBuilder<QuerySnapshot>(
-              stream: firestore.collection('Pinchannel').snapshots(),
+              stream: SpacepageStreamParent(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  uiset.pagelist.clear();
-                  final valuespace = snapshot.data!.docs;
-                  for (var sp in valuespace) {
-                    final messageuser = sp.get('username');
-                    final messagetitle = sp.get('linkname');
-                    if (messageuser == usercode) {
-                      uiset.pagelist.add(PageList(
-                          title: messagetitle,
-                          username: messageuser,
-                          id: sp.id));
-                    }
-                  }
+                  SpacepageChild1(snapshot);
 
                   return uiset.pagelist.isEmpty
                       ? Center(

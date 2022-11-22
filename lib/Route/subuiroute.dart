@@ -1,8 +1,10 @@
-// ignore_for_file: non_constant_identifier_names, prefer_typing_uninitialized_variables
+// ignore_for_file: non_constant_identifier_names, prefer_typing_uninitialized_variables, unused_local_variable
 
 import 'dart:async';
 import 'dart:io';
+import 'package:clickbyme/BACKENDPART/FIREBASE/PersonalVP.dart';
 import 'package:clickbyme/Enums/Variables.dart';
+import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -248,32 +250,14 @@ func7(String title, String email, String origin, String id) async {
 CompanyNotice(
   String str,
 ) {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  final List<CompanyPageList> listcompanytousers = [];
-  var url;
   final draw = Get.put(navibool());
   final uiset = Get.put(uisetting());
 
   return StreamBuilder<QuerySnapshot>(
-    stream: firestore.collection('CompanyNotice').snapshots(),
+    stream: CompanyNoticeStreamFamily(),
     builder: (context, snapshot) {
       if (snapshot.hasData) {
-        listcompanytousers.clear();
-        final valuespace = snapshot.data!.docs;
-        for (var sp in valuespace) {
-          final messageText = sp.get('title');
-          final messageDate = sp.get('date');
-          final messageyes = sp.get('showthisinapp');
-          final messagewhere = sp.get('where');
-          if (messageyes == 'yes' && messagewhere == str) {
-            listcompanytousers.add(CompanyPageList(
-              title: messageText,
-              url: messageDate,
-            ));
-            url = Uri.parse(sp.get('url'));
-          }
-        }
-
+        CompanyNoticeChild1(snapshot, 'home');
         return listcompanytousers.isEmpty
             ? const SizedBox()
             : Padding(
@@ -281,28 +265,26 @@ CompanyNotice(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
                     GestureDetector(
                       onTap: () async {
                         draw.setclose();
-                        launchUrl(Uri.parse(listcompanytousers[0].url));
+                        launchUrl(CompanyNoticeChild1(snapshot, 'home'));
                       },
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(15),
-                          color: Colors.grey.shade200,
-                        ),
+                      child: ContainerDesign(
+                        color: draw.backgroundcolor,
                         child: SizedBox(
-                          height: 30,
                           width: double.infinity,
                           child: Row(
+                            mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.campaign,
-                                color: Colors.black45,
+                                color: draw.color_textstatus,
                                 size: 30,
                               ),
                               const SizedBox(
@@ -312,9 +294,9 @@ CompanyNotice(
                                   fit: FlexFit.tight,
                                   child: Text(
                                     listcompanytousers[0].title,
-                                    maxLines: 1,
+                                    maxLines: 3,
                                     style: TextStyle(
-                                        color: Colors.black45,
+                                        color: draw.color_textstatus,
                                         fontWeight: FontWeight.bold,
                                         fontSize: contentTextsize()),
                                     overflow: TextOverflow.ellipsis,

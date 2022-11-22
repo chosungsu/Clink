@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names
 
+import 'package:clickbyme/BACKENDPART/FIREBASE/PersonalVP.dart';
+import 'package:clickbyme/BACKENDPART/FIREBASE/SearchVP.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -17,6 +19,7 @@ import 'PageUI.dart';
 
 SearchUI(scrollController, TextEditingController controller, double height,
     TextEditingController controller2, searchNode) {
+  final uiset = Get.put(uisetting());
   return uiset.searchpagemove == ''
       ? Flexible(
           fit: FlexFit.tight,
@@ -115,38 +118,15 @@ Se_Container0(double height, controller, searchNode) {
 }
 
 Se_Container01(double height, controller, searchNode) {
+  final uiset = Get.put(uisetting());
   return GetBuilder<uisetting>(
       builder: (_) => Padding(
             padding: EdgeInsets.only(left: 20, right: 20),
             child: StreamBuilder<QuerySnapshot>(
-              stream: firestore.collection('Pinchannel').snapshots(),
+              stream: SpacepageStreamParent(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  uiset.searchpagelist.clear();
-                  uiset.editpagelist.clear();
-                  final valuespace = snapshot.data!.docs;
-                  for (var sp in valuespace) {
-                    final messageuser = sp.get('username');
-                    final messagetitle = sp.get('linkname');
-                    final messageemail = sp.get('email');
-                    final messagesetting = sp.get('setting');
-                    if (uiset.textrecognizer == '') {
-                    } else {
-                      if (messagetitle
-                          .toString()
-                          .contains(uiset.textrecognizer)) {
-                        if (messagetitle == '빈 스페이스') {
-                        } else {
-                          uiset.searchpagelist.add(PageList(
-                              title: messagetitle,
-                              username: messageuser,
-                              email: messageemail,
-                              id: sp.id,
-                              setting: messagesetting));
-                        }
-                      }
-                    }
-                  }
+                  SearchpageChild1(snapshot);
 
                   return uiset.searchpagelist.isEmpty
                       ? Column(
@@ -328,7 +308,7 @@ Se_Container01(double height, controller, searchNode) {
 Se_Container1(
   double height,
 ) {
-  //프로버전 구매시 보이지 않게 함
+  final uiset = Get.put(uisetting());
   return Padding(
     padding: const EdgeInsets.only(left: 20, right: 20),
     child: SizedBox(
@@ -357,32 +337,15 @@ Se_Container1(
 }
 
 Se_Container11(double height, TextEditingController controller, searchNode) {
+  final uiset = Get.put(uisetting());
   return GetBuilder<uisetting>(
       builder: (_) => Padding(
             padding: EdgeInsets.only(left: 20, right: 20),
             child: StreamBuilder<QuerySnapshot>(
-              stream: firestore.collection('Favorplace').snapshots(),
+              stream: SearchpageStreamParent(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  uiset.favorpagelist.clear();
-                  uiset.editpagelist.clear();
-                  final valuespace = snapshot.data!.docs;
-                  for (var sp in valuespace) {
-                    final messageuser = sp.get('originuser');
-                    final messagetitle = sp.get('title');
-                    final messageadduser = sp.get('favoradduser');
-                    final messageemail = sp.get('email');
-                    final messageid = sp.get('id');
-                    final messagesetting = sp.get('setting');
-                    if (messageadduser == usercode) {
-                      uiset.favorpagelist.add(PageList(
-                          title: messagetitle,
-                          email: messageemail,
-                          username: messageuser,
-                          id: messageid,
-                          setting: messagesetting));
-                    }
-                  }
+                  SearchpageChild2(snapshot);
 
                   return uiset.favorpagelist.isEmpty
                       ? ContainerDesign(
@@ -534,7 +497,6 @@ Se_Container2(String id, String setting, TextEditingController controller) {
 Se_Container3(
   double height,
 ) {
-  //프로버전 구매시 보이지 않게 함
   return Padding(
     padding: const EdgeInsets.only(left: 20, right: 20),
     child: SizedBox(

@@ -138,58 +138,20 @@ class AppBarCustom extends StatelessWidget {
                                                           .get('page_index') ==
                                                       0
                                                   ? uiset.pagelist.isEmpty
-                                                      ? ContainerDesign(
-                                                          child:
-                                                              GestureDetector(
-                                                            onTap: (() =>
-                                                                func5()),
-                                                            child: RichText(
-                                                                text: TextSpan(
-                                                                    children: [
-                                                                  WidgetSpan(
-                                                                    style: TextStyle(
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .normal,
-                                                                        fontSize:
-                                                                            contentTitleTextsize(),
-                                                                        color: draw
-                                                                            .color_textstatus),
-                                                                    child: Row(
-                                                                      children: [
-                                                                        Text(
-                                                                          '빈 스페이스',
-                                                                          style: TextStyle(
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontSize: contentTitleTextsize(),
-                                                                              color: draw.color_textstatus),
-                                                                        ),
-                                                                        const SizedBox(
-                                                                          width:
-                                                                              10,
-                                                                        ),
-                                                                        Icon(
-                                                                          Icons
-                                                                              .swap_horiz,
-                                                                          color:
-                                                                              draw.color_textstatus,
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ])),
-                                                          ),
-                                                          color: draw
-                                                              .backgroundcolor)
-                                                      : ContainerDesign(
-                                                          child:
-                                                              GestureDetector(
-                                                            onTap: (() =>
-                                                                func5()),
-                                                            child: RichText(
-                                                                softWrap: true,
-                                                                text: TextSpan(
-                                                                    children: [
+                                                      ? Flexible(
+                                                          fit: FlexFit.tight,
+                                                          child: Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            children: [
+                                                              ContainerDesign(
+                                                                  child:
+                                                                      GestureDetector(
+                                                                    onTap: (() =>
+                                                                        func5()),
+                                                                    child: RichText(
+                                                                        text: TextSpan(children: [
                                                                       WidgetSpan(
                                                                         style: TextStyle(
                                                                             fontWeight: FontWeight
@@ -202,9 +164,8 @@ class AppBarCustom extends StatelessWidget {
                                                                             Row(
                                                                           children: [
                                                                             Text(
-                                                                              uiset.pagelist[uiset.mypagelistindex].title,
-                                                                              maxLines: 1,
-                                                                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: contentTitleTextsize(), color: draw.color_textstatus, overflow: TextOverflow.clip),
+                                                                              '빈 스페이스',
+                                                                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: contentTitleTextsize(), color: draw.color_textstatus),
                                                                             ),
                                                                             const SizedBox(
                                                                               width: 10,
@@ -217,9 +178,55 @@ class AppBarCustom extends StatelessWidget {
                                                                         ),
                                                                       ),
                                                                     ])),
-                                                          ),
-                                                          color: draw
-                                                              .backgroundcolor)
+                                                                  ),
+                                                                  color: draw
+                                                                      .backgroundcolor)
+                                                            ],
+                                                          ))
+                                                      : Flexible(
+                                                          fit: FlexFit.tight,
+                                                          child: Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            children: [
+                                                              ContainerDesign(
+                                                                  child:
+                                                                      GestureDetector(
+                                                                    onTap: (() =>
+                                                                        func5()),
+                                                                    child: RichText(
+                                                                        softWrap: true,
+                                                                        text: TextSpan(children: [
+                                                                          WidgetSpan(
+                                                                            style: TextStyle(
+                                                                                fontWeight: FontWeight.normal,
+                                                                                fontSize: contentTitleTextsize(),
+                                                                                color: draw.color_textstatus),
+                                                                            child:
+                                                                                Row(
+                                                                              children: [
+                                                                                Text(
+                                                                                  uiset.pagelist[uiset.mypagelistindex].title,
+                                                                                  maxLines: 1,
+                                                                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: contentTitleTextsize(), color: draw.color_textstatus, overflow: TextOverflow.ellipsis),
+                                                                                ),
+                                                                                const SizedBox(
+                                                                                  width: 10,
+                                                                                ),
+                                                                                Icon(
+                                                                                  Icons.swap_horiz,
+                                                                                  color: draw.color_textstatus,
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ])),
+                                                                  ),
+                                                                  color: draw
+                                                                      .backgroundcolor)
+                                                            ],
+                                                          ))
                                                   : const SizedBox()
                                               : Text(
                                                   title.toString(),

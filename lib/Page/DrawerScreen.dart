@@ -2,10 +2,7 @@
 
 import 'package:clickbyme/Enums/Drawer_item.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
-import 'package:clickbyme/Tool/MyTheme.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
@@ -28,18 +25,13 @@ class _DrawerScreenState extends State<DrawerScreen> {
   bool selected = false;
   TextEditingController controller = TextEditingController();
   var searchNode = FocusNode();
-  String name = Hive.box('user_info').get('id');
   late DateTime Date = DateTime.now();
   final draw = Get.put(navibool());
   final cal_share_person = Get.put(PeopleAdd());
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  late FToast fToast;
 
   @override
   void initState() {
     super.initState();
-    fToast = FToast();
-    fToast.init(context);
   }
 
   @override
@@ -55,7 +47,6 @@ class _DrawerScreenState extends State<DrawerScreen> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: drawerItems.map((element) {
-              selected = drawerItems.indexOf(element) == widget.index;
               return GetBuilder<navibool>(
                   builder: (_) => Padding(
                       padding: const EdgeInsets.only(top: 30, bottom: 30),
@@ -64,7 +55,11 @@ class _DrawerScreenState extends State<DrawerScreen> {
                           if (element.containsValue(Icons.view_stream)) {
                             draw.setclose();
                             Hive.box('user_setting').put('page_index', 0);
-                            uiset.setmypagelistindex(0);
+                            uiset.setmypagelistindex(
+                                Hive.box('user_setting').get('currentmypage') ??
+                                    0);
+                            uiset.setpageindex(
+                                Hive.box('user_setting').get('page_index'));
                             Navigator.of(context).pushReplacement(
                               PageTransition(
                                 type: PageTransitionType.fade,
@@ -74,12 +69,10 @@ class _DrawerScreenState extends State<DrawerScreen> {
                               ),
                             );
                           } else if (element.containsValue(Icons.search)) {
-                            //draw.setclose();
-                            /*addWhole_update(context, searchNode, controller, name,
-                            Date, 'home', fToast);*/
                             draw.setclose();
                             Hive.box('user_setting').put('page_index', 1);
-                            uiset.setmypagelistindex(1);
+                            uiset.setpageindex(
+                                Hive.box('user_setting').get('page_index'));
                             Navigator.of(context).pushReplacement(
                               PageTransition(
                                 type: PageTransitionType.fade,
@@ -89,10 +82,10 @@ class _DrawerScreenState extends State<DrawerScreen> {
                               ),
                             );
                           } else if (element.containsValue(Icons.settings)) {
-                            //draw.setclose();
                             draw.setclose();
                             Hive.box('user_setting').put('page_index', 2);
-                            uiset.setmypagelistindex(2);
+                            uiset.setpageindex(
+                                Hive.box('user_setting').get('page_index'));
                             Navigator.of(context).pushReplacement(
                               PageTransition(
                                 type: PageTransitionType.fade,
@@ -107,9 +100,10 @@ class _DrawerScreenState extends State<DrawerScreen> {
                           children: [
                             Icon(
                               element['icon'],
-                              color: selected
-                                  ? Colors.purple.shade300
-                                  : draw.color_textstatus,
+                              color:
+                                  drawerItems.indexOf(element) == widget.index
+                                      ? Colors.purple.shade300
+                                      : draw.color_textstatus,
                             ),
                             const SizedBox(
                               height: 20,

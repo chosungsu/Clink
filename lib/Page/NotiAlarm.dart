@@ -1,4 +1,5 @@
-import 'package:clickbyme/DB/PageList.dart';
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/Getx/notishow.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:status_bar_control/status_bar_control.dart';
+import '../BACKENDPART/FIREBASE/PersonalVP.dart';
 import '../Route/mainroute.dart';
 import '../Route/subuiroute.dart';
 import '../Tool/AppBarCustom.dart';
@@ -26,16 +28,10 @@ class NotiAlarm extends StatefulWidget {
 
 class _NotiAlarmState extends State<NotiAlarm>
     with WidgetsBindingObserver, TickerProviderStateMixin {
-  double translateX = 0.0;
-  double translateY = 0.0;
-  double myWidth = 0.0;
-  String name = Hive.box('user_info').get('id');
   final notilist = Get.put(notishow());
   final draw = Get.put(navibool());
   final readlist = [];
   final listid = [];
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  late Animation animation;
 
   @override
   void initState() {
@@ -95,6 +91,7 @@ class _NotiAlarmState extends State<NotiAlarm>
                             doubleicon: true,
                             iconname: Icons.keyboard_double_arrow_up,
                           ),
+                          CompanyNotice('home'),
                           allread(),
                           Flexible(
                               fit: FlexFit.tight,
@@ -164,27 +161,10 @@ class _NotiAlarmState extends State<NotiAlarm>
 
   UserNotice() {
     return StreamBuilder<QuerySnapshot>(
-      stream: firestore
-          .collection('AppNoticeByUsers')
-          .orderBy('date', descending: true)
-          .snapshots(),
+      stream: NotiAlarmStreamFamily(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          notilist.listad.clear();
-          listid.clear();
-          readlist.clear();
-          final valuespace = snapshot.data!.docs;
-          for (var sp in valuespace) {
-            final messageText = sp.get('title');
-            final messageDate = sp.get('date');
-            if (sp.get('sharename').toString().contains(name) ||
-                sp.get('username') == name) {
-              readlist.add(sp.get('read'));
-              listid.add(sp.id);
-              notilist.listad
-                  .add(CompanyPageList(title: messageText, url: messageDate));
-            }
-          }
+          NotiAlarmRes1(snapshot, listid, readlist);
           return notilist.listad.isEmpty
               ? Center(
                   child: NeumorphicText(
@@ -288,7 +268,7 @@ class _NotiAlarmState extends State<NotiAlarm>
                                                     CrossAxisAlignment.end,
                                                 children: [
                                                   Text(
-                                                    notilist.listad[index].url
+                                                    notilist.listad[index].date
                                                         .toString(),
                                                     style: TextStyle(
                                                         color: readlist[

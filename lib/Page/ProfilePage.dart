@@ -15,6 +15,7 @@ import '../Enums/Variables.dart';
 import '../Tool/ContainerDesign.dart';
 import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/navibool.dart';
+import '../Tool/Getx/uisetting.dart';
 import '../Tool/NoBehavior.dart';
 import '../Tool/AppBarCustom.dart';
 import '../UI/ShowLicense.dart';
@@ -37,6 +38,7 @@ class _ProfilePageState extends State<ProfilePage>
   late FToast fToast;
   final searchNode = FocusNode();
   final draw = Get.put(navibool());
+  final uiset = Get.put(uisetting());
 
   @override
   void initState() {
@@ -982,109 +984,112 @@ class _ProfilePageState extends State<ProfilePage>
                                 ],
                               ),
                             )
-                          : SizedBox(
-                              height: 30,
-                              width: 80,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Flexible(
-                                      flex: 1,
-                                      child: SizedBox(
-                                          width: 30,
-                                          height: 30,
-                                          child: InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                Hive.box('user_setting')
-                                                    .put('which_text_size', 0);
-                                              });
-                                            },
-                                            child: CircleAvatar(
-                                              backgroundColor:
-                                                  BGColor_shadowcolor(),
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    border: Border.all(
-                                                        width: 2,
-                                                        color: Hive.box('user_setting')
-                                                                        .get(
+                          : (index == 1
+                              ? SizedBox(
+                                  height: 30,
+                                  width: 80,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Flexible(
+                                          flex: 1,
+                                          child: SizedBox(
+                                              width: 30,
+                                              height: 30,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    Hive.box('user_setting')
+                                                        .put('which_text_size',
+                                                            0);
+                                                  });
+                                                },
+                                                child: CircleAvatar(
+                                                  backgroundColor:
+                                                      BGColor_shadowcolor(),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        border: Border.all(
+                                                            width: 2,
+                                                            color: Hive.box('user_setting').get(
                                                                             'which_text_size') ==
-                                                                    0 ||
-                                                                Hive.box('user_setting')
-                                                                        .get(
+                                                                        0 ||
+                                                                    Hive.box('user_setting').get(
                                                                             'which_text_size') ==
-                                                                    null
-                                                            ? Colors
-                                                                .blue.shade400
-                                                            : BGColor_shadowcolor())),
-                                                alignment: Alignment.center,
-                                                child: NeumorphicIcon(
-                                                  Icons.format_size,
-                                                  size: 15,
-                                                  style: NeumorphicStyle(
-                                                      shape: NeumorphicShape
-                                                          .convex,
-                                                      depth: 2,
-                                                      color:
-                                                          Colors.blue.shade300,
-                                                      lightSource:
-                                                          LightSource.topLeft),
+                                                                        null
+                                                                ? Colors.blue
+                                                                    .shade400
+                                                                : BGColor_shadowcolor())),
+                                                    alignment: Alignment.center,
+                                                    child: NeumorphicIcon(
+                                                      Icons.format_size,
+                                                      size: 15,
+                                                      style: NeumorphicStyle(
+                                                          shape: NeumorphicShape
+                                                              .convex,
+                                                          depth: 2,
+                                                          color: Colors
+                                                              .blue.shade300,
+                                                          lightSource:
+                                                              LightSource
+                                                                  .topLeft),
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                            ),
-                                          ))),
-                                  const SizedBox(
-                                    width: 3,
+                                              ))),
+                                      const SizedBox(
+                                        width: 3,
+                                      ),
+                                      Flexible(
+                                          flex: 1,
+                                          child: SizedBox(
+                                              width: 30,
+                                              height: 30,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    Hive.box('user_setting')
+                                                        .put('which_text_size',
+                                                            1);
+                                                  });
+                                                },
+                                                child: CircleAvatar(
+                                                  backgroundColor:
+                                                      BGColor_shadowcolor(),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        border: Border.all(
+                                                            width: 2,
+                                                            color: Hive.box('user_setting')
+                                                                        .get(
+                                                                            'which_text_size') ==
+                                                                    1
+                                                                ? Colors.blue
+                                                                    .shade400
+                                                                : BGColor_shadowcolor())),
+                                                    alignment: Alignment.center,
+                                                    child: NeumorphicIcon(
+                                                      Icons.text_fields,
+                                                      size: 25,
+                                                      style: NeumorphicStyle(
+                                                          shape: NeumorphicShape
+                                                              .convex,
+                                                          depth: 2,
+                                                          color: Colors
+                                                              .blue.shade300,
+                                                          lightSource:
+                                                              LightSource
+                                                                  .topLeft),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ))),
+                                    ],
                                   ),
-                                  Flexible(
-                                      flex: 1,
-                                      child: SizedBox(
-                                          width: 30,
-                                          height: 30,
-                                          child: InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                Hive.box('user_setting')
-                                                    .put('which_text_size', 1);
-                                              });
-                                            },
-                                            child: CircleAvatar(
-                                              backgroundColor:
-                                                  BGColor_shadowcolor(),
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    border: Border.all(
-                                                        width: 2,
-                                                        color: Hive.box('user_setting')
-                                                                    .get(
-                                                                        'which_text_size') ==
-                                                                1
-                                                            ? Colors
-                                                                .blue.shade400
-                                                            : BGColor_shadowcolor())),
-                                                alignment: Alignment.center,
-                                                child: NeumorphicIcon(
-                                                  Icons.text_fields,
-                                                  size: 25,
-                                                  style: NeumorphicStyle(
-                                                      shape: NeumorphicShape
-                                                          .convex,
-                                                      depth: 2,
-                                                      color:
-                                                          Colors.blue.shade300,
-                                                      lightSource:
-                                                          LightSource.topLeft),
-                                                ),
-                                              ),
-                                            ),
-                                          ))),
-                                ],
-                              ),
-                            )
-                      /*SizedBox(
+                                )
+                              : SizedBox(
                                   height: 30,
                                   width: 80,
                                   child: Row(
@@ -1101,6 +1106,11 @@ class _ProfilePageState extends State<ProfilePage>
                                                     Hive.box('user_setting')
                                                         .put('which_menu_pick',
                                                             0);
+                                                    Hive.box('user_setting')
+                                                        .put('page_index', 2);
+                                                    uiset.setpageindex(
+                                                        Hive.box('user_setting')
+                                                            .get('page_index'));
                                                     draw.setnavi();
                                                   });
                                                 },
@@ -1151,6 +1161,11 @@ class _ProfilePageState extends State<ProfilePage>
                                                     Hive.box('user_setting')
                                                         .put('which_menu_pick',
                                                             1);
+                                                    Hive.box('user_setting')
+                                                        .put('page_index', 2);
+                                                    uiset.setpageindex(
+                                                        Hive.box('user_setting')
+                                                            .get('page_index'));
                                                     draw.setnavi();
                                                   });
                                                 },
@@ -1191,8 +1206,7 @@ class _ProfilePageState extends State<ProfilePage>
                                               ))),
                                     ],
                                   ),
-                                )
-                          )*/
+                                ))
                     ],
                   ),
                 )

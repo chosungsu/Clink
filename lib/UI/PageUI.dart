@@ -12,16 +12,21 @@ import '../../../Tool/BGColor.dart';
 import '../../../Tool/Getx/linkspacesetting.dart';
 import '../../../Tool/TextSize.dart';
 import '../../../sheets/linksettingsheet.dart';
+import '../BACKENDPART/FIREBASE/PersonalVP.dart';
 import '../Page/Spacein.dart';
+import '../Tool/FlushbarStyle.dart';
 
 PageUI1(String id, TextEditingController controller) {
   final searchNode = FocusNode();
+  final linkspaceset = Get.put(linkspacesetting());
+
   return GetBuilder<linkspacesetting>(
       builder: (_) => StreamBuilder<QuerySnapshot>(
-            stream: firestore.collection('PageView').snapshots(),
+            stream: PageViewStreamParent(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                linkspaceset.indextreetmp.clear();
+                PageViewRes1(id, snapshot);
+                /*linkspaceset.indextreetmp.clear();
                 linkspaceset.indexcnt.clear();
                 final valuespace = snapshot.data!.docs;
                 for (var sp in valuespace) {
@@ -40,7 +45,7 @@ PageUI1(String id, TextEditingController controller) {
                 }
                 linkspaceset.indexcnt.sort(((a, b) {
                   return a.index.compareTo(b.index);
-                }));
+                }));*/
                 return linkspaceset.indexcnt.isEmpty
                     ? Flexible(
                         fit: FlexFit.tight,
@@ -106,72 +111,8 @@ PageUI1(String id, TextEditingController controller) {
                                                     ),
                                                     InkWell(
                                                       onTap: () async {
-                                                        await firestore
-                                                            .collection(
-                                                                'Pinchannel')
-                                                            .doc(id)
-                                                            .get()
-                                                            .then(
-                                                          (value) {
-                                                            if (value.get(
-                                                                    'username') ==
-                                                                usercode) {
-                                                              linkmadetreeplace(
-                                                                context,
-                                                                usercode,
-                                                                uiset
-                                                                    .pagelist[0]
-                                                                    .title,
-                                                                linkspaceset
-                                                                    .indexcnt[
-                                                                        index]
-                                                                    .placestr,
-                                                                linkspaceset
-                                                                    .indextreetmp[
-                                                                        index]
-                                                                    .length,
-                                                                linkspaceset
-                                                                    .indexcnt[
-                                                                        index]
-                                                                    .familycode,
-                                                                linkspaceset
-                                                                    .indexcnt[
-                                                                        index]
-                                                                    .type,
-                                                              );
-                                                            } else {
-                                                              if (value.get(
-                                                                      'setting') ==
-                                                                  'block') {
-                                                              } else {
-                                                                linkmadetreeplace(
-                                                                  context,
-                                                                  usercode,
-                                                                  uiset
-                                                                      .pagelist[
-                                                                          0]
-                                                                      .title,
-                                                                  linkspaceset
-                                                                      .indexcnt[
-                                                                          index]
-                                                                      .placestr,
-                                                                  linkspaceset
-                                                                      .indextreetmp[
-                                                                          index]
-                                                                      .length,
-                                                                  linkspaceset
-                                                                      .indexcnt[
-                                                                          index]
-                                                                      .familycode,
-                                                                  linkspaceset
-                                                                      .indexcnt[
-                                                                          index]
-                                                                      .type,
-                                                                );
-                                                              }
-                                                            }
-                                                          },
-                                                        );
+                                                        PageViewStreamChild1(
+                                                            context, id, index);
                                                       },
                                                       child: Icon(
                                                         Icons
@@ -185,61 +126,12 @@ PageUI1(String id, TextEditingController controller) {
                                                     ),
                                                     InkWell(
                                                       onTap: () async {
-                                                        await firestore
-                                                            .collection(
-                                                                'Pinchannel')
-                                                            .doc(id)
-                                                            .get()
-                                                            .then(
-                                                          (value) {
-                                                            if (value.get(
-                                                                    'username') ==
-                                                                usercode) {
-                                                              linkplacechangeoptions(
-                                                                  context,
-                                                                  index,
-                                                                  linkspaceset
-                                                                      .indexcnt[
-                                                                          index]
-                                                                      .placestr,
-                                                                  linkspaceset
-                                                                      .indexcnt[
-                                                                          index]
-                                                                      .uniquecode,
-                                                                  linkspaceset
-                                                                      .indexcnt[
-                                                                          index]
-                                                                      .type,
-                                                                  controller,
-                                                                  searchNode,
-                                                                  'pinchannel');
-                                                            } else {
-                                                              if (value.get(
-                                                                      'setting') ==
-                                                                  'block') {
-                                                              } else {
-                                                                linkplacechangeoptions(
-                                                                    context,
-                                                                    index,
-                                                                    linkspaceset
-                                                                        .indexcnt[
-                                                                            index]
-                                                                        .placestr,
-                                                                    linkspaceset
-                                                                        .indexcnt[
-                                                                            index]
-                                                                        .uniquecode,
-                                                                    linkspaceset
-                                                                        .indexcnt[
-                                                                            index]
-                                                                        .type,
-                                                                    controller,
-                                                                    searchNode,
-                                                                    'pinchannel');
-                                                              }
-                                                            }
-                                                          },
-                                                        );
+                                                        PageViewStreamChild2(
+                                                            context,
+                                                            id,
+                                                            index,
+                                                            controller,
+                                                            searchNode);
                                                       },
                                                       child: Icon(
                                                         Icons.more_horiz,
@@ -252,47 +144,13 @@ PageUI1(String id, TextEditingController controller) {
                                                 height: 10,
                                               ),
                                               StreamBuilder<QuerySnapshot>(
-                                                  stream: firestore
-                                                      .collection(
-                                                          'Pinchannelin')
-                                                      .snapshots(),
+                                                  stream:
+                                                      PageViewStreamParent2(),
                                                   builder:
                                                       ((context, snapshot) {
                                                     if (snapshot.hasData) {
-                                                      linkspaceset
-                                                          .indextreetmp[index]
-                                                          .clear();
-                                                      final valuespace =
-                                                          snapshot.data!.docs;
-                                                      for (var sp
-                                                          in valuespace) {
-                                                        spacename =
-                                                            sp.get('addname');
-                                                        if (linkspaceset
-                                                                .indexcnt[index]
-                                                                .familycode ==
-                                                            sp.get(
-                                                                'uniquecode')) {
-                                                          linkspaceset
-                                                              .indextreetmp[
-                                                                  index]
-                                                              .add(Linkspacetreepage(
-                                                                  subindex: sp.get(
-                                                                      'index'),
-                                                                  placestr:
-                                                                      spacename,
-                                                                  mainid: sp.id,
-                                                                  uniqueid: sp.get(
-                                                                      'uniquecode')));
-                                                        }
-                                                      }
-                                                      linkspaceset
-                                                          .indextreetmp[index]
-                                                          .sort(((a, b) {
-                                                        return a.subindex
-                                                            .compareTo(
-                                                                b.subindex);
-                                                      }));
+                                                      PageViewRes2(
+                                                          id, snapshot, index);
                                                       if (linkspaceset
                                                           .indextreetmp[index]
                                                           .isNotEmpty) {
@@ -333,11 +191,7 @@ PageUI1(String id, TextEditingController controller) {
                                                                           GestureDetector(
                                                                             onTap:
                                                                                 () async {
-                                                                              await firestore.collection('PageView').doc(linkspaceset.indextreetmp[index][index2].uniqueid).get().then(
-                                                                                (value) {
-                                                                                  Get.to(() => Spacein(id: linkspaceset.indextreetmp[index][index2].mainid, type: value.get('type'), spacename: linkspaceset.indextreetmp[index][index2].placestr), transition: Transition.downToUp);
-                                                                                },
-                                                                              );
+                                                                              PageViewStreamChild3(context, id, index, index2);
                                                                             },
                                                                             child: ContainerDesign(
                                                                                 color: draw.backgroundcolor,
@@ -363,18 +217,7 @@ PageUI1(String id, TextEditingController controller) {
                                                                                           ),
                                                                                           InkWell(
                                                                                             onTap: () async {
-                                                                                              await firestore.collection('Pinchannel').doc(id).get().then(
-                                                                                                (value) {
-                                                                                                  if (value.get('username') == usercode) {
-                                                                                                    linkplacechangeoptions(context, index2, linkspaceset.indextreetmp[index][index2].placestr, linkspaceset.indextreetmp[index][index2].uniqueid, 0, controller, searchNode, 'pinchannelin');
-                                                                                                  } else {
-                                                                                                    if (value.get('setting') == 'block') {
-                                                                                                    } else {
-                                                                                                      linkplacechangeoptions(context, index2, linkspaceset.indextreetmp[index][index2].placestr, linkspaceset.indextreetmp[index][index2].uniqueid, 0, controller, searchNode, 'pinchannelin');
-                                                                                                    }
-                                                                                                  }
-                                                                                                },
-                                                                                              );
+                                                                                              PageViewStreamChild4(context, id, index, index2, controller, searchNode);
                                                                                             },
                                                                                             child: Icon(
                                                                                               Icons.more_horiz,
