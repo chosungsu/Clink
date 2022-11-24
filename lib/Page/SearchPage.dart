@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import '../Enums/Variables.dart';
 import '../Tool/Getx/navibool.dart';
 import '../UI/SearchUI.dart';
@@ -34,6 +35,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
     controller = TextEditingController();
     controller2 = TextEditingController();
     Hive.box('user_setting').put('page_index', 1);
+    draw.navi = Hive.box('user_setting').get('which_menu_pick');
   }
 
   @override
@@ -51,7 +53,8 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
       backgroundColor: BGColor(),
       body: GetBuilder<navibool>(
         init: navibool(),
-        builder: (_) => draw.navi == 0
+        builder: (_) => draw.navi == 0 ||
+                MediaQuery.of(context).orientation == Orientation.landscape
             ? (draw.drawopen == true
                 ? Stack(
                     children: [

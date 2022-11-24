@@ -1,19 +1,14 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable
 
-import 'dart:io';
-import 'dart:math';
-
 import 'package:clickbyme/Tool/Getx/category.dart';
 import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:outline_gradient_button/outline_gradient_button.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';

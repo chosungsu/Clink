@@ -4,6 +4,7 @@ import 'package:clickbyme/Enums/Variables.dart';
 import 'package:clickbyme/Page/MYPage.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/Getx/uisetting.dart';
+import 'package:clickbyme/Tool/ResponsiveUI.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import 'subuiroute.dart';
 import '../Page/SearchPage.dart';
@@ -107,116 +109,107 @@ class _mainrouteState extends State<mainroute>
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-
     List pages = [
-      //HomePage(secondname: cal_share_person.secondname),
       const MYPage(),
       SearchPage(secondname: peopleadd.secondname),
       const ProfilePage(),
     ];
-    return GetBuilder<navibool>(
-        builder: (_) => GetBuilder<uisetting>(builder: ((_) {
-              return Scaffold(
-                backgroundColor: draw.backgroundcolor,
-                body: WillPopScope(
-                    onWillPop: Hive.box('user_setting').get('page_index') == 0
-                        ? _onWillPop
-                        : _onWillPop2,
-                    child: pages[uiset.pagenumber]),
-                bottomNavigationBar: draw.navi == 1
-                    ? Container(
-                        decoration: BoxDecoration(
-                            border: Border(
-                                top: BorderSide(
-                                    color: draw.backgroundcolor, width: 1))),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ADSHOW(),
-                            BottomNavigationBar(
-                              type: BottomNavigationBarType.fixed,
-                              onTap: (_index) async {
-                                //Handle button tap
-                                uiset.setloading(true);
-                                uiset.searchpagemove = '';
-                                uiset.textrecognizer = '';
-                                uiset.setmypagelistindex(
-                                    Hive.box('user_setting')
-                                            .get('currentmypage') ??
-                                        0);
-                                Hive.box('user_setting')
-                                    .put('page_index', _index);
-                                uiset.setpageindex(
-                                    Hive.box('user_setting').get('page_index'));
+    return OrientationBuilder(builder: ((context, orientation) {
+      return ResponsiveMainUI(
+          GetBuilder<navibool>(
+              builder: (_) => GetBuilder<uisetting>(builder: ((_) {
+                    return Scaffold(
+                      backgroundColor: draw.backgroundcolor,
+                      body: WillPopScope(
+                          onWillPop:
+                              Hive.box('user_setting').get('page_index') == 0
+                                  ? _onWillPop
+                                  : _onWillPop2,
+                          child: pages[uiset.pagenumber]),
+                      bottomNavigationBar: ADSHOW(),
+                    );
+                  }))),
+          GetBuilder<navibool>(
+              builder: (_) => GetBuilder<uisetting>(builder: ((_) {
+                    return Scaffold(
+                      backgroundColor: draw.backgroundcolor,
+                      body: WillPopScope(
+                          onWillPop:
+                              Hive.box('user_setting').get('page_index') == 0
+                                  ? _onWillPop
+                                  : _onWillPop2,
+                          child: pages[uiset.pagenumber]),
+                      bottomNavigationBar: draw.navi == 1
+                          ? Container(
+                              decoration: BoxDecoration(
+                                  border: Border(
+                                      top: BorderSide(
+                                          color: draw.backgroundcolor,
+                                          width: 1))),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ADSHOW(),
+                                  BottomNavigationBar(
+                                    type: BottomNavigationBarType.fixed,
+                                    onTap: (_index) async {
+                                      //Handle button tap
+                                      uiset.setloading(true);
+                                      uiset.searchpagemove = '';
+                                      uiset.textrecognizer = '';
+                                      uiset.setmypagelistindex(
+                                          Hive.box('user_setting')
+                                                  .get('currentmypage') ??
+                                              0);
+                                      Hive.box('user_setting')
+                                          .put('page_index', _index);
+                                      uiset.setpageindex(
+                                          Hive.box('user_setting')
+                                              .get('page_index'));
 
-                                uiset.setloading(false);
-                              },
-                              backgroundColor: draw.backgroundcolor,
-                              selectedFontSize: 18,
-                              unselectedFontSize: 18,
-                              selectedItemColor: Colors.purple.shade300,
-                              unselectedItemColor: draw.color_textstatus,
-                              showSelectedLabels: false,
-                              showUnselectedLabels: false,
-                              currentIndex: uiset.pagenumber,
-                              items: <BottomNavigationBarItem>[
-                                BottomNavigationBarItem(
-                                  backgroundColor: BGColor(),
-                                  icon: const Icon(
-                                    Icons.view_stream,
-                                    size: 25,
-                                  ),
-                                  label: '홈',
-                                ),
-                                BottomNavigationBarItem(
-                                  backgroundColor: BGColor(),
-                                  icon: const Icon(
-                                    Icons.search,
-                                    size: 25,
-                                  ),
-                                  label: '검색',
-                                ),
-                                BottomNavigationBarItem(
-                                  backgroundColor: BGColor(),
-                                  icon: const Icon(
-                                    Icons.settings,
-                                    size: 25,
-                                  ),
-                                  label: '설정',
-                                ),
-                                /*BottomNavigationBarItem(
-                                backgroundColor: BGColor(),
-                                icon: GetBuilder<notishow>(
-                                  builder: (_) => notilist.isread == true
-                                      ? const Icon(
-                                          Icons.notifications_none,
-                                          size: 25,
-                                        )
-                                      : Badge(
-                                          child: const Icon(
-                                            Icons.notifications_none,
-                                            size: 25,
-                                          ),
-                                        ),
-                                  /*RotationTransition(
-                                      turns: notilist.noticontroller,
-                                      child: Badge(
-                                        child: const Icon(
-                                          Icons.notifications_none,
+                                      uiset.setloading(false);
+                                    },
+                                    backgroundColor: draw.backgroundcolor,
+                                    selectedFontSize: 18,
+                                    unselectedFontSize: 18,
+                                    selectedItemColor: Colors.purple.shade300,
+                                    unselectedItemColor: draw.color_textstatus,
+                                    showSelectedLabels: false,
+                                    showUnselectedLabels: false,
+                                    currentIndex: uiset.pagenumber,
+                                    items: <BottomNavigationBarItem>[
+                                      BottomNavigationBarItem(
+                                        backgroundColor: BGColor(),
+                                        icon: const Icon(
+                                          Icons.view_stream,
                                           size: 25,
                                         ),
+                                        label: '홈',
                                       ),
-                                    )*/
-                                ),
-                                label: '알림',
-                              ),*/
-                              ],
-                            ),
-                          ],
-                        ))
-                    : ADSHOW(),
-              );
-            })));
+                                      BottomNavigationBarItem(
+                                        backgroundColor: BGColor(),
+                                        icon: const Icon(
+                                          Icons.search,
+                                          size: 25,
+                                        ),
+                                        label: '검색',
+                                      ),
+                                      BottomNavigationBarItem(
+                                        backgroundColor: BGColor(),
+                                        icon: const Icon(
+                                          Icons.settings,
+                                          size: 25,
+                                        ),
+                                        label: '설정',
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ))
+                          : ADSHOW(),
+                    );
+                  }))),
+          orientation);
+    }));
   }
 }

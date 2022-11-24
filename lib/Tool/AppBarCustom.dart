@@ -64,7 +64,9 @@ class AppBarCustom extends StatelessWidget {
                         builder: (_) => Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            draw.navi == 0
+                            draw.navi == 0 ||
+                                    MediaQuery.of(context).orientation ==
+                                        Orientation.landscape
                                 ? draw.drawopen == true ||
                                         Hive.box('user_setting')
                                                 .get('page_opened') ==
@@ -102,6 +104,7 @@ class AppBarCustom extends StatelessWidget {
                                         constraints: const BoxConstraints(),
                                         onPressed: () {
                                           setState(() {
+                                            draw.navi = 0;
                                             draw.setopen();
                                             Hive.box('user_setting')
                                                 .put('page_opened', true);

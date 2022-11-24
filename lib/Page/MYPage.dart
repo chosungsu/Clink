@@ -4,6 +4,7 @@ import 'package:clickbyme/Tool/Getx/uisetting.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import '../Enums/Variables.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/Loader.dart';
@@ -36,6 +37,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
     Hive.box('user_setting').put('page_index', 0);
     uiset.mypagelistindex = Hive.box('user_setting').get('currentmypage') ?? 0;
     scrollController = ScrollController();
+    draw.navi = Hive.box('user_setting').get('which_menu_pick');
   }
 
   @override
@@ -51,7 +53,9 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
         builder: (_) => Scaffold(
             backgroundColor: draw.backgroundcolor,
             body: SafeArea(
-              child: draw.navi == 0
+              child: draw.navi == 0 ||
+                      MediaQuery.of(context).orientation ==
+                          Orientation.landscape
                   ? (draw.drawopen == true
                       ? Stack(
                           children: [
@@ -94,53 +98,54 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
   }
 
   Widget GroupBody(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    return GetBuilder<navibool>(
-        builder: (_) => AnimatedContainer(
-            transform: Matrix4.translationValues(draw.xoffset, draw.yoffset, 0)
-              ..scale(draw.scalefactor),
-            duration: const Duration(milliseconds: 250),
-            child: GetBuilder<navibool>(
-              builder: (_) => GestureDetector(
-                onTap: () {
-                  draw.drawopen == true
-                      ? setState(() {
-                          draw.drawopen = false;
-                          draw.setclose();
-                          Hive.box('user_setting').put('page_opened', false);
-                        })
-                      : null;
-                },
-                child: SizedBox(
-                  height: height,
-                  child: Container(
-                      color: draw.backgroundcolor,
-                      child: Column(
-                        children: [
-                          GetBuilder<uisetting>(
-                            builder: (_) => AppBarCustom(
-                              title: '',
-                              righticon: true,
-                              doubleicon: true,
-                              iconname: Icons.notifications_none,
-                              textEditingController: _controller,
-                              focusNode: searchNode,
-                              myindex: uiset.mypagelistindex,
+    return OrientationBuilder(builder: ((context, orientation) {
+      return GetBuilder<navibool>(
+          builder: (_) => AnimatedContainer(
+              transform:
+                  Matrix4.translationValues(draw.xoffset, draw.yoffset, 0)
+                    ..scale(draw.scalefactor),
+              duration: const Duration(milliseconds: 250),
+              child: GetBuilder<navibool>(
+                builder: (_) => GestureDetector(
+                  onTap: () {
+                    draw.drawopen == true
+                        ? setState(() {
+                            draw.drawopen = false;
+                            draw.setclose();
+                            Hive.box('user_setting').put('page_opened', false);
+                          })
+                        : null;
+                  },
+                  child: SizedBox(
+                    child: Container(
+                        color: draw.backgroundcolor,
+                        child: Column(
+                          children: [
+                            GetBuilder<uisetting>(
+                              builder: (_) => AppBarCustom(
+                                title: '',
+                                righticon: true,
+                                doubleicon: true,
+                                iconname: Icons.notifications_none,
+                                textEditingController: _controller,
+                                focusNode: searchNode,
+                                myindex: uiset.mypagelistindex,
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          ScrollConfiguration(
-                              behavior: NoBehavior(),
-                              child: PageUI1(
-                                  uiset.pagelist[uiset.mypagelistindex].id
-                                      .toString(),
-                                  _controller)),
-                        ],
-                      )),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            ScrollConfiguration(
+                                behavior: NoBehavior(),
+                                child: PageUI1(
+                                    uiset.pagelist[uiset.mypagelistindex].id
+                                        .toString(),
+                                    _controller)),
+                          ],
+                        )),
+                  ),
                 ),
-              ),
-            )));
+              )));
+    }));
   }
 }
