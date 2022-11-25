@@ -8,8 +8,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info/package_info.dart';
-
-import '../Auth/GoogleSignInController.dart';
+import '../BACKENDPART/Auth/GoogleSignInController.dart';
 import '../Enums/Variables.dart';
 import '../LocalNotiPlatform/NotificationApi.dart';
 import '../Route/subuiroute.dart';

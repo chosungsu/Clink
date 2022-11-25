@@ -97,7 +97,7 @@ Se_Container0(double height, controller, searchNode) {
                       fillColor: draw.backgroundcolor,
                       border: InputBorder.none,
                       hintMaxLines: 2,
-                      hintText: '탐색하실 페이지 제목 입력',
+                      hintText: 'search'.tr,
                       hintStyle: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
@@ -138,7 +138,7 @@ Se_Container01(double height, controller, searchNode) {
                                   height: 40.h,
                                   child: Center(
                                     child: NeumorphicText(
-                                      '검색 결과 없음',
+                                      'result_search'.tr,
                                       style: NeumorphicStyle(
                                         shape: NeumorphicShape.flat,
                                         depth: 3,
@@ -285,7 +285,7 @@ Se_Container01(double height, controller, searchNode) {
                       height: 40.h,
                       child: Center(
                         child: NeumorphicText(
-                          '검색 결과 없음',
+                          'result_search'.tr,
                           style: NeumorphicStyle(
                             shape: NeumorphicShape.flat,
                             depth: 3,
@@ -321,7 +321,7 @@ Se_Container1(
               Flexible(
                 fit: FlexFit.tight,
                 child: Text(
-                  '즐겨찾기 페이지',
+                  'favoritetitle'.tr,
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: contentTitleTextsize(),
@@ -353,7 +353,7 @@ Se_Container11(double height, TextEditingController controller, searchNode) {
                             height: 40.h,
                             child: Center(
                               child: NeumorphicText(
-                                '즐겨찾기 설정하신 페이지가 없네요',
+                                'result_search'.tr,
                                 style: NeumorphicStyle(
                                   shape: NeumorphicShape.flat,
                                   depth: 3,
@@ -470,7 +470,7 @@ Se_Container11(double height, TextEditingController controller, searchNode) {
                       height: 40.h,
                       child: Center(
                         child: NeumorphicText(
-                          '즐겨찾기 설정하신 페이지가 없네요',
+                          'result_search'.tr,
                           style: NeumorphicStyle(
                             shape: NeumorphicShape.flat,
                             depth: 3,
@@ -509,7 +509,7 @@ Se_Container3(
               Flexible(
                 fit: FlexFit.tight,
                 child: Text(
-                  '페이지 팁',
+                  'pagetip'.tr,
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: contentTitleTextsize(),

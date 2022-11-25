@@ -97,7 +97,7 @@ class _AddTemplateState extends State<AddTemplate>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           AppBarCustom(
-                            title: '스페이스 리스트',
+                            title: 'spaceaddtitle'.tr,
                             righticon: false,
                             doubleicon: false,
                             iconname: Icons.add_box,
@@ -137,7 +137,7 @@ class _AddTemplateState extends State<AddTemplate>
                   height: 20,
                 ),
                 Text(
-                  '아래 스페이스 중 원하시는 스페이스를 선택하시면 됩니다.',
+                  'spaceaddinfo'.tr,
                   style: TextStyle(
                     fontSize: contentTextsize(),
                     color: draw.color_textstatus,
@@ -184,7 +184,7 @@ class _AddTemplateState extends State<AddTemplate>
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        '완료',
+                        'spaceaddcompletebtn'.tr,
                         style: TextStyle(
                           fontSize: contentTextsize(),
                           color: TextColor(),
@@ -200,10 +200,10 @@ class _AddTemplateState extends State<AddTemplate>
 
   Page1() {
     List<String> listdata = [
-      'URL, 파일, 사진 등을 담을 수 있는 스페이스',
-      '일정정리를 도와주는 캘린더 스페이스',
-      'Todo 리스트 스페이스',
-      '메모 스페이스'
+      'spaceaddone'.tr,
+      'spaceaddtwo'.tr,
+      'spaceaddthird'.tr,
+      'spaceaddforth'.tr,
     ];
     return Column(
       children: [

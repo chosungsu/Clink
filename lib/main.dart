@@ -5,19 +5,17 @@ import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Route/initScreenLoading.dart';
 import 'package:clickbyme/Tool/ResponsiveUI.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 import 'package:outline_gradient_button/outline_gradient_button.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:status_bar_control/status_bar_control.dart';
+import 'BACKENDPART/Locale/Locale.dart';
 import 'Enums/Variables.dart';
 import 'Route/subuiroute.dart';
 import 'LocalNotiPlatform/NotificationApi.dart';
@@ -26,23 +24,15 @@ import 'Tool/Getx/notishow.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  KakaoSdk.init(nativeAppKey: '	caac43875f322f45a8cec21c52741a24');
   MobileAds.instance.initialize();
   await Firebase.initializeApp();
   await Hive.initFlutter();
   await Hive.openBox('user_info');
   await Hive.openBox('user_setting');
   NotificationApi.init(initScheduled: true);
-  //await MongoDB.connect();
   runApp(
     const MyApp(),
   );
-  /*runApp(
-    DevicePreview(
-      enabled: !kReleaseMode,
-      builder: (context) => const MyApp(), // Wrap your app
-    ),
-  );*/
 }
 
 class MyApp extends StatelessWidget {
@@ -54,9 +44,9 @@ class MyApp extends StatelessWidget {
     return ResponsiveSizer(builder: ((p0, p1, p2) {
       return GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        //useInheritedMediaQuery: true,
-        //locale: DevicePreview.locale(context),
-        //builder: DevicePreview.appBuilder,
+        translations: Languages(),
+        locale: Get.deviceLocale,
+        fallbackLocale: Locale('en', 'US'),
         home: const SplashPage(),
       );
     }));

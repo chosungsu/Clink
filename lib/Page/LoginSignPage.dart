@@ -3,23 +3,19 @@
 import 'package:clickbyme/Tool/FlushbarStyle.dart';
 import 'package:clickbyme/Tool/Getx/navibool.dart';
 import 'package:clickbyme/Tool/ResponsiveUI.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:sign_button/constants.dart';
 import 'package:sign_button/create_button.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../Auth/GoogleSignInController.dart';
-import '../Enums/Variables.dart';
+import '../BACKENDPART/Auth/GoogleSignInController.dart';
 import '../Route/subuiroute.dart';
 import '../Tool/AndroidIOS.dart';
 import '../Tool/Loader.dart';
 import '../Tool/TextSize.dart';
-import '../UI/Home/Widgets/CreateCalandmemo.dart';
 
 class LoginSignPage extends StatefulWidget {
   const LoginSignPage({Key? key, required this.first}) : super(key: key);

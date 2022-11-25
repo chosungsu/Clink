@@ -1,4 +1,3 @@
-import 'package:another_flushbar/flushbar.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
@@ -13,9 +12,8 @@ import 'package:local_auth_ios/types/auth_messages_ios.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
-import '../Tool/FlushbarStyle.dart';
-import '../Tool/IconBtn.dart';
-import 'package:local_auth/error_codes.dart' as auth_error;
+import '../../Tool/FlushbarStyle.dart';
+import '../../Tool/IconBtn.dart';
 
 class SecureAuth extends StatefulWidget {
   const SecureAuth({

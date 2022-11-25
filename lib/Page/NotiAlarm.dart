@@ -86,7 +86,7 @@ class _NotiAlarmState extends State<NotiAlarm>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           AppBarCustom(
-                            title: '알림',
+                            title: 'notipagetitle'.tr,
                             righticon: true,
                             doubleicon: true,
                             iconname: Icons.keyboard_double_arrow_up,
@@ -145,7 +145,7 @@ class _NotiAlarmState extends State<NotiAlarm>
               });
             },
             child: Text(
-              '모두 읽음표시',
+              'notipageread'.tr,
               style: TextStyle(
                   color: Colors.blue,
                   fontWeight: FontWeight.bold,
@@ -168,7 +168,7 @@ class _NotiAlarmState extends State<NotiAlarm>
           return notilist.listad.isEmpty
               ? Center(
                   child: NeumorphicText(
-                    '텅! 비어있어요~',
+                    'notisearch'.tr,
                     style: NeumorphicStyle(
                       shape: NeumorphicShape.flat,
                       depth: 3,
@@ -314,7 +314,7 @@ class _NotiAlarmState extends State<NotiAlarm>
             children: [
               Center(
                 child: NeumorphicText(
-                  '생성된 푸시알림이 아직 없습니다.',
+                  'notisearch'.tr,
                   style: NeumorphicStyle(
                       shape: NeumorphicShape.flat,
                       depth: 3,

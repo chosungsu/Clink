@@ -819,7 +819,7 @@ class _ProfilePageState extends State<ProfilePage>
                   width: 10,
                 ),
                 Text(
-                  '앱 UI 설정',
+                  'profilepagetitleone'.tr,
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: contentTextsize(),
@@ -841,6 +841,11 @@ class _ProfilePageState extends State<ProfilePage>
   }
 
   Opt1_body() {
+    final List<String> list_app_setting = <String>[
+      'profilepagetitleonebyone'.tr,
+      'profilepagetitleonebytwo'.tr,
+      'profilepagetitleonebythird'.tr,
+    ];
     return GetBuilder<navibool>(
         builder: (_) => SizedBox(
               child: ListView.builder(
@@ -1291,7 +1296,7 @@ class _ProfilePageState extends State<ProfilePage>
                   width: 10,
                 ),
                 Text(
-                  '공지사항 및 문의',
+                  'profilepagetitletwo'.tr,
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: contentTextsize(),
@@ -1335,7 +1340,7 @@ class _ProfilePageState extends State<ProfilePage>
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                '공지사항',
+                                'profilepagetitletwobyone'.tr,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: contentTextsize(),
@@ -1363,7 +1368,7 @@ class _ProfilePageState extends State<ProfilePage>
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                '개발자에게 문의하기',
+                                'profilepagetitletwobytwo'.tr,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: contentTextsize(),
@@ -1406,7 +1411,7 @@ class _ProfilePageState extends State<ProfilePage>
                   width: 10,
                 ),
                 Text(
-                  '실험실',
+                  'profilepagetitlethird'.tr,
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: contentTextsize(),
@@ -1454,7 +1459,7 @@ class _ProfilePageState extends State<ProfilePage>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '넥스트버전',
+                          'profilepagetitlethirdbyone'.tr,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: contentTextsize(),
@@ -1497,7 +1502,7 @@ class _ProfilePageState extends State<ProfilePage>
                   width: 10,
                 ),
                 Text(
-                  '친구추가',
+                  'profilepagetitleforth'.tr,
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: contentTextsize(),
@@ -1540,7 +1545,7 @@ class _ProfilePageState extends State<ProfilePage>
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                '친구검색하기',
+                                'profilepagetitleforthbyone'.tr,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: contentTextsize(),
@@ -1571,7 +1576,7 @@ class _ProfilePageState extends State<ProfilePage>
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                '친구목록',
+                                'profilepagetitleforthbytwo'.tr,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: contentTextsize(),
@@ -1613,7 +1618,7 @@ class _ProfilePageState extends State<ProfilePage>
                   width: 10,
                 ),
                 Text(
-                  '약관 및 정책',
+                  'profilepagetitlefifth'.tr,
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: contentTextsize(),
@@ -1635,6 +1640,10 @@ class _ProfilePageState extends State<ProfilePage>
   }
 
   Opt5_body() {
+    final List<String> list_user_setting = <String>[
+      'profilepagetitlefifthbyone'.tr,
+      'profilepagetitlefifthbytwo'.tr,
+    ];
     return SizedBox(
       child: ListView.builder(
           physics: const NeverScrollableScrollPhysics(),

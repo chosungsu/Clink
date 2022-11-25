@@ -8,10 +8,8 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
 
-import '../Enums/Variables.dart';
-import '../Route/subuiroute.dart';
-import '../Route/initScreenLoading.dart';
-import '../mongoDB/mongodatabase.dart';
+import '../../Enums/Variables.dart';
+import '../../Route/initScreenLoading.dart';
 
 class GoogleSignInController extends GetxController {
   final _googleSignIn = GoogleSignIn();
