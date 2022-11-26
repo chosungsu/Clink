@@ -5,10 +5,11 @@ class Linkpage {
 }
 
 class Linkspacepageenter {
-  final String placeentercode;
+  final String? placeentercode;
+  final String? addname;
   final String? substrcode;
 
-  Linkspacepageenter({required this.placeentercode, this.substrcode});
+  Linkspacepageenter({this.placeentercode, this.addname, this.substrcode});
 }
 
 class Linkspacepage {

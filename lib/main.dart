@@ -2,7 +2,7 @@
 
 import 'package:clickbyme/DB/PushNotification.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
-import 'package:clickbyme/Route/initScreenLoading.dart';
+import 'package:clickbyme/FRONTENDPART/Route/initScreenLoading.dart';
 import 'package:clickbyme/Tool/ResponsiveUI.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,7 +17,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import 'BACKENDPART/Locale/Locale.dart';
 import 'Enums/Variables.dart';
-import 'Route/subuiroute.dart';
+import 'FRONTENDPART/Route/subuiroute.dart';
 import 'LocalNotiPlatform/NotificationApi.dart';
 import 'Tool/Getx/PeopleAdd.dart';
 import 'Tool/Getx/notishow.dart';

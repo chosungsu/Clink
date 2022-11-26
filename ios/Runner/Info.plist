@@ -164,6 +164,8 @@
     </array>
 	<key>NSContactsUsageDescription</key>
 	<string>contacts</string>
+  <key>NSCalendarUsageDescription</key> 
+  <string>To Add Todo in Calendar</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>NSPhotoLibraryUsageDescription</key>

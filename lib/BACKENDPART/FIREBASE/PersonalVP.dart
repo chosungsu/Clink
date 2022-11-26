@@ -6,11 +6,12 @@ import 'package:get/get.dart';
 import '../../DB/Linkpage.dart';
 import '../../DB/PageList.dart';
 import '../../Enums/Variables.dart';
-import '../../Page/Spacein.dart';
+import '../../FRONTENDPART/Page/Spacein.dart';
 import '../../Tool/FlushbarStyle.dart';
 import '../../Tool/Getx/category.dart';
 import '../../Tool/Getx/linkspacesetting.dart';
 import '../../Tool/Getx/uisetting.dart';
+import '../../UI/Home/firstContentNet/DayContentHome.dart';
 import '../../sheets/linksettingsheet.dart';
 
 PageViewStreamParent() {
@@ -182,6 +183,31 @@ PageViewStreamChild4(context, id, index, index2, controller, searchNode) async {
               controller,
               searchNode,
               'pinchannelin');
+        }
+      }
+    },
+  );
+}
+
+PageViewStreamParent3() {
+  return firestore.collection('Calendar').get();
+}
+
+PageViewStreamChild5(context, id) async {
+  final linkspaceset = Get.put(linkspacesetting());
+
+  await firestore.collection('Calendar').get().then(
+    (value) {
+      linkspaceset.inindextreetmp.clear();
+      if (value.docs.isEmpty) {
+      } else {
+        final valuespace = value.docs;
+        for (var sp in valuespace) {
+          spacename = sp.get('parentid');
+          if (spacename == id) {
+            linkspaceset.inindextreetmp
+                .add(Linkspacepageenter(addname: sp.get('calname')));
+          }
         }
       }
     },

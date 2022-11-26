@@ -1,18 +1,18 @@
 // ignore_for_file: body_might_complete_normally_nullable, non_constant_identifier_names, unused_local_variable
 
-import 'package:clickbyme/Route/subuiroute.dart';
+import 'package:clickbyme/FRONTENDPART/Route/subuiroute.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import '../DB/PageList.dart';
-import '../Enums/Variables.dart';
-import '../LocalNotiPlatform/NotificationApi.dart';
-import '../Tool/Getx/PeopleAdd.dart';
-import '../Tool/Getx/memosetting.dart';
-import '../Tool/Getx/notishow.dart';
-import '../Tool/Getx/uisetting.dart';
+import '../../DB/PageList.dart';
+import '../../Enums/Variables.dart';
+import '../../LocalNotiPlatform/NotificationApi.dart';
+import '../../Tool/Getx/PeopleAdd.dart';
+import '../../Tool/Getx/memosetting.dart';
+import '../../Tool/Getx/notishow.dart';
+import '../../Tool/Getx/uisetting.dart';
 
 Future<Widget?> initScreen() async {
   final peopleadd = Get.put(PeopleAdd());

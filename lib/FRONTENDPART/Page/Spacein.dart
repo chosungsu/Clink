@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names
 
+import 'package:clickbyme/BACKENDPART/FIREBASE/PersonalVP.dart';
 import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
 import 'package:clickbyme/Tool/Getx/uisetting.dart';
 import 'package:clickbyme/sheets/linksettingsheet.dart';
@@ -9,15 +10,19 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:status_bar_control/status_bar_control.dart';
-import '../Enums/Variables.dart';
+import '../../DB/Event.dart';
+import '../../Enums/Variables.dart';
+import '../../Tool/Getx/calendarsetting.dart';
+import '../../UI/Home/firstContentNet/DayContentHome.dart';
 import '../Route/subuiroute.dart';
-import '../Tool/BGColor.dart';
-import '../Tool/Getx/navibool.dart';
-import '../Tool/Loader.dart';
-import '../Tool/NoBehavior.dart';
-import '../Tool/AppBarCustom.dart';
-import '../UI/SpaceinUI.dart';
+import '../../Tool/BGColor.dart';
+import '../../Tool/Getx/navibool.dart';
+import '../../Tool/Loader.dart';
+import '../../Tool/NoBehavior.dart';
+import '../../Tool/AppBarCustom.dart';
+import '../../UI/SpaceinUI.dart';
 
 class Spacein extends StatefulWidget {
   const Spacein(
@@ -33,14 +38,31 @@ class Spacein extends StatefulWidget {
 
 class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
   var scrollController;
+  bool isinit = false;
   ValueNotifier<bool> isDialOpen = ValueNotifier(false);
   final linkspaceset = Get.put(linkspacesetting());
+  final controll_cals = Get.put(calendarsetting());
+  late DateTime fromDate = DateTime.now();
+  late DateTime toDate = DateTime.now();
+  final DateTime _selectedDay = DateTime.now();
+  final DateTime _focusedDay = DateTime.now();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    initializeDateFormatting(Localizations.localeOf(context).languageCode);
+  }
 
   @override
   void initState() {
     super.initState();
     Hive.box('user_setting').put('widgetid', widget.id);
     scrollController = ScrollController();
+    fromDate = DateTime.now();
+    toDate = DateTime.now().add(const Duration(hours: 2));
+    controll_cals.events = {};
+    controll_cals.selectedDay = _selectedDay;
+    controll_cals.focusedDay = _focusedDay;
   }
 
   @override
@@ -101,15 +123,45 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
                       child: Column(
                         children: [
                           widget.type == 1
-                              ? GetBuilder<uisetting>(
-                                  builder: (_) => AppBarCustom(
-                                    title: widget.spacename,
-                                    righticon: false,
-                                    doubleicon: false,
-                                    iconname: Icons.download,
-                                    mainid: widget.id,
-                                  ),
-                                )
+                              ? FutureBuilder(
+                                  future: firestore
+                                      .collection('Calendar')
+                                      .get()
+                                      .then((value) {
+                                    if (value.docs.isNotEmpty) {
+                                      final valuespace = value.docs;
+                                      for (int i = 0;
+                                          i < valuespace.length;
+                                          i++) {
+                                        if (value.docs[i].get('parentid') ==
+                                            widget.id) {
+                                          setState(() {
+                                            isinit = true;
+                                          });
+                                        }
+                                      }
+                                    } else {
+                                      setState(() {
+                                        isinit = false;
+                                      });
+                                    }
+                                  }),
+                                  builder: ((context, snapshot) {
+                                    PageViewStreamChild5(context, widget.id);
+                                    if (isinit == true) {
+                                      return const SizedBox();
+                                    } else {
+                                      return GetBuilder<uisetting>(
+                                        builder: (_) => AppBarCustom(
+                                          title: widget.spacename,
+                                          righticon: false,
+                                          doubleicon: false,
+                                          iconname: Icons.download,
+                                          mainid: widget.id,
+                                        ),
+                                      );
+                                    }
+                                  }))
                               : GetBuilder<uisetting>(
                                   builder: (_) => AppBarCustom(
                                     title: widget.spacename,
@@ -124,7 +176,7 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
                           ),
                           ScrollConfiguration(
                               behavior: NoBehavior(),
-                              child: SpaceinUI(widget.id, widget.type)),
+                              child: SpaceinUI(widget.id, widget.type, isinit)),
                         ],
                       )),
                 ),
@@ -140,6 +192,9 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
         StatusBarControl.setColor(draw.backgroundcolor, animated: true);
         draw.setnavi();
         Hive.box('user_setting').put('widgetid', null);
+        setState(() {
+          isinit = false;
+        });
         Get.back();
       }
 

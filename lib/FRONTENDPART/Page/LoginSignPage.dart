@@ -11,11 +11,11 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:sign_button/constants.dart';
 import 'package:sign_button/create_button.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../BACKENDPART/Auth/GoogleSignInController.dart';
+import '../../BACKENDPART/Auth/GoogleSignInController.dart';
 import '../Route/subuiroute.dart';
-import '../Tool/AndroidIOS.dart';
-import '../Tool/Loader.dart';
-import '../Tool/TextSize.dart';
+import '../../Tool/AndroidIOS.dart';
+import '../../Tool/Loader.dart';
+import '../../Tool/TextSize.dart';
 
 class LoginSignPage extends StatefulWidget {
   const LoginSignPage({Key? key, required this.first}) : super(key: key);

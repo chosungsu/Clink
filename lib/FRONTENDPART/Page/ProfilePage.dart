@@ -12,17 +12,17 @@ import 'package:package_info/package_info.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:store_redirect/store_redirect.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../Enums/Variables.dart';
-import '../Tool/ContainerDesign.dart';
-import '../Tool/FlushbarStyle.dart';
-import '../Tool/Getx/navibool.dart';
-import '../Tool/Getx/uisetting.dart';
-import '../Tool/NoBehavior.dart';
-import '../Tool/AppBarCustom.dart';
-import '../UI/ShowLicense.dart';
-import '../sheets/addgroupmember.dart';
-import '../sheets/settingpagesheets.dart';
-import '../sheets/userinfotalk.dart';
+import '../../Enums/Variables.dart';
+import '../../Tool/ContainerDesign.dart';
+import '../../Tool/FlushbarStyle.dart';
+import '../../Tool/Getx/navibool.dart';
+import '../../Tool/Getx/uisetting.dart';
+import '../../Tool/NoBehavior.dart';
+import '../../Tool/AppBarCustom.dart';
+import '../../UI/ShowLicense.dart';
+import '../../sheets/addgroupmember.dart';
+import '../../sheets/settingpagesheets.dart';
+import '../../sheets/userinfotalk.dart';
 import 'DrawerScreen.dart';
 
 class ProfilePage extends StatefulWidget {

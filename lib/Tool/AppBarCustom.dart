@@ -5,11 +5,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 
 import '../DB/PageList.dart';
 import '../Enums/Variables.dart';
-import '../Route/subuiroute.dart';
+import '../FRONTENDPART/Route/subuiroute.dart';
 import '../sheets/settingpagesheets.dart';
 import 'Getx/linkspacesetting.dart';
 import 'Getx/navibool.dart';
@@ -231,20 +232,25 @@ class AppBarCustom extends StatelessWidget {
                                                             ],
                                                           ))
                                                   : const SizedBox()
-                                              : Text(
-                                                  title.toString(),
-                                                  maxLines: 1,
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize:
-                                                          mainTitleTextsize(),
-                                                      color: draw
-                                                          .color_textstatus),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
+                                              : Flexible(
+                                                  fit: FlexFit.tight,
+                                                  child: SizedBox(
+                                                    child: Text(
+                                                      title.toString(),
+                                                      maxLines: 1,
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize:
+                                                              mainTitleTextsize(),
+                                                          color: draw
+                                                              .color_textstatus),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  )),
                                           righticon == true
                                               ? Row(
                                                   children: [

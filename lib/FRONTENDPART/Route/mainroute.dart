@@ -1,7 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, camel_case_types
 
 import 'package:clickbyme/Enums/Variables.dart';
-import 'package:clickbyme/Page/MYPage.dart';
+import 'package:clickbyme/FRONTENDPART/Page/MYPage.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/ResponsiveUI.dart';
@@ -17,9 +17,9 @@ import 'package:status_bar_control/status_bar_control.dart';
 import 'subuiroute.dart';
 import '../Page/SearchPage.dart';
 import '../Page/ProfilePage.dart';
-import '../Tool/AndroidIOS.dart';
-import '../Tool/Getx/PeopleAdd.dart';
-import '../Tool/Getx/navibool.dart';
+import '../../Tool/AndroidIOS.dart';
+import '../../Tool/Getx/PeopleAdd.dart';
+import '../../Tool/Getx/navibool.dart';
 
 class mainroute extends StatefulWidget {
   const mainroute({Key? key, required this.index}) : super(key: key);

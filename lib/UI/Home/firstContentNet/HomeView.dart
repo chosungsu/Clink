@@ -10,13 +10,12 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import '../../../DB/Linkpage.dart';
-import '../../../Route/subuiroute.dart';
+import '../../../FRONTENDPART/Route/subuiroute.dart';
 import '../../../Tool/AppBarCustom.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/Getx/linkspacesetting.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
-import '../../../mongoDB/mongodatabase.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key, required this.where, required this.link})

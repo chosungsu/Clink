@@ -11,7 +11,7 @@ import 'package:package_info/package_info.dart';
 import '../BACKENDPART/Auth/GoogleSignInController.dart';
 import '../Enums/Variables.dart';
 import '../LocalNotiPlatform/NotificationApi.dart';
-import '../Route/subuiroute.dart';
+import '../FRONTENDPART/Route/subuiroute.dart';
 import '../Tool/BGColor.dart';
 import '../Tool/ContainerDesign.dart';
 import '../Tool/FlushbarStyle.dart';

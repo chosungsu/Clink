@@ -1,18 +1,17 @@
-import 'package:flutter/widgets.dart';
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import 'package:rxdart/subjects.dart';
 
-import '../Route/subuiroute.dart';
+import '../FRONTENDPART/Route/subuiroute.dart';
 import '../UI/Home/firstContentNet/DayContentHome.dart';
 import '../UI/Home/firstContentNet/DayNoteHome.dart';
 
 class NotificationApi {
   NotificationApi();
   static final _notifications = FlutterLocalNotificationsPlugin();
-  static final BehaviorSubject<String> behaviorSubject = BehaviorSubject();
 
   static Future cancelNotification({required int id}) async {
     await _notifications.cancel(id);
@@ -173,7 +172,7 @@ class NotificationApi {
                   ),
               transition: Transition.downToUp);
         } else {
-          Get.to(() => DayContentHome(id: payload),
+          Get.to(() => DayContentHome(payload),
               transition: Transition.downToUp);
         }
       } else {}
@@ -198,7 +197,7 @@ class NotificationApi {
         } else {
           GoToMain();
           Future.delayed(const Duration(seconds: 1), () {
-            Get.to(() => DayContentHome(id: details.payload.toString()),
+            Get.to(() => DayContentHome(details.payload.toString()),
                 transition: Transition.downToUp);
           });
         }

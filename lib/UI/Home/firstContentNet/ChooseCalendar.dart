@@ -13,7 +13,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import '../../../Route/subuiroute.dart';
+import '../../../FRONTENDPART/Route/subuiroute.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/FlushbarStyle.dart';
 import '../../../Tool/Getx/PeopleAdd.dart';
@@ -650,8 +650,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                             onPressed: () {
                                               Get.to(
                                                 () => DayContentHome(
-                                                  id: snapshot
-                                                      .data!.docs[index].id,
+                                                  snapshot.data!.docs[index].id,
                                                   /*share: snapshot.data!
                                                       .docs[index]['share'],
                                                   origin: snapshot.data!
@@ -1122,7 +1121,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                             onPressed: () {
                                               Get.to(
                                                 () => DayContentHome(
-                                                  id: snapshot.data!.docs[index]
+                                                  snapshot.data!.docs[index]
                                                       ['doc'],
                                                   /*share: snapshot.data!
                                                       .docs[index]['share'],

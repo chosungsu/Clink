@@ -9,14 +9,14 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:status_bar_control/status_bar_control.dart';
-import '../BACKENDPART/FIREBASE/PersonalVP.dart';
+import '../../BACKENDPART/FIREBASE/PersonalVP.dart';
 import '../Route/mainroute.dart';
 import '../Route/subuiroute.dart';
-import '../Tool/AppBarCustom.dart';
-import '../Tool/Getx/navibool.dart';
-import '../Tool/NoBehavior.dart';
-import '../UI/Home/firstContentNet/ChooseCalendar.dart';
-import '../UI/Home/firstContentNet/DayNoteHome.dart';
+import '../../Tool/AppBarCustom.dart';
+import '../../Tool/Getx/navibool.dart';
+import '../../Tool/NoBehavior.dart';
+import '../../UI/Home/firstContentNet/ChooseCalendar.dart';
+import '../../UI/Home/firstContentNet/DayNoteHome.dart';
 
 class NotiAlarm extends StatefulWidget {
   const NotiAlarm({

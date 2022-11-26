@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
-import '../Enums/Variables.dart';
-import '../Tool/Getx/PeopleAdd.dart';
-import '../Tool/Getx/navibool.dart';
+import '../../Enums/Variables.dart';
+import '../../Tool/Getx/PeopleAdd.dart';
+import '../../Tool/Getx/navibool.dart';
 import '../Route/mainroute.dart';
 
 class DrawerScreen extends StatefulWidget {

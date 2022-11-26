@@ -12,7 +12,7 @@ import '../Tool/ContainerDesign.dart';
 import '../Tool/FlushbarStyle.dart';
 import '../Tool/TextSize.dart';
 import 'package:flutter/material.dart';
-import '../Route/subuiroute.dart';
+import '../FRONTENDPART/Route/subuiroute.dart';
 import '../Tool/AndroidIOS.dart';
 import '../Tool/Getx/memosetting.dart';
 import '../Tool/Getx/uisetting.dart';

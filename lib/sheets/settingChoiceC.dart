@@ -7,7 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
-import '../Route/subuiroute.dart';
+import '../FRONTENDPART/Route/subuiroute.dart';
 import '../Tool/AndroidIOS.dart';
 import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/PeopleAdd.dart';

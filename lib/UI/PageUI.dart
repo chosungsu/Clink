@@ -13,7 +13,7 @@ import '../../../Tool/Getx/linkspacesetting.dart';
 import '../../../Tool/TextSize.dart';
 import '../../../sheets/linksettingsheet.dart';
 import '../BACKENDPART/FIREBASE/PersonalVP.dart';
-import '../Page/Spacein.dart';
+import '../FRONTENDPART/Page/Spacein.dart';
 import '../Tool/FlushbarStyle.dart';
 
 PageUI1(String id, TextEditingController controller) {

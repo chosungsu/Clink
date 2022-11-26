@@ -2,10 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../../DB/Event.dart';
 import '../../LocalNotiPlatform/NotificationApi.dart';
 import 'PeopleAdd.dart';
 
 class calendarsetting extends GetxController {
+  List share = [];
+  String calname = '';
+  Map<DateTime, List<Event>> events = {};
   int showcalendar = Hive.box('user_setting').get('viewcalsettings') ?? 0;
   int themecalendar = Hive.box('user_setting').get('origorpastel') ?? 0;
   int stylecalendar = Hive.box('user_setting').get('origordday') ?? 0;
@@ -38,6 +42,18 @@ class calendarsetting extends GetxController {
       repeatwhile = Hive.box('user_setting').get('repeatwhile');
     }
 
+    update();
+    notifyChildrens();
+  }
+
+  void setcalname(what) {
+    calname = what;
+    update();
+    notifyChildrens();
+  }
+
+  void setshare(what) {
+    share = what;
     update();
     notifyChildrens();
   }

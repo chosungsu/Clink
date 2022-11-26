@@ -445,7 +445,7 @@ stream1(
                             onTap: () {
                               Get.to(
                                 () => DayContentHome(
-                                  id: contentmy[index].code,
+                                  contentmy[index].code,
                                 ),
                                 transition: Transition.rightToLeft,
                               );
@@ -663,7 +663,7 @@ stream2(
                                   //수정 및 삭제 시트 띄우기
                                   Get.to(
                                     () => DayContentHome(
-                                      id: contentshare[index].code,
+                                      contentshare[index].code,
                                     ),
                                     transition: Transition.rightToLeft,
                                   );

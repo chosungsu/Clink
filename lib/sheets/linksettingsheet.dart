@@ -3,6 +3,7 @@
 import 'package:clickbyme/Tool/Getx/category.dart';
 import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_calendar/device_calendar.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import '../DB/Linkpage.dart';
 import '../Enums/Variables.dart';
-import '../Route/subuiroute.dart';
+import '../FRONTENDPART/Route/subuiroute.dart';
 import '../Tool/AndroidIOS.dart';
 import '../Tool/BGColor.dart';
 import '../Tool/ContainerDesign.dart';
@@ -23,7 +24,6 @@ import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/TextSize.dart';
 import '../UI/Home/firstContentNet/HomeView.dart';
-import '../mongoDB/mongodatabase.dart';
 
 linksetting(
   BuildContext context,
@@ -202,19 +202,6 @@ content(
                       onPressed: () async {
                         Navigator.of(context).pop();
                         var id;
-                        await MongoDB.delete(
-                            collectionname: 'pinchannel',
-                            deletelist: {
-                              'username': usercode,
-                              'linkname': name,
-                            });
-                        await MongoDB.add(
-                            collectionname: 'pinchannel',
-                            addlist: {
-                              'username': usercode,
-                              'linkname': name,
-                              'color': linkspacesetting().color.value.toInt()
-                            });
                         await firestore
                             .collection('Pinchannel')
                             .get()

@@ -9,17 +9,17 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:status_bar_control/status_bar_control.dart';
-import '../DB/PageList.dart';
-import '../Enums/Variables.dart';
+import '../../DB/PageList.dart';
+import '../../Enums/Variables.dart';
 import '../Route/subuiroute.dart';
-import '../Tool/AppBarCustom.dart';
-import '../Tool/FlushbarStyle.dart';
-import '../Tool/Getx/category.dart';
-import '../Tool/Getx/navibool.dart';
-import '../Tool/Getx/uisetting.dart';
-import '../Tool/NoBehavior.dart';
-import '../Tool/TextSize.dart';
-import '../sheets/linksettingsheet.dart';
+import '../../Tool/AppBarCustom.dart';
+import '../../Tool/FlushbarStyle.dart';
+import '../../Tool/Getx/category.dart';
+import '../../Tool/Getx/navibool.dart';
+import '../../Tool/Getx/uisetting.dart';
+import '../../Tool/NoBehavior.dart';
+import '../../Tool/TextSize.dart';
+import '../../sheets/linksettingsheet.dart';
 
 class AddTemplate extends StatefulWidget {
   AddTemplate({Key? key, required this.id, indexcnt}) : super(key: key);

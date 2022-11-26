@@ -35,14 +35,11 @@ dependencies:
   cupertino_icons: 
   intl: 
   responsive_sizer:
-  device_preview:
+  
   #애니메이션효과를 주기 위함
-  animated_text_kit: 
   flutter_spinkit: 
   page_transition: 
   transition: 
-  carousel_slider: 
-  smooth_page_indicator: 
   #firebase 기능
   cloud_firestore: 
   firebase_auth: 
@@ -66,7 +63,6 @@ dependencies:
   async:
   http:
   external_path:
-  mongo_dart:
   #image picker
   image_picker: 
   multi_image_picker2: 
@@ -78,14 +74,13 @@ dependencies:
   flutter_email_sender: 
   path_provider: 
   device_info_plus: 
-  #UI-buttons
+  #UI
+  device_calendar:
   outline_gradient_button:
   sign_button:
   fab_circular_menu:
   expandable_page_view:
-  another_stepper:
   badges:
-  numberpicker: 
   flutter_neumorphic: 
   flutter_switch: 
   shimmer: 
@@ -124,7 +119,6 @@ dependencies:
   local_auth_android: 
   google_mobile_ads: 
   store_redirect: 
-  rxdart: 
   
   
   

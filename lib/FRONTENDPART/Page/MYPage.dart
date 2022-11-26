@@ -5,12 +5,12 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import '../Enums/Variables.dart';
-import '../Tool/Getx/navibool.dart';
-import '../Tool/Loader.dart';
-import '../Tool/NoBehavior.dart';
-import '../Tool/AppBarCustom.dart';
-import '../UI/PageUI.dart';
+import '../../Enums/Variables.dart';
+import '../../Tool/Getx/navibool.dart';
+import '../../Tool/Loader.dart';
+import '../../Tool/NoBehavior.dart';
+import '../../Tool/AppBarCustom.dart';
+import '../../UI/PageUI.dart';
 import 'DrawerScreen.dart';
 
 class MYPage extends StatefulWidget {
