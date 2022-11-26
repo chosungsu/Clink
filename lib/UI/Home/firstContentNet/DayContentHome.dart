@@ -8,7 +8,7 @@ import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import '../../../DB/Event.dart';
+import '../../../Enums/Event.dart';
 import '../../../Enums/Variables.dart';
 import '../../../Tool/Getx/PeopleAdd.dart';
 import '../../../Tool/Getx/calendarsetting.dart';

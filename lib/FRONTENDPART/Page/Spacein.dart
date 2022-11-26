@@ -12,7 +12,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:status_bar_control/status_bar_control.dart';
-import '../../DB/Event.dart';
 import '../../Enums/Variables.dart';
 import '../../Tool/Getx/calendarsetting.dart';
 import '../../UI/Home/firstContentNet/DayContentHome.dart';

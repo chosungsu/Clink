@@ -1,8 +1,9 @@
 // ignore_for_file: camel_case_types
 
-import 'package:clickbyme/DB/PageList.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
+import '../../Enums/PageList.dart';
 
 class uisetting extends GetxController {
   bool loading = false;

@@ -9,8 +9,6 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:status_bar_control/status_bar_control.dart';
-import '../../DB/PageList.dart';
-import '../../Enums/Variables.dart';
 import '../Route/mainroute.dart';
 import '../Route/subuiroute.dart';
 import '../../Tool/AppBarCustom.dart';

@@ -5,10 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:status_bar_control/status_bar_control.dart';
-
-import '../DB/PageList.dart';
+import '../Enums/PageList.dart';
 import '../Enums/Variables.dart';
 import '../FRONTENDPART/Route/subuiroute.dart';
 import '../sheets/settingpagesheets.dart';

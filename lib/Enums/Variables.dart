@@ -1,19 +1,17 @@
 // ignore_for_file: file_names, prefer_typing_uninitialized_variables, non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info/package_info.dart';
-
-import '../DB/Linkpage.dart';
-import '../DB/PageList.dart';
 import '../Tool/Getx/PeopleAdd.dart';
 import '../Tool/Getx/linkspacesetting.dart';
 import '../Tool/Getx/navibool.dart';
 import '../Tool/Getx/notishow.dart';
 import '../Tool/Getx/selectcollection.dart';
 import '../Tool/Getx/uisetting.dart';
+import 'Linkpage.dart';
+import 'PageList.dart';
 
 //Here are general Variables
 var usercode = Hive.box('user_setting').get('usercode') ?? '';

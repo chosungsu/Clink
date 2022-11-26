@@ -4,8 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/animation.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
-import '../../DB/PageList.dart';
+import '../../Enums/PageList.dart';
 
 class notishow extends GetxController {
   List listad = [];

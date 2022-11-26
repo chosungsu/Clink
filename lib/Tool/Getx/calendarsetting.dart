@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
-import '../../DB/Event.dart';
+import '../../Enums/Event.dart';
 import '../../LocalNotiPlatform/NotificationApi.dart';
 import 'PeopleAdd.dart';
 

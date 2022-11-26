@@ -1,6 +1,4 @@
 // ignore_for_file: prefer_const_constructors, unused_local_variable
-
-import 'package:clickbyme/DB/PushNotification.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/FRONTENDPART/Route/initScreenLoading.dart';
 import 'package:clickbyme/Tool/ResponsiveUI.dart';
@@ -16,6 +14,7 @@ import 'package:outline_gradient_button/outline_gradient_button.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import 'BACKENDPART/Locale/Locale.dart';
+import 'Enums/PushNotification.dart';
 import 'Enums/Variables.dart';
 import 'FRONTENDPART/Route/subuiroute.dart';
 import 'LocalNotiPlatform/NotificationApi.dart';
@@ -108,7 +107,7 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
                     flex: 3,
                     child: Center(
                       child: NeumorphicText(
-                        'LinkAI',
+                        'NearU',
                         style: const NeumorphicStyle(
                           shape: NeumorphicShape.flat,
                           depth: 3,
@@ -146,7 +145,7 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
                     flex: 3,
                     child: Center(
                       child: NeumorphicText(
-                        'LinkAI',
+                        'NearU',
                         style: const NeumorphicStyle(
                           shape: NeumorphicShape.flat,
                           depth: 3,
@@ -191,7 +190,7 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
                     flex: 2,
                     child: Center(
                       child: NeumorphicText(
-                        'LinkAI',
+                        'NearU',
                         style: const NeumorphicStyle(
                           shape: NeumorphicShape.flat,
                           depth: 3,
@@ -251,7 +250,7 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
                     flex: 3,
                     child: Center(
                       child: NeumorphicText(
-                        'LinkAI',
+                        'NearU',
                         style: const NeumorphicStyle(
                           shape: NeumorphicShape.flat,
                           depth: 3,

@@ -1,6 +1,5 @@
 // ignore_for_file: non_constant_identifier_names, prefer_const_literals_to_create_immutables, must_be_immutable
 
-import 'package:clickbyme/BACKENDPART/FIREBASE/PersonalVP.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
@@ -9,7 +8,6 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:status_bar_control/status_bar_control.dart';
-import '../../DB/PageList.dart';
 import '../../Enums/Variables.dart';
 import '../Route/subuiroute.dart';
 import '../../Tool/AppBarCustom.dart';
@@ -19,7 +17,6 @@ import '../../Tool/Getx/navibool.dart';
 import '../../Tool/Getx/uisetting.dart';
 import '../../Tool/NoBehavior.dart';
 import '../../Tool/TextSize.dart';
-import '../../sheets/linksettingsheet.dart';
 
 class AddTemplate extends StatefulWidget {
   AddTemplate({Key? key, required this.id, indexcnt}) : super(key: key);

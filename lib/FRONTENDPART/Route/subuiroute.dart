@@ -18,7 +18,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../DB/PageList.dart';
 import '../Page/AddTemplate.dart';
 import '../Page/LoginSignPage.dart';
 import '../Page/NotiAlarm.dart';

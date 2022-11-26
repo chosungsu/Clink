@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:clickbyme/DB/MemoList.dart';
 import 'package:clickbyme/Tool/Getx/selectcollection.dart';
 import 'package:clickbyme/UI/Home/Widgets/CreateCalandmemo.dart';
 import 'package:clickbyme/UI/Home/secondContentNet/Memodrawer.dart';
@@ -22,9 +20,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:printing/printing.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../Enums/MemoList.dart';
 import '../../../FRONTENDPART/Route/subuiroute.dart';
 import '../../../Tool/AndroidIOS.dart';
-import '../../../Tool/BGColor.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/uisetting.dart';
 import '../../../Tool/IconBtn.dart';

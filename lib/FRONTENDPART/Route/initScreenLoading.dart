@@ -5,8 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
-import '../../DB/PageList.dart';
+import '../../Enums/PageList.dart';
 import '../../Enums/Variables.dart';
 import '../../LocalNotiPlatform/NotificationApi.dart';
 import '../../Tool/Getx/PeopleAdd.dart';

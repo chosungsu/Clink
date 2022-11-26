@@ -9,12 +9,4 @@ List<Map> drawerItems = [
     'icon': Icons.settings,
     'title': '설정',
   },
-  /*{
-    'icon': Icons.account_circle_outlined,
-    'title': '설정',
-  },*/
-  /*{
-    'icon': Icons.notifications_none,
-    'title': '알림',
-  },*/
 ];

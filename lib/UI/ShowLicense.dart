@@ -1,6 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'package:clickbyme/DB/Expandable.dart';
+import 'package:clickbyme/Enums/Expandable.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/Getx/licenseget.dart';
 import 'package:clickbyme/Tool/Getx/navibool.dart';

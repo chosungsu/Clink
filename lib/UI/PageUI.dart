@@ -5,16 +5,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-
-import '../../../DB/Linkpage.dart';
 import '../../../Enums/Variables.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/Getx/linkspacesetting.dart';
 import '../../../Tool/TextSize.dart';
-import '../../../sheets/linksettingsheet.dart';
 import '../BACKENDPART/FIREBASE/PersonalVP.dart';
-import '../FRONTENDPART/Page/Spacein.dart';
-import '../Tool/FlushbarStyle.dart';
 
 PageUI1(String id, TextEditingController controller) {
   final searchNode = FocusNode();
@@ -26,26 +21,6 @@ PageUI1(String id, TextEditingController controller) {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 PageViewRes1(id, snapshot);
-                /*linkspaceset.indextreetmp.clear();
-                linkspaceset.indexcnt.clear();
-                final valuespace = snapshot.data!.docs;
-                for (var sp in valuespace) {
-                  pagename = sp.get('pagename');
-                  spacename = sp.get('spacename');
-                  type = sp.get('type');
-                  if (sp.get('id') == id) {
-                    linkspaceset.indextreetmp.add(List.empty(growable: true));
-                    linkspaceset.indexcnt.add(Linkspacepage(
-                        type: sp.get('type'),
-                        placestr: sp.get('spacename'),
-                        uniquecode: sp.get('id'),
-                        index: sp.get('index'),
-                        familycode: sp.id));
-                  }
-                }
-                linkspaceset.indexcnt.sort(((a, b) {
-                  return a.index.compareTo(b.index);
-                }));*/
                 return linkspaceset.indexcnt.isEmpty
                     ? Flexible(
                         fit: FlexFit.tight,

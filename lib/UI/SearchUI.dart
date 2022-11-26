@@ -7,8 +7,6 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-
-import '../../../DB/PageList.dart';
 import '../../../Enums/Variables.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/Getx/uisetting.dart';

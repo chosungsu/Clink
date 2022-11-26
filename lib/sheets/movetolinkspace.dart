@@ -1,17 +1,15 @@
 // ignore_for_file: non_constant_identifier_names, unused_local_variable
 
-import 'package:clickbyme/DB/PageList.dart';
 import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import '../Enums/PageList.dart';
 import '../Enums/Variables.dart';
 import '../Tool/BGColor.dart';
 import '../Tool/ContainerDesign.dart';
 import '../Tool/FlushbarStyle.dart';
 import '../Tool/TextSize.dart';
-import 'package:flutter/material.dart';
 import '../FRONTENDPART/Route/subuiroute.dart';
 import '../Tool/AndroidIOS.dart';
 import '../Tool/Getx/memosetting.dart';

@@ -2,8 +2,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
-
-import '../../../DB/Event.dart';
+import '../../../Enums/Event.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/Getx/calendarsetting.dart';
 import '../../../Tool/IconBtn.dart';

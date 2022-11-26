@@ -3,15 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../DB/Linkpage.dart';
-import '../../DB/PageList.dart';
+import '../../Enums/Linkpage.dart';
+import '../../Enums/PageList.dart';
 import '../../Enums/Variables.dart';
 import '../../FRONTENDPART/Page/Spacein.dart';
 import '../../Tool/FlushbarStyle.dart';
 import '../../Tool/Getx/category.dart';
 import '../../Tool/Getx/linkspacesetting.dart';
 import '../../Tool/Getx/uisetting.dart';
-import '../../UI/Home/firstContentNet/DayContentHome.dart';
 import '../../sheets/linksettingsheet.dart';
 
 PageViewStreamParent() {

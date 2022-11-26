@@ -2,8 +2,7 @@
 
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
-import '../../DB/PageList.dart';
+import '../../Enums/PageList.dart';
 import '../../Enums/Variables.dart';
 import '../../Tool/Getx/uisetting.dart';
 
