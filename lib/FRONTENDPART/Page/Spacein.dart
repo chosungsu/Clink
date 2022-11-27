@@ -13,15 +13,16 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import '../../Enums/Variables.dart';
+import '../../Tool/ContainerDesign.dart';
 import '../../Tool/Getx/calendarsetting.dart';
-import '../../UI/Home/firstContentNet/DayContentHome.dart';
+import '../../Tool/TextSize.dart';
 import '../Route/subuiroute.dart';
 import '../../Tool/BGColor.dart';
 import '../../Tool/Getx/navibool.dart';
 import '../../Tool/Loader.dart';
 import '../../Tool/NoBehavior.dart';
 import '../../Tool/AppBarCustom.dart';
-import '../../UI/SpaceinUI.dart';
+import '../UI(Widget/SpaceinUI.dart';
 
 class Spacein extends StatefulWidget {
   const Spacein(
@@ -150,14 +151,57 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
                                     if (isinit == true) {
                                       return const SizedBox();
                                     } else {
-                                      return GetBuilder<uisetting>(
-                                        builder: (_) => AppBarCustom(
-                                          title: widget.spacename,
-                                          righticon: false,
-                                          doubleicon: false,
-                                          iconname: Icons.download,
-                                          mainid: widget.id,
-                                        ),
+                                      return SizedBox(
+                                        height: 60,
+                                        child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 20,
+                                                right: 20,
+                                                top: 5,
+                                                bottom: 5),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                ContainerDesign(
+                                                    child: GestureDetector(
+                                                      onTap: () {
+                                                        Get.back();
+                                                      },
+                                                      child: Icon(
+                                                        Icons
+                                                            .keyboard_arrow_left,
+                                                        size: 30,
+                                                        color: draw
+                                                            .color_textstatus,
+                                                      ),
+                                                    ),
+                                                    color:
+                                                        draw.backgroundcolor),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Flexible(
+                                                    fit: FlexFit.tight,
+                                                    child: SizedBox(
+                                                      child: Text(
+                                                        widget.spacename,
+                                                        maxLines: 1,
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize:
+                                                                mainTitleTextsize(),
+                                                            color: draw
+                                                                .color_textstatus),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    )),
+                                              ],
+                                            )),
                                       );
                                     }
                                   }))
@@ -170,9 +214,13 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
                                     mainid: widget.id,
                                   ),
                                 ),
-                          const SizedBox(
-                            height: 20,
-                          ),
+                          isinit == true
+                              ? const SizedBox(
+                                  height: 0,
+                                )
+                              : const SizedBox(
+                                  height: 20,
+                                ),
                           ScrollConfiguration(
                               behavior: NoBehavior(),
                               child: SpaceinUI(widget.id, widget.type, isinit)),

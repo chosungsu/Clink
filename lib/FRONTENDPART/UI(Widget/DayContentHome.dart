@@ -1,6 +1,5 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'package:clickbyme/FRONTENDPART/Route/subuiroute.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
@@ -13,8 +12,8 @@ import '../../../Enums/Variables.dart';
 import '../../../Tool/Getx/PeopleAdd.dart';
 import '../../../Tool/Getx/calendarsetting.dart';
 import '../../../Tool/NoBehavior.dart';
-import '../Widgets/CalendarView.dart';
-import '../secondContentNet/ClickShowEachCalendar.dart';
+import '../../UI/Home/secondContentNet/ClickShowEachCalendar.dart';
+import 'CalendarView.dart';
 
 DayContentHome(id) {
   final controll_cals = Get.put(calendarsetting());
@@ -91,11 +90,7 @@ DayContentHome(id) {
                               const SizedBox(
                                 height: 20,
                               ),
-                              ADSHOW(),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              //TimeLineView(id),
+                              TimeLineView(id),
                               const SizedBox(
                                 height: 50,
                               )
@@ -575,153 +570,3 @@ TimeLineView(id) {
             },
           ));
 }
-/*class DayContentHome extends StatefulWidget {
-  const DayContentHome({
-    Key? key,
-    required this.id,
-    /*required this.share,
-    required this.origin,
-    required this.theme,
-    required this.view,
-    required this.calname,*/
-  }) : super(key: key);
-  final String id;
-  /*final List share;
-  final String origin;
-  final String calname;
-  final int theme;
-  final int view;*/
-  @override
-  State<StatefulWidget> createState() => _DayContentHomeState();
-}
-
-class _DayContentHomeState extends State<DayContentHome>
-    with WidgetsBindingObserver {
-  final draw = Get.put(navibool());
-  final linkspaceset = Get.put(linkspacesetting());
-  final cal_share_person = Get.put(PeopleAdd());
-  var controll_cals = Get.put(calendarsetting());
-  DateTime _selectedDay = DateTime.now();
-  DateTime _focusedDay = DateTime.now();
-  late Map<DateTime, List<Event>> events;
-  List<Event> getList(DateTime date) {
-    return events[date] ?? [];
-  }
-  late DateTime fromDate = DateTime.now();
-  late DateTime toDate = DateTime.now();
-
-  
-  String hour = '';
-  String minute = '';
-  String username = Hive.box('user_info').get(
-    'id',
-  );
-  String usercode = Hive.box('user_setting').get('usercode');
-  String madeUser = '';
-  int theme = 0;
-  int view = 0;
-  String calname = '';
-  List share = [];
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
-  var _rangeStart = null;
-  var _rangeEnd = null;
-  var updateidalarm = '';
-  List<bool> alarmtypes = [];
-  bool isChecked_pushalarm = false;
-  /*@override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    initializeDateFormatting(Localizations.localeOf(context).languageCode);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-    /*setcal_fromsheet = widget.view;
-    themecal_fromsheet = widget.theme;
-    if (setcal_fromsheet == 0) {
-      controll_cals.showcalendar = 0;
-    } else if (setcal_fromsheet == 1) {
-      controll_cals.showcalendar = 1;
-    } else {
-      controll_cals.showcalendar = 2;
-    }
-    if (themecal_fromsheet == 0) {
-      controll_cals.themecalendar = 0;
-    } else {
-      controll_cals.themecalendar = 1;
-    }*/
-    fromDate = DateTime.now();
-    toDate = DateTime.now().add(const Duration(hours: 2));
-    events = {};
-    controll_cals.selectedDay = _selectedDay;
-    controll_cals.focusedDay = _focusedDay;
-    /*firestore
-        .collection('CalendarSheetHome_update')
-        .doc(widget.id)
-        .get()
-        .then((value) {
-      if (value.exists) {
-        madeUser = value.data()!['madeUser'];
-        theme = value.data()!['themesetting'];
-        view = value.data()!['viewsetting'];
-        share = value.data()!['share'];
-        calname = value.data()!['calname'];
-        controll_cals.showcalendar = view;
-        controll_cals.themecalendar = theme;
-      }
-    });
-    print(view);*/
-  }*/
-
-  /*@override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    WidgetsBinding.instance.removeObserver(this);
-  }*/
-
-  void _onRangeSelected(DateTime? start, DateTime? end, DateTime focusedDay) {
-    setState(() {
-      _focusedDay = focusedDay;
-      _rangeStart = start;
-      _rangeEnd = end;
-      _rangeSelectionMode = RangeSelectionMode.toggledOn;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Flexible(
-        fit: FlexFit.tight,
-        child: Ui(controll_cals, events));
-    /*SafeArea(
-        child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            backgroundColor: BGColor(),
-            body: FutureBuilder(
-              future: firestore
-                  .collection('CalendarSheetHome_update')
-                  .doc(widget.id)
-                  .get()
-                  .then((value) {
-                if (value.exists) {
-                  madeUser = value.data()!['madeUser'];
-                  theme = value.data()!['themesetting'];
-                  view = value.data()!['viewsetting'];
-                  share = value.data()!['share'];
-                  calname = value.data()!['calname'];
-                  controll_cals.showcalendar = view;
-                  controll_cals.themecalendar = theme;
-                }
-              }),
-              builder: ((context, snapshot) {
-                return EnterCheckUi(controll_cals, events);
-              }),
-            )));*/
-  }
-
-  
-}*/

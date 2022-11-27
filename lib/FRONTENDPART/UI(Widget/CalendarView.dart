@@ -4,12 +4,14 @@ import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../../../Enums/Event.dart';
 import '../../../Tool/BGColor.dart';
+import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/Getx/calendarsetting.dart';
+import '../../../Tool/Getx/navibool.dart';
 import '../../../Tool/IconBtn.dart';
 import '../../../Tool/MyTheme.dart';
 import '../../../Tool/TextSize.dart';
 import '../../../sheets/settingCalendarHome.dart';
-import '../firstContentNet/DayScript.dart';
+import 'DayScript.dart';
 
 calendarView(
   BuildContext context,
@@ -30,6 +32,7 @@ calendarView(
     return events[date] ?? [];
   }
 
+  final draw = Get.put(navibool());
   final cal_date = Get.put(calendarsetting());
 
   return s == 'oncreate'
@@ -439,37 +442,27 @@ calendarView(
                         leftChevronPadding:
                             const EdgeInsets.only(left: 10, right: 10),
                         leftChevronMargin: EdgeInsets.zero,
-                        leftChevronIcon: IconBtn(
-                            child: IconButton(
-                                onPressed: () {
-                                  //Navigator.pop(context);
-                                  Get.back();
-                                },
-                                icon: Container(
-                                  alignment: Alignment.center,
-                                  width: 30,
-                                  height: 30,
-                                  child: NeumorphicIcon(
-                                    Icons.keyboard_arrow_left,
-                                    size: 30,
-                                    style: NeumorphicStyle(
-                                        shape: NeumorphicShape.convex,
-                                        depth: 2,
-                                        surfaceIntensity: 0.5,
-                                        color: TextColor(),
-                                        lightSource: LightSource.topLeft),
-                                  ),
-                                )),
-                            color: TextColor()),
+                        leftChevronIcon: ContainerDesign(
+                            child: GestureDetector(
+                              onTap: () {
+                                Get.back();
+                              },
+                              child: Icon(
+                                Icons.keyboard_arrow_left,
+                                size: 30,
+                                color: draw.color_textstatus,
+                              ),
+                            ),
+                            color: draw.backgroundcolor),
                         rightChevronVisible: s == 'oncreate' ? false : true,
                         rightChevronPadding: const EdgeInsets.only(right: 10),
                         rightChevronMargin: EdgeInsets.zero,
                         rightChevronIcon: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            IconBtn(
-                                child: IconButton(
-                                  onPressed: () {
+                            ContainerDesign(
+                                child: GestureDetector(
+                                  onTap: () {
                                     controll_cals.setrepeatdate(1, '주');
                                     Get.to(
                                         () => DayScript(
@@ -486,24 +479,19 @@ calendarView(
                                             ),
                                         transition: Transition.downToUp);
                                   },
-                                  icon: NeumorphicIcon(
+                                  child: Icon(
                                     Icons.add,
                                     size: 30,
-                                    style: NeumorphicStyle(
-                                        shape: NeumorphicShape.convex,
-                                        depth: 2,
-                                        surfaceIntensity: 0.5,
-                                        color: TextColor(),
-                                        lightSource: LightSource.topLeft),
+                                    color: draw.color_textstatus,
                                   ),
                                 ),
-                                color: TextColor()),
+                                color: draw.backgroundcolor),
                             const SizedBox(
                               width: 10,
                             ),
-                            IconBtn(
-                                child: IconButton(
-                                  onPressed: () {
+                            ContainerDesign(
+                                child: GestureDetector(
+                                  onTap: () {
                                     settingCalendarHome(
                                       context,
                                       controll_cals,
@@ -512,18 +500,13 @@ calendarView(
                                       id,
                                     );
                                   },
-                                  icon: NeumorphicIcon(
+                                  child: Icon(
                                     Icons.settings,
                                     size: 30,
-                                    style: NeumorphicStyle(
-                                        shape: NeumorphicShape.convex,
-                                        depth: 2,
-                                        surfaceIntensity: 0.5,
-                                        color: TextColor(),
-                                        lightSource: LightSource.topLeft),
+                                    color: draw.color_textstatus,
                                   ),
                                 ),
-                                color: TextColor())
+                                color: draw.backgroundcolor),
                           ],
                         ),
                         titleTextStyle: TextStyle(

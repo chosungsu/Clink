@@ -11,7 +11,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../Enums/Variables.dart';
 import '../../Tool/Getx/navibool.dart';
-import '../../UI/SearchUI.dart';
+import '../UI(Widget/SearchUI.dart';
 import 'DrawerScreen.dart';
 
 class SearchPage extends StatefulWidget {

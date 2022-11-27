@@ -652,6 +652,7 @@ contentthird(
                       });
                     });
                   } else if (where == 'editnametemplatein') {
+                    var parentid;
                     firestore.collection('Pinchannelin').get().then((value) {
                       if (value.docs.isNotEmpty) {
                         for (int j = 0; j < value.docs.length; j++) {
@@ -659,6 +660,7 @@ contentthird(
                           final messageindex = value.docs[j]['index'];
                           if (messageindex == categorynumber &&
                               messageuniquecode == id) {
+                            parentid = value.docs[j].id;
                             firestore
                                 .collection('Pinchannelin')
                                 .doc(value.docs[j].id)
@@ -669,15 +671,31 @@ contentthird(
                         }
                       } else {}
                     }).whenComplete(() {
-                      Snack.snackbars(
-                          context: context,
-                          title: '정상적으로 처리되었어요',
-                          backgroundcolor: Colors.green,
-                          bordercolor: draw.backgroundcolor);
-                      linkspaceset.setcompleted(false);
-                      linkspaceset
-                          .setspacelink(textEditingControllerAddSheet.text);
-                      Get.back(result: true);
+                      firestore.collection('Calendar').get().then((value) {
+                        if (value.docs.isNotEmpty) {
+                          for (int j = 0; j < value.docs.length; j++) {
+                            final messageuniquecode = value.docs[j]['parentid'];
+                            if (messageuniquecode == parentid) {
+                              firestore
+                                  .collection('Calendar')
+                                  .doc(value.docs[j].id)
+                                  .update({
+                                'calname': textEditingControllerAddSheet.text
+                              });
+                            }
+                          }
+                        } else {}
+                      }).whenComplete(() {
+                        Snack.snackbars(
+                            context: context,
+                            title: '정상적으로 처리되었어요',
+                            backgroundcolor: Colors.green,
+                            bordercolor: draw.backgroundcolor);
+                        linkspaceset.setcompleted(false);
+                        linkspaceset
+                            .setspacelink(textEditingControllerAddSheet.text);
+                        Get.back(result: true);
+                      });
                     });
                   } else {
                     firestore.collection('Pinchannel').add({

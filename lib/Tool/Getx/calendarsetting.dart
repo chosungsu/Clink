@@ -60,29 +60,20 @@ class calendarsetting extends GetxController {
   void themecals1(String id) {
     themecalendar = 0;
     Hive.box('user_setting').put('origorpastel', 0);
-    /*
-    firestore.collection('CalendarSheetHome').doc(id).update({
-      'themesetting': themecalendar,
-    });
-    */
-    firestore.collection('CalendarSheetHome_update').doc(id).update({
-      'themesetting': themecalendar,
-    });
-    /*firestore
-        .collection('ShareHome')
-        .where('doc', isEqualTo: id)
+    firestore
+        .collection('Calendar')
+        .where('parentid', isEqualTo: id)
         .get()
         .then((value) {
-      for (int i = 0; i < value.docs.length; i++) {
-        sharehomeid.add(value.docs[i].id);
+      var id;
+      if (value.docs.isEmpty) {
+      } else {
+        id = value.docs[0].id;
       }
-    }).whenComplete(() {
-      for (int j = 0; j < sharehomeid.length; j++) {
-        firestore.collection('ShareHome').doc(sharehomeid[j]).update({
-          'themesetting': themecalendar,
-        });
-      }
-    });*/
+      firestore.collection('Calendar').doc(id).update({
+        'themesetting': themecalendar,
+      });
+    });
     firestore
         .collection('ShareHome_update')
         .where('doc', isEqualTo: id)
@@ -105,29 +96,20 @@ class calendarsetting extends GetxController {
   void themecals2(String id) {
     themecalendar = 1;
     Hive.box('user_setting').put('origorpastel', 1);
-    /*
-    firestore.collection('CalendarSheetHome').doc(id).update({
-      'themesetting': themecalendar,
-    });
-    */
-    firestore.collection('CalendarSheetHome_update').doc(id).update({
-      'themesetting': themecalendar,
-    });
-    /*firestore
-        .collection('ShareHome')
-        .where('doc', isEqualTo: id)
+    firestore
+        .collection('Calendar')
+        .where('parentid', isEqualTo: id)
         .get()
         .then((value) {
-      for (int i = 0; i < value.docs.length; i++) {
-        sharehomeid.add(value.docs[i].id);
+      var id;
+      if (value.docs.isEmpty) {
+      } else {
+        id = value.docs[0].id;
       }
-    }).whenComplete(() {
-      for (int j = 0; j < sharehomeid.length; j++) {
-        firestore.collection('ShareHome').doc(sharehomeid[j]).update({
-          'themesetting': themecalendar,
-        });
-      }
-    });*/
+      firestore.collection('Calendar').doc(id).update({
+        'themesetting': themecalendar,
+      });
+    });
     firestore
         .collection('ShareHome_update')
         .where('doc', isEqualTo: id)
@@ -150,29 +132,20 @@ class calendarsetting extends GetxController {
   void stylecalorigin(String id) {
     stylecalendar = 0;
     Hive.box('user_setting').put('origordday', 0);
-    /*
-    firestore.collection('CalendarSheetHome').doc(id).update({
-      'type': stylecalendar,
-    });
-    */
-    firestore.collection('CalendarSheetHome_update').doc(id).update({
-      'type': stylecalendar,
-    });
-    /*firestore
-        .collection('ShareHome')
-        .where('doc', isEqualTo: id)
+    firestore
+        .collection('Calendar')
+        .where('parentid', isEqualTo: id)
         .get()
         .then((value) {
-      for (int i = 0; i < value.docs.length; i++) {
-        sharehomeid.add(value.docs[i].id);
+      var id;
+      if (value.docs.isEmpty) {
+      } else {
+        id = value.docs[0].id;
       }
-    }).whenComplete(() {
-      for (int j = 0; j < sharehomeid.length; j++) {
-        firestore.collection('ShareHome').doc(sharehomeid[j]).update({
-          'type': stylecalendar,
-        });
-      }
-    });*/
+      firestore.collection('Calendar').doc(id).update({
+        'type': stylecalendar,
+      });
+    });
     firestore
         .collection('ShareHome_update')
         .where('doc', isEqualTo: id)
@@ -195,29 +168,20 @@ class calendarsetting extends GetxController {
   void stylecaldday(String id) {
     stylecalendar = 1;
     Hive.box('user_setting').put('origordday', 1);
-    /*
-    firestore.collection('CalendarSheetHome').doc(id).update({
-      'type': stylecalendar,
-    });
-    */
-    firestore.collection('CalendarSheetHome_update').doc(id).update({
-      'type': stylecalendar,
-    });
-    /*firestore
-        .collection('ShareHome')
-        .where('doc', isEqualTo: id)
+    firestore
+        .collection('Calendar')
+        .where('parentid', isEqualTo: id)
         .get()
         .then((value) {
-      for (int i = 0; i < value.docs.length; i++) {
-        sharehomeid.add(value.docs[i].id);
+      var id;
+      if (value.docs.isEmpty) {
+      } else {
+        id = value.docs[0].id;
       }
-    }).whenComplete(() {
-      for (int j = 0; j < sharehomeid.length; j++) {
-        firestore.collection('ShareHome').doc(sharehomeid[j]).update({
-          'type': stylecalendar,
-        });
-      }
-    });*/
+      firestore.collection('Calendar').doc(id).update({
+        'type': stylecalendar,
+      });
+    });
     firestore
         .collection('ShareHome_update')
         .where('doc', isEqualTo: id)
@@ -240,29 +204,20 @@ class calendarsetting extends GetxController {
   void setcals1w(String id) {
     showcalendar = 0;
     Hive.box('user_setting').put('viewcalsettings', 0);
-    /*
-    firestore.collection('CalendarSheetHome').doc(id).update({
-      'viewsetting': showcalendar,
-    });
-    */
-    firestore.collection('CalendarSheetHome_update').doc(id).update({
-      'viewsetting': showcalendar,
-    });
-    /*firestore
-        .collection('ShareHome')
-        .where('doc', isEqualTo: id)
+    firestore
+        .collection('Calendar')
+        .where('parentid', isEqualTo: id)
         .get()
         .then((value) {
-      for (int i = 0; i < value.docs.length; i++) {
-        sharehomeid.add(value.docs[i].id);
+      var id;
+      if (value.docs.isEmpty) {
+      } else {
+        id = value.docs[0].id;
       }
-    }).whenComplete(() {
-      for (int j = 0; j < sharehomeid.length; j++) {
-        firestore.collection('ShareHome').doc(sharehomeid[j]).update({
-          'viewsetting': showcalendar,
-        });
-      }
-    });*/
+      firestore.collection('Calendar').doc(id).update({
+        'viewsetting': showcalendar,
+      });
+    });
     firestore
         .collection('ShareHome_update')
         .where('doc', isEqualTo: id)
@@ -285,29 +240,20 @@ class calendarsetting extends GetxController {
   void setcals2w(String id) {
     showcalendar = 1;
     Hive.box('user_setting').put('viewcalsettings', 1);
-    /*
-    firestore.collection('CalendarSheetHome').doc(id).update({
-      'viewsetting': showcalendar,
-    });
-    */
-    firestore.collection('CalendarSheetHome_update').doc(id).update({
-      'viewsetting': showcalendar,
-    });
-    /*firestore
-        .collection('ShareHome')
-        .where('doc', isEqualTo: id)
+    firestore
+        .collection('Calendar')
+        .where('parentid', isEqualTo: id)
         .get()
         .then((value) {
-      for (int i = 0; i < value.docs.length; i++) {
-        sharehomeid.add(value.docs[i].id);
+      var id;
+      if (value.docs.isEmpty) {
+      } else {
+        id = value.docs[0].id;
       }
-    }).whenComplete(() {
-      for (int j = 0; j < sharehomeid.length; j++) {
-        firestore.collection('ShareHome').doc(sharehomeid[j]).update({
-          'viewsetting': showcalendar,
-        });
-      }
-    });*/
+      firestore.collection('Calendar').doc(id).update({
+        'viewsetting': showcalendar,
+      });
+    });
     firestore
         .collection('ShareHome_update')
         .where('doc', isEqualTo: id)
@@ -330,29 +276,20 @@ class calendarsetting extends GetxController {
   void setcals1m(String id) {
     showcalendar = 2;
     Hive.box('user_setting').put('viewcalsettings', 2);
-    /*
-    firestore.collection('CalendarSheetHome').doc(id).update({
-      'viewsetting': showcalendar,
-    });
-    */
-    firestore.collection('CalendarSheetHome_update').doc(id).update({
-      'viewsetting': showcalendar,
-    });
-    /*firestore
-        .collection('ShareHome')
-        .where('doc', isEqualTo: id)
+    firestore
+        .collection('Calendar')
+        .where('parentid', isEqualTo: id)
         .get()
         .then((value) {
-      for (int i = 0; i < value.docs.length; i++) {
-        sharehomeid.add(value.docs[i].id);
+      var id;
+      if (value.docs.isEmpty) {
+      } else {
+        id = value.docs[0].id;
       }
-    }).whenComplete(() {
-      for (int j = 0; j < sharehomeid.length; j++) {
-        firestore.collection('ShareHome').doc(sharehomeid[j]).update({
-          'viewsetting': showcalendar,
-        });
-      }
-    });*/
+      firestore.collection('Calendar').doc(id).update({
+        'viewsetting': showcalendar,
+      });
+    });
     firestore
         .collection('ShareHome_update')
         .where('doc', isEqualTo: id)

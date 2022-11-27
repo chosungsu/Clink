@@ -70,64 +70,47 @@ class AppBarCustom extends StatelessWidget {
                                         Hive.box('user_setting')
                                                 .get('page_opened') ==
                                             true
-                                    ? IconButton(
-                                        padding:
-                                            const EdgeInsets.only(right: 10),
-                                        constraints: const BoxConstraints(),
-                                        onPressed: () {
-                                          setState(() {
-                                            draw.setclose();
-                                            Hive.box('user_setting')
-                                                .put('page_opened', false);
-                                          });
-                                        },
-                                        icon: Container(
-                                          padding:
-                                              const EdgeInsets.only(right: 10),
-                                          alignment: Alignment.center,
-                                          child: NeumorphicIcon(
+                                    ? ContainerDesign(
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              draw.setclose();
+                                              Hive.box('user_setting')
+                                                  .put('page_opened', false);
+                                            });
+                                          },
+                                          child: Icon(
                                             Icons.keyboard_arrow_left,
                                             size: 30,
-                                            style: NeumorphicStyle(
-                                                shape: NeumorphicShape.concave,
-                                                depth: 2,
-                                                surfaceIntensity: 0.5,
-                                                color: draw.color_textstatus,
-                                                lightSource:
-                                                    LightSource.topLeft),
+                                            color: draw.color_textstatus,
                                           ),
-                                        ))
-                                    : IconButton(
-                                        padding:
-                                            const EdgeInsets.only(right: 10),
-                                        constraints: const BoxConstraints(),
-                                        onPressed: () {
-                                          setState(() {
-                                            draw.navi = 0;
-                                            draw.setopen();
-                                            Hive.box('user_setting')
-                                                .put('page_opened', true);
-                                          });
-                                        },
-                                        icon: Container(
-                                          alignment: Alignment.center,
-                                          child: NeumorphicIcon(
+                                        ),
+                                        color: draw.backgroundcolor)
+                                    : ContainerDesign(
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              draw.navi = 0;
+                                              draw.setopen();
+                                              Hive.box('user_setting')
+                                                  .put('page_opened', true);
+                                            });
+                                          },
+                                          child: Icon(
                                             Icons.menu,
                                             size: 30,
-                                            style: NeumorphicStyle(
-                                                shape: NeumorphicShape.concave,
-                                                depth: 2,
-                                                surfaceIntensity: 0.5,
-                                                color: draw.color_textstatus,
-                                                lightSource:
-                                                    LightSource.topLeft),
+                                            color: draw.color_textstatus,
                                           ),
-                                        ))
+                                        ),
+                                        color: draw.backgroundcolor)
+                                : const SizedBox(),
+                            Hive.box('user_setting').get('page_index') == 0 &&
+                                    draw.navi == 0
+                                ? const SizedBox(
+                                    width: 10,
+                                  )
                                 : const SizedBox(),
                             Flexible(
-                                /*width: draw.navi == 0
-                                ? MediaQuery.of(context).size.width - 80
-                                : MediaQuery.of(context).size.width - 30,*/
                                 child: Padding(
                                     padding: const EdgeInsets.only(right: 10),
                                     child: GetBuilder<uisetting>(

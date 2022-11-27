@@ -12,7 +12,7 @@ import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/Getx/uisetting.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
-import 'Home/secondContentNet/ShowTips.dart';
+import '../../UI/Home/secondContentNet/ShowTips.dart';
 import 'PageUI.dart';
 
 SearchUI(scrollController, TextEditingController controller, double height,

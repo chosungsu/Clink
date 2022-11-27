@@ -418,10 +418,7 @@ content2() {
                     bordercolor: draw.backgroundcolor);
                 await NotificationApi.cancelAll();
                 GoogleSignInController().Deletelogout(context, name);
-                await firestore
-                    .collection('CalendarSheetHome_update')
-                    .get()
-                    .then((value) {
+                await firestore.collection('Calendar').get().then((value) {
                   for (int i = 0; i < value.docs.length; i++) {
                     for (int j = 0;
                         j < value.docs[i].get('share').length;
@@ -432,7 +429,7 @@ content2() {
                       changepeople.removeWhere(
                           (element) => element == cal_share_person.secondname);
                       firestore
-                          .collection('CalendarSheetHome_update')
+                          .collection('Calendar')
                           .doc(value.docs[i].id)
                           .update({'share': changepeople});
                     }

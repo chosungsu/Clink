@@ -653,6 +653,7 @@ contentthird(
                 false;
             if (reloadpage) {
               Get.back();
+              var parentid;
               var changeindex;
               if (s == 'pinchannel') {
                 await firestore.collection('PageView').get().then((value) {
@@ -672,7 +673,8 @@ contentthird(
                       .then((value) {
                     for (int i = 0; i < value.docs.length; i++) {
                       if (value.docs[i].get('uniquecode') == id) {
-                        updateid.add(value.docs[i].id);
+                        parentid = value.docs[i].id;
+                        updateid.add(parentid);
                       }
                     }
                     if (updateid.isEmpty) {
@@ -708,8 +710,9 @@ contentthird(
                               .update({'index': updateindex[j] - 1});
                         }
                       }
+                    }).whenComplete(() {
+                      linkspaceset.setcompleted(false);
                     });
-                    linkspaceset.setcompleted(false);
                   });
                 });
               } else {
@@ -753,6 +756,19 @@ contentthird(
                         backgroundcolor: Colors.red,
                         bordercolor: draw.backgroundcolor);
                     linkspaceset.setcompleted(false);
+                    firestore.collection('Calendar').get().then((value) {
+                      if (value.docs.isNotEmpty) {
+                        for (int j = 0; j < value.docs.length; j++) {
+                          final messageuniquecode = value.docs[j]['parentid'];
+                          if (messageuniquecode == id) {
+                            firestore
+                                .collection('Calendar')
+                                .doc(value.docs[j].id)
+                                .delete();
+                          }
+                        }
+                      } else {}
+                    }).whenComplete(() {});
                   });
                 });
               }

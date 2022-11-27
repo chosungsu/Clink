@@ -1,21 +1,15 @@
-import 'package:another_flushbar/flushbar.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/Getx/calendarsetting.dart';
 import 'package:clickbyme/Tool/Getx/memosetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
-import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 
 import '../Tool/BGColor.dart';
 import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/PeopleAdd.dart';
+import '../Tool/Getx/navibool.dart';
 import '../Tool/IconBtn.dart';
-import '../UI/Home/Widgets/CreateCalandmemo.dart';
 
 pushalarmsettingcal(
   BuildContext context,
@@ -23,11 +17,10 @@ pushalarmsettingcal(
   FocusNode setalarmminuteNode,
   String hour,
   String minute,
-  String doc_title,
+  String docTitle,
   String id,
-  int isChecked_pushalarmwhat,
+  int isCheckedPushalarmwhat,
   DateTime date,
-  FToast fToast,
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -62,16 +55,16 @@ pushalarmsettingcal(
                     child: SingleChildScrollView(
                         physics: const NeverScrollableScrollPhysics(),
                         child: SheetPage(
-                            context,
-                            setalarmhourNode,
-                            setalarmminuteNode,
-                            hour,
-                            minute,
-                            doc_title,
-                            id,
-                            isChecked_pushalarmwhat,
-                            date,
-                            fToast))),
+                          context,
+                          setalarmhourNode,
+                          setalarmminuteNode,
+                          hour,
+                          minute,
+                          docTitle,
+                          id,
+                          isCheckedPushalarmwhat,
+                          date,
+                        ))),
               )),
         );
       });
@@ -83,11 +76,10 @@ SheetPage(
   FocusNode setalarmminuteNode,
   String hour,
   String minute,
-  String doc_title,
+  String docTitle,
   String id,
-  int isChecked_pushalarmwhat,
+  int isCheckedPushalarmwhat,
   DateTime date,
-  FToast fToast,
 ) {
   return SizedBox(
       child: Padding(
@@ -110,12 +102,21 @@ SheetPage(
               const SizedBox(
                 height: 20,
               ),
-              title(context, doc_title),
+              title(context, docTitle),
               const SizedBox(
                 height: 20,
               ),
-              content(context, setalarmhourNode, setalarmminuteNode, hour,
-                  minute, doc_title, id, isChecked_pushalarmwhat, date, fToast),
+              content(
+                context,
+                setalarmhourNode,
+                setalarmminuteNode,
+                hour,
+                minute,
+                docTitle,
+                id,
+                isCheckedPushalarmwhat,
+                date,
+              ),
               const SizedBox(
                 height: 20,
               ),
@@ -125,19 +126,19 @@ SheetPage(
 
 title(
   BuildContext context,
-  String doc_title,
+  String docTitle,
 ) {
   return SizedBox(
       width: MediaQuery.of(context).size.width * 0.8,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          doc_title != ''
+          docTitle != ''
               ? RichText(
                   maxLines: 2,
                   text: TextSpan(children: [
                     TextSpan(
-                        text: doc_title,
+                        text: docTitle,
                         style: TextStyle(
                             color: Colors.blue.shade400,
                             fontWeight: FontWeight.bold,
@@ -169,21 +170,17 @@ content(
   FocusNode setalarmminuteNode,
   String hour,
   String minute,
-  String doc_title,
+  String docTitle,
   String id,
-  int isChecked_pushalarmwhat,
+  int isCheckedPushalarmwhat,
   DateTime date,
-  FToast fToast,
 ) {
   DateTime now = DateTime.now();
-  final controll_cal = Get.put(calendarsetting());
-  final controll_memo = Get.put(memosetting());
+  final draw = Get.put(navibool());
+  final controllCal = Get.put(calendarsetting());
+  final controllMemo = Get.put(memosetting());
   TimeOfDay? pickednow;
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  String username = Hive.box('user_info').get(
-    'id',
-  );
-  final cal_share_person = Get.put(PeopleAdd());
+  final calSharePerson = Get.put(PeopleAdd());
 
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
@@ -255,23 +252,23 @@ content(
                                         cancelText: '닫기',
                                         confirmText: '설정',
                                         initialTime:
-                                            controll_cal.hour1 == '99' &&
-                                                    controll_cal.minute1 == '99'
+                                            controllCal.hour1 == '99' &&
+                                                    controllCal.minute1 == '99'
                                                 ? TimeOfDay.now()
                                                 : TimeOfDay(
                                                     hour: int.parse(
-                                                        controll_cal.hour1),
+                                                        controllCal.hour1),
                                                     minute: int.parse(
-                                                        controll_cal.minute1)));
+                                                        controllCal.minute1)));
                                     if (pickednow != null) {
-                                      if (doc_title != '') {
-                                        controll_cal.settimeminute(
+                                      if (docTitle != '') {
+                                        controllCal.settimeminute(
                                             pickednow!.hour,
                                             pickednow!.minute,
-                                            doc_title,
+                                            docTitle,
                                             id);
                                       } else {
-                                        controll_cal.settimeminute(
+                                        controllCal.settimeminute(
                                             pickednow!.hour,
                                             pickednow!.minute,
                                             '',
@@ -298,22 +295,19 @@ content(
                         mainAxisAlignment: MainAxisAlignment.end,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          doc_title != ''
-                              ? (controll_cal.hour1 != '99' ||
-                                      controll_cal.minute1 != '99'
-                                  ? (controll_cal.hour1.toString().length < 2
-                                      ? (controll_cal.minute1
-                                                  .toString()
-                                                  .length <
+                          docTitle != ''
+                              ? (controllCal.hour1 != '99' ||
+                                      controllCal.minute1 != '99'
+                                  ? (controllCal.hour1.toString().length < 2
+                                      ? (controllCal.minute1.toString().length <
                                               2
                                           ? Text(
                                               '설정시간 : ' +
                                                   '0' +
-                                                  controll_cal.hour1
-                                                      .toString() +
+                                                  controllCal.hour1.toString() +
                                                   '시 ' +
                                                   '0' +
-                                                  controll_cal.minute1
+                                                  controllCal.minute1
                                                       .toString() +
                                                   '분',
                                               style: TextStyle(
@@ -324,10 +318,9 @@ content(
                                           : Text(
                                               '설정시간 : ' +
                                                   '0' +
-                                                  controll_cal.hour1
-                                                      .toString() +
+                                                  controllCal.hour1.toString() +
                                                   '시 ' +
-                                                  controll_cal.minute1
+                                                  controllCal.minute1
                                                       .toString() +
                                                   '분',
                                               style: TextStyle(
@@ -335,17 +328,14 @@ content(
                                                   fontSize: contentTextsize(),
                                                   color: Colors.black),
                                             ))
-                                      : (controll_cal.minute1
-                                                  .toString()
-                                                  .length <
+                                      : (controllCal.minute1.toString().length <
                                               2
                                           ? Text(
                                               '설정시간 : ' +
-                                                  controll_cal.hour1
-                                                      .toString() +
+                                                  controllCal.hour1.toString() +
                                                   '시 ' +
                                                   '0' +
-                                                  controll_cal.minute1
+                                                  controllCal.minute1
                                                       .toString() +
                                                   '분',
                                               style: TextStyle(
@@ -355,10 +345,9 @@ content(
                                             )
                                           : Text(
                                               '설정시간 : ' +
-                                                  controll_cal.hour1
-                                                      .toString() +
+                                                  controllCal.hour1.toString() +
                                                   '시 ' +
-                                                  controll_cal.minute1
+                                                  controllCal.minute1
                                                       .toString() +
                                                   '분',
                                               style: TextStyle(
@@ -373,21 +362,18 @@ content(
                                           fontSize: contentTextsize(),
                                           color: Colors.black),
                                     ))
-                              : (controll_cal.hour1 != '99' ||
-                                      controll_cal.minute1 != '99'
-                                  ? (controll_cal.hour1.toString().length < 2
-                                      ? (controll_cal.minute1
-                                                  .toString()
-                                                  .length <
+                              : (controllCal.hour1 != '99' ||
+                                      controllCal.minute1 != '99'
+                                  ? (controllCal.hour1.toString().length < 2
+                                      ? (controllCal.minute1.toString().length <
                                               2
                                           ? Text(
                                               '설정시간 : ' +
                                                   '0' +
-                                                  controll_cal.hour1
-                                                      .toString() +
+                                                  controllCal.hour1.toString() +
                                                   '시 ' +
                                                   '0' +
-                                                  controll_cal.minute1
+                                                  controllCal.minute1
                                                       .toString() +
                                                   '분',
                                               style: TextStyle(
@@ -398,10 +384,9 @@ content(
                                           : Text(
                                               '설정시간 : ' +
                                                   '0' +
-                                                  controll_cal.hour1
-                                                      .toString() +
+                                                  controllCal.hour1.toString() +
                                                   '시 ' +
-                                                  controll_cal.minute1
+                                                  controllCal.minute1
                                                       .toString() +
                                                   '분',
                                               style: TextStyle(
@@ -409,17 +394,14 @@ content(
                                                   fontSize: contentTextsize(),
                                                   color: Colors.black),
                                             ))
-                                      : (controll_cal.minute1
-                                                  .toString()
-                                                  .length <
+                                      : (controllCal.minute1.toString().length <
                                               2
                                           ? Text(
                                               '설정시간 : ' +
-                                                  controll_cal.hour1
-                                                      .toString() +
+                                                  controllCal.hour1.toString() +
                                                   '시 ' +
                                                   '0' +
-                                                  controll_cal.minute1
+                                                  controllCal.minute1
                                                       .toString() +
                                                   '분',
                                               style: TextStyle(
@@ -429,10 +411,9 @@ content(
                                             )
                                           : Text(
                                               '설정시간 : ' +
-                                                  controll_cal.hour1
-                                                      .toString() +
+                                                  controllCal.hour1.toString() +
                                                   '시 ' +
-                                                  controll_cal.minute1
+                                                  controllCal.minute1
                                                       .toString() +
                                                   '분',
                                               style: TextStyle(
@@ -460,26 +441,25 @@ content(
                                     child: InkWell(
                                       onTap: () {
                                         setState(() {
-                                          if (controll_cal.hour1.toString() ==
+                                          if (controllCal.hour1.toString() ==
                                                   '99' ||
-                                              controll_cal.minute1.toString() ==
+                                              controllCal.minute1.toString() ==
                                                   '99') {
-                                            CreateCalandmemoSuccessFlushbar(
-                                                '시간 설정안됨!', fToast);
+                                            Snack.snackbars(
+                                                context: context,
+                                                title: '시간 설정안됨!',
+                                                backgroundcolor: Colors.black,
+                                                bordercolor:
+                                                    draw.backgroundcolor);
                                           } else {
-                                            CreateCalandmemoSuccessFlushbar(
-                                                '설정 완료!', fToast);
+                                            Snack.snackbars(
+                                                context: context,
+                                                title: '설정 완료!',
+                                                backgroundcolor: Colors.green,
+                                                bordercolor:
+                                                    draw.backgroundcolor);
                                             Snack.isopensnacks();
                                           }
-
-                                          /*Get.back();
-                                          Snack.show(
-                                              context: context,
-                                              title: '알림',
-                                              content: '알람설정 완료',
-                                              snackType: SnackType.info,
-                                              behavior:
-                                                  SnackBarBehavior.floating);*/
                                         });
                                       },
                                       child: Container(
@@ -518,19 +498,14 @@ content(
                                       height: 50,
                                       child: InkWell(
                                         onTap: () {
-                                          controll_cal.setalarmcal(
-                                              doc_title, id);
-                                          CreateCalandmemoSuccessFlushbar(
-                                              '해제 완료!', fToast);
-                                          Snack.isopensnacks();
-                                          /*Get.back();
-                                          Snack.show(
+                                          controllCal.setalarmcal(docTitle, id);
+                                          Snack.snackbars(
                                               context: context,
-                                              title: '알림',
-                                              content: '알람해제 완료!',
-                                              snackType: SnackType.info,
-                                              behavior:
-                                                  SnackBarBehavior.floating);*/
+                                              title: '해제 완료!',
+                                              backgroundcolor: Colors.green,
+                                              bordercolor:
+                                                  draw.backgroundcolor);
+                                          Snack.isopensnacks();
                                         },
                                         child: Container(
                                           color: Colors.red.shade400,

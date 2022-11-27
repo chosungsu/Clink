@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/Getx/PeopleAdd.dart';
 import 'package:clickbyme/Tool/Getx/calendarsetting.dart';
@@ -10,16 +12,17 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import '../../../Enums/Variables.dart';
 import '../../../FRONTENDPART/Route/subuiroute.dart';
+import '../../../FRONTENDPART/UI(Widget/DayScript.dart';
 import '../../../LocalNotiPlatform/NotificationApi.dart';
 import '../../../Tool/AndroidIOS.dart';
 import '../../../Tool/FlushbarStyle.dart';
+import '../../../Tool/Getx/navibool.dart';
 import '../../../Tool/Loader.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
 import '../Widgets/CreateCalandmemo.dart';
-import '../Widgets/ViewSet.dart';
-import '../firstContentNet/DayScript.dart';
 
 class ClickShowEachCalendar extends StatefulWidget {
   const ClickShowEachCalendar({
@@ -61,9 +64,6 @@ class ClickShowEachCalendar extends StatefulWidget {
 
 class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
     with WidgetsBindingObserver {
-  double translateX = 0.0;
-  double translateY = 0.0;
-  double myWidth = 0.0;
   late TextEditingController textEditingController1;
   late TextEditingController textEditingController2;
   late TextEditingController textEditingController3;
@@ -74,10 +74,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
   List deleteid = [];
   bool isresponsive = false;
   bool isChecked_pushalarm = false;
-  String name = Hive.box('user_info').get('id');
   String changevalue = Hive.box('user_setting').get('alarming_time') ?? "10분 전";
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  late FToast fToast;
   bool loading = false;
   late List<bool> alarmtypes = [];
   final setalarmhourNode = FocusNode();
@@ -85,6 +82,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
   String hour = '';
   String minute = '';
   var isChecked_pushalarmwhat = null;
+  final draw = Get.put(navibool());
   final cal_share_person = Get.put(PeopleAdd());
   final controll_cal = Get.put(calendarsetting());
   String updateidalarm = '';
@@ -104,8 +102,6 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
     super.initState();
     print(widget.date);
     alarmtypes.clear();
-    fToast = FToast();
-    fToast.init(context);
     WidgetsBinding.instance.addObserver(this);
     textEditingController1 = TextEditingController(text: widget.calinfo);
     if (widget.start == '' || widget.start == '하루종일 일정으로 기록') {
@@ -221,7 +217,11 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
               setState(() {
                 loading = false;
               });
-              CreateCalandmemoSuccessFlushbar('일정삭제 완료!', fToast);
+              Snack.snackbars(
+                  context: context,
+                  title: '일정삭제 완료!',
+                  backgroundcolor: Colors.red,
+                  bordercolor: draw.backgroundcolor);
               widget.isfromwhere == 'home' ? GoToMain() : Get.back();
               firestore
                   .collection('CalendarDataBase')
@@ -240,7 +240,11 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                 setState(() {
                   loading = false;
                 });
-                CreateCalandmemoSuccessFlushbar('일정삭제 완료!', fToast);
+                Snack.snackbars(
+                    context: context,
+                    title: '일정삭제 완료!',
+                    backgroundcolor: Colors.red,
+                    bordercolor: draw.backgroundcolor);
                 widget.isfromwhere == 'home' ? GoToMain() : Get.back();
                 firestore
                     .collection('CalendarDataBase')
@@ -280,7 +284,11 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                   setState(() {
                     loading = false;
                   });
-                  CreateCalandmemoSuccessFlushbar('일정삭제 완료!', fToast);
+                  Snack.snackbars(
+                      context: context,
+                      title: '일정삭제 완료!',
+                      backgroundcolor: Colors.red,
+                      bordercolor: draw.backgroundcolor);
                   widget.isfromwhere == 'home' ? GoToMain() : Get.back();
                   for (int i = 0; i <= deleterepeatdate; i++) {
                     firestore
@@ -300,7 +308,11 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                   setState(() {
                     loading = false;
                   });
-                  CreateCalandmemoSuccessFlushbar('일정삭제 완료!', fToast);
+                  Snack.snackbars(
+                      context: context,
+                      title: '일정삭제 완료!',
+                      backgroundcolor: Colors.red,
+                      bordercolor: draw.backgroundcolor);
                   widget.isfromwhere == 'home' ? GoToMain() : Get.back();
                   firestore
                       .collection('CalendarDataBase')
@@ -446,7 +458,11 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
         setState(() {
           loading = false;
         });
-        CreateCalandmemoSuccessFlushbar('저장완료', fToast);
+        Snack.snackbars(
+            context: context,
+            title: '저장완료',
+            backgroundcolor: Colors.green,
+            bordercolor: draw.backgroundcolor);
         Future.delayed(const Duration(seconds: 1), () {
           if (widget.isfromwhere == 'home') {
             GoToMain();
@@ -569,24 +585,24 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
     MediaQuery.of(context).size.height > 900
         ? isresponsive = true
         : isresponsive = false;
-    return SafeArea(
-        child: Scaffold(
-      backgroundColor: Colors.white,
-      resizeToAvoidBottomInset: false,
-      body: WillPopScope(
-        onWillPop: _onWillPop,
-        child: Stack(
-          children: [
-            UI(),
-            loading == true
-                ? const Loader(
-                    wherein: 'caleach',
-                  )
-                : Container()
-          ],
-        ),
-      ),
-    ));
+    return Scaffold(
+        backgroundColor: draw.backgroundcolor,
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: WillPopScope(
+            onWillPop: _onWillPop,
+            child: Stack(
+              children: [
+                UI(),
+                loading == true
+                    ? const Loader(
+                        wherein: 'caleach',
+                      )
+                    : Container()
+              ],
+            ),
+          ),
+        ));
   }
 
   UI() {
@@ -594,131 +610,90 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
     return SizedBox(
       height: height,
       child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
+          decoration: BoxDecoration(
+            color: draw.backgroundcolor,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                  height: 80,
+                  height: 60,
                   child: Padding(
                     padding: const EdgeInsets.only(
-                        left: 10, right: 10, top: 20, bottom: 10),
+                        left: 20, right: 10, top: 5, bottom: 5),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
+                        GetPlatform.isMobile == false
+                            ? IconBtn(
+                                child: IconButton(
+                                    onPressed: () {
+                                      savelogic();
+                                    },
+                                    icon: Container(
+                                      alignment: Alignment.center,
+                                      width: 30,
+                                      height: 30,
+                                      child: NeumorphicIcon(
+                                        Icons.keyboard_arrow_left,
+                                        size: 30,
+                                        style: const NeumorphicStyle(
+                                            shape: NeumorphicShape.convex,
+                                            depth: 2,
+                                            surfaceIntensity: 0.5,
+                                            color: Colors.black,
+                                            lightSource: LightSource.topLeft),
+                                      ),
+                                    )),
+                                color: Colors.black)
+                            : const SizedBox(),
                         Flexible(
                             fit: FlexFit.tight,
-                            child: Row(
-                              children: [
-                                GetPlatform.isMobile == false
-                                    ? IconBtn(
-                                        child: IconButton(
-                                            onPressed: () {
-                                              savelogic();
-                                            },
-                                            icon: Container(
-                                              alignment: Alignment.center,
-                                              width: 30,
-                                              height: 30,
-                                              child: NeumorphicIcon(
-                                                Icons.keyboard_arrow_left,
-                                                size: 30,
-                                                style: const NeumorphicStyle(
-                                                    shape:
-                                                        NeumorphicShape.convex,
-                                                    depth: 2,
-                                                    surfaceIntensity: 0.5,
-                                                    color: Colors.black,
-                                                    lightSource:
-                                                        LightSource.topLeft),
-                                              ),
-                                            )),
-                                        color: Colors.black)
-                                    : const SizedBox(),
-                                SizedBox(
-                                    width: GetPlatform.isMobile == false
-                                        ? MediaQuery.of(context).size.width - 70
-                                        : MediaQuery.of(context).size.width -
-                                            20,
-                                    child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 10, right: 10),
-                                        child: Row(
-                                          children: [
-                                            const Flexible(
-                                              fit: FlexFit.tight,
-                                              child: Text(
-                                                '',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 25,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                            ),
-                                            IconBtn(
-                                                child: IconButton(
-                                                    onPressed: () async {
-                                                      savelogic();
-                                                    },
-                                                    icon: Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      width: 30,
-                                                      height: 30,
-                                                      child: NeumorphicIcon(
-                                                        Icons.save_alt,
-                                                        size: 30,
-                                                        style: const NeumorphicStyle(
-                                                            shape:
-                                                                NeumorphicShape
-                                                                    .convex,
-                                                            depth: 2,
-                                                            surfaceIntensity:
-                                                                0.5,
-                                                            color: Colors.black,
-                                                            lightSource:
-                                                                LightSource
-                                                                    .topLeft),
-                                                      ),
-                                                    )),
-                                                color: Colors.black),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            IconBtn(
-                                                child: IconButton(
-                                                    onPressed: () async {
-                                                      deletelogic();
-                                                    },
-                                                    icon: Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      width: 30,
-                                                      height: 30,
-                                                      child: NeumorphicIcon(
-                                                        Icons.delete,
-                                                        size: 30,
-                                                        style: const NeumorphicStyle(
-                                                            shape:
-                                                                NeumorphicShape
-                                                                    .convex,
-                                                            depth: 2,
-                                                            surfaceIntensity:
-                                                                0.5,
-                                                            color: Colors.black,
-                                                            lightSource:
-                                                                LightSource
-                                                                    .topLeft),
-                                                      ),
-                                                    )),
-                                                color: Colors.black),
-                                          ],
-                                        ))),
-                              ],
-                            )),
+                            child: Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: Row(
+                                  children: [
+                                    const Flexible(
+                                      fit: FlexFit.tight,
+                                      child: Text(
+                                        '',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 25,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                    ContainerDesign(
+                                        child: GestureDetector(
+                                          onTap: () async {
+                                            savelogic();
+                                          },
+                                          child: Icon(
+                                            Icons.save_alt,
+                                            size: 30,
+                                            color: draw.color_textstatus,
+                                          ),
+                                        ),
+                                        color: draw.backgroundcolor),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    ContainerDesign(
+                                        child: GestureDetector(
+                                          onTap: () async {
+                                            deletelogic();
+                                          },
+                                          child: Icon(
+                                            Icons.delete,
+                                            size: 30,
+                                            color: draw.color_textstatus,
+                                          ),
+                                        ),
+                                        color: draw.backgroundcolor),
+                                  ],
+                                ))),
                       ],
                     ),
                   )),
@@ -801,14 +776,14 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
       style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: contentTitleTextsize(),
-          color: Colors.black),
+          color: draw.color_textstatus),
     );
   }
 
   Title() {
     return SizedBox(
         child: ContainerDesign(
-      color: Colors.white,
+      color: draw.backgroundcolor,
       child: TextField(
         readOnly: false,
         minLines: 1,
@@ -831,7 +806,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
       style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: contentTitleTextsize(),
-          color: Colors.black),
+          color: draw.color_textstatus),
     );
   }
 
@@ -847,16 +822,16 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
             children: [
               SizedBox(
                 child: ContainerDesign(
-                  color: Colors.white,
+                  color: draw.backgroundcolor,
                   child: ListTile(
                     leading: NeumorphicIcon(
                       Icons.schedule,
                       size: 30,
-                      style: const NeumorphicStyle(
+                      style: NeumorphicStyle(
                           shape: NeumorphicShape.convex,
                           depth: 2,
                           surfaceIntensity: 0.5,
-                          color: Colors.black,
+                          color: draw.color_textstatus,
                           lightSource: LightSource.topLeft),
                     ),
                     title: Text(
@@ -864,12 +839,13 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: contentTitleTextsize(),
-                          color: Colors.black),
+                          color: draw.color_textstatus),
                     ),
                     subtitle: TextFormField(
                       readOnly: true,
                       style: TextStyle(
-                          fontSize: contentTextsize(), color: Colors.black),
+                          fontSize: contentTextsize(),
+                          color: draw.color_textstatus),
                       decoration: const InputDecoration(
                         border: InputBorder.none,
                         isCollapsed: true,
@@ -880,9 +856,9 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                       onTap: () {
                         pickDates(context, textEditingController2, widget.date);
                       },
-                      child: const Icon(
+                      child: Icon(
                         Icons.arrow_drop_down,
-                        color: Colors.black,
+                        color: draw.color_textstatus,
                       ),
                     ),
                   ),
@@ -893,16 +869,16 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
               ),
               SizedBox(
                 child: ContainerDesign(
-                  color: Colors.white,
+                  color: draw.backgroundcolor,
                   child: ListTile(
                     leading: NeumorphicIcon(
                       Icons.schedule,
                       size: 30,
-                      style: const NeumorphicStyle(
+                      style: NeumorphicStyle(
                           shape: NeumorphicShape.convex,
                           depth: 2,
                           surfaceIntensity: 0.5,
-                          color: Colors.black,
+                          color: draw.color_textstatus,
                           lightSource: LightSource.topLeft),
                     ),
                     title: Text(
@@ -910,12 +886,13 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: contentTitleTextsize(),
-                          color: Colors.black),
+                          color: draw.color_textstatus),
                     ),
                     subtitle: TextFormField(
                       readOnly: true,
                       style: TextStyle(
-                          fontSize: contentTextsize(), color: Colors.black),
+                          fontSize: contentTextsize(),
+                          color: draw.color_textstatus),
                       decoration: const InputDecoration(
                         border: InputBorder.none,
                         isCollapsed: true,
@@ -926,9 +903,9 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                       onTap: () {
                         pickDates(context, textEditingController3, widget.date);
                       },
-                      child: const Icon(
+                      child: Icon(
                         Icons.arrow_drop_down,
-                        color: Colors.black,
+                        color: draw.color_textstatus,
                       ),
                     ),
                   ),
@@ -950,7 +927,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
           style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: contentTitleTextsize(),
-              color: Colors.black),
+              color: draw.color_textstatus),
         ),
         const SizedBox(
           height: 20,
@@ -960,204 +937,22 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
               minLines: 5,
               maxLines: null,
               focusNode: searchsecondNode,
-              style:
-                  TextStyle(fontSize: contentTextsize(), color: Colors.black),
+              style: TextStyle(
+                  fontSize: contentTextsize(), color: draw.color_textstatus),
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.only(left: 10),
                 border: InputBorder.none,
                 isCollapsed: true,
                 hintText: '일정에 대한 세부사항 작성',
                 hintStyle: TextStyle(
-                    fontSize: contentTextsize(), color: Colors.grey.shade400),
+                    fontSize: contentTextsize(), color: draw.color_textstatus),
               ),
               controller: textEditingController4,
             ),
-            color: Colors.white)
+            color: draw.backgroundcolor)
       ],
     ));
   }
-
-  /*buildAlarmTitle() {
-    return SizedBox(
-        child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Flexible(
-          fit: FlexFit.tight,
-          child: Text(
-            '알람설정',
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: contentTitleTextsize(),
-                color: Colors.black),
-          ),
-        ),
-        widget.alarm == '설정off'
-            ? Transform.scale(
-                scale: 1,
-                child: Switch(
-                    activeColor: Colors.blue,
-                    inactiveThumbColor: Colors.black,
-                    inactiveTrackColor: Colors.grey.shade100,
-                    value: isChecked_pushalarm,
-                    onChanged: (bool val) {
-                      setState(() {
-                        isChecked_pushalarm = val;
-                        if (isChecked_pushalarm == false) {
-                          NotificationApi.cancelNotification(
-                              id: int.parse(
-                                      widget.date.toString().split('-')[0]) +
-                                  int.parse(
-                                      widget.date.toString().split('-')[1]) +
-                                  int.parse(widget.date
-                                      .toString()
-                                      .split('-')[2]
-                                      .toString()
-                                      .split(' ')[0]) +
-                                  int.parse(
-                                      widget.code.toString().numericOnly()));
-                        }
-                      });
-                    }),
-              )
-            : Transform.scale(
-                scale: 1,
-                child: Switch(
-                    activeColor: Colors.blue,
-                    inactiveThumbColor: Colors.black,
-                    inactiveTrackColor: Colors.grey.shade400,
-                    value: !isChecked_pushalarm,
-                    onChanged: (bool val) {
-                      setState(() {
-                        isChecked_pushalarm = !val;
-                        if (!isChecked_pushalarm == false) {
-                          NotificationApi.cancelNotification(
-                              id: int.parse(
-                                      widget.date.toString().split('-')[0]) +
-                                  int.parse(
-                                      widget.date.toString().split('-')[1]) +
-                                  int.parse(widget.date
-                                      .toString()
-                                      .split('-')[2]
-                                      .toString()
-                                      .split(' ')[0]) +
-                                  int.parse(
-                                      widget.code.toString().numericOnly()));
-                        }
-                      });
-                    }),
-              )
-      ],
-    ));
-  }
-
-  List<DropdownMenuItem<String>> get dropdownItems {
-    List<DropdownMenuItem<String>> menuItems = [
-      const DropdownMenuItem(child: Text("1분 전"), value: "1분 전"),
-      const DropdownMenuItem(child: Text("5분 전"), value: "5분 전"),
-      const DropdownMenuItem(child: Text("10분 전"), value: "10분 전"),
-      const DropdownMenuItem(child: Text("30분 전"), value: "30분 전"),
-    ];
-    return menuItems;
-  }
-
-  Alarm() {
-    return SizedBox(
-        child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SizedBox(
-          child: ContainerDesign(
-            color: Colors.white,
-            child: ListTile(
-              leading: NeumorphicIcon(
-                Icons.alarm,
-                size: 30,
-                style: const NeumorphicStyle(
-                    shape: NeumorphicShape.convex,
-                    depth: 2,
-                    surfaceIntensity: 0.5,
-                    color: Colors.black,
-                    lightSource: LightSource.topLeft),
-              ),
-              title: Text(
-                '알람',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: contentTitleTextsize(),
-                    color: Colors.black),
-              ),
-              trailing: widget.alarm == '설정off'
-                  ? (isChecked_pushalarm == true
-                      ? DropdownButton(
-                          value: changevalue,
-                          dropdownColor: Colors.white,
-                          items: dropdownItems,
-                          icon: NeumorphicIcon(
-                            Icons.arrow_drop_down,
-                            size: 20,
-                            style: const NeumorphicStyle(
-                                shape: NeumorphicShape.convex,
-                                depth: 2,
-                                surfaceIntensity: 0.5,
-                                color: Colors.black,
-                                lightSource: LightSource.topLeft),
-                          ),
-                          style: TextStyle(
-                              color: Colors.black, fontSize: contentTextsize()),
-                          onChanged: isChecked_pushalarm == true
-                              ? (String? value) {
-                                  setState(() {
-                                    changevalue = value!;
-                                    Hive.box('user_setting')
-                                        .put('alarming_time', changevalue);
-                                  });
-                                }
-                              : null,
-                        )
-                      : Text(
-                          '설정off상태입니다.',
-                          style: TextStyle(
-                              fontSize: contentTextsize(), color: Colors.black),
-                        ))
-                  : (!isChecked_pushalarm == true
-                      ? DropdownButton(
-                          value: changevalue,
-                          dropdownColor: Colors.white,
-                          items: dropdownItems,
-                          icon: NeumorphicIcon(
-                            Icons.arrow_drop_down,
-                            size: 20,
-                            style: const NeumorphicStyle(
-                                shape: NeumorphicShape.convex,
-                                depth: 2,
-                                surfaceIntensity: 0.5,
-                                color: Colors.black,
-                                lightSource: LightSource.topLeft),
-                          ),
-                          style: TextStyle(
-                              color: Colors.black, fontSize: contentTextsize()),
-                          onChanged: !isChecked_pushalarm == true
-                              ? (String? value) {
-                                  setState(() {
-                                    changevalue = value!;
-                                    Hive.box('user_setting')
-                                        .put('alarming_time', changevalue);
-                                  });
-                                }
-                              : null,
-                        )
-                      : Text(
-                          '설정off상태입니다.',
-                          style: TextStyle(
-                              fontSize: contentTextsize(), color: Colors.black),
-                        )),
-            ),
-          ),
-        ),
-      ],
-    ));
-  }*/
 
   buildAlarmTitleupdateversion() {
     return SizedBox(
@@ -1171,15 +966,15 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: contentTitleTextsize(),
-                color: Colors.black),
+                color: draw.color_textstatus),
           ),
         ),
         Transform.scale(
           scale: 1,
           child: Switch(
               activeColor: Colors.blue,
-              inactiveThumbColor: Colors.black,
-              inactiveTrackColor: Colors.grey.shade100,
+              inactiveThumbColor: draw.color_textstatus,
+              inactiveTrackColor: draw.color_textstatus,
               value: isChecked_pushalarm,
               onChanged: (bool val) {
                 setState(() {
@@ -1202,7 +997,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
   Alarmupdateversion() {
     return SizedBox(
         child: ContainerDesign(
-      color: Colors.white,
+      color: draw.backgroundcolor,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -1212,7 +1007,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: contentTextsize(),
-                  color: Colors.black),
+                  color: draw.color_textstatus),
             ),
             subtitle: Text(
               '이 기능은 하루전날만 알람이 울립니다.',
@@ -1220,7 +1015,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
-                  color: Colors.grey.shade400,
+                  color: draw.color_textstatus,
                   overflow: TextOverflow.ellipsis),
             ),
             enabled: !isChecked_pushalarm == true ? false : true,
@@ -1247,7 +1042,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: contentTextsize(),
-                  color: Colors.black),
+                  color: draw.color_textstatus),
             ),
             subtitle: Text(
               '이 기능은 당일만 알람이 울립니다.',
@@ -1255,7 +1050,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
-                  color: Colors.grey.shade400,
+                  color: draw.color_textstatus,
                   overflow: TextOverflow.ellipsis),
             ),
             enabled: !isChecked_pushalarm == true ? false : true,
@@ -1290,7 +1085,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: contentTextsize(),
-                          color: Colors.black),
+                          color: draw.color_textstatus),
                     ),
                     subtitle: Text(
                       '우측 알람 아이콘 클릭',
@@ -1298,39 +1093,25 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
-                          color: Colors.grey.shade400,
+                          color: draw.color_textstatus,
                           overflow: TextOverflow.ellipsis),
                     ),
                     trailing: IconButton(
                       icon: const Icon(Icons.alarm_add),
                       onPressed: () {
-                        /*await firestore
-                    .collection('CalendarDataBase')
-                    .doc(widget.id)
-                    .get()
-                    .then(
-                  (value) {
-                    if (value.exists) {
-                      setState(() {
-                        hour = value.data()!['alarmhour'].toString();
-                        minute = value.data()!['alarmminute'].toString();
-                      });
-                    }
-                  },
-                );*/
                         hour = controll_cal.hour1;
                         minute = controll_cal.minute1;
                         pushalarmsettingcal(
-                            context,
-                            setalarmhourNode,
-                            setalarmminuteNode,
-                            hour,
-                            minute,
-                            widget.calinfo,
-                            widget.id,
-                            isChecked_pushalarmwhat,
-                            widget.date,
-                            fToast);
+                          context,
+                          setalarmhourNode,
+                          setalarmminuteNode,
+                          hour,
+                          minute,
+                          widget.calinfo,
+                          widget.id,
+                          isChecked_pushalarmwhat,
+                          widget.date,
+                        );
                       },
                     ),
                   )),
@@ -1341,7 +1122,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: contentTextsize(),
-                          color: Colors.black),
+                          color: draw.color_textstatus),
                     ),
                     trailing: controll_cal.hour1 != '99' ||
                             controll_cal.minute1 != '99'
@@ -1364,7 +1145,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: contentTextsize(),
-                                                color: Colors.black),
+                                                color: draw.color_textstatus),
                                           )
                                         : Text(
                                             '0' +
@@ -1376,7 +1157,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: contentTextsize(),
-                                                color: Colors.black),
+                                                color: draw.color_textstatus),
                                           ))
                                     : (controll_cal.minute1.toString().length <
                                             2
@@ -1390,7 +1171,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: contentTextsize(),
-                                                color: Colors.black),
+                                                color: draw.color_textstatus),
                                           )
                                         : Text(
                                             controll_cal.hour1.toString() +
@@ -1401,22 +1182,8 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: contentTextsize(),
-                                                color: Colors.black),
+                                                color: draw.color_textstatus),
                                           )))
-                                /*Text(
-                                  controll_cal.hour1 + '시 ',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTextsize(),
-                                      color: Colors.grey.shade400),
-                                ),
-                                Text(
-                                  controll_cal.minute1 + '분',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTextsize(),
-                                      color: Colors.grey.shade400),
-                                ),*/
                               ],
                             ),
                           )
@@ -1425,7 +1192,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: contentTextsize(),
-                                color: Colors.grey.shade400),
+                                color: draw.color_textstatus),
                           ),
                   ))
         ],

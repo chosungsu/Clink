@@ -10,12 +10,12 @@ import '../../../Enums/Variables.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/Getx/linkspacesetting.dart';
 import '../../../Tool/TextSize.dart';
-import '../Enums/Linkpage.dart';
-import '../Tool/FlushbarStyle.dart';
-import '../Tool/Getx/PeopleAdd.dart';
-import '../Tool/Getx/calendarsetting.dart';
-import '../Tool/Getx/navibool.dart';
-import 'Home/firstContentNet/DayContentHome.dart';
+import '../../Enums/Linkpage.dart';
+import '../../Tool/FlushbarStyle.dart';
+import '../../Tool/Getx/PeopleAdd.dart';
+import '../../Tool/Getx/calendarsetting.dart';
+import '../../Tool/Getx/navibool.dart';
+import 'DayContentHome.dart';
 
 SpaceinUI(
   String id,

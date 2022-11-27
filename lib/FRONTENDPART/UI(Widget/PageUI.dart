@@ -9,7 +9,7 @@ import '../../../Enums/Variables.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/Getx/linkspacesetting.dart';
 import '../../../Tool/TextSize.dart';
-import '../BACKENDPART/FIREBASE/PersonalVP.dart';
+import '../../BACKENDPART/FIREBASE/PersonalVP.dart';
 
 PageUI1(String id, TextEditingController controller) {
   final searchNode = FocusNode();

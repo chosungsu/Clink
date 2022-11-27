@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:clickbyme/LocalNotiPlatform/NotificationApi.dart';
-import 'package:clickbyme/UI/Home/Widgets/CalendarView.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Home/Widgets/CreateCalandmemo.dart';
 import 'package:clickbyme/UI/Home/Widgets/MemoFocusedHolder.dart';
@@ -12,15 +11,18 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../Enums/Event.dart';
 import '../../../Enums/MemoList.dart';
 import '../../../FRONTENDPART/Route/subuiroute.dart';
 import '../../../Tool/AndroidIOS.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/ContainerDesign.dart';
+import '../../../Tool/FlushbarStyle.dart';
 import '../../../Tool/Getx/PeopleAdd.dart';
 import '../../../Tool/Getx/calendarsetting.dart';
 import '../../../Tool/Getx/memosetting.dart';
+import '../../../Tool/Getx/navibool.dart';
 import '../../../Tool/Getx/selectcollection.dart';
 import '../../../Tool/Getx/uisetting.dart';
 import '../../../Tool/IconBtn.dart';
@@ -30,9 +32,10 @@ import '../../../Tool/lunarToSolar.dart';
 import '../../../sheets/addcalendarrepeat.dart';
 import '../../../sheets/addmemocollection.dart';
 import '../../../sheets/pushalarmsettingcal.dart';
+import 'CalendarView.dart';
 
 class DayScript extends StatefulWidget {
-  DayScript(
+  const DayScript(
       {Key? key,
       required this.firstdate,
       required this.position,
@@ -84,6 +87,7 @@ class _DayScriptState extends State<DayScript> {
   late TextEditingController textEditingController4;
   late TextEditingController textEditingController5;
   String usercode = Hive.box('user_setting').get('usercode');
+  final draw = Get.put(navibool());
   //캘린더변수
   late Map<DateTime, List<Event>> _events;
   static final cal_share_person = Get.put(PeopleAdd());
@@ -775,7 +779,11 @@ class _DayScriptState extends State<DayScript> {
       setState(() {
         uisetting().setloading(false);
       });
-      CreateCalandmemoFailSaveTitle(context);
+      Snack.snackbars(
+          context: context,
+          title: '제목이 비어있어요!',
+          backgroundcolor: Colors.red,
+          bordercolor: draw.backgroundcolor);
     }
   }
 
@@ -813,10 +821,6 @@ class _DayScriptState extends State<DayScript> {
 
   @override
   Widget build(BuildContext context) {
-    MediaQuery.of(context).size.height > 900
-        ? isresponsible = true
-        : isresponsible = false;
-
     return SafeArea(
       child: Scaffold(
           backgroundColor: BGColor(),
@@ -843,11 +847,10 @@ class _DayScriptState extends State<DayScript> {
   }
 
   UI() {
-    double height = MediaQuery.of(context).size.height;
     return StatefulBuilder(builder: ((context, setState) {
       return GetBuilder<memosetting>(
           builder: (_) => SizedBox(
-                height: height,
+                height: 100.h,
                 child: Container(
                     decoration: BoxDecoration(
                       color: widget.position == 'note'
@@ -860,197 +863,108 @@ class _DayScriptState extends State<DayScript> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                            height: 80,
+                            height: 60,
                             child: Padding(
                               padding: const EdgeInsets.only(
-                                  left: 10, right: 10, top: 20, bottom: 10),
+                                  left: 20, right: 10, top: 5, bottom: 5),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
+                                  GetPlatform.isMobile == false
+                                      ? ContainerDesign(
+                                          child: GestureDetector(
+                                            onTap: () async {
+                                              reloadpage = await Get.dialog(OSDialog(
+                                                      context,
+                                                      '경고',
+                                                      Text(
+                                                          '뒤로 나가시면 작성중인 내용은 사라지게 됩니다. 나가시겠습니까?',
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize:
+                                                                  contentTextsize(),
+                                                              color: Colors
+                                                                  .blueGrey)),
+                                                      pressed2)) ??
+                                                  false;
+                                              if (reloadpage) {
+                                                Get.back();
+                                              }
+                                            },
+                                            child: Icon(
+                                              Icons.keyboard_arrow_left,
+                                              size: 30,
+                                              color: draw.color_textstatus,
+                                            ),
+                                          ),
+                                          color: draw.backgroundcolor)
+                                      : const SizedBox(),
                                   Flexible(
                                       fit: FlexFit.tight,
-                                      child: Row(
-                                        children: [
-                                          GetPlatform.isMobile == false
-                                              ? IconBtn(
-                                                  child: IconButton(
-                                                      onPressed: () async {
-                                                        reloadpage = await Get.dialog(OSDialog(
-                                                                context,
-                                                                '경고',
-                                                                Text(
-                                                                    '뒤로 나가시면 작성중인 내용은 사라지게 됩니다. 나가시겠습니까?',
-                                                                    style: TextStyle(
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontSize:
-                                                                            contentTextsize(),
-                                                                        color: Colors
-                                                                            .blueGrey)),
-                                                                pressed2)) ??
-                                                            false;
-                                                        if (reloadpage) {
-                                                          Get.back();
-                                                        }
-                                                      },
-                                                      icon: Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 30,
-                                                        height: 30,
-                                                        child: NeumorphicIcon(
-                                                          Icons
-                                                              .keyboard_arrow_left,
-                                                          size: 30,
-                                                          style: NeumorphicStyle(
-                                                              shape:
-                                                                  NeumorphicShape
-                                                                      .convex,
-                                                              depth: 2,
-                                                              surfaceIntensity:
-                                                                  0.5,
-                                                              color: widget
-                                                                          .position ==
-                                                                      'note'
-                                                                  ? (controll_memo
-                                                                              .color ==
-                                                                          Colors
-                                                                              .black
-                                                                      ? Colors
-                                                                          .white
-                                                                      : Colors
-                                                                          .black)
-                                                                  : TextColor(),
-                                                              lightSource:
-                                                                  LightSource
-                                                                      .topLeft),
-                                                        ),
-                                                      )),
-                                                  color: widget.position ==
-                                                          'note'
-                                                      ? (controll_memo.color ==
-                                                              Colors.black
-                                                          ? Colors.white
-                                                          : Colors.black)
-                                                      : TextColor(),
-                                                )
-                                              : const SizedBox(),
-                                          SizedBox(
-                                              width:
-                                                  GetPlatform.isMobile == false
-                                                      ? MediaQuery.of(context)
-                                                              .size
-                                                              .width -
-                                                          70
-                                                      : MediaQuery.of(context)
-                                                              .size
-                                                              .width -
-                                                          20,
-                                              child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 10, right: 10),
-                                                  child: Row(
-                                                    children: [
-                                                      Flexible(
-                                                        fit: FlexFit.tight,
-                                                        child: Text(
-                                                          widget.position ==
-                                                                  'cal'
-                                                              ? '새 일정 작성'
-                                                              : '새 메모 작성',
-                                                          style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize:
-                                                                secondTitleTextsize(),
-                                                            color: widget
-                                                                        .position ==
-                                                                    'note'
-                                                                ? (controll_memo
-                                                                            .color ==
-                                                                        Colors
-                                                                            .black
-                                                                    ? Colors
-                                                                        .white
-                                                                    : Colors
-                                                                        .black)
-                                                                : Colors.black,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      widget.position == 'note'
-                                                          ? GetBuilder<
-                                                                  memosetting>(
-                                                              builder: (_) => MFHolder(
-                                                                  checkbottoms,
-                                                                  nodes,
-                                                                  scollection,
-                                                                  _color,
-                                                                  '',
-                                                                  controll_memo
-                                                                      .ischeckedtohideminus,
-                                                                  scollection
-                                                                      .controllersall,
-                                                                  _colorfont,
-                                                                  controll_memo
-                                                                      .imagelist))
-                                                          : const SizedBox(),
-                                                      widget.position == 'note'
-                                                          ? const SizedBox(
-                                                              width: 10,
-                                                            )
-                                                          : const SizedBox(),
-                                                      IconBtn(
-                                                        child: IconButton(
-                                                            onPressed:
-                                                                () async {
-                                                              autosavelogic();
-                                                            },
-                                                            icon: Container(
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                              width: 30,
-                                                              height: 30,
-                                                              child:
-                                                                  NeumorphicIcon(
-                                                                Icons.done_all,
-                                                                size: 30,
-                                                                style: NeumorphicStyle(
-                                                                    shape: NeumorphicShape
-                                                                        .convex,
-                                                                    depth: 2,
-                                                                    surfaceIntensity:
-                                                                        0.5,
-                                                                    color: widget.position ==
-                                                                            'note'
-                                                                        ? (controll_memo.color == Colors.black
-                                                                            ? Colors
-                                                                                .white
-                                                                            : Colors
-                                                                                .black)
-                                                                        : TextColor(),
-                                                                    lightSource:
-                                                                        LightSource
-                                                                            .topLeft),
-                                                              ),
-                                                            )),
-                                                        color: widget
-                                                                    .position ==
-                                                                'note'
-                                                            ? (controll_memo
-                                                                        .color ==
-                                                                    Colors.black
-                                                                ? Colors.white
-                                                                : Colors.black)
-                                                            : TextColor(),
-                                                      ),
-                                                    ],
-                                                  ))),
-                                        ],
-                                      )),
+                                      child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 10),
+                                          child: Row(
+                                            children: [
+                                              Flexible(
+                                                fit: FlexFit.tight,
+                                                child: Text(
+                                                  widget.position == 'cal'
+                                                      ? '새 일정 작성'
+                                                      : '새 메모 작성',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize:
+                                                        secondTitleTextsize(),
+                                                    color: widget.position ==
+                                                            'note'
+                                                        ? (controll_memo
+                                                                    .color ==
+                                                                Colors.black
+                                                            ? Colors.white
+                                                            : Colors.black)
+                                                        : Colors.black,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget.position == 'note'
+                                                  ? GetBuilder<memosetting>(
+                                                      builder: (_) => MFHolder(
+                                                          checkbottoms,
+                                                          nodes,
+                                                          scollection,
+                                                          _color,
+                                                          '',
+                                                          controll_memo
+                                                              .ischeckedtohideminus,
+                                                          scollection
+                                                              .controllersall,
+                                                          _colorfont,
+                                                          controll_memo
+                                                              .imagelist))
+                                                  : const SizedBox(),
+                                              widget.position == 'note'
+                                                  ? const SizedBox(
+                                                      width: 10,
+                                                    )
+                                                  : const SizedBox(),
+                                              ContainerDesign(
+                                                  child: GestureDetector(
+                                                    onTap: () async {
+                                                      autosavelogic();
+                                                    },
+                                                    child: Icon(
+                                                      Icons.done_all,
+                                                      size: 30,
+                                                      color:
+                                                          draw.color_textstatus,
+                                                    ),
+                                                  ),
+                                                  color: draw.backgroundcolor)
+                                            ],
+                                          ))),
                                 ],
                               ),
                             )),
@@ -2488,16 +2402,16 @@ class _DayScriptState extends State<DayScript> {
                       hour = '99';
                       minute = '99';
                       pushalarmsettingcal(
-                          context,
-                          setalarmhourNode,
-                          setalarmminuteNode,
-                          hour,
-                          minute,
-                          '',
-                          '',
-                          isChecked_pushalarmwhat,
-                          DateTime.now(),
-                          fToast);
+                        context,
+                        setalarmhourNode,
+                        setalarmminuteNode,
+                        hour,
+                        minute,
+                        '',
+                        '',
+                        isChecked_pushalarmwhat,
+                        DateTime.now(),
+                      );
                     },
             ),
           ),

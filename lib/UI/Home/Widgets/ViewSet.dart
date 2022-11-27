@@ -4,12 +4,12 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../../BACKENDPART/Auth/SecureAuth.dart';
 import '../../../Enums/SpaceContent.dart';
+import '../../../FRONTENDPART/UI(Widget/DayContentHome.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/Getx/PeopleAdd.dart';
 import '../../../Tool/Getx/calendarsetting.dart';
 import '../../../Tool/TextSize.dart';
-import '../firstContentNet/DayContentHome.dart';
 import '../secondContentNet/ClickShowEachNote.dart';
 
 ViewSet(List defaulthomeviewlist, List userviewlist, String usercode) {

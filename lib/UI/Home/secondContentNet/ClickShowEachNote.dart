@@ -11,6 +11,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import '../../../Enums/MemoList.dart';
+import '../../../FRONTENDPART/UI(Widget/DayScript.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/Getx/memosetting.dart';
 import '../../../Tool/Getx/selectcollection.dart';
@@ -18,7 +19,6 @@ import '../../../Tool/Getx/uisetting.dart';
 import '../../../Tool/Loader.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
-import '../firstContentNet/DayScript.dart';
 import 'package:http/http.dart' show get;
 
 class ClickShowEachNote extends StatefulWidget {

@@ -19,10 +19,10 @@ import '../../Tool/Getx/navibool.dart';
 import '../../Tool/Getx/uisetting.dart';
 import '../../Tool/NoBehavior.dart';
 import '../../Tool/AppBarCustom.dart';
-import '../../UI/ShowLicense.dart';
 import '../../sheets/addgroupmember.dart';
 import '../../sheets/settingpagesheets.dart';
 import '../../sheets/userinfotalk.dart';
+import '../UI(Widget/ShowLicense.dart';
 import 'DrawerScreen.dart';
 
 class ProfilePage extends StatefulWidget {

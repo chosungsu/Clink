@@ -9,8 +9,7 @@ import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import '../../../Tool/NoBehavior.dart';
-import '../Enums/Variables.dart';
-import '../Tool/AppBarCustom.dart';
+import '../../Tool/AppBarCustom.dart';
 
 class ShowLicense extends StatefulWidget {
   const ShowLicense({Key? key}) : super(key: key);
@@ -30,6 +29,7 @@ class _ShowLicenseState extends State<ShowLicense> {
   List listid_list = [];
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final getlicense = Get.put(licenseget());
+  final draw = Get.put(navibool());
 
   @override
   void initState() {
