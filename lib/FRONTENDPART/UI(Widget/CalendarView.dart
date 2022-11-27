@@ -11,29 +11,21 @@ import '../../../Tool/IconBtn.dart';
 import '../../../Tool/MyTheme.dart';
 import '../../../Tool/TextSize.dart';
 import '../../../sheets/settingCalendarHome.dart';
+import '../../Enums/Variables.dart';
 import 'DayScript.dart';
 
 calendarView(
   BuildContext context,
-  calendarsetting controll_cals,
-  Map<DateTime, List<Event>> events,
-  DateTime _focusedDay,
-  DateTime _selectedDay,
   String id,
-  List share,
-  String calname,
-  String usercode,
-  int theme,
-  int view,
   String s,
 ) {
-  List<Widget> list_calendar = [];
-  List<Event> getList(DateTime date) {
-    return events[date] ?? [];
-  }
-
+  List<Widget> listCalendar = [];
   final draw = Get.put(navibool());
-  final cal_date = Get.put(calendarsetting());
+  final controllCals = Get.put(calendarsetting());
+  final calDate = Get.put(calendarsetting());
+  List<Event> getList(DateTime date) {
+    return controllCals.events[date] ?? [];
+  }
 
   return s == 'oncreate'
       ? showModalBottomSheet(
@@ -73,7 +65,7 @@ calendarView(
                             GetBuilder<calendarsetting>(
                               builder: (_) => TableCalendar(
                                 locale: 'ko_KR',
-                                focusedDay: controll_cals.focusedDay,
+                                focusedDay: controllCals.focusedDay,
                                 calendarBuilders: CalendarBuilders(
                                     dowBuilder: (context, day) {
                                   if (day.weekday == DateTime.sunday) {
@@ -114,7 +106,7 @@ calendarView(
                                         height: 20,
                                         decoration: BoxDecoration(
                                             shape: BoxShape.rectangle,
-                                            color: controll_cals.themecalendar ==
+                                            color: controllCals.themecalendar ==
                                                     0
                                                 ? (events.length % 4 == 0
                                                     ? MyTheme.colororigred
@@ -159,26 +151,23 @@ calendarView(
                                 },
                                 firstDay: DateTime.utc(2000, 1, 1),
                                 lastDay: DateTime.utc(2100, 12, 31),
-                                calendarFormat: controll_cals.showcalendar == 0
+                                calendarFormat: controllCals.showcalendar == 0
                                     ? CalendarFormat.week
-                                    : (controll_cals.showcalendar == 1
+                                    : (controllCals.showcalendar == 1
                                         ? CalendarFormat.twoWeeks
                                         : CalendarFormat.month),
                                 eventLoader: getList,
                                 selectedDayPredicate: (day) {
                                   return isSameDay(
-                                      controll_cals.selectedDay, day);
+                                      controllCals.selectedDay, day);
                                 },
                                 onDaySelected: (selectedDay, focusedDay) {
                                   setState(() {
-                                    controll_cals.selectedDay = selectedDay;
-                                    controll_cals.focusedDay = focusedDay;
-                                    print(controll_cals.selectedDay.toString() +
-                                        '/' +
-                                        controll_cals.focusedDay.toString());
-                                    cal_date.setclickday(
-                                        controll_cals.selectedDay,
-                                        controll_cals.focusedDay);
+                                    controllCals.selectedDay = selectedDay;
+                                    controllCals.focusedDay = focusedDay;
+                                    calDate.setclickday(
+                                        controllCals.selectedDay,
+                                        controllCals.focusedDay);
                                     /*_rangeStart = null;
                   _rangeEnd = null;
                   _rangeSelectionMode = RangeSelectionMode.toggledOff;*/
@@ -233,21 +222,12 @@ calendarView(
                                         IconBtn(
                                             child: IconButton(
                                               onPressed: () {
-                                                controll_cals.setrepeatdate(
+                                                controllCals.setrepeatdate(
                                                     1, '주');
                                                 Get.to(
                                                     () => DayScript(
-                                                          firstdate:
-                                                              controll_cals
-                                                                  .selectedDay,
-                                                          lastdate:
-                                                              controll_cals
-                                                                  .selectedDay,
                                                           position: 'cal',
                                                           id: id,
-                                                          share: share,
-                                                          orig: usercode,
-                                                          calname: calname,
                                                           isfromwhere:
                                                               'dayhome',
                                                         ),
@@ -276,9 +256,8 @@ calendarView(
                                               onPressed: () {
                                                 settingCalendarHome(
                                                   context,
-                                                  controll_cals,
-                                                  theme,
-                                                  view,
+                                                  controllCals.themecalendar,
+                                                  controllCals.showcalendar,
                                                   id,
                                                 );
                                               },
@@ -339,7 +318,7 @@ calendarView(
                 GetBuilder<calendarsetting>(
                   builder: (_) => TableCalendar(
                     locale: 'ko_KR',
-                    focusedDay: controll_cals.focusedDay,
+                    focusedDay: controllCals.focusedDay,
                     calendarBuilders:
                         CalendarBuilders(dowBuilder: (context, day) {
                       if (day.weekday == DateTime.sunday) {
@@ -374,7 +353,7 @@ calendarView(
                             height: 20,
                             decoration: BoxDecoration(
                                 shape: BoxShape.rectangle,
-                                color: controll_cals.themecalendar == 0
+                                color: controllCals.themecalendar == 0
                                     ? (events.length % 4 == 0
                                         ? MyTheme.colororigred
                                         : (events.length % 4 == 1
@@ -409,27 +388,27 @@ calendarView(
                     },
                     firstDay: DateTime.utc(2000, 1, 1),
                     lastDay: DateTime.utc(2100, 12, 31),
-                    calendarFormat: controll_cals.showcalendar == 0
+                    calendarFormat: controllCals.showcalendar == 0
                         ? CalendarFormat.week
-                        : (controll_cals.showcalendar == 1
+                        : (controllCals.showcalendar == 1
                             ? CalendarFormat.twoWeeks
                             : CalendarFormat.month),
                     eventLoader: getList,
                     selectedDayPredicate: (day) {
-                      return isSameDay(controll_cals.selectedDay, day);
+                      return isSameDay(controllCals.selectedDay, day);
                     },
                     onDaySelected: (selectedDay, focusedDay) {
                       setState(() {
-                        controll_cals.selectedDay = selectedDay;
-                        controll_cals.focusedDay = focusedDay;
-                        cal_date.setclickday(selectedDay, focusedDay);
+                        controllCals.selectedDay = selectedDay;
+                        controllCals.focusedDay = focusedDay;
+                        calDate.setclickday(selectedDay, focusedDay);
                         /*_rangeStart = null;
                   _rangeEnd = null;
                   _rangeSelectionMode = RangeSelectionMode.toggledOff;*/
                       });
                     },
                     onPageChanged: (focusedDay) {
-                      controll_cals.focusedDay = focusedDay;
+                      controllCals.focusedDay = focusedDay;
                     },
                     startingDayOfWeek: StartingDayOfWeek.sunday,
                     daysOfWeekVisible: true,
@@ -463,18 +442,11 @@ calendarView(
                             ContainerDesign(
                                 child: GestureDetector(
                                   onTap: () {
-                                    controll_cals.setrepeatdate(1, '주');
+                                    controllCals.setrepeatdate(1, '주');
                                     Get.to(
                                         () => DayScript(
-                                              firstdate:
-                                                  controll_cals.selectedDay,
-                                              lastdate:
-                                                  controll_cals.selectedDay,
                                               position: 'cal',
                                               id: id,
-                                              share: share,
-                                              orig: usercode,
-                                              calname: calname,
                                               isfromwhere: 'dayhome',
                                             ),
                                         transition: Transition.downToUp);
@@ -494,9 +466,8 @@ calendarView(
                                   onTap: () {
                                     settingCalendarHome(
                                       context,
-                                      controll_cals,
-                                      theme,
-                                      view,
+                                      controllCals.themecalendar,
+                                      controllCals.showcalendar,
                                       id,
                                     );
                                   },
@@ -538,7 +509,6 @@ calendarView(
 
 settingCalendarHome(
   BuildContext context,
-  calendarsetting controll_cals,
   int theme,
   int view,
   String title,
@@ -571,7 +541,7 @@ settingCalendarHome(
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
-                child: SheetPage(context, controll_cals, theme, view, title),
+                child: SheetPage(context, theme, view, title),
               )),
         );
       }).whenComplete(() {});

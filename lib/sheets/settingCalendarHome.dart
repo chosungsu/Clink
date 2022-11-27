@@ -1,9 +1,9 @@
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:get/get.dart';
 import '../Tool/Getx/calendarsetting.dart';
 
-SheetPage(BuildContext context, calendarsetting controll_cals, int theme,
-    int view, String docid) {
+SheetPage(BuildContext context, int theme, int view, String docid) {
   return SizedBox(
       child: Padding(
           padding:
@@ -30,7 +30,7 @@ SheetPage(BuildContext context, calendarsetting controll_cals, int theme,
               const SizedBox(
                 height: 20,
               ),
-              content(context, controll_cals, theme, view, docid)
+              content(context, theme, view, docid)
             ],
           )));
 }
@@ -52,8 +52,8 @@ title(
       ));
 }
 
-content(BuildContext context, calendarsetting controll_cals, int theme,
-    int view, String docid) {
+content(BuildContext context, int theme, int view, String docid) {
+  final controll_cals = Get.put(calendarsetting());
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
         child: Column(

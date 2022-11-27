@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:clickbyme/Enums/Variables.dart';
 import 'package:clickbyme/LocalNotiPlatform/NotificationApi.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Home/Widgets/CreateCalandmemo.dart';
@@ -37,22 +38,12 @@ import 'CalendarView.dart';
 class DayScript extends StatefulWidget {
   const DayScript(
       {Key? key,
-      required this.firstdate,
       required this.position,
       required this.id,
-      required this.share,
-      required this.orig,
-      required this.lastdate,
-      required this.calname,
       required this.isfromwhere})
       : super(key: key);
-  final DateTime firstdate;
-  final DateTime lastdate;
   final String position;
   final String id;
-  final String orig;
-  final List share;
-  final String calname;
   final String isfromwhere;
   @override
   State<StatefulWidget> createState() => _DayScriptState();
@@ -67,9 +58,6 @@ class _DayScriptState extends State<DayScript> {
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  String username = Hive.box('user_info').get(
-    'id',
-  );
   var _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
   Random _rnd = Random();
   String code = '';
@@ -204,9 +192,9 @@ class _DayScriptState extends State<DayScript> {
         textEditingController2.text + ' - ' + textEditingController3.text;
     if (textEditingController1.text.isNotEmpty) {
       if (widget.position == 'cal') {
-        widget.lastdate != widget.firstdate
-            ? differ_date = int.parse(widget.lastdate
-                .difference(DateTime.parse(widget.firstdate.toString()))
+        controll_cal.selectedDay != controll_cal.selectedDay
+            ? differ_date = int.parse(controll_cal.selectedDay
+                .difference(DateTime.parse(controll_cal.selectedDay.toString()))
                 .inDays
                 .toString())
             : (cal.repeatwhile != 'no'
@@ -217,9 +205,11 @@ class _DayScriptState extends State<DayScript> {
           for (int i = 0; i <= differ_date; i++) {
             if (differ_date == 0) {
             } else {
-              widget.lastdate != widget.firstdate
-                  ? differ_list.add(DateTime(widget.firstdate.year,
-                      widget.firstdate.month, widget.firstdate.day + i))
+              controll_cal.selectedDay != controll_cal.selectedDay
+                  ? differ_list.add(DateTime(
+                      controll_cal.selectedDay.year,
+                      controll_cal.selectedDay.month,
+                      controll_cal.selectedDay.day + i))
                   : (cal.repeatwhile == '주'
                       ? differ_list.add(DateTime(
                           controll_cal.selectedDay.year,
@@ -239,7 +229,7 @@ class _DayScriptState extends State<DayScript> {
         }
         firestore.collection('AppNoticeByUsers').add({
           'title': '[' +
-              widget.calname +
+              controll_cal.calname +
               '] 캘린더의 일정 ${textEditingController1.text}이(가) 추가되었습니다.',
           'date': DateFormat('yyyy-MM-dd hh:mm')
                   .parse(DateTime.now().toString())
@@ -257,8 +247,8 @@ class _DayScriptState extends State<DayScript> {
                   .toString()
                   .split(' ')[1]
                   .split(':')[1],
-          'username': username,
-          'sharename': widget.share,
+          'username': name,
+          'sharename': controll_cal.share,
           'read': 'no',
         }).whenComplete(() async {
           if (differ_list.isNotEmpty) {
@@ -312,7 +302,7 @@ class _DayScriptState extends State<DayScript> {
                         : (textEditingController3.text.split(':')[1].length == 1
                             ? textEditingController3.text + '0'
                             : textEditingController3.text)),
-                'Shares': widget.share,
+                'Shares': controll_cal.share,
                 'OriginalUser': usercode,
                 'calname': widget.id,
                 'summary': textEditingController5.text,
@@ -334,13 +324,13 @@ class _DayScriptState extends State<DayScript> {
                   'alarmmake': isChecked_pushalarm,
                   'calcode': value.id
                 });
-                for (int k = 0; k < widget.share.length; k++) {
-                  if (widget.share[k] != cal_share_person.secondname) {
+                for (int k = 0; k < controll_cal.share.length; k++) {
+                  if (controll_cal.share[k] != cal_share_person.secondname) {
                     firestore
                         .collection('CalendarDataBase')
                         .doc(value.id)
                         .collection('AlarmTable')
-                        .doc(widget.share[k])
+                        .doc(controll_cal.share[k])
                         .get()
                         .then((value1) {
                       if (value1.exists) {
@@ -349,7 +339,7 @@ class _DayScriptState extends State<DayScript> {
                             .collection('CalendarDataBase')
                             .doc(value.id)
                             .collection('AlarmTable')
-                            .doc(widget.share[k])
+                            .doc(controll_cal.share[k])
                             .set({
                           'alarmtype': alarmtypes,
                           'alarmhour': '99',
@@ -496,7 +486,7 @@ class _DayScriptState extends State<DayScript> {
                       : (textEditingController3.text.split(':')[1].length == 1
                           ? textEditingController3.text + '0'
                           : textEditingController3.text)),
-              'Shares': widget.share,
+              'Shares': controll_cal.share,
               'OriginalUser': usercode,
               'calname': widget.id,
               'summary': textEditingController5.text,
@@ -536,13 +526,13 @@ class _DayScriptState extends State<DayScript> {
               }
 
               for (int j = 0; j < valueid.length; j++) {
-                for (int k = 0; k < widget.share.length; k++) {
-                  if (widget.share[k] != cal_share_person.secondname) {
+                for (int k = 0; k < controll_cal.share.length; k++) {
+                  if (controll_cal.share[k] != cal_share_person.secondname) {
                     firestore
                         .collection('CalendarDataBase')
                         .doc(valueid[j])
                         .collection('AlarmTable')
-                        .doc(widget.share[k])
+                        .doc(controll_cal.share[k])
                         .get()
                         .then((value) {
                       if (value.exists) {
@@ -551,7 +541,7 @@ class _DayScriptState extends State<DayScript> {
                             .collection('CalendarDataBase')
                             .doc(valueid[j])
                             .collection('AlarmTable')
-                            .doc(widget.share[k])
+                            .doc(controll_cal.share[k])
                             .set({
                           'alarmtype': alarmtypes,
                           'alarmhour': '99',
@@ -579,11 +569,11 @@ class _DayScriptState extends State<DayScript> {
                               : '예정된 시각 : ' + forthtxt),
                     );
                     NotificationApi.showScheduledNotification(
-                        id: int.parse(widget.firstdate
+                        id: int.parse(controll_cal.selectedDay
                                 .toString()
                                 .split(' ')[0]
                                 .split('-')[0]) +
-                            int.parse(widget.firstdate
+                            int.parse(controll_cal.selectedDay
                                 .toString()
                                 .split(' ')[0]
                                 .split('-')[1]) +
@@ -608,19 +598,19 @@ class _DayScriptState extends State<DayScript> {
                                     : '예정된 시각 : ' + forthtxt),
                         payload: widget.id,
                         scheduledate: DateTime.utc(
-                          int.parse(widget.firstdate
+                          int.parse(controll_cal.selectedDay
                               .toString()
                               .toString()
                               .split(' ')[0]
                               .toString()
                               .substring(0, 4)),
-                          int.parse(widget.firstdate
+                          int.parse(controll_cal.selectedDay
                               .toString()
                               .toString()
                               .split(' ')[0]
                               .toString()
                               .substring(5, 7)),
-                          int.parse(widget.firstdate
+                          int.parse(controll_cal.selectedDay
                               .toString()
                               .toString()
                               .split(' ')[0]
@@ -644,11 +634,11 @@ class _DayScriptState extends State<DayScript> {
                               : '예정된 시각 : ' + forthtxt),
                     );
                     NotificationApi.showScheduledNotification(
-                        id: int.parse(widget.firstdate
+                        id: int.parse(controll_cal.selectedDay
                                 .toString()
                                 .split(' ')[0]
                                 .split('-')[0]) +
-                            int.parse(widget.firstdate
+                            int.parse(controll_cal.selectedDay
                                 .toString()
                                 .split(' ')[0]
                                 .split('-')[1]) +
@@ -673,19 +663,19 @@ class _DayScriptState extends State<DayScript> {
                                     : '예정된 시각 : ' + forthtxt),
                         payload: widget.id,
                         scheduledate: DateTime.utc(
-                          int.parse(widget.firstdate
+                          int.parse(controll_cal.selectedDay
                               .toString()
                               .toString()
                               .split(' ')[0]
                               .toString()
                               .substring(0, 4)),
-                          int.parse(widget.firstdate
+                          int.parse(controll_cal.selectedDay
                               .toString()
                               .toString()
                               .split(' ')[0]
                               .toString()
                               .substring(5, 7)),
-                          int.parse(widget.firstdate
+                          int.parse(controll_cal.selectedDay
                               .toString()
                               .toString()
                               .split(' ')[0]
@@ -719,8 +709,8 @@ class _DayScriptState extends State<DayScript> {
                   .toString()
                   .split(' ')[1]
                   .split(':')[1],
-          'username': username,
-          'sharename': widget.share,
+          'username': name,
+          'sharename': controll_cal.share,
           'read': 'no',
         }).whenComplete(() {
           for (int i = 0; i < scollection.memolistin.length; i++) {
@@ -744,7 +734,7 @@ class _DayScriptState extends State<DayScript> {
             'colorfont': Hive.box('user_setting').get('coloreachmemofont') ??
                 _colorfont.value.toInt(),
             'Date': DateFormat('yyyy-MM-dd')
-                    .parse(widget.firstdate.toString())
+                    .parse(controll_cal.selectedDay.toString())
                     .toString()
                     .split(' ')[0] +
                 '일',
@@ -760,7 +750,7 @@ class _DayScriptState extends State<DayScript> {
             'pinnumber': '0000',
             'securewith': 999,
             'EditDate': DateFormat('yyyy-MM-dd')
-                    .parse(widget.firstdate.toString())
+                    .parse(controll_cal.selectedDay.toString())
                     .toString()
                     .split(' ')[0] +
                 '일',
@@ -870,37 +860,34 @@ class _DayScriptState extends State<DayScript> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  GetPlatform.isMobile == false
-                                      ? ContainerDesign(
-                                          child: GestureDetector(
-                                            onTap: () async {
-                                              reloadpage = await Get.dialog(OSDialog(
-                                                      context,
-                                                      '경고',
-                                                      Text(
-                                                          '뒤로 나가시면 작성중인 내용은 사라지게 됩니다. 나가시겠습니까?',
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize:
-                                                                  contentTextsize(),
-                                                              color: Colors
-                                                                  .blueGrey)),
-                                                      pressed2)) ??
-                                                  false;
-                                              if (reloadpage) {
-                                                Get.back();
-                                              }
-                                            },
-                                            child: Icon(
-                                              Icons.keyboard_arrow_left,
-                                              size: 30,
-                                              color: draw.color_textstatus,
-                                            ),
-                                          ),
-                                          color: draw.backgroundcolor)
-                                      : const SizedBox(),
+                                  ContainerDesign(
+                                      child: GestureDetector(
+                                        onTap: () async {
+                                          reloadpage = await Get.dialog(OSDialog(
+                                                  context,
+                                                  '경고',
+                                                  Text(
+                                                      '뒤로 나가시면 작성중인 내용은 사라지게 됩니다. 나가시겠습니까?',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize:
+                                                              contentTextsize(),
+                                                          color:
+                                                              Colors.blueGrey)),
+                                                  pressed2)) ??
+                                              false;
+                                          if (reloadpage) {
+                                            Get.back();
+                                          }
+                                        },
+                                        child: Icon(
+                                          Icons.keyboard_arrow_left,
+                                          size: 30,
+                                          color: draw.color_textstatus,
+                                        ),
+                                      ),
+                                      color: draw.backgroundcolor),
                                   Flexible(
                                       fit: FlexFit.tight,
                                       child: Padding(
@@ -1005,7 +992,8 @@ class _DayScriptState extends State<DayScript> {
                                           const SizedBox(
                                             height: 20,
                                           ),
-                                          buildSheetTitle(widget.firstdate),
+                                          buildSheetTitle(
+                                              controll_cal.selectedDay),
                                           const SizedBox(
                                             height: 20,
                                           ),
@@ -1201,7 +1189,7 @@ class _DayScriptState extends State<DayScript> {
                               }
                               addhashtagcollector(
                                   context,
-                                  username,
+                                  name,
                                   textEditingController_add_sheet,
                                   searchNode_add_section,
                                   'inside',
@@ -1733,7 +1721,7 @@ class _DayScriptState extends State<DayScript> {
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisSize: MainAxisSize.min,
             children: [
-              widget.lastdate != widget.firstdate
+              controll_cal.selectedDay != controll_cal.focusedDay
                   ? SizedBox(
                       child: ContainerDesign(
                         color: BGColor(),
@@ -1753,9 +1741,11 @@ class _DayScriptState extends State<DayScript> {
                                 lightSource: LightSource.topLeft),
                           ),
                           title: Text(
-                            widget.firstdate.toString().split(' ')[0] +
+                            controll_cal.focusedDay.toString().split(' ')[0] +
                                 '부터 ' +
-                                widget.lastdate.toString().split(' ')[0] +
+                                controll_cal.selectedDay
+                                    .toString()
+                                    .split(' ')[0] +
                                 '까지',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
@@ -1779,19 +1769,7 @@ class _DayScriptState extends State<DayScript> {
                                 searchNode_first_section.unfocus();
                                 Future.delayed(
                                     const Duration(milliseconds: 300), () {
-                                  calendarView(
-                                      context,
-                                      controll_cal,
-                                      _events,
-                                      _focusedDay,
-                                      _selectedDay,
-                                      widget.id,
-                                      widget.share,
-                                      widget.calname,
-                                      usercode,
-                                      1,
-                                      2,
-                                      'oncreate');
+                                  calendarView(context, widget.id, 'oncreate');
                                 });
                               },
                               child: SizedBox(
@@ -1836,7 +1814,7 @@ class _DayScriptState extends State<DayScript> {
                         const SizedBox(
                           width: 10,
                         ),
-                        widget.lastdate == widget.firstdate
+                        controll_cal.selectedDay == controll_cal.focusedDay
                             ? Column(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
@@ -1974,8 +1952,8 @@ class _DayScriptState extends State<DayScript> {
                 color: BGColor(),
                 child: ListTile(
                   onTap: () {
-                    pickDates(
-                        context, textEditingController2, widget.firstdate);
+                    pickDates(context, textEditingController2,
+                        controll_cal.selectedDay);
                   },
                   leading: NeumorphicIcon(
                     Icons.schedule,
@@ -2027,8 +2005,8 @@ class _DayScriptState extends State<DayScript> {
                   color: BGColor(),
                   child: ListTile(
                     onTap: () {
-                      pickDates(
-                          context, textEditingController3, widget.firstdate);
+                      pickDates(context, textEditingController3,
+                          controll_cal.selectedDay);
                     },
                     leading: NeumorphicIcon(
                       Icons.schedule,
@@ -2073,14 +2051,14 @@ class _DayScriptState extends State<DayScript> {
                   ),
                 ),
               ),
-              widget.lastdate == widget.firstdate
+              controll_cal.selectedDay == controll_cal.focusedDay
                   ? const SizedBox(
                       height: 20,
                     )
                   : const SizedBox(
                       height: 0,
                     ),
-              widget.lastdate == widget.firstdate
+              controll_cal.selectedDay == controll_cal.focusedDay
                   ? GetBuilder<calendarsetting>(
                       builder: (_) => SizedBox(
                             child: ContainerDesign(

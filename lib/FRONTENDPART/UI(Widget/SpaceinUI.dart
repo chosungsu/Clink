@@ -22,9 +22,6 @@ SpaceinUI(
   int type,
   bool isinit,
 ) {
-  final controll_cals = Get.put(calendarsetting());
-  final linkspaceset = Get.put(linkspacesetting());
-
   return StatefulBuilder(builder: ((context, setState) {
     return GetBuilder<linkspacesetting>(
         builder: (_) => isinit == false

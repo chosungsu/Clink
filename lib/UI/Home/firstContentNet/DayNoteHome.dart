@@ -218,14 +218,9 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                 backgroundColor: Colors.orange.shade200,
                 onTap: () {
                   Get.to(
-                      () => DayScript(
-                            firstdate: DateTime.now(),
-                            lastdate: DateTime.now(),
+                      () => const DayScript(
                             position: 'note',
                             id: '',
-                            share: const [],
-                            orig: '',
-                            calname: '',
                             isfromwhere: 'memohome',
                           ),
                       transition: Transition.downToUp);

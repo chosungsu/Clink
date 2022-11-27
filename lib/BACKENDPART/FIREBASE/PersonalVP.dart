@@ -8,6 +8,7 @@ import '../../Enums/PageList.dart';
 import '../../Enums/Variables.dart';
 import '../../FRONTENDPART/Page/Spacein.dart';
 import '../../Tool/FlushbarStyle.dart';
+import '../../Tool/Getx/calendarsetting.dart';
 import '../../Tool/Getx/category.dart';
 import '../../Tool/Getx/linkspacesetting.dart';
 import '../../Tool/Getx/uisetting.dart';
@@ -192,10 +193,11 @@ PageViewStreamParent3() {
   return firestore.collection('Calendar').get();
 }
 
-PageViewStreamChild5(context, id) async {
+PageViewStreamChild5(context, id) {
   final linkspaceset = Get.put(linkspacesetting());
+  final controll_cals = Get.put(calendarsetting());
 
-  await firestore.collection('Calendar').get().then(
+  firestore.collection('Calendar').get().then(
     (value) {
       linkspaceset.inindextreetmp.clear();
       if (value.docs.isEmpty) {
@@ -204,6 +206,11 @@ PageViewStreamChild5(context, id) async {
         for (var sp in valuespace) {
           spacename = sp.get('parentid');
           if (spacename == id) {
+            controll_cals.share = sp.get('share');
+            controll_cals.events = {};
+            controll_cals.calname = sp.get('calname');
+            controll_cals.themecalendar = sp.get('themesetting');
+            controll_cals.showcalendar = sp.get('viewsetting');
             linkspaceset.inindextreetmp
                 .add(Linkspacepageenter(addname: sp.get('calname')));
           }

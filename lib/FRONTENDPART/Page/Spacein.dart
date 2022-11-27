@@ -12,6 +12,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:status_bar_control/status_bar_control.dart';
+import '../../Enums/Linkpage.dart';
 import '../../Enums/Variables.dart';
 import '../../Tool/ContainerDesign.dart';
 import '../../Tool/Getx/calendarsetting.dart';
@@ -63,6 +64,7 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
     controll_cals.events = {};
     controll_cals.selectedDay = _selectedDay;
     controll_cals.focusedDay = _focusedDay;
+    PageViewStreamChild5(context, widget.id);
   }
 
   @override
@@ -147,7 +149,6 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
                                     }
                                   }),
                                   builder: ((context, snapshot) {
-                                    PageViewStreamChild5(context, widget.id);
                                     if (isinit == true) {
                                       return const SizedBox();
                                     } else {

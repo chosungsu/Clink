@@ -57,20 +57,7 @@ DayContentHome(id) {
                     }
                   }
                 }
-                return SizedBox(
-                    child: calendarView(
-                        context,
-                        controll_cals,
-                        controll_cals.events,
-                        controll_cals.focusedDay,
-                        controll_cals.selectedDay,
-                        id,
-                        controll_cals.share,
-                        controll_cals.calname,
-                        usercode,
-                        controll_cals.themecalendar,
-                        controll_cals.showcalendar,
-                        'large'));
+                return SizedBox(child: calendarView(context, id, 'large'));
               })),
           Flexible(
               fit: FlexFit.tight,
