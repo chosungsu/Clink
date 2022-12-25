@@ -12,7 +12,9 @@ import '../../Enums/Variables.dart';
 import '../../FRONTENDPART/Route/initScreenLoading.dart';
 
 class GoogleSignInController extends GetxController {
-  final _googleSignIn = GoogleSignIn();
+  final _googleSignIn = GoogleSignIn(
+      clientId:
+          "789398252263-0egnmrhp7qso704ekt7pclkbmkia1s6f.apps.googleusercontent.com");
   GoogleSignInAccount? googleSignInAccount;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   late int count;

@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import '../Enums/PageList.dart';
 import '../Enums/Variables.dart';
@@ -64,8 +65,7 @@ class AppBarCustom extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             draw.navi == 0 ||
-                                    MediaQuery.of(context).orientation ==
-                                        Orientation.landscape
+                                    Device.orientation == Orientation.landscape
                                 ? draw.drawopen == true ||
                                         Hive.box('user_setting')
                                                 .get('page_opened') ==
@@ -105,7 +105,7 @@ class AppBarCustom extends StatelessWidget {
                                         color: draw.backgroundcolor)
                                 : const SizedBox(),
                             Hive.box('user_setting').get('page_index') == 0 &&
-                                    draw.navi == 0
+                                    Device.orientation == Orientation.landscape
                                 ? const SizedBox(
                                     width: 10,
                                   )

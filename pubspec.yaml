@@ -43,10 +43,12 @@ dependencies:
   #firebase 기능
   cloud_firestore: 
   firebase_auth: 
+  firebase_auth_web:
   firebase_messaging: 
   flutter_local_notifications: 
   google_sign_in: 
   firebase_core:
+  firebase_core_web:
   firebase_storage: 
   #카카오 sdk
   kakao_flutter_sdk: 

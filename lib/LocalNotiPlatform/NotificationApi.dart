@@ -141,7 +141,7 @@ class NotificationApi {
             enableLights: true,
             sound: RawResourceAndroidNotificationSound('notification'),
             importance: Importance.max),
-        iOS: IOSNotificationDetails(
+        iOS: DarwinNotificationDetails(
             sound: 'notification.mp3',
             presentSound: true,
             presentAlert: true,
@@ -150,21 +150,20 @@ class NotificationApi {
 
   static Future init({bool initScheduled = false}) async {
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const iOS = IOSInitializationSettings(
+    const iOS = DarwinInitializationSettings(
         requestSoundPermission: true,
         requestAlertPermission: true,
         requestBadgePermission: true);
     const settings = InitializationSettings(android: android, iOS: iOS);
 
     await _notifications.initialize(settings,
-        onSelectNotification: onSelectNoti);
+        onDidReceiveNotificationResponse: onSelectNoti);
   }
 
-  static void onSelectNoti(String? payload) async {
-    print(payload);
-    if (payload != null && payload.isNotEmpty) {
-      if (payload.isNotEmpty) {
-        if (payload == 'memo') {
+  static void onSelectNoti(NotificationResponse? response) async {
+    if (response!.payload != null && response.payload!.isNotEmpty) {
+      if (response.payload!.isNotEmpty) {
+        if (response.payload! == 'memo') {
           Get.to(
               () => const DayNoteHome(
                     title: '',
@@ -172,7 +171,7 @@ class NotificationApi {
                   ),
               transition: Transition.downToUp);
         } else {
-          Get.to(() => DayContentHome(payload),
+          Get.to(() => DayContentHome(response.payload!),
               transition: Transition.downToUp);
         }
       } else {}
@@ -183,8 +182,8 @@ class NotificationApi {
     var details = await _notifications.getNotificationAppLaunchDetails();
 
     if (details!.didNotificationLaunchApp) {
-      if (details.payload != null) {
-        if (details.payload == 'memo') {
+      if (details.notificationResponse!.payload != null) {
+        if (details.notificationResponse!.payload == 'memo') {
           GoToMain();
           Future.delayed(const Duration(seconds: 1), () {
             Get.to(
@@ -197,7 +196,9 @@ class NotificationApi {
         } else {
           GoToMain();
           Future.delayed(const Duration(seconds: 1), () {
-            Get.to(() => DayContentHome(details.payload.toString()),
+            Get.to(
+                () => DayContentHome(
+                    details.notificationResponse!.payload.toString()),
                 transition: Transition.downToUp);
           });
         }

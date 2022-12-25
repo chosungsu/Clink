@@ -23,8 +23,22 @@ import 'Tool/Getx/notishow.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  MobileAds.instance.initialize();
-  await Firebase.initializeApp();
+  if (GetPlatform.isWeb) {
+    await Firebase.initializeApp(
+        options: FirebaseOptions(
+            apiKey: 'AIzaSyDmkVyvA80pDPV59DNd27yhqLkEgcHHFJU',
+            appId: '1:789398252263:web:75abc4946fa7fe798e5042',
+            messagingSenderId: '789398252263',
+            projectId: 'habit-tracker-8dad1'));
+  } else {
+    MobileAds.instance.initialize();
+    await Firebase.initializeApp(
+        options: FirebaseOptions(
+            apiKey: 'AIzaSyDmkVyvA80pDPV59DNd27yhqLkEgcHHFJU',
+            appId: '1:789398252263:android:21d69620fcd7caaa8e5042',
+            messagingSenderId: '789398252263',
+            projectId: 'habit-tracker-8dad1'));
+  }
   await Hive.initFlutter();
   await Hive.openBox('user_info');
   await Hive.openBox('user_setting');

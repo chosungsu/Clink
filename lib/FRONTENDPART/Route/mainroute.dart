@@ -38,6 +38,7 @@ class _mainrouteState extends State<mainroute>
   @override
   void initState() {
     super.initState();
+    Hive.box('user_setting').put('page_index', 0);
     uiset.mypagelistindex = Hive.box('user_setting').get('currentmypage') ?? 0;
     WidgetsBinding.instance.addObserver(this);
     uiset.pagenumber = widget.index;

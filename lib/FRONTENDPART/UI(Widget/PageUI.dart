@@ -2,6 +2,7 @@
 
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,7 @@ import '../../../Tool/BGColor.dart';
 import '../../../Tool/Getx/linkspacesetting.dart';
 import '../../../Tool/TextSize.dart';
 import '../../BACKENDPART/FIREBASE/PersonalVP.dart';
+import '../Route/subuiroute.dart';
 
 PageUI1(String id, TextEditingController controller) {
   final searchNode = FocusNode();
@@ -25,20 +27,48 @@ PageUI1(String id, TextEditingController controller) {
                     ? Flexible(
                         fit: FlexFit.tight,
                         child: Center(
-                          child: NeumorphicText(
-                            '텅! 비어있어요~',
-                            style: NeumorphicStyle(
-                              shape: NeumorphicShape.flat,
-                              depth: 3,
-                              color: draw.color_textstatus,
-                            ),
-                            textStyle: NeumorphicTextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTitleTextsize(),
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ))
+                            child: GestureDetector(
+                          onTap: () {
+                            func4(context, uiset.mypagelistindex);
+                          },
+                          child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20.0, vertical: 20.0),
+                              child: DottedBorder(
+                                borderType: BorderType.RRect,
+                                radius: const Radius.circular(10),
+                                dashPattern: const [10, 4],
+                                strokeCap: StrokeCap.round,
+                                color: Colors.blue.shade400,
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 150,
+                                  decoration: BoxDecoration(
+                                      color:
+                                          draw.backgroundcolor.withOpacity(.3),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(
+                                        Icons.near_me,
+                                        color: Colors.blue,
+                                        size: 30,
+                                      ),
+                                      const SizedBox(
+                                        height: 15,
+                                      ),
+                                      Text(
+                                        '페이지타입 고르기',
+                                        style: TextStyle(
+                                            fontSize: contentTextsize(),
+                                            color: draw.color_textstatus),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )),
+                        )))
                     : Flexible(
                         fit: FlexFit.tight,
                         child: ListView.builder(
@@ -347,20 +377,47 @@ PageUI1(String id, TextEditingController controller) {
                 return Flexible(
                     fit: FlexFit.tight,
                     child: Center(
-                      child: NeumorphicText(
-                        '텅! 비어있어요~',
-                        style: NeumorphicStyle(
-                          shape: NeumorphicShape.flat,
-                          depth: 3,
-                          color: TextColor_shadowcolor(),
-                        ),
-                        textStyle: NeumorphicTextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: contentTitleTextsize(),
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ));
+                        child: GestureDetector(
+                      onTap: () {
+                        func4(context, uiset.mypagelistindex);
+                      },
+                      child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20.0, vertical: 20.0),
+                          child: DottedBorder(
+                            borderType: BorderType.RRect,
+                            radius: const Radius.circular(10),
+                            dashPattern: const [10, 4],
+                            strokeCap: StrokeCap.round,
+                            color: Colors.blue.shade400,
+                            child: Container(
+                              width: double.infinity,
+                              height: 150,
+                              decoration: BoxDecoration(
+                                  color: draw.backgroundcolor.withOpacity(.3),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    Icons.near_me,
+                                    color: Colors.blue,
+                                    size: 30,
+                                  ),
+                                  const SizedBox(
+                                    height: 15,
+                                  ),
+                                  Text(
+                                    '페이지타입 고르기',
+                                    style: TextStyle(
+                                        fontSize: contentTextsize(),
+                                        color: draw.color_textstatus),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )),
+                    )));
               }
               return SizedBox(
                 height: 2,

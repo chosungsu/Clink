@@ -7,6 +7,7 @@ import 'package:clickbyme/Tool/Getx/notishow.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import '../../Enums/Variables.dart';
 import '../Route/subuiroute.dart';
@@ -156,6 +157,87 @@ class _AddTemplateState extends State<AddTemplate>
             ));
   }
 
+  Page1() {
+    List<String> listdata = [
+      'spaceaddone'.tr,
+      'spaceaddtwo'.tr,
+      'spaceaddthird'.tr,
+    ];
+    return Column(
+      children: [
+        ListView.builder(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            primary: false,
+            physics: const ScrollPhysics(),
+            itemCount: listdata.length,
+            itemBuilder: ((context, index) {
+              return Column(
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  GetBuilder<category>(
+                      builder: (_) => GestureDetector(
+                            onTap: () {
+                              if (cg.categorypicknumber == index) {
+                                cg.setcategorypicknumber(99);
+                              } else {
+                                cg.setcategorypicknumber(index);
+                              }
+                            },
+                            child: ContainerDesign(
+                                color: cg.categorypicknumber == index
+                                    ? Colors.blue.shade200
+                                    : draw.backgroundcolor,
+                                child: SizedBox(
+                                  height: 20.h,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      cg.categorypicknumber == index
+                                          ? const Icon(
+                                              Icons.done_all,
+                                              color: Colors.white,
+                                              size: 25,
+                                            )
+                                          : Icon(
+                                              Icons.ads_click,
+                                              color: draw.color_textstatus,
+                                              size: 25,
+                                            ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Flexible(
+                                        fit: FlexFit.tight,
+                                        child: Text(
+                                          listdata[index],
+                                          maxLines: 2,
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontSize: contentTextsize(),
+                                            color: draw.color_textstatus,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          overflow: TextOverflow.clip,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )),
+                          )),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ],
+              );
+            }))
+      ],
+    );
+  }
+
   moveaction() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -191,85 +273,6 @@ class _AddTemplateState extends State<AddTemplate>
                     ],
                   )),
             ))
-      ],
-    );
-  }
-
-  Page1() {
-    List<String> listdata = [
-      'spaceaddone'.tr,
-      'spaceaddtwo'.tr,
-      'spaceaddthird'.tr,
-      'spaceaddforth'.tr,
-    ];
-    return Column(
-      children: [
-        ListView.builder(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            primary: false,
-            physics: const ScrollPhysics(),
-            itemCount: listdata.length,
-            itemBuilder: ((context, index) {
-              return Column(
-                children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  GetBuilder<category>(
-                      builder: (_) => GestureDetector(
-                            onTap: () {
-                              if (cg.categorypicknumber == index) {
-                                cg.setcategorypicknumber(99);
-                              } else {
-                                cg.setcategorypicknumber(index);
-                              }
-                            },
-                            child: ContainerDesign(
-                                color: cg.categorypicknumber == index
-                                    ? Colors.blue.shade200
-                                    : draw.backgroundcolor,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    cg.categorypicknumber == index
-                                        ? const Icon(
-                                            Icons.done_all,
-                                            color: Colors.white,
-                                            size: 25,
-                                          )
-                                        : Icon(
-                                            Icons.ads_click,
-                                            color: draw.color_textstatus,
-                                            size: 25,
-                                          ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Flexible(
-                                      fit: FlexFit.tight,
-                                      child: Text(
-                                        listdata[index],
-                                        maxLines: 2,
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                          fontSize: contentTextsize(),
-                                          color: draw.color_textstatus,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        overflow: TextOverflow.clip,
-                                      ),
-                                    )
-                                  ],
-                                )),
-                          )),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                ],
-              );
-            }))
       ],
     );
   }
