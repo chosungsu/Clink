@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/FlushbarStyle.dart';
 import 'package:clickbyme/Tool/Getx/navibool.dart';
 import 'package:clickbyme/Tool/ResponsiveUI.dart';
@@ -93,6 +94,14 @@ class _LoginSignPageState extends State<LoginSignPage>
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SignInButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            side: BorderSide(
+                              color: TextColor(),
+                            )),
+                        elevation: 0,
+                        btnColor: BGColor(),
+                        btnTextColor: TextColor(),
                         buttonType: ButtonType.google,
                         buttonSize:
                             ButtonSize.medium, // small(default), medium, large
@@ -226,6 +235,14 @@ class _LoginSignPageState extends State<LoginSignPage>
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SignInButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            side: BorderSide(
+                              color: TextColor(),
+                            )),
+                        elevation: 0,
+                        btnColor: BGColor(),
+                        btnTextColor: TextColor(),
                         buttonType: ButtonType.google,
                         buttonSize:
                             ButtonSize.medium, // small(default), medium, large

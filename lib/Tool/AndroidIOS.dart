@@ -1,11 +1,36 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_utils/src/platform/platform.dart';
 
 import 'TextSize.dart';
+
+CodeByPlatform(actionandroid, actionios, actionweb) {
+  if (GetPlatform.isWeb) {
+    actionweb;
+  } else {
+    if (GetPlatform.isAndroid) {
+      actionandroid;
+    } else {
+      actionios;
+    }
+  }
+}
+
+ReturnByPlatform(actionandroid, actionios, actionweb) {
+  if (GetPlatform.isWeb) {
+    return actionweb;
+  } else {
+    if (GetPlatform.isAndroid) {
+      return actionandroid;
+    } else {
+      return actionios;
+    }
+  }
+}
 
 OSDialog(BuildContext context, String title, content, pressed) {
   return GetPlatform.isAndroid == true

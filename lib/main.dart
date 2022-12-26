@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, unused_local_variable
+import 'package:clickbyme/Tool/AndroidIOS.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/FRONTENDPART/Route/initScreenLoading.dart';
-import 'package:clickbyme/Tool/ResponsiveUI.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -10,7 +10,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:outline_gradient_button/outline_gradient_button.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import 'BACKENDPART/Locale/Locale.dart';
@@ -20,25 +19,31 @@ import 'FRONTENDPART/Route/subuiroute.dart';
 import 'LocalNotiPlatform/NotificationApi.dart';
 import 'Tool/Getx/PeopleAdd.dart';
 import 'Tool/Getx/notishow.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 void main() async {
+  ///flutter를 시작하게 하는 main function입니다.
+  ///웹과 앱에서의 환경설정을 다르게 구성해야 하므로 아래처럼 작성되었습니다.
   WidgetsFlutterBinding.ensureInitialized();
-  if (GetPlatform.isWeb) {
-    await Firebase.initializeApp(
-        options: FirebaseOptions(
-            apiKey: 'AIzaSyDmkVyvA80pDPV59DNd27yhqLkEgcHHFJU',
-            appId: '1:789398252263:web:75abc4946fa7fe798e5042',
-            messagingSenderId: '789398252263',
-            projectId: 'habit-tracker-8dad1'));
-  } else {
-    MobileAds.instance.initialize();
-    await Firebase.initializeApp(
-        options: FirebaseOptions(
-            apiKey: 'AIzaSyDmkVyvA80pDPV59DNd27yhqLkEgcHHFJU',
-            appId: '1:789398252263:android:21d69620fcd7caaa8e5042',
-            messagingSenderId: '789398252263',
-            projectId: 'habit-tracker-8dad1'));
-  }
+  CodeByPlatform(
+      {
+        MobileAds.instance.initialize(),
+        await Firebase.initializeApp(
+            name: 'linki',
+            options: FirebaseOptions(
+                apiKey: 'AIzaSyDmkVyvA80pDPV59DNd27yhqLkEgcHHFJU',
+                appId: '1:789398252263:android:21d69620fcd7caaa8e5042',
+                messagingSenderId: '789398252263',
+                projectId: 'habit-tracker-8dad1'))
+      },
+      null,
+      await Firebase.initializeApp(
+          name: 'linki',
+          options: FirebaseOptions(
+              apiKey: 'AIzaSyDmkVyvA80pDPV59DNd27yhqLkEgcHHFJU',
+              appId: '1:789398252263:web:75abc4946fa7fe798e5042',
+              messagingSenderId: '789398252263',
+              projectId: 'habit-tracker-8dad1')));
   await Hive.initFlutter();
   await Hive.openBox('user_info');
   await Hive.openBox('user_setting');
@@ -49,19 +54,37 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  ///MyApp Class
+  ///
+  ///환경에 따라 GetMaterialApp, GetCupertinoApp을 구분한다.
   const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return ResponsiveSizer(builder: ((p0, p1, p2) {
-      return GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        translations: Languages(),
-        locale: Get.deviceLocale,
-        fallbackLocale: Locale('en', 'US'),
-        home: const SplashPage(),
-      );
+      return ReturnByPlatform(
+          GetMaterialApp(
+            debugShowCheckedModeBanner: false,
+            translations: Languages(),
+            locale: Get.deviceLocale,
+            fallbackLocale: Locale('en', 'US'),
+            home: const SplashPage(),
+          ),
+          GetCupertinoApp(
+            debugShowCheckedModeBanner: false,
+            translations: Languages(),
+            locale: Get.deviceLocale,
+            fallbackLocale: Locale('en', 'US'),
+            home: const SplashPage(),
+          ),
+          GetMaterialApp(
+            debugShowCheckedModeBanner: false,
+            translations: Languages(),
+            locale: Get.deviceLocale,
+            fallbackLocale: Locale('en', 'US'),
+            home: const SplashPage(),
+          ));
     }));
   }
 }
@@ -73,8 +96,7 @@ class SplashPage extends StatefulWidget {
   State<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
-{
+class _SplashPageState extends State<SplashPage> {
   late AnimationController scaleController;
   late Animation<double> scaleAnimation;
   bool islogined = false;
@@ -114,211 +136,112 @@ class _SplashPageState extends State<SplashPage> //with TickerProviderStateMixin
 
   Widget loadingbody(Orientation orientation) {
     return SizedBox(
-        child: ResponsiveMainUI(
-            Row(
-              children: [
-                Flexible(
-                    flex: 3,
-                    child: Center(
-                      child: NeumorphicText(
-                        'NearU',
-                        style: const NeumorphicStyle(
-                          shape: NeumorphicShape.flat,
-                          depth: 3,
-                          color: Colors.lightBlue,
-                        ),
-                        textStyle: NeumorphicTextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25,
-                        ),
-                      ),
-                    )),
-                Flexible(
-                    flex: 1,
-                    child: SizedBox(
-                        child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        SpinKitThreeBounce(
-                          size: 25,
-                          itemBuilder: (BuildContext context, int index) {
-                            return DecoratedBox(
-                              decoration: BoxDecoration(
-                                  color: Colors.blue.shade200,
-                                  shape: BoxShape.circle),
-                            );
-                          },
-                        ),
-                      ],
-                    )))
-              ],
-            ),
-            Column(
-              children: [
-                Flexible(
-                    flex: 3,
-                    child: Center(
-                      child: NeumorphicText(
-                        'NearU',
-                        style: const NeumorphicStyle(
-                          shape: NeumorphicShape.flat,
-                          depth: 3,
-                          color: Colors.lightBlue,
-                        ),
-                        textStyle: NeumorphicTextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25,
-                        ),
-                      ),
-                    )),
-                Flexible(
-                    flex: 1,
-                    child: SizedBox(
-                        width: 80.w,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            SpinKitThreeBounce(
-                              size: 25,
-                              itemBuilder: (BuildContext context, int index) {
-                                return DecoratedBox(
-                                  decoration: BoxDecoration(
-                                      color: Colors.blue.shade200,
-                                      shape: BoxShape.circle),
-                                );
-                              },
-                            ),
-                          ],
-                        )))
-              ],
-            ),
-            orientation));
+        child: Column(
+      children: [
+        Flexible(
+            flex: 3,
+            child: Center(
+              child: Icon(
+                Ionicons.bookmark_outline,
+                size: 50,
+                color: Colors.blue,
+              ),
+            )),
+        Flexible(
+            flex: 1,
+            child: SizedBox(
+                width: 80.w,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SpinKitThreeBounce(
+                      size: 25,
+                      itemBuilder: (BuildContext context, int index) {
+                        return DecoratedBox(
+                          decoration: BoxDecoration(
+                              color: Colors.blue.shade200,
+                              shape: BoxShape.circle),
+                        );
+                      },
+                    ),
+                  ],
+                )))
+      ],
+    ));
   }
 
   Widget body(Orientation orientation) {
     return SizedBox(
-        child: ResponsiveMainUI(
-            Column(
-              children: [
-                Flexible(
-                    flex: 2,
-                    child: Center(
-                      child: NeumorphicText(
-                        'NearU',
-                        style: const NeumorphicStyle(
-                          shape: NeumorphicShape.flat,
-                          depth: 3,
-                          color: Colors.lightBlue,
+      child: Column(
+        children: [
+          Flexible(
+              flex: 3,
+              child: Center(
+                  child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Ionicons.bookmark_outline,
+                    size: 30,
+                    color: Colors.blue,
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  NeumorphicText(
+                    'Towiz',
+                    style: const NeumorphicStyle(
+                      shape: NeumorphicShape.flat,
+                      depth: 3,
+                      color: Colors.lightBlue,
+                    ),
+                    textStyle: NeumorphicTextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
+                    ),
+                  ),
+                ],
+              ))),
+          Flexible(
+              flex: 1,
+              child: SizedBox(
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      GoToLogin('first');
+                    },
+                    child: SizedBox(
+                      height: 50,
+                      width: 60.w,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(
+                            color: Colors.grey,
+                            width: 2,
+                          ),
                         ),
-                        textStyle: NeumorphicTextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('Get Start',
+                                style: TextStyle(
+                                    color: TextColor(),
+                                    fontSize: contentTextsize())),
+                          ],
                         ),
                       ),
-                    )),
-                Flexible(
-                    flex: 1,
-                    child: SizedBox(
-                        child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 50,
-                          child: OutlineGradientButton(
-                            child: SizedBox(
-                                width: 40.w,
-                                child: Center(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text('Get Start',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: contentTextsize())),
-                                    ],
-                                  ),
-                                )),
-                            gradient: const LinearGradient(
-                              colors: [Colors.blue, Colors.blueGrey],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            strokeWidth: 2,
-                            backgroundColor: Colors.blue.shade300,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 24, vertical: 12),
-                            radius: const Radius.circular(10),
-                            onTap: () {
-                              GoToLogin('first');
-                            },
-                          ),
-                        )
-                      ],
-                    ))),
-              ],
-            ),
-            Column(
-              children: [
-                Flexible(
-                    flex: 3,
-                    child: Center(
-                      child: NeumorphicText(
-                        'NearU',
-                        style: const NeumorphicStyle(
-                          shape: NeumorphicShape.flat,
-                          depth: 3,
-                          color: Colors.lightBlue,
-                        ),
-                        textStyle: NeumorphicTextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25,
-                        ),
-                      ),
-                    )),
-                Flexible(
-                    flex: 1,
-                    child: SizedBox(
-                        child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 50,
-                          child: OutlineGradientButton(
-                            child: SizedBox(
-                                width: 60.w,
-                                child: Center(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text('Get Start',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: contentTextsize())),
-                                    ],
-                                  ),
-                                )),
-                            gradient: const LinearGradient(
-                              colors: [Colors.blue, Colors.blueGrey],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            strokeWidth: 2,
-                            backgroundColor: Colors.blue.shade300,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 24, vertical: 12),
-                            radius: const Radius.circular(10),
-                            onTap: () {
-                              GoToLogin('first');
-                            },
-                          ),
-                        )
-                      ],
-                    ))),
-              ],
-            ),
-            orientation));
+                    ),
+                  )
+                ],
+              ))),
+        ],
+      ),
+    );
   }
 }
 

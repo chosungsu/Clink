@@ -36,7 +36,8 @@ dependencies:
   intl: 
   responsive_sizer:
   
-  #애니메이션효과를 주기 위함
+  #효과 및 아이콘 라이브러리
+  flutter_vector_icons:
   flutter_spinkit: 
   page_transition: 
   transition: 
