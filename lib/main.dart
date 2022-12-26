@@ -25,25 +25,26 @@ void main() async {
   ///flutter를 시작하게 하는 main function입니다.
   ///웹과 앱에서의 환경설정을 다르게 구성해야 하므로 아래처럼 작성되었습니다.
   WidgetsFlutterBinding.ensureInitialized();
-  CodeByPlatform(
-      {
-        MobileAds.instance.initialize(),
-        await Firebase.initializeApp(
-            name: 'linki',
-            options: FirebaseOptions(
-                apiKey: 'AIzaSyDmkVyvA80pDPV59DNd27yhqLkEgcHHFJU',
-                appId: '1:789398252263:android:21d69620fcd7caaa8e5042',
-                messagingSenderId: '789398252263',
-                projectId: 'habit-tracker-8dad1'))
-      },
-      null,
+  if (GetPlatform.isWeb) {
+    await Firebase.initializeApp(
+        options: FirebaseOptions(
+            apiKey: 'AIzaSyDmkVyvA80pDPV59DNd27yhqLkEgcHHFJU',
+            appId: '1:789398252263:web:75abc4946fa7fe798e5042',
+            messagingSenderId: '789398252263',
+            projectId: 'habit-tracker-8dad1'));
+  } else {
+    CodeByPlatform({
+      MobileAds.instance.initialize(),
       await Firebase.initializeApp(
           name: 'linki',
           options: FirebaseOptions(
               apiKey: 'AIzaSyDmkVyvA80pDPV59DNd27yhqLkEgcHHFJU',
-              appId: '1:789398252263:web:75abc4946fa7fe798e5042',
+              appId: '1:789398252263:android:21d69620fcd7caaa8e5042',
               messagingSenderId: '789398252263',
-              projectId: 'habit-tracker-8dad1')));
+              projectId: 'habit-tracker-8dad1'))
+    }, null, null);
+  }
+
   await Hive.initFlutter();
   await Hive.openBox('user_info');
   await Hive.openBox('user_setting');
@@ -136,42 +137,47 @@ class _SplashPageState extends State<SplashPage> {
 
   Widget loadingbody(Orientation orientation) {
     return SizedBox(
-        child: Column(
-      children: [
-        Flexible(
-            flex: 3,
-            child: Center(
-              child: Icon(
-                Ionicons.bookmark_outline,
-                size: 50,
-                color: Colors.blue,
-              ),
-            )),
-        Flexible(
-            flex: 1,
-            child: SizedBox(
-                width: 80.w,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SpinKitThreeBounce(
-                      size: 25,
-                      itemBuilder: (BuildContext context, int index) {
-                        return DecoratedBox(
-                          decoration: BoxDecoration(
-                              color: Colors.blue.shade200,
-                              shape: BoxShape.circle),
-                        );
-                      },
-                    ),
-                  ],
-                )))
-      ],
+        child: SingleChildScrollView(
+      physics: ScrollPhysics(),
+      child: Column(
+        children: [
+          Flexible(
+              flex: 3,
+              child: Center(
+                child: Icon(
+                  Ionicons.bookmark_outline,
+                  size: 50,
+                  color: Colors.blue,
+                ),
+              )),
+          Flexible(
+              flex: 1,
+              child: SizedBox(
+                  width: 80.w,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SpinKitThreeBounce(
+                        size: 25,
+                        itemBuilder: (BuildContext context, int index) {
+                          return DecoratedBox(
+                            decoration: BoxDecoration(
+                                color: Colors.blue.shade200,
+                                shape: BoxShape.circle),
+                          );
+                        },
+                      ),
+                    ],
+                  )))
+        ],
+      ),
     ));
   }
 
   Widget body(Orientation orientation) {
     return SizedBox(
+        child: SingleChildScrollView(
+      physics: ScrollPhysics(),
       child: Column(
         children: [
           Flexible(
@@ -241,7 +247,7 @@ class _SplashPageState extends State<SplashPage> {
               ))),
         ],
       ),
-    );
+    ));
   }
 }
 

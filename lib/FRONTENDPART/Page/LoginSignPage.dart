@@ -5,7 +5,6 @@ import 'package:clickbyme/Tool/FlushbarStyle.dart';
 import 'package:clickbyme/Tool/Getx/navibool.dart';
 import 'package:clickbyme/Tool/ResponsiveUI.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -17,6 +16,7 @@ import '../Route/subuiroute.dart';
 import '../../Tool/AndroidIOS.dart';
 import '../../Tool/Loader.dart';
 import '../../Tool/TextSize.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 class LoginSignPage extends StatefulWidget {
   const LoginSignPage({Key? key, required this.first}) : super(key: key);
@@ -69,342 +69,422 @@ class _LoginSignPageState extends State<LoginSignPage>
 
   Widget UI(Orientation orientation, bool ischecked) {
     return ResponsiveMainUI(
-        Row(
-          children: [
-            Flexible(
-                flex: 2,
-                child: Center(
-                  child: NeumorphicText(
-                    'LOGIN',
-                    style: const NeumorphicStyle(
-                      shape: NeumorphicShape.flat,
-                      depth: 3,
-                      color: Colors.lightBlue,
-                    ),
-                    textStyle: NeumorphicTextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                    ),
-                  ),
-                )),
-            Flexible(
-                flex: 3,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SignInButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            side: BorderSide(
-                              color: TextColor(),
-                            )),
-                        elevation: 0,
-                        btnColor: BGColor(),
-                        btnTextColor: TextColor(),
-                        buttonType: ButtonType.google,
-                        buttonSize:
-                            ButtonSize.medium, // small(default), medium, large
-                        onPressed: () async {
-                          setState(() {
-                            loading = true;
-                          });
-                          await GoogleSignInController()
-                              .login(context, ischecked);
-
-                          setState(() {
-                            loading = false;
-                          });
-                          Snack.snackbars(
-                              context: context,
-                              title: '로그인 완료',
-                              backgroundcolor: Colors.green,
-                              bordercolor: draw.backgroundcolor);
-                        }),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    Divider(
-                      height: 30,
-                      color: draw.color_textstatus,
-                      thickness: 0.5,
-                      indent: 30.0,
-                      endIndent: 30.0,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Checkbox(
-                                value: _ischecked,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _ischecked = value!;
-                                  });
-                                }),
-                            Flexible(
-                                fit: FlexFit.tight,
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      '(선택)자동 로그인 사용',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 16,
-                                          color: draw.color_textstatus,
-                                          letterSpacing: 2),
-                                    ),
-                                  ],
-                                ))
-                          ],
-                        ),
-                        widget.first == 'first'
-                            ? Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 20, right: 20),
-                                child: RichText(
-                                  text: TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: 16,
-                                            color: draw.color_textstatus,
-                                            letterSpacing: 2),
-                                        text:
-                                            '구글로그인(Google Login)을 클릭하여 로그인 시 ',
-                                      ),
-                                      TextSpan(
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: 16,
-                                            color: Colors.blue.shade400,
-                                            letterSpacing: 2),
-                                        text: '앱의 개인정보처리방침',
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = () async {
-                                            var url = Uri.parse(
-                                                'https://linkaiteam.github.io/LINKAITEAM/개인정보처리방침');
-
-                                            launchUrl(url);
-                                          },
-                                      ),
-                                      TextSpan(
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: 16,
-                                            color: draw.color_textstatus,
-                                            letterSpacing: 2),
-                                        text: '에 동의하는 것으로 간주합니다.',
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            : const SizedBox()
-                      ],
-                    )
-                  ],
-                )),
-          ],
-        ),
-        Column(
-          children: [
-            Flexible(
-                flex: 2,
-                child: Center(
-                  child: NeumorphicText(
-                    'LOGIN',
-                    style: const NeumorphicStyle(
-                      shape: NeumorphicShape.flat,
-                      depth: 3,
-                      color: Colors.lightBlue,
-                    ),
-                    textStyle: NeumorphicTextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                    ),
-                  ),
-                )),
-            Flexible(
-                flex: 3,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SignInButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            side: BorderSide(
-                              color: TextColor(),
-                            )),
-                        elevation: 0,
-                        btnColor: BGColor(),
-                        btnTextColor: TextColor(),
-                        buttonType: ButtonType.google,
-                        buttonSize:
-                            ButtonSize.medium, // small(default), medium, large
-                        onPressed: () async {
-                          setState(() {
-                            loading = true;
-                          });
-                          await GoogleSignInController()
-                              .login(context, ischecked);
-
-                          setState(() {
-                            loading = false;
-                          });
-                          Snack.snackbars(
-                              context: context,
-                              title: '로그인 완료',
-                              backgroundcolor: Colors.green,
-                              bordercolor: draw.backgroundcolor);
-                        }),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    Divider(
-                      height: 30,
-                      color: draw.color_textstatus,
-                      thickness: 0.5,
-                      indent: 30.0,
-                      endIndent: 30.0,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Checkbox(
-                                value: _ischecked,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _ischecked = value!;
-                                  });
-                                }),
-                            Flexible(
-                                fit: FlexFit.tight,
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      '(선택)자동 로그인 사용',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 16,
-                                          color: draw.color_textstatus,
-                                          letterSpacing: 2),
-                                    ),
-                                  ],
-                                ))
-                          ],
-                        ),
-                        widget.first == 'first'
-                            ? Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 20, right: 20),
-                                child: RichText(
-                                  text: TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: 16,
-                                            color: draw.color_textstatus,
-                                            letterSpacing: 2),
-                                        text:
-                                            '구글로그인(Google Login)을 클릭하여 로그인 시 ',
-                                      ),
-                                      TextSpan(
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: 16,
-                                            color: Colors.blue.shade400,
-                                            letterSpacing: 2),
-                                        text: '앱의 개인정보처리방침',
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = () async {
-                                            var url = Uri.parse(
-                                                'https://linkaiteam.github.io/LINKAITEAM/개인정보처리방침');
-
-                                            launchUrl(url);
-                                          },
-                                      ),
-                                      TextSpan(
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: 16,
-                                            color: draw.color_textstatus,
-                                            letterSpacing: 2),
-                                        text: '에 동의하는 것으로 간주합니다.',
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            : const SizedBox()
-                      ],
-                    )
-                  ],
-                )),
-          ],
-        ),
-        orientation);
+        LandScapeView(ischecked), PortraitView(ischecked), orientation);
   }
 
-  // 바디 만들기
-  Widget makeBody(BuildContext context, bool ischecked) {
-    double height =
-        MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
+  LandScapeView(bool ischecked) {
     return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          SizedBox(
-            height: height * 0.75,
-            child: LoginPlus(context, ischecked, height),
-          ),
+      physics: const ScrollPhysics(),
+      child: Row(
+        children: [
+          const Flexible(
+              flex: 3,
+              child: Center(
+                child: Icon(
+                  Ionicons.lock_closed,
+                  size: 50,
+                  color: Colors.blue,
+                ),
+              )),
+          Flexible(
+              flex: 3,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Flexible(
+                      flex: 1,
+                      child: SizedBox(
+                        width: 80.w,
+                        child: Row(children: [
+                          Flexible(
+                            fit: FlexFit.tight,
+                            child: Container(
+                              height: 0,
+                              color: TextColor_shadowcolor(),
+                            ),
+                          ),
+                          Text(
+                            'Social Login',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontStyle: FontStyle.normal,
+                                fontSize: 30,
+                                color: draw.color_textstatus,
+                                letterSpacing: 2),
+                          ),
+                          Flexible(
+                            fit: FlexFit.tight,
+                            child: Container(
+                              height: 0,
+                              color: TextColor_shadowcolor(),
+                            ),
+                          ),
+                        ]),
+                      )),
+                  Flexible(
+                      flex: 3,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SignInButton(
+                                  width: 80.w,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                    side: BorderSide(
+                                        color: TextColor_shadowcolor()),
+                                  ),
+                                  elevation: 0,
+                                  btnColor: BGColor_shadowcolor(),
+                                  buttonType: ButtonType.google,
+                                  buttonSize: ButtonSize
+                                      .medium, // small(default), medium, large
+                                  onPressed: () async {
+                                    setState(() {
+                                      loading = true;
+                                    });
+                                    await GoogleSignInController()
+                                        .login(context, ischecked);
+
+                                    setState(() {
+                                      loading = false;
+                                    });
+                                    Snack.snackbars(
+                                        context: context,
+                                        title: '로그인 완료',
+                                        backgroundcolor: Colors.green,
+                                        bordercolor: draw.backgroundcolor);
+                                  }),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              SignInButton(
+                                  width: 80.w,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                    side: BorderSide(
+                                        color: TextColor_shadowcolor()),
+                                  ),
+                                  elevation: 0,
+                                  btnColor: BGColor_shadowcolor(),
+                                  buttonType: ButtonType.apple,
+                                  buttonSize: ButtonSize
+                                      .medium, // small(default), medium, large
+                                  onPressed: () async {
+                                    setState(() {
+                                      loading = true;
+                                    });
+                                    await GoogleSignInController()
+                                        .login(context, ischecked);
+
+                                    setState(() {
+                                      loading = false;
+                                    });
+                                    Snack.snackbars(
+                                        context: context,
+                                        title: '로그인 완료',
+                                        backgroundcolor: Colors.green,
+                                        bordercolor: draw.backgroundcolor);
+                                  }),
+                            ],
+                          ),
+                          Divider(
+                            height: 30,
+                            color: draw.color_textstatus,
+                            thickness: 0.5,
+                            indent: 30.0,
+                            endIndent: 30.0,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Checkbox(
+                                      value: _ischecked,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _ischecked = value!;
+                                        });
+                                      }),
+                                  Flexible(
+                                      fit: FlexFit.tight,
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            '(선택)자동 로그인 사용',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 16,
+                                                color: draw.color_textstatus,
+                                                letterSpacing: 2),
+                                          ),
+                                        ],
+                                      ))
+                                ],
+                              ),
+                              widget.first == 'first'
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20, right: 20),
+                                      child: RichText(
+                                        text: TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontSize: 16,
+                                                  color: draw.color_textstatus,
+                                                  letterSpacing: 2),
+                                              text:
+                                                  '구글로그인(Google Login)을 클릭하여 로그인 시 ',
+                                            ),
+                                            TextSpan(
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontSize: 16,
+                                                  color: Colors.blue.shade400,
+                                                  letterSpacing: 2),
+                                              text: '앱의 개인정보처리방침',
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = () async {
+                                                  var url = Uri.parse(
+                                                      'https://linkaiteam.github.io/LINKAITEAM/개인정보처리방침');
+
+                                                  launchUrl(url);
+                                                },
+                                            ),
+                                            TextSpan(
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontSize: 16,
+                                                  color: draw.color_textstatus,
+                                                  letterSpacing: 2),
+                                              text: '에 동의하는 것으로 간주합니다.',
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  : const SizedBox()
+                            ],
+                          )
+                        ],
+                      ))
+                ],
+              )),
+          const Flexible(flex: 1, child: SizedBox()),
         ],
       ),
     );
   }
 
-  Widget LoginPlus(BuildContext context, bool ischecked, double height) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(
-          '로그인',
-          style: TextStyle(
-            color: draw.color_textstatus,
-            fontSize: 20,
-            fontWeight: FontWeight.w600, // bold
-          ),
-        ),
-        SizedBox(
-          height: height * 0.25,
-        ),
-        SignInButton(
-            buttonType: ButtonType.google,
-            buttonSize: ButtonSize.medium, // small(default), medium, large
-            onPressed: () async {
-              setState(() {
-                loading = true;
-              });
-              await GoogleSignInController().login(context, ischecked);
+  PortraitView(bool ischecked) {
+    return SingleChildScrollView(
+      physics: const ScrollPhysics(),
+      child: Column(
+        children: [
+          const Flexible(
+              flex: 1,
+              child: Center(
+                child: Icon(
+                  Ionicons.lock_closed,
+                  size: 50,
+                  color: Colors.blue,
+                ),
+              )),
+          Flexible(
+              flex: 1,
+              child: SizedBox(
+                width: 80.w,
+                child: Row(children: [
+                  Flexible(
+                    fit: FlexFit.tight,
+                    child: Container(
+                      height: 0,
+                      color: TextColor_shadowcolor(),
+                    ),
+                  ),
+                  Text(
+                    'Social Login',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontStyle: FontStyle.normal,
+                        fontSize: 30,
+                        color: draw.color_textstatus,
+                        letterSpacing: 2),
+                  ),
+                  Flexible(
+                    fit: FlexFit.tight,
+                    child: Container(
+                      height: 0,
+                      color: TextColor_shadowcolor(),
+                    ),
+                  ),
+                ]),
+              )),
+          Flexible(
+              flex: 3,
+              child: SizedBox(
+                width: 80.w,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SignInButton(
+                            width: 80.w,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50),
+                              side: BorderSide(color: TextColor_shadowcolor()),
+                            ),
+                            elevation: 0,
+                            btnColor: BGColor_shadowcolor(),
+                            buttonType: ButtonType.google,
+                            buttonSize: ButtonSize
+                                .medium, // small(default), medium, large
+                            onPressed: () async {
+                              setState(() {
+                                loading = true;
+                              });
+                              await GoogleSignInController()
+                                  .login(context, ischecked);
 
-              setState(() {
-                loading = false;
-              });
-              Snack.snackbars(
-                  context: context,
-                  title: '로그인 완료',
-                  backgroundcolor: Colors.green,
-                  bordercolor: draw.backgroundcolor);
-            }),
-      ],
+                              setState(() {
+                                loading = false;
+                              });
+                              Snack.snackbars(
+                                  context: context,
+                                  title: '로그인 완료',
+                                  backgroundcolor: Colors.green,
+                                  bordercolor: draw.backgroundcolor);
+                            }),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        SignInButton(
+                            width: 80.w,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50),
+                              side: BorderSide(color: TextColor_shadowcolor()),
+                            ),
+                            elevation: 0,
+                            btnColor: BGColor_shadowcolor(),
+                            buttonType: ButtonType.apple,
+                            buttonSize: ButtonSize
+                                .medium, // small(default), medium, large
+                            onPressed: () async {
+                              setState(() {
+                                loading = true;
+                              });
+                              await GoogleSignInController()
+                                  .login(context, ischecked);
+
+                              setState(() {
+                                loading = false;
+                              });
+                              Snack.snackbars(
+                                  context: context,
+                                  title: '로그인 완료',
+                                  backgroundcolor: Colors.green,
+                                  bordercolor: draw.backgroundcolor);
+                            }),
+                      ],
+                    ),
+                    Divider(
+                      height: 30,
+                      color: draw.color_textstatus,
+                      thickness: 0.5,
+                      indent: 30.0,
+                      endIndent: 30.0,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Checkbox(
+                                value: _ischecked,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _ischecked = value!;
+                                  });
+                                }),
+                            Flexible(
+                                fit: FlexFit.tight,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      '(선택)자동 로그인 사용',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 16,
+                                          color: draw.color_textstatus,
+                                          letterSpacing: 2),
+                                    ),
+                                  ],
+                                ))
+                          ],
+                        ),
+                        widget.first == 'first'
+                            ? Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 20, right: 20),
+                                child: RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 16,
+                                            color: draw.color_textstatus,
+                                            letterSpacing: 2),
+                                        text:
+                                            '구글로그인(Google Login)을 클릭하여 로그인 시 ',
+                                      ),
+                                      TextSpan(
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 16,
+                                            color: Colors.blue.shade400,
+                                            letterSpacing: 2),
+                                        text: '앱의 개인정보처리방침',
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () async {
+                                            var url = Uri.parse(
+                                                'https://linkaiteam.github.io/LINKAITEAM/개인정보처리방침');
+
+                                            launchUrl(url);
+                                          },
+                                      ),
+                                      TextSpan(
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 16,
+                                            color: draw.color_textstatus,
+                                            letterSpacing: 2),
+                                        text: '에 동의하는 것으로 간주합니다.',
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : const SizedBox()
+                      ],
+                    )
+                  ],
+                ),
+              )),
+        ],
+      ),
     );
   }
 
