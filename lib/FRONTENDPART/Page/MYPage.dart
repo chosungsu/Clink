@@ -1,10 +1,8 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names
-
 import 'package:clickbyme/Tool/Getx/uisetting.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../Enums/Variables.dart';
 import '../../Tool/Getx/navibool.dart';
 import '../../Tool/Loader.dart';
@@ -53,48 +51,48 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
         builder: (_) => Scaffold(
             backgroundColor: draw.backgroundcolor,
             body: SafeArea(
-              child: draw.navi == 0 ||
-                      MediaQuery.of(context).orientation ==
-                          Orientation.landscape
-                  ? (draw.drawopen == true
-                      ? Stack(
-                          children: [
-                            SizedBox(
-                              width: 80,
-                              child: DrawerScreen(
-                                index:
-                                    Hive.box('user_setting').get('page_index'),
-                              ),
-                            ),
-                            GroupBody(context),
-                            uiset.loading == true
-                                ? const Loader(
-                                    wherein: 'route',
-                                  )
-                                : Container()
-                          ],
-                        )
-                      : Stack(
-                          children: [
-                            GroupBody(context),
-                            uiset.loading == true
-                                ? const Loader(
-                                    wherein: 'route',
-                                  )
-                                : Container()
-                          ],
-                        ))
-                  : Stack(
-                      children: [
-                        GroupBody(context),
-                        uiset.loading == true
-                            ? const Loader(
-                                wherein: 'route',
-                              )
-                            : Container()
-                      ],
-                    ),
-            )));
+                child: draw.drawopen == true
+                    ? Stack(
+                        children: [
+                          draw.navi == 0
+                              ? Positioned(
+                                  left: 0,
+                                  child: SizedBox(
+                                    width: 80,
+                                    child: DrawerScreen(
+                                      index: Hive.box('user_setting')
+                                          .get('page_index'),
+                                    ),
+                                  ),
+                                )
+                              : Positioned(
+                                  right: 0,
+                                  child: SizedBox(
+                                    width: 80,
+                                    child: DrawerScreen(
+                                      index: Hive.box('user_setting')
+                                          .get('page_index'),
+                                    ),
+                                  ),
+                                ),
+                          GroupBody(context),
+                          uiset.loading == true
+                              ? const Loader(
+                                  wherein: 'route',
+                                )
+                              : Container()
+                        ],
+                      )
+                    : Stack(
+                        children: [
+                          GroupBody(context),
+                          uiset.loading == true
+                              ? const Loader(
+                                  wherein: 'route',
+                                )
+                              : Container()
+                        ],
+                      ))));
   }
 
   Widget GroupBody(BuildContext context) {

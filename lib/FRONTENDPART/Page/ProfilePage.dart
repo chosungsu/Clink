@@ -73,31 +73,38 @@ class _ProfilePageState extends State<ProfilePage>
       child: Scaffold(
           backgroundColor: BGColor(),
           body: GetBuilder<navibool>(
-            builder: (_) => draw.navi == 0 ||
-                    MediaQuery.of(context).orientation == Orientation.landscape
-                ? (draw.drawopen == true
-                    ? Stack(
-                        children: [
-                          SizedBox(
-                            width: 80,
-                            child: DrawerScreen(
-                                index:
-                                    Hive.box('user_setting').get('page_index')),
-                          ),
-                          ProfileBody(context),
-                        ],
-                      )
-                    : Stack(
-                        children: [
-                          ProfileBody(context),
-                        ],
-                      ))
-                : Stack(
-                    children: [
-                      ProfileBody(context),
-                    ],
-                  ),
-          )),
+              builder: (_) => draw.drawopen == true
+                  ? Stack(
+                      children: [
+                        draw.navi == 0
+                            ? Positioned(
+                                left: 0,
+                                child: SizedBox(
+                                  width: 80,
+                                  child: DrawerScreen(
+                                    index: Hive.box('user_setting')
+                                        .get('page_index'),
+                                  ),
+                                ),
+                              )
+                            : Positioned(
+                                right: 0,
+                                child: SizedBox(
+                                  width: 80,
+                                  child: DrawerScreen(
+                                    index: Hive.box('user_setting')
+                                        .get('page_index'),
+                                  ),
+                                ),
+                              ),
+                        ProfileBody(context),
+                      ],
+                    )
+                  : Stack(
+                      children: [
+                        ProfileBody(context),
+                      ],
+                    ))),
     );
   }
 
@@ -852,10 +859,7 @@ class _ProfilePageState extends State<ProfilePage>
                   physics: const NeverScrollableScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
-                  itemCount: MediaQuery.of(context).orientation ==
-                          Orientation.landscape
-                      ? list_app_setting.length - 1
-                      : list_app_setting.length,
+                  itemCount: list_app_setting.length,
                   itemBuilder: (context, index) {
                     return Column(
                       mainAxisSize: MainAxisSize.min,
@@ -1130,29 +1134,24 @@ class _ProfilePageState extends State<ProfilePage>
                                                       height: 30,
                                                       child: InkWell(
                                                         onTap: () {
-                                                          MediaQuery.of(context)
-                                                                      .orientation ==
-                                                                  Orientation
-                                                                      .portrait
-                                                              ? setState(() {
-                                                                  Hive.box(
-                                                                          'user_setting')
-                                                                      .put(
-                                                                          'which_menu_pick',
-                                                                          0);
-                                                                  Hive.box(
-                                                                          'user_setting')
-                                                                      .put(
-                                                                          'page_index',
-                                                                          2);
-                                                                  uiset.setpageindex(
-                                                                      Hive.box(
-                                                                              'user_setting')
-                                                                          .get(
-                                                                              'page_index'));
-                                                                  draw.setnavi();
-                                                                })
-                                                              : null;
+                                                          setState(() {
+                                                            Hive.box(
+                                                                    'user_setting')
+                                                                .put(
+                                                                    'which_menu_pick',
+                                                                    0);
+                                                            Hive.box(
+                                                                    'user_setting')
+                                                                .put(
+                                                                    'page_index',
+                                                                    2);
+                                                            uiset.setpageindex(Hive
+                                                                    .box(
+                                                                        'user_setting')
+                                                                .get(
+                                                                    'page_index'));
+                                                            draw.setnavi();
+                                                          });
                                                         },
                                                         child: CircleAvatar(
                                                           backgroundColor:
@@ -1200,29 +1199,24 @@ class _ProfilePageState extends State<ProfilePage>
                                                       height: 30,
                                                       child: InkWell(
                                                         onTap: () {
-                                                          MediaQuery.of(context)
-                                                                      .orientation ==
-                                                                  Orientation
-                                                                      .landscape
-                                                              ? null
-                                                              : setState(() {
-                                                                  Hive.box(
-                                                                          'user_setting')
-                                                                      .put(
-                                                                          'which_menu_pick',
-                                                                          1);
-                                                                  Hive.box(
-                                                                          'user_setting')
-                                                                      .put(
-                                                                          'page_index',
-                                                                          2);
-                                                                  uiset.setpageindex(
-                                                                      Hive.box(
-                                                                              'user_setting')
-                                                                          .get(
-                                                                              'page_index'));
-                                                                  draw.setnavi();
-                                                                });
+                                                          setState(() {
+                                                            Hive.box(
+                                                                    'user_setting')
+                                                                .put(
+                                                                    'which_menu_pick',
+                                                                    1);
+                                                            Hive.box(
+                                                                    'user_setting')
+                                                                .put(
+                                                                    'page_index',
+                                                                    2);
+                                                            uiset.setpageindex(Hive
+                                                                    .box(
+                                                                        'user_setting')
+                                                                .get(
+                                                                    'page_index'));
+                                                            draw.setnavi();
+                                                          });
                                                         },
                                                         child: CircleAvatar(
                                                           backgroundColor:
@@ -1244,7 +1238,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                             child:
                                                                 NeumorphicIcon(
                                                               Icons
-                                                                  .align_vertical_bottom,
+                                                                  .align_horizontal_right,
                                                               size: 25,
                                                               style: NeumorphicStyle(
                                                                   shape:

@@ -175,7 +175,7 @@
 	<key>NSFaceIDUsageDescription</key>
 	<string>To lock your memos with face id</string>
 	<key>CFBundleDisplayName</key>
-	<string>Clickbyme</string>
+	<string>Towiz</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>

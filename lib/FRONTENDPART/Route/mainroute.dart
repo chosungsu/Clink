@@ -140,7 +140,15 @@ class _mainrouteState extends State<mainroute>
                                   ? _onWillPop
                                   : _onWillPop2,
                           child: pages[uiset.pagenumber]),
-                      bottomNavigationBar: draw.navi == 1
+                      bottomNavigationBar: ADSHOW(),
+                    );
+                  }))),
+          orientation);
+    }));
+  }
+}
+/**
+ * draw.navi == 1
                           ? Container(
                               decoration: BoxDecoration(
                                   border: Border(
@@ -207,10 +215,5 @@ class _mainrouteState extends State<mainroute>
                                   ),
                                 ],
                               ))
-                          : ADSHOW(),
-                    );
-                  }))),
-          orientation);
-    }));
-  }
-}
+                          : 
+ */

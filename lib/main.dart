@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, unused_local_variable
+// ignore_for_file: prefer_const_constructors, unused_local_variable, non_constant_identifier_names
 import 'package:clickbyme/Tool/AndroidIOS.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/FRONTENDPART/Route/initScreenLoading.dart';

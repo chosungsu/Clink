@@ -52,31 +52,39 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
         child: Scaffold(
       backgroundColor: BGColor(),
       body: GetBuilder<navibool>(
-        init: navibool(),
-        builder: (_) => draw.navi == 0 ||
-                MediaQuery.of(context).orientation == Orientation.landscape
-            ? (draw.drawopen == true
-                ? Stack(
-                    children: [
-                      SizedBox(
-                        width: 80,
-                        child: DrawerScreen(
-                            index: Hive.box('user_setting').get('page_index')),
-                      ),
-                      HomeUi(),
-                    ],
-                  )
-                : Stack(
-                    children: [
-                      HomeUi(),
-                    ],
-                  ))
-            : Stack(
-                children: [
-                  HomeUi(),
-                ],
-              ),
-      ),
+          init: navibool(),
+          builder: (_) => draw.drawopen == true
+              ? Stack(
+                  children: [
+                    draw.navi == 0
+                        ? Positioned(
+                            left: 0,
+                            child: SizedBox(
+                              width: 80,
+                              child: DrawerScreen(
+                                index:
+                                    Hive.box('user_setting').get('page_index'),
+                              ),
+                            ),
+                          )
+                        : Positioned(
+                            right: 0,
+                            child: SizedBox(
+                              width: 80,
+                              child: DrawerScreen(
+                                index:
+                                    Hive.box('user_setting').get('page_index'),
+                              ),
+                            ),
+                          ),
+                    HomeUi(),
+                  ],
+                )
+              : Stack(
+                  children: [
+                    HomeUi(),
+                  ],
+                )),
     ));
   }
 

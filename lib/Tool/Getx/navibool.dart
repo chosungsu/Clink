@@ -35,7 +35,11 @@ class navibool extends GetxController {
   }
 
   void setopen() {
-    xoffset = 80;
+    if (navi == 0) {
+      xoffset = 80;
+    } else {
+      xoffset = -80;
+    }
     yoffset = 0;
     scalefactor = 1;
     drawopen = true;
