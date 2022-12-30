@@ -33,6 +33,14 @@ ReturnByPlatform(actionandroid, actionios, actionweb) {
   }
 }
 
+Responsivelayout(size, landscape, portrait) {
+  if (size > 600) {
+    return landscape;
+  } else {
+    return portrait;
+  }
+}
+
 OSDialog(BuildContext context, String title, content, pressed) {
   return GetPlatform.isAndroid == true
       ? AlertDialog(

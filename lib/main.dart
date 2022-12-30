@@ -121,133 +121,204 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     StatusBarControl.setColor(draw.backgroundcolor, animated: true);
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: BGColor(),
-        body: OrientationBuilder(builder: ((context, orientation) {
-          return waitingbody(orientation);
-        })));
+        body: SafeArea(
+            child: SizedBox(
+                height: height,
+                child: LayoutBuilder(
+                  builder: ((context, constraint) {
+                    return ListView(
+                      shrinkWrap: true,
+                      physics: ScrollPhysics(),
+                      children: [
+                        Column(
+                          children: [
+                            Responsivelayout(
+                                constraint.maxWidth,
+                                SameView(constraint.maxHeight),
+                                SameView(constraint.maxHeight))
+                          ],
+                        )
+                      ],
+                    );
+                  }),
+                ))));
   }
 
-  Widget waitingbody(Orientation orientation) {
-    return SizedBox(
-        child: name == '' ? body(orientation) : loadingbody(orientation));
-  }
+  Widget SameView(double maxHeight) {
+    ///Landscape와 Portrait뷰가 동일한 경우의 위젯입니다.
+    ///name이 공백일 경우 버튼, 공백이 아닌 경우 로딩을 띄운다.
 
-  Widget loadingbody(Orientation orientation) {
     return SizedBox(
-        child: SingleChildScrollView(
-      physics: ScrollPhysics(),
-      child: Column(
-        children: [
-          Flexible(
-              flex: 3,
-              child: Center(
-                child: Icon(
-                  Ionicons.bookmark_outline,
-                  size: 50,
-                  color: Colors.blue,
-                ),
-              )),
-          Flexible(
-              flex: 1,
-              child: SizedBox(
-                  width: 80.w,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
+      height: maxHeight <= 100 ? 300 : maxHeight,
+      child: maxHeight <= 300
+          ? Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 50.w,
+                  child: Center(
+                      child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SpinKitThreeBounce(
-                        size: 25,
-                        itemBuilder: (BuildContext context, int index) {
-                          return DecoratedBox(
-                            decoration: BoxDecoration(
-                                color: Colors.blue.shade200,
-                                shape: BoxShape.circle),
-                          );
-                        },
+                      Icon(
+                        Ionicons.bookmark_outline,
+                        size: 30,
+                        color: Colors.blue,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      NeumorphicText(
+                        'Towiz',
+                        style: const NeumorphicStyle(
+                          shape: NeumorphicShape.flat,
+                          depth: 3,
+                          color: Colors.lightBlue,
+                        ),
+                        textStyle: NeumorphicTextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30,
+                        ),
                       ),
                     ],
-                  )))
-        ],
-      ),
-    ));
-  }
-
-  Widget body(Orientation orientation) {
-    return SizedBox(
-        child: SingleChildScrollView(
-      physics: ScrollPhysics(),
-      child: Column(
-        children: [
-          Flexible(
-              flex: 3,
-              child: Center(
-                  child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Ionicons.bookmark_outline,
-                    size: 30,
-                    color: Colors.blue,
-                  ),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  NeumorphicText(
-                    'Towiz',
-                    style: const NeumorphicStyle(
-                      shape: NeumorphicShape.flat,
-                      depth: 3,
-                      color: Colors.lightBlue,
-                    ),
-                    textStyle: NeumorphicTextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                    ),
-                  ),
-                ],
-              ))),
-          Flexible(
-              flex: 1,
-              child: SizedBox(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      GoToLogin('first');
-                    },
-                    child: SizedBox(
-                      height: 50,
-                      width: 60.w,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(
-                            color: Colors.grey,
-                            width: 2,
+                  )),
+                ),
+                SizedBox(
+                  width: 40.w,
+                  child: name == ''
+                      ? SizedBox(
+                          width: 30.w,
+                          height: 50,
+                          child: GestureDetector(
+                            onTap: () {
+                              GoToLogin('first');
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(15),
+                                border: Border.all(
+                                  color: Colors.grey,
+                                  width: 2,
+                                ),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('Get Start',
+                                      style: TextStyle(
+                                          color: TextColor(),
+                                          fontSize: contentTextsize())),
+                                ],
+                              ),
+                            ),
                           ),
+                        )
+                      : SpinKitThreeBounce(
+                          size: 30,
+                          itemBuilder: (BuildContext context, int index) {
+                            return DecoratedBox(
+                              decoration: BoxDecoration(
+                                  color: Colors.blue.shade200,
+                                  shape: BoxShape.circle),
+                            );
+                          },
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('Get Start',
-                                style: TextStyle(
-                                    color: TextColor(),
-                                    fontSize: contentTextsize())),
-                          ],
+                ),
+              ],
+            )
+          : Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  height: 60.h,
+                  child: Center(
+                      child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Ionicons.bookmark_outline,
+                        size: 30,
+                        color: Colors.blue,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      NeumorphicText(
+                        'Towiz',
+                        style: const NeumorphicStyle(
+                          shape: NeumorphicShape.flat,
+                          depth: 3,
+                          color: Colors.lightBlue,
+                        ),
+                        textStyle: NeumorphicTextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30,
                         ),
                       ),
-                    ),
-                  )
-                ],
-              ))),
-        ],
-      ),
-    ));
+                    ],
+                  )),
+                ),
+                SizedBox(
+                    height: 40.h,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        name == ''
+                            ? SizedBox(
+                                width: 50.w,
+                                height: 50,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    GoToLogin('first');
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.transparent,
+                                      borderRadius: BorderRadius.circular(15),
+                                      border: Border.all(
+                                        color: Colors.grey,
+                                        width: 2,
+                                      ),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text('Get Start',
+                                            style: TextStyle(
+                                                color: TextColor(),
+                                                fontSize: contentTextsize())),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : SpinKitThreeBounce(
+                                size: 25,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return DecoratedBox(
+                                    decoration: BoxDecoration(
+                                        color: Colors.blue.shade200,
+                                        shape: BoxShape.circle),
+                                  );
+                                },
+                              ),
+                      ],
+                    ))
+              ],
+            ),
+    );
   }
 }
 

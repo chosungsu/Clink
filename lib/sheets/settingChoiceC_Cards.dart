@@ -1,6 +1,7 @@
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 
@@ -8,6 +9,11 @@ settingCalendarHome(int index, doc_name, doc_shares, doc_change,
     BuildContext context, doc, doc_theme, doc_view) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.of(context).orientation == Orientation.portrait
+            ? Get.width
+            : Get.width / 2,
+      ),
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
         topLeft: Radius.circular(20),
@@ -61,7 +67,10 @@ SheetPageCC(BuildContext context, doc_name, doc_shares, doc_change, doc,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                          width: (MediaQuery.of(context).size.width - 40) * 0.2,
+                          width: MediaQuery.of(context).orientation ==
+                                  Orientation.portrait
+                              ? (MediaQuery.of(context).size.width - 40) * 0.2
+                              : (Get.width / 2 - 40) * 0.2,
                           alignment: Alignment.topCenter,
                           color: Colors.black45),
                     ],

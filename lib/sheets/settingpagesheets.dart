@@ -26,6 +26,11 @@ setUsers(
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.of(context).orientation == Orientation.portrait
+            ? Get.width
+            : Get.width / 2,
+      ),
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
         topLeft: Radius.circular(20),
@@ -79,7 +84,10 @@ sheet1(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                          width: (MediaQuery.of(context).size.width - 40) * 0.2,
+                          width: MediaQuery.of(context).orientation ==
+                                  Orientation.portrait
+                              ? (MediaQuery.of(context).size.width - 40) * 0.2
+                              : (Get.width / 2 - 40) * 0.2,
                           alignment: Alignment.topCenter,
                           color: Colors.black45),
                     ],
@@ -307,6 +315,11 @@ DeleteUserVerify(BuildContext context, String name) {
   showModalBottomSheet(
       context: context,
       isDismissible: false,
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.of(context).orientation == Orientation.portrait
+            ? Get.width
+            : Get.width / 2,
+      ),
       backgroundColor: Colors.transparent,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -348,7 +361,10 @@ sheet2(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                          width: (MediaQuery.of(context).size.width - 40) * 0.2,
+                          width: MediaQuery.of(context).orientation ==
+                                  Orientation.portrait
+                              ? (MediaQuery.of(context).size.width - 40) * 0.2
+                              : (Get.width / 2 - 40) * 0.2,
                           alignment: Alignment.topCenter,
                           color: Colors.black45),
                     ],
@@ -528,6 +544,11 @@ sheetmultiprofile(
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.of(context).orientation == Orientation.portrait
+            ? Get.width
+            : Get.width / 2,
+      ),
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
         topLeft: Radius.circular(20),
@@ -585,7 +606,10 @@ sheet3(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                          width: (MediaQuery.of(context).size.width - 40) * 0.2,
+                          width: MediaQuery.of(context).orientation ==
+                                  Orientation.portrait
+                              ? (MediaQuery.of(context).size.width - 40) * 0.2
+                              : (Get.width / 2 - 40) * 0.2,
                           alignment: Alignment.topCenter,
                           color: Colors.black45),
                     ],
@@ -1133,6 +1157,11 @@ showreadycontent(
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.of(context).orientation == Orientation.portrait
+            ? Get.width
+            : Get.width / 2,
+      ),
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
         topLeft: Radius.circular(20),
@@ -1185,7 +1214,10 @@ sheet4(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                          width: (MediaQuery.of(context).size.width - 40) * 0.2,
+                          width: MediaQuery.of(context).orientation ==
+                                  Orientation.portrait
+                              ? (MediaQuery.of(context).size.width - 40) * 0.2
+                              : (Get.width / 2 - 40) * 0.2,
                           alignment: Alignment.topCenter,
                           color: Colors.black45),
                     ],

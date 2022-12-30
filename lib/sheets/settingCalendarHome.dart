@@ -18,7 +18,10 @@ SheetPage(BuildContext context, int theme, int view, String docid) {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                          width: (MediaQuery.of(context).size.width - 40) * 0.2,
+                          width: MediaQuery.of(context).orientation ==
+                                  Orientation.portrait
+                              ? (MediaQuery.of(context).size.width - 40) * 0.2
+                              : (Get.width / 2 - 40) * 0.2,
                           alignment: Alignment.topCenter,
                           color: Colors.black45),
                     ],

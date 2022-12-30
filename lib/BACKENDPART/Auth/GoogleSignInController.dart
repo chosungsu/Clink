@@ -21,7 +21,12 @@ class GoogleSignInController extends GetxController {
 
   login(BuildContext context, bool ischecked) async {
     count = 1;
-    googleSignInAccount = await _googleSignIn.signIn();
+    try {
+      googleSignInAccount = await _googleSignIn.signIn();
+    } catch (e) {
+      update();
+      notifyChildrens();
+    }
     String nick = googleSignInAccount!.displayName.toString();
     String email = googleSignInAccount!.email.toString();
     var _chars =

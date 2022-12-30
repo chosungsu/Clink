@@ -18,6 +18,11 @@ infoshow(
     String isfromwhere) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.of(context).orientation == Orientation.portrait
+            ? Get.width
+            : Get.width / 2,
+      ),
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
         topLeft: Radius.circular(20),
@@ -74,7 +79,10 @@ infos(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                          width: (MediaQuery.of(context).size.width - 40) * 0.2,
+                          width: MediaQuery.of(context).orientation ==
+                                  Orientation.portrait
+                              ? (MediaQuery.of(context).size.width - 40) * 0.2
+                              : (Get.width / 2 - 40) * 0.2,
                           alignment: Alignment.topCenter,
                           color: Colors.black45),
                     ],

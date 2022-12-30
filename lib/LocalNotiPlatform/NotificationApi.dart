@@ -180,32 +180,35 @@ class NotificationApi {
 
   static void runWhileAppIsTerminated() async {
     var details = await _notifications.getNotificationAppLaunchDetails();
-
-    if (details!.didNotificationLaunchApp) {
-      if (details.notificationResponse!.payload != null) {
-        if (details.notificationResponse!.payload == 'memo') {
-          GoToMain();
-          Future.delayed(const Duration(seconds: 1), () {
-            Get.to(
-                () => const DayNoteHome(
-                      title: '',
-                      isfromwhere: 'home',
-                    ),
-                transition: Transition.downToUp);
-          });
+    try {
+      if (details!.didNotificationLaunchApp) {
+        if (details.notificationResponse!.payload != null) {
+          if (details.notificationResponse!.payload == 'memo') {
+            GoToMain();
+            Future.delayed(const Duration(seconds: 1), () {
+              Get.to(
+                  () => const DayNoteHome(
+                        title: '',
+                        isfromwhere: 'home',
+                      ),
+                  transition: Transition.downToUp);
+            });
+          } else {
+            GoToMain();
+            Future.delayed(const Duration(seconds: 1), () {
+              Get.to(
+                  () => DayContentHome(
+                      details.notificationResponse!.payload.toString()),
+                  transition: Transition.downToUp);
+            });
+          }
         } else {
           GoToMain();
-          Future.delayed(const Duration(seconds: 1), () {
-            Get.to(
-                () => DayContentHome(
-                    details.notificationResponse!.payload.toString()),
-                transition: Transition.downToUp);
-          });
         }
       } else {
         GoToMain();
       }
-    } else {
+    } catch (e) {
       GoToMain();
     }
   }

@@ -30,6 +30,11 @@ calendarView(
   return s == 'oncreate'
       ? showModalBottomSheet(
           backgroundColor: Colors.transparent,
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).orientation == Orientation.portrait
+                ? Get.width
+                : Get.width / 2,
+          ),
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20),
@@ -515,6 +520,11 @@ settingCalendarHome(
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.of(context).orientation == Orientation.portrait
+            ? Get.width
+            : Get.width / 2,
+      ),
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
         topLeft: Radius.circular(20),
