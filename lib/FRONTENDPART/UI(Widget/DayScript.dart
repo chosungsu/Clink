@@ -54,19 +54,16 @@ class _DayScriptState extends State<DayScript> {
   final imagePicker = ImagePicker();
   List<FocusNode> focusnodelist =
       List<FocusNode>.generate(5, ((index) => FocusNode()));
-  late TextEditingController textEditingController1;
-  late TextEditingController textEditingController2;
-  late TextEditingController textEditingController3;
-  late TextEditingController textEditingController4;
-  late TextEditingController textEditingController5;
+  late List<TextEditingController> texteditingcontrollerlist;
   final draw = Get.put(navibool());
-  //캘린더변수
-  late Map<DateTime, List<Event>> _events;
-  static final cal_share_person = Get.put(PeopleAdd());
+  final cal_share_person = Get.put(PeopleAdd());
   final controll_cal = Get.put(calendarsetting());
   final controll_memo = Get.put(memosetting());
-  final cal = Get.put(calendarsetting());
-  List finallist = cal_share_person.people;
+  final scollection = Get.put(selectcollection());
+
+  //캘린더변수
+  late Map<DateTime, List<Event>> _events;
+  late List finallist;
   String selectedValue = '선택없음';
   bool isChecked_pushalarm = false;
   int differ_date = 0;
@@ -78,10 +75,9 @@ class _DayScriptState extends State<DayScript> {
   final setalarmhourNode = FocusNode();
   final setalarmminuteNode = FocusNode();
   List valueid = [];
+
   //메모변수
   int _currentValue = 1;
-  final scollection = Get.put(selectcollection());
-  late TextEditingController textEditingController_add_sheet;
   List<TextEditingController> controllers = List.empty(growable: true);
   List savepicturelist = [];
   List<FocusNode> nodes = [];
@@ -110,11 +106,23 @@ class _DayScriptState extends State<DayScript> {
   @override
   void initState() {
     super.initState();
+    texteditingcontrollerlist =
+        List<TextEditingController>.generate(5, ((index) {
+      if (index == 0 || index == 3 || index == 4 || index == 5) {
+        return TextEditingController();
+      } else {
+        if (widget.position == 'note') {
+          return TextEditingController();
+        } else {
+          return TextEditingController(text: '하루종일 일정');
+        }
+      }
+    }));
     selectedDay = controll_cal.selectedDay;
     controll_cal.hour1 = '99';
     controll_cal.minute1 = '99';
-    cal.repeatwhile = 'no';
-    cal.repeatdate = 0;
+    controll_cal.repeatwhile = 'no';
+    controll_cal.repeatdate = 0;
     controll_memo.imagelist.clear();
     Hive.box('user_setting')
         .put('alarm_cal_hour_${cal_share_person.secondname}', '99');
@@ -137,17 +145,6 @@ class _DayScriptState extends State<DayScript> {
     Hive.box('user_setting').put('share_cal_person', '');
     cal_share_person.people = [];
     finallist = cal_share_person.people;
-    textEditingController1 = TextEditingController();
-    if (widget.position == 'note') {
-      textEditingController2 = TextEditingController();
-      textEditingController3 = TextEditingController();
-    } else {
-      textEditingController2 = TextEditingController(text: '하루종일 일정');
-      textEditingController3 = TextEditingController(text: '하루종일 일정');
-    }
-    textEditingController4 = TextEditingController();
-    textEditingController5 = TextEditingController();
-    textEditingController_add_sheet = TextEditingController();
     _events = {};
     ischeckedtohideminus = controll_memo.ischeckedtohideminus;
     scollection.collection = '';
@@ -159,24 +156,28 @@ class _DayScriptState extends State<DayScript> {
       uisetting().setloading(true);
     });
     var firsttxt = '0' +
-        textEditingController2.text +
+        texteditingcontrollerlist[1].text +
         ' - 0' +
-        textEditingController3.text;
-    var secondtxt =
-        '0' + textEditingController2.text + ' - ' + textEditingController3.text;
-    var thirdtxt =
-        textEditingController2.text + ' - 0' + textEditingController3.text;
-    var forthtxt =
-        textEditingController2.text + ' - ' + textEditingController3.text;
-    if (textEditingController1.text.isNotEmpty) {
+        texteditingcontrollerlist[2].text;
+    var secondtxt = '0' +
+        texteditingcontrollerlist[1].text +
+        ' - ' +
+        texteditingcontrollerlist[2].text;
+    var thirdtxt = texteditingcontrollerlist[1].text +
+        ' - 0' +
+        texteditingcontrollerlist[2].text;
+    var forthtxt = texteditingcontrollerlist[1].text +
+        ' - ' +
+        texteditingcontrollerlist[2].text;
+    if (texteditingcontrollerlist[0].text.isNotEmpty) {
       if (widget.position == 'cal') {
         controll_cal.selectedDay != controll_cal.selectedDay
             ? differ_date = int.parse(controll_cal.selectedDay
                 .difference(DateTime.parse(controll_cal.selectedDay.toString()))
                 .inDays
                 .toString())
-            : (cal.repeatwhile != 'no'
-                ? differ_date = cal.repeatdate
+            : (controll_cal.repeatwhile != 'no'
+                ? differ_date = controll_cal.repeatdate
                 : differ_date = 0);
         if (differ_date == 0) {
         } else {
@@ -188,12 +189,12 @@ class _DayScriptState extends State<DayScript> {
                       controll_cal.selectedDay.year,
                       controll_cal.selectedDay.month,
                       controll_cal.selectedDay.day + i))
-                  : (cal.repeatwhile == '주'
+                  : (controll_cal.repeatwhile == '주'
                       ? differ_list.add(DateTime(
                           controll_cal.selectedDay.year,
                           controll_cal.selectedDay.month,
                           controll_cal.selectedDay.day + 7 * i))
-                      : (cal.repeatwhile == '월'
+                      : (controll_cal.repeatwhile == '월'
                           ? differ_list.add(DateTime(
                               controll_cal.selectedDay.year,
                               controll_cal.selectedDay.month + i,
@@ -208,7 +209,7 @@ class _DayScriptState extends State<DayScript> {
         firestore.collection('AppNoticeByUsers').add({
           'title': '[' +
               controll_cal.calname +
-              '] 캘린더의 일정 ${textEditingController1.text}이(가) 추가되었습니다.',
+              '] 캘린더의 일정 ${texteditingcontrollerlist[0].text}이(가) 추가되었습니다.',
           'date': DateFormat('yyyy-MM-dd hh:mm')
                   .parse(DateTime.now().toString())
                   .toString()
@@ -232,12 +233,15 @@ class _DayScriptState extends State<DayScript> {
           if (differ_list.isNotEmpty) {
             if (isChecked_pushalarm) {
               NotificationApi.showNotification(
-                title: '알람설정된 일정 : ' + textEditingController1.text,
-                body: textEditingController2.text.split(':')[0].length == 1
-                    ? (textEditingController3.text.split(':')[0].length == 1
+                title: '알람설정된 일정 : ' + texteditingcontrollerlist[0].text,
+                body: texteditingcontrollerlist[1].text.split(':')[0].length ==
+                        1
+                    ? (texteditingcontrollerlist[2].text.split(':')[0].length ==
+                            1
                         ? '예정된 시각 : ' + firsttxt
                         : '예정된 시각 : ' + secondtxt)
-                    : (textEditingController3.text.split(':')[0].length == 1
+                    : (texteditingcontrollerlist[2].text.split(':')[0].length ==
+                            1
                         ? '예정된 시각 : ' + thirdtxt
                         : '예정된 시각 : ' + forthtxt),
               );
@@ -253,41 +257,59 @@ class _DayScriptState extends State<DayScript> {
             Future.delayed(const Duration(seconds: 1), () {
               Get.back();
             });
-            if (cal.repeatwhile != 'no') {
+            if (controll_cal.repeatwhile != 'no') {
               code = String.fromCharCodes(Iterable.generate(
                   5, (_) => chars.codeUnitAt(rnd.nextInt(chars.length))));
             }
             for (int h = 0; h < differ_list.length; h++) {
               await firestore.collection('CalendarDataBase').add({
                 'code': code,
-                'whenrepeat': cal.repeatwhile,
-                'whattimecnt': cal.repeatdate,
-                'Daytodo': textEditingController1.text,
+                'whenrepeat': controll_cal.repeatwhile,
+                'whattimecnt': controll_cal.repeatdate,
+                'Daytodo': texteditingcontrollerlist[0].text,
                 'Alarm': isChecked_pushalarm == true
                     ? Hive.box('user_setting').get('alarming_time')
                     : '설정off',
-                'Timestart': textEditingController2.text == '하루종일 일정'
-                    ? textEditingController2.text + '으로 기록'
-                    : (textEditingController2.text.split(':')[0].length == 1
-                        ? (textEditingController2.text.split(':')[1].length == 1
-                            ? '0' + textEditingController2.text + '0'
-                            : '0' + textEditingController2.text)
-                        : (textEditingController2.text.split(':')[1].length == 1
-                            ? textEditingController2.text + '0'
-                            : textEditingController2.text)),
-                'Timefinish': textEditingController3.text == '하루종일 일정'
-                    ? textEditingController3.text + '으로 기록'
-                    : (textEditingController3.text.split(':')[0].length == 1
-                        ? (textEditingController3.text.split(':')[1].length == 1
-                            ? '0' + textEditingController3.text + '0'
-                            : '0' + textEditingController3.text)
-                        : (textEditingController3.text.split(':')[1].length == 1
-                            ? textEditingController3.text + '0'
-                            : textEditingController3.text)),
+                'Timestart': texteditingcontrollerlist[1].text == '하루종일 일정'
+                    ? texteditingcontrollerlist[1].text + '으로 기록'
+                    : (texteditingcontrollerlist[1].text.split(':')[0].length ==
+                            1
+                        ? (texteditingcontrollerlist[1]
+                                    .text
+                                    .split(':')[1]
+                                    .length ==
+                                1
+                            ? '0' + texteditingcontrollerlist[1].text + '0'
+                            : '0' + texteditingcontrollerlist[1].text)
+                        : (texteditingcontrollerlist[1]
+                                    .text
+                                    .split(':')[1]
+                                    .length ==
+                                1
+                            ? texteditingcontrollerlist[1].text + '0'
+                            : texteditingcontrollerlist[1].text)),
+                'Timefinish': texteditingcontrollerlist[2].text == '하루종일 일정'
+                    ? texteditingcontrollerlist[2].text + '으로 기록'
+                    : (texteditingcontrollerlist[2].text.split(':')[0].length ==
+                            1
+                        ? (texteditingcontrollerlist[2]
+                                    .text
+                                    .split(':')[1]
+                                    .length ==
+                                1
+                            ? '0' + texteditingcontrollerlist[2].text + '0'
+                            : '0' + texteditingcontrollerlist[2].text)
+                        : (texteditingcontrollerlist[2]
+                                    .text
+                                    .split(':')[1]
+                                    .length ==
+                                1
+                            ? texteditingcontrollerlist[2].text + '0'
+                            : texteditingcontrollerlist[2].text)),
                 'Shares': controll_cal.share,
                 'OriginalUser': usercode,
                 'calname': widget.id,
-                'summary': textEditingController5.text,
+                'summary': texteditingcontrollerlist[4].text,
                 'Date': DateFormat('yyyy-MM-dd')
                         .parse(differ_list[h].toString())
                         .toString()
@@ -349,22 +371,26 @@ class _DayScriptState extends State<DayScript> {
                             int.parse(value.id.hashCode.toString()) +
                             int.parse(cal_share_person.secondname.hashCode
                                 .toString()),
-                        title: textEditingController1.text + '일정이 다가옵니다',
-                        body:
-                            textEditingController2.text.split(':')[0].length ==
+                        title: texteditingcontrollerlist[0].text + '일정이 다가옵니다',
+                        body: texteditingcontrollerlist[1]
+                                    .text
+                                    .split(':')[0]
+                                    .length ==
+                                1
+                            ? (texteditingcontrollerlist[2]
+                                        .text
+                                        .split(':')[0]
+                                        .length ==
                                     1
-                                ? (textEditingController3.text
-                                            .split(':')[0]
-                                            .length ==
-                                        1
-                                    ? '예정된 시각 : ' + firsttxt
-                                    : '예정된 시각 : ' + secondtxt)
-                                : (textEditingController3.text
-                                            .split(':')[0]
-                                            .length ==
-                                        1
-                                    ? '예정된 시각 : ' + thirdtxt
-                                    : '예정된 시각 : ' + forthtxt),
+                                ? '예정된 시각 : ' + firsttxt
+                                : '예정된 시각 : ' + secondtxt)
+                            : (texteditingcontrollerlist[2]
+                                        .text
+                                        .split(':')[0]
+                                        .length ==
+                                    1
+                                ? '예정된 시각 : ' + thirdtxt
+                                : '예정된 시각 : ' + forthtxt),
                         payload: widget.id,
                         scheduledate: DateTime.utc(
                           int.parse(differ_list[h]
@@ -401,22 +427,26 @@ class _DayScriptState extends State<DayScript> {
                             int.parse(value.id.hashCode.toString()) +
                             int.parse(cal_share_person.secondname.hashCode
                                 .toString()),
-                        title: textEditingController1.text + '일정이 다가옵니다',
-                        body:
-                            textEditingController2.text.split(':')[0].length ==
+                        title: texteditingcontrollerlist[0].text + '일정이 다가옵니다',
+                        body: texteditingcontrollerlist[1]
+                                    .text
+                                    .split(':')[0]
+                                    .length ==
+                                1
+                            ? (texteditingcontrollerlist[2]
+                                        .text
+                                        .split(':')[0]
+                                        .length ==
                                     1
-                                ? (textEditingController3.text
-                                            .split(':')[0]
-                                            .length ==
-                                        1
-                                    ? '예정된 시각 : ' + firsttxt
-                                    : '예정된 시각 : ' + secondtxt)
-                                : (textEditingController3.text
-                                            .split(':')[0]
-                                            .length ==
-                                        1
-                                    ? '예정된 시각 : ' + thirdtxt
-                                    : '예정된 시각 : ' + forthtxt),
+                                ? '예정된 시각 : ' + firsttxt
+                                : '예정된 시각 : ' + secondtxt)
+                            : (texteditingcontrollerlist[2]
+                                        .text
+                                        .split(':')[0]
+                                        .length ==
+                                    1
+                                ? '예정된 시각 : ' + thirdtxt
+                                : '예정된 시각 : ' + forthtxt),
                         payload: widget.id,
                         scheduledate: DateTime.utc(
                           int.parse(differ_list[h]
@@ -446,32 +476,48 @@ class _DayScriptState extends State<DayScript> {
               'code': '',
               'whenrepeat': 'no',
               'whattimecnt': 0,
-              'Daytodo': textEditingController1.text,
+              'Daytodo': texteditingcontrollerlist[0].text,
               'Alarm': isChecked_pushalarm == true
                   ? Hive.box('user_setting').get('alarming_time')
                   : '설정off',
-              'Timestart': textEditingController2.text == '하루종일 일정'
-                  ? textEditingController2.text + '으로 기록'
-                  : (textEditingController2.text.split(':')[0].length == 1
-                      ? (textEditingController2.text.split(':')[1].length == 1
-                          ? '0' + textEditingController2.text + '0'
-                          : '0' + textEditingController2.text)
-                      : (textEditingController2.text.split(':')[1].length == 1
-                          ? textEditingController2.text + '0'
-                          : textEditingController2.text)),
-              'Timefinish': textEditingController3.text == '하루종일 일정'
-                  ? textEditingController3.text + '으로 기록'
-                  : (textEditingController3.text.split(':')[0].length == 1
-                      ? (textEditingController3.text.split(':')[1].length == 1
-                          ? '0' + textEditingController3.text + '0'
-                          : '0' + textEditingController3.text)
-                      : (textEditingController3.text.split(':')[1].length == 1
-                          ? textEditingController3.text + '0'
-                          : textEditingController3.text)),
+              'Timestart': texteditingcontrollerlist[1].text == '하루종일 일정'
+                  ? texteditingcontrollerlist[1].text + '으로 기록'
+                  : (texteditingcontrollerlist[1].text.split(':')[0].length == 1
+                      ? (texteditingcontrollerlist[1]
+                                  .text
+                                  .split(':')[1]
+                                  .length ==
+                              1
+                          ? '0' + texteditingcontrollerlist[1].text + '0'
+                          : '0' + texteditingcontrollerlist[1].text)
+                      : (texteditingcontrollerlist[1]
+                                  .text
+                                  .split(':')[1]
+                                  .length ==
+                              1
+                          ? texteditingcontrollerlist[1].text + '0'
+                          : texteditingcontrollerlist[1].text)),
+              'Timefinish': texteditingcontrollerlist[2].text == '하루종일 일정'
+                  ? texteditingcontrollerlist[2].text + '으로 기록'
+                  : (texteditingcontrollerlist[2].text.split(':')[0].length == 1
+                      ? (texteditingcontrollerlist[2]
+                                  .text
+                                  .split(':')[1]
+                                  .length ==
+                              1
+                          ? '0' + texteditingcontrollerlist[2].text + '0'
+                          : '0' + texteditingcontrollerlist[2].text)
+                      : (texteditingcontrollerlist[2]
+                                  .text
+                                  .split(':')[1]
+                                  .length ==
+                              1
+                          ? texteditingcontrollerlist[2].text + '0'
+                          : texteditingcontrollerlist[2].text)),
               'Shares': controll_cal.share,
               'OriginalUser': usercode,
               'calname': widget.id,
-              'summary': textEditingController5.text,
+              'summary': texteditingcontrollerlist[4].text,
               'Date': DateFormat('yyyy-MM-dd')
                       .parse(controll_cal.selectedDay.toString())
                       .toString()
@@ -492,7 +538,7 @@ class _DayScriptState extends State<DayScript> {
             firestore
                 .collection('CalendarDataBase')
                 .where('calname', isEqualTo: widget.id)
-                .where('Daytodo', isEqualTo: textEditingController1.text)
+                .where('Daytodo', isEqualTo: texteditingcontrollerlist[0].text)
                 .get()
                 .then((value) {
               for (int i = 0; i < value.docs.length; i++) {
@@ -542,14 +588,23 @@ class _DayScriptState extends State<DayScript> {
                 if (isChecked_pushalarm == true) {
                   if (alarmtypes[0] == true) {
                     NotificationApi.showNotification(
-                      title: '알람설정된 일정 : ' + textEditingController1.text,
-                      body: textEditingController2.text.split(':')[0].length ==
+                      title: '알람설정된 일정 : ' + texteditingcontrollerlist[1].text,
+                      body: texteditingcontrollerlist[1]
+                                  .text
+                                  .split(':')[0]
+                                  .length ==
                               1
-                          ? (textEditingController3.text.split(':')[0].length ==
+                          ? (texteditingcontrollerlist[2]
+                                      .text
+                                      .split(':')[0]
+                                      .length ==
                                   1
                               ? '예정된 시각 : ' + firsttxt
                               : '예정된 시각 : ' + secondtxt)
-                          : (textEditingController3.text.split(':')[0].length ==
+                          : (texteditingcontrollerlist[2]
+                                      .text
+                                      .split(':')[0]
+                                      .length ==
                                   1
                               ? '예정된 시각 : ' + thirdtxt
                               : '예정된 시각 : ' + forthtxt),
@@ -566,17 +621,19 @@ class _DayScriptState extends State<DayScript> {
                             int.parse(valueid[j].hashCode.toString()) +
                             int.parse(cal_share_person.secondname.hashCode
                                 .toString()),
-                        title: textEditingController1.text + '일정이 다가옵니다',
+                        title: texteditingcontrollerlist[0].text + '일정이 다가옵니다',
                         body:
-                            textEditingController2.text.split(':')[0].length ==
+                            texteditingcontrollerlist[1].text.split(':')[0].length ==
                                     1
-                                ? (textEditingController3.text
+                                ? (texteditingcontrollerlist[2]
+                                            .text
                                             .split(':')[0]
                                             .length ==
                                         1
                                     ? '예정된 시각 : ' + firsttxt
                                     : '예정된 시각 : ' + secondtxt)
-                                : (textEditingController3.text
+                                : (texteditingcontrollerlist[2]
+                                            .text
                                             .split(':')[0]
                                             .length ==
                                         1
@@ -607,14 +664,23 @@ class _DayScriptState extends State<DayScript> {
                         ));
                   } else {
                     NotificationApi.showNotification(
-                      title: '알람설정된 일정 : ' + textEditingController1.text,
-                      body: textEditingController2.text.split(':')[0].length ==
+                      title: '알람설정된 일정 : ' + texteditingcontrollerlist[0].text,
+                      body: texteditingcontrollerlist[1]
+                                  .text
+                                  .split(':')[0]
+                                  .length ==
                               1
-                          ? (textEditingController3.text.split(':')[0].length ==
+                          ? (texteditingcontrollerlist[2]
+                                      .text
+                                      .split(':')[0]
+                                      .length ==
                                   1
                               ? '예정된 시각 : ' + firsttxt
                               : '예정된 시각 : ' + secondtxt)
-                          : (textEditingController3.text.split(':')[0].length ==
+                          : (texteditingcontrollerlist[2]
+                                      .text
+                                      .split(':')[0]
+                                      .length ==
                                   1
                               ? '예정된 시각 : ' + thirdtxt
                               : '예정된 시각 : ' + forthtxt),
@@ -631,17 +697,19 @@ class _DayScriptState extends State<DayScript> {
                             int.parse(valueid[j].hashCode.toString()) +
                             int.parse(cal_share_person.secondname.hashCode
                                 .toString()),
-                        title: textEditingController1.text + '일정이 다가옵니다',
+                        title: texteditingcontrollerlist[0].text + '일정이 다가옵니다',
                         body:
-                            textEditingController2.text.split(':')[0].length ==
+                            texteditingcontrollerlist[1].text.split(':')[0].length ==
                                     1
-                                ? (textEditingController3.text
+                                ? (texteditingcontrollerlist[2]
+                                            .text
                                             .split(':')[0]
                                             .length ==
                                         1
                                     ? '예정된 시각 : ' + firsttxt
                                     : '예정된 시각 : ' + secondtxt)
-                                : (textEditingController3.text
+                                : (texteditingcontrollerlist[2]
+                                            .text
                                             .split(':')[0]
                                             .length ==
                                         1
@@ -678,7 +746,7 @@ class _DayScriptState extends State<DayScript> {
         });
       } else {
         firestore.collection('AppNoticeByUsers').add({
-          'title': '메모 ${textEditingController1.text}이(가) 추가되었습니다.',
+          'title': '메모 ${texteditingcontrollerlist[0].text}이(가) 추가되었습니다.',
           'date': DateFormat('yyyy-MM-dd hh:mm')
                   .parse(DateTime.now().toString())
                   .toString()
@@ -705,7 +773,7 @@ class _DayScriptState extends State<DayScript> {
                 contentindex: scollection.memolistin[i]));
           }
           firestore.collection('MemoDataBase').doc().set({
-            'memoTitle': textEditingController1.text,
+            'memoTitle': texteditingcontrollerlist[0].text,
             'Collection':
                 scollection.collection == '' || scollection.collection == null
                     ? null
@@ -771,12 +839,9 @@ class _DayScriptState extends State<DayScript> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    textEditingController1.dispose();
-    textEditingController2.dispose();
-    textEditingController3.dispose();
-    textEditingController4.dispose();
-    textEditingController5.dispose();
-    textEditingController_add_sheet.dispose();
+    for (int i = 0; i < texteditingcontrollerlist.length; i++) {
+      texteditingcontrollerlist[i].dispose();
+    }
     for (int i = 0; i < scollection.controllersall.length; i++) {
       scollection.controllersall[i].dispose();
     }
@@ -1360,7 +1425,7 @@ class _DayScriptState extends State<DayScript> {
                 hintStyle: TextStyle(
                     fontSize: contentTextsize(), color: Colors.grey.shade400),
               ),
-              controller: textEditingController1,
+              controller: texteditingcontrollerlist[0],
             ),
             color: BGColor())
         : ListView.builder(
@@ -1393,7 +1458,7 @@ class _DayScriptState extends State<DayScript> {
                                 fontSize: contentTextsize(),
                                 color: Colors.grey.shade400),
                           ),
-                          controller: textEditingController1,
+                          controller: texteditingcontrollerlist[0],
                         ),
                         color: controll_memo.color),
                   ),
@@ -1431,7 +1496,7 @@ class _DayScriptState extends State<DayScript> {
                               addhashtagcollector(
                                   context,
                                   name,
-                                  textEditingController_add_sheet,
+                                  texteditingcontrollerlist[5],
                                   focusnodelist[4],
                                   'inside',
                                   scollection,
@@ -2135,7 +2200,7 @@ class _DayScriptState extends State<DayScript> {
                 color: BGColor(),
                 child: ListTile(
                   onTap: () {
-                    pickDates(context, textEditingController2,
+                    pickDates(context, texteditingcontrollerlist[1],
                         controll_cal.selectedDay);
                   },
                   leading: NeumorphicIcon(
@@ -2176,7 +2241,7 @@ class _DayScriptState extends State<DayScript> {
                       border: InputBorder.none,
                       isCollapsed: true,
                     ),
-                    controller: textEditingController2,
+                    controller: texteditingcontrollerlist[1],
                   ),
                 ),
               ),
@@ -2188,7 +2253,7 @@ class _DayScriptState extends State<DayScript> {
                   color: BGColor(),
                   child: ListTile(
                     onTap: () {
-                      pickDates(context, textEditingController3,
+                      pickDates(context, texteditingcontrollerlist[2],
                           controll_cal.selectedDay);
                     },
                     leading: NeumorphicIcon(
@@ -2229,7 +2294,7 @@ class _DayScriptState extends State<DayScript> {
                         border: InputBorder.none,
                         isCollapsed: true,
                       ),
-                      controller: textEditingController3,
+                      controller: texteditingcontrollerlist[2],
                     ),
                   ),
                 ),
@@ -2275,7 +2340,7 @@ class _DayScriptState extends State<DayScript> {
                                         const Duration(milliseconds: 300), () {
                                       showrepeatdate(
                                           context,
-                                          textEditingController4,
+                                          texteditingcontrollerlist[3],
                                           focusnodelist[3]);
                                     });
                                   },
@@ -2290,7 +2355,7 @@ class _DayScriptState extends State<DayScript> {
                                                 : TextColor()),
                                   ),
                                 ),
-                                subtitle: cal.repeatwhile == 'no'
+                                subtitle: controll_cal.repeatwhile == 'no'
                                     ? Text(
                                         '설정값 없음',
                                         style: TextStyle(
@@ -2303,9 +2368,9 @@ class _DayScriptState extends State<DayScript> {
                                                 : TextColor()),
                                       )
                                     : Text(
-                                        cal.repeatwhile +
+                                        controll_cal.repeatwhile +
                                             '간반복 : ' +
-                                            cal.repeatdate.toString() +
+                                            controll_cal.repeatdate.toString() +
                                             '회 설정',
                                         style: TextStyle(
                                             fontSize: contentTextsize(),
@@ -2378,7 +2443,7 @@ class _DayScriptState extends State<DayScript> {
                 hintStyle: TextStyle(
                     fontSize: contentTextsize(), color: Colors.grey.shade400),
               ),
-              controller: textEditingController5,
+              controller: texteditingcontrollerlist[4],
             ),
             color: BGColor())
       ],

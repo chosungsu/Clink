@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, unused_local_variable, prefer_typing_uninitialized_variables
 
+import 'package:clickbyme/Tool/NoBehavior.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
@@ -42,25 +43,22 @@ setUsers(
       isScrollControlled: true,
       builder: (context) {
         return Container(
-          margin: const EdgeInsets.only(
-              left: 10, right: 10, bottom: kBottomNavigationBarHeight),
-          child: Padding(
-              padding: MediaQuery.of(context).viewInsets,
-              child: Container(
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
-                    )),
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom,
-                ),
-                child: sheet1(context, node, controller, name),
-              )),
-        );
+            margin: const EdgeInsets.only(
+                left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+            child: Container(
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  )),
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: sheet1(context, node, controller, name),
+            ));
       }).whenComplete(() {});
 }
 
@@ -74,36 +72,43 @@ sheet1(
       child: Padding(
           padding:
               const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                  height: 5,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                          width: MediaQuery.of(context).orientation ==
-                                  Orientation.portrait
-                              ? (MediaQuery.of(context).size.width - 40) * 0.2
-                              : (Get.width / 2 - 40) * 0.2,
-                          alignment: Alignment.topCenter,
-                          color: Colors.black45),
-                    ],
-                  )),
-              const SizedBox(
-                height: 20,
+          child: ScrollConfiguration(
+            behavior: NoBehavior(),
+            child: SingleChildScrollView(
+              physics: const ScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                      height: 5,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                              width: MediaQuery.of(context).orientation ==
+                                      Orientation.portrait
+                                  ? (MediaQuery.of(context).size.width - 40) *
+                                      0.2
+                                  : (Get.width / 2 - 40) * 0.2,
+                              alignment: Alignment.topCenter,
+                              color: Colors.black45),
+                        ],
+                      )),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  title1(context),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  content1(context, node, controller, name),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                ],
               ),
-              title1(context),
-              const SizedBox(
-                height: 20,
-              ),
-              content1(context, node, controller, name),
-              const SizedBox(
-                height: 20,
-              ),
-            ],
+            ),
           )));
 }
 

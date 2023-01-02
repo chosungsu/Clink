@@ -6,10 +6,12 @@ import 'package:clickbyme/Tool/ResponsiveUI.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:status_bar_control/status_bar_control.dart';
+import '../../Tool/BGColor.dart';
 import '../Page/NotiAlarm.dart';
 import 'subuiroute.dart';
 import '../Page/SearchPage.dart';
@@ -118,15 +120,90 @@ class _mainrouteState extends State<mainroute>
           GetBuilder<navibool>(
               builder: (_) => GetBuilder<uisetting>(builder: ((_) {
                     return Scaffold(
-                      backgroundColor: draw.backgroundcolor,
-                      body: WillPopScope(
-                          onWillPop:
-                              Hive.box('user_setting').get('page_index') == 0
-                                  ? _onWillPop
-                                  : _onWillPop2,
-                          child: pages[uiset.pagenumber]),
-                      bottomNavigationBar: ADSHOW(),
-                    );
+                        backgroundColor: draw.backgroundcolor,
+                        body: WillPopScope(
+                            onWillPop:
+                                Hive.box('user_setting').get('page_index') == 0
+                                    ? _onWillPop
+                                    : _onWillPop2,
+                            child: pages[uiset.pagenumber]),
+                        bottomNavigationBar: draw.navi == 2
+                            ? Container(
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                        top: BorderSide(
+                                            color: draw.backgroundcolor,
+                                            width: 1))),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    ADSHOW(),
+                                    BottomNavigationBar(
+                                      type: BottomNavigationBarType.fixed,
+                                      onTap: (_index) async {
+                                        //Handle button tap
+                                        uiset.setloading(true);
+                                        uiset.searchpagemove = '';
+                                        uiset.textrecognizer = '';
+                                        uiset.setmypagelistindex(
+                                            Hive.box('user_setting')
+                                                    .get('currentmypage') ??
+                                                0);
+                                        Hive.box('user_setting')
+                                            .put('page_index', _index);
+                                        uiset.setpageindex(
+                                            Hive.box('user_setting')
+                                                .get('page_index'));
+
+                                        uiset.setloading(false);
+                                      },
+                                      backgroundColor: draw.backgroundcolor,
+                                      selectedFontSize: 18,
+                                      unselectedFontSize: 18,
+                                      selectedItemColor: Colors.purple.shade300,
+                                      unselectedItemColor:
+                                          draw.color_textstatus,
+                                      showSelectedLabels: false,
+                                      showUnselectedLabels: false,
+                                      currentIndex: uiset.pagenumber,
+                                      items: <BottomNavigationBarItem>[
+                                        BottomNavigationBarItem(
+                                          backgroundColor: BGColor(),
+                                          icon: const Icon(
+                                            AntDesign.home,
+                                            size: 25,
+                                          ),
+                                          label: '홈',
+                                        ),
+                                        BottomNavigationBarItem(
+                                          backgroundColor: BGColor(),
+                                          icon: const Icon(
+                                            Ionicons.search,
+                                            size: 25,
+                                          ),
+                                          label: '검색',
+                                        ),
+                                        BottomNavigationBarItem(
+                                          backgroundColor: BGColor(),
+                                          icon: const Icon(
+                                            Ionicons.notifications_outline,
+                                            size: 25,
+                                          ),
+                                          label: '알림',
+                                        ),
+                                        BottomNavigationBarItem(
+                                          backgroundColor: BGColor(),
+                                          icon: const Icon(
+                                            Ionicons.settings_outline,
+                                            size: 25,
+                                          ),
+                                          label: '설정',
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ))
+                            : ADSHOW());
                   }))),
           GetBuilder<navibool>(
               builder: (_) => GetBuilder<uisetting>(builder: ((_) {
@@ -138,15 +215,7 @@ class _mainrouteState extends State<mainroute>
                                   ? _onWillPop
                                   : _onWillPop2,
                           child: pages[uiset.pagenumber]),
-                      bottomNavigationBar: ADSHOW(),
-                    );
-                  }))),
-          orientation);
-    }));
-  }
-}
-/**
- * draw.navi == 1
+                      bottomNavigationBar: draw.navi == 2
                           ? Container(
                               decoration: BoxDecoration(
                                   border: Border(
@@ -188,7 +257,7 @@ class _mainrouteState extends State<mainroute>
                                       BottomNavigationBarItem(
                                         backgroundColor: BGColor(),
                                         icon: const Icon(
-                                          Icons.view_stream,
+                                          AntDesign.home,
                                           size: 25,
                                         ),
                                         label: '홈',
@@ -196,7 +265,7 @@ class _mainrouteState extends State<mainroute>
                                       BottomNavigationBarItem(
                                         backgroundColor: BGColor(),
                                         icon: const Icon(
-                                          Icons.search,
+                                          Ionicons.search,
                                           size: 25,
                                         ),
                                         label: '검색',
@@ -204,7 +273,15 @@ class _mainrouteState extends State<mainroute>
                                       BottomNavigationBarItem(
                                         backgroundColor: BGColor(),
                                         icon: const Icon(
-                                          Icons.settings,
+                                          Ionicons.notifications_outline,
+                                          size: 25,
+                                        ),
+                                        label: '알림',
+                                      ),
+                                      BottomNavigationBarItem(
+                                        backgroundColor: BGColor(),
+                                        icon: const Icon(
+                                          Ionicons.settings_outline,
                                           size: 25,
                                         ),
                                         label: '설정',
@@ -213,5 +290,10 @@ class _mainrouteState extends State<mainroute>
                                   ),
                                 ],
                               ))
-                          : 
- */
+                          : ADSHOW(),
+                    );
+                  }))),
+          orientation);
+    }));
+  }
+}

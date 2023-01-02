@@ -869,12 +869,15 @@ class _ProfilePageState extends State<ProfilePage>
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                list_app_setting[index],
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: contentTextsize(),
-                                    color: TextColor()),
+                              Flexible(
+                                fit: FlexFit.tight,
+                                child: Text(
+                                  list_app_setting[index],
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentTextsize(),
+                                      color: TextColor()),
+                                ),
                               ),
                               index == 0
                                   ? SizedBox(
@@ -1123,7 +1126,7 @@ class _ProfilePageState extends State<ProfilePage>
                                         )
                                       : SizedBox(
                                           height: 30,
-                                          width: 100,
+                                          width: 150,
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.end,
@@ -1239,6 +1242,71 @@ class _ProfilePageState extends State<ProfilePage>
                                                                 NeumorphicIcon(
                                                               Icons
                                                                   .align_horizontal_right,
+                                                              size: 25,
+                                                              style: NeumorphicStyle(
+                                                                  shape:
+                                                                      NeumorphicShape
+                                                                          .convex,
+                                                                  depth: 2,
+                                                                  color: Colors
+                                                                      .blue
+                                                                      .shade300,
+                                                                  lightSource:
+                                                                      LightSource
+                                                                          .topLeft),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ))),
+                                              const SizedBox(
+                                                width: 3,
+                                              ),
+                                              Flexible(
+                                                  flex: 1,
+                                                  child: SizedBox(
+                                                      height: 30,
+                                                      child: InkWell(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            Hive.box(
+                                                                    'user_setting')
+                                                                .put(
+                                                                    'which_menu_pick',
+                                                                    2);
+                                                            Hive.box(
+                                                                    'user_setting')
+                                                                .put(
+                                                                    'page_index',
+                                                                    3);
+                                                            uiset.setpageindex(Hive
+                                                                    .box(
+                                                                        'user_setting')
+                                                                .get(
+                                                                    'page_index'));
+                                                            draw.setnavi();
+                                                          });
+                                                        },
+                                                        child: CircleAvatar(
+                                                          backgroundColor:
+                                                              BGColor_shadowcolor(),
+                                                          child: Container(
+                                                            decoration: BoxDecoration(
+                                                                shape: BoxShape
+                                                                    .circle,
+                                                                border: Border.all(
+                                                                    width: 2,
+                                                                    color: draw.navi ==
+                                                                            2
+                                                                        ? Colors
+                                                                            .blue
+                                                                            .shade400
+                                                                        : BGColor_shadowcolor())),
+                                                            alignment: Alignment
+                                                                .center,
+                                                            child:
+                                                                NeumorphicIcon(
+                                                              Icons
+                                                                  .align_vertical_bottom,
                                                               size: 25,
                                                               style: NeumorphicStyle(
                                                                   shape:

@@ -61,9 +61,7 @@ class navibool extends GetxController {
   void setnavi() {
     Hive.box('user_setting').get('which_menu_pick') == null
         ? navi = 1
-        : (Hive.box('user_setting').get('which_menu_pick') == 0
-            ? navi = 0
-            : navi = 1);
+        : navi = Hive.box('user_setting').get('which_menu_pick');
     update();
     notifyChildrens();
   }
