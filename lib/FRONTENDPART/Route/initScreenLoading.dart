@@ -2,18 +2,20 @@
 
 import 'package:clickbyme/FRONTENDPART/Route/subuiroute.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../Enums/PageList.dart';
 import '../../Enums/Variables.dart';
 import '../../LocalNotiPlatform/NotificationApi.dart';
+import '../../Tool/FlushbarStyle.dart';
 import '../../Tool/Getx/PeopleAdd.dart';
 import '../../Tool/Getx/memosetting.dart';
 import '../../Tool/Getx/notishow.dart';
 import '../../Tool/Getx/uisetting.dart';
 
-Future<Widget?> initScreen() async {
+Future<Widget?> initScreen(BuildContext context) async {
   final peopleadd = Get.put(PeopleAdd());
   final notilist = Get.put(notishow());
   final controll_memo = Get.put(memosetting());
@@ -124,6 +126,15 @@ Future<Widget?> initScreen() async {
     }).whenComplete(() {
       NotificationApi.runWhileAppIsTerminated();
       Hive.box('user_setting').put('currentmypage', 0);
+      uiset.setloading(false);
+      if (uiset.loading) {
+      } else {
+        Snack.snackbars(
+            context: context,
+            title: '로그인 완료',
+            backgroundcolor: Colors.green,
+            bordercolor: draw.backgroundcolor);
+      }
       GoToMain();
     });
   }

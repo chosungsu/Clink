@@ -1,5 +1,7 @@
 // ignore_for_file: file_names, prefer_typing_uninitialized_variables, non_constant_identifier_names
 
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -46,3 +48,8 @@ final friendnamelist = [];
 late PackageInfo info;
 String versioninfo = '';
 int pagesetnumber = 0;
+//Here are DayScript Variables
+DateTime selectedDay = DateTime.now();
+var chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+Random rnd = Random();
+String code = '';

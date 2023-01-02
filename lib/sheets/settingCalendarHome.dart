@@ -3,6 +3,51 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import '../Tool/Getx/calendarsetting.dart';
 
+settingCalendarHome(
+  BuildContext context,
+  int theme,
+  int view,
+  String title,
+) {
+  showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.of(context).orientation == Orientation.portrait
+            ? Get.width
+            : Get.width / 2,
+      ),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        bottomLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+        bottomRight: Radius.circular(20),
+      )),
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Container(
+          margin: const EdgeInsets.all(10),
+          child: Padding(
+              padding: MediaQuery.of(context).viewInsets,
+              child: Container(
+                decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20),
+                    )),
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: SheetPage(context, theme, view, title),
+              )),
+        );
+      }).whenComplete(() {});
+}
+
 SheetPage(BuildContext context, int theme, int view, String docid) {
   return SizedBox(
       child: Padding(

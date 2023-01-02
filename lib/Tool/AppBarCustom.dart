@@ -65,7 +65,9 @@ class AppBarCustom extends StatelessWidget {
                         builder: (_) => Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            draw.navi == 0
+                            navinumlist.contains(Hive.box('user_setting')
+                                        .get('page_index')) &&
+                                    draw.navi == 0
                                 ? draw.drawopen == true ||
                                         Hive.box('user_setting')
                                                 .get('page_opened') ==

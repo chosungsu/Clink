@@ -111,7 +111,7 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
     checkForInitialMessage();
-    initScreen();
+    initScreen(context);
   }
 
   @override
@@ -267,55 +267,56 @@ class _SplashPageState extends State<SplashPage> {
                     ],
                   )),
                 ),
+                Spacer(),
                 SizedBox(
-                    height: 40.h,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        name == ''
-                            ? SizedBox(
-                                width: 50.w,
-                                height: 50,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    GoToLogin('first');
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius: BorderRadius.circular(15),
-                                      border: Border.all(
-                                        color: Colors.grey,
-                                        width: 2,
-                                      ),
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text('Get Start',
-                                            style: TextStyle(
-                                                color: TextColor(),
-                                                fontSize: contentTextsize())),
-                                      ],
-                                    ),
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    name == ''
+                        ? SizedBox(
+                            width: 50.w,
+                            height: 50,
+                            child: GestureDetector(
+                              onTap: () {
+                                GoToLogin('first');
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  borderRadius: BorderRadius.circular(15),
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 2,
                                   ),
                                 ),
-                              )
-                            : SpinKitThreeBounce(
-                                size: 25,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return DecoratedBox(
-                                    decoration: BoxDecoration(
-                                        color: Colors.blue.shade200,
-                                        shape: BoxShape.circle),
-                                  );
-                                },
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('Get Start',
+                                        style: TextStyle(
+                                            color: TextColor(),
+                                            fontSize: contentTextsize())),
+                                  ],
+                                ),
                               ),
-                      ],
-                    ))
+                            ),
+                          )
+                        : SpinKitThreeBounce(
+                            size: 25,
+                            itemBuilder: (BuildContext context, int index) {
+                              return DecoratedBox(
+                                decoration: BoxDecoration(
+                                    color: Colors.blue.shade200,
+                                    shape: BoxShape.circle),
+                              );
+                            },
+                          ),
+                  ],
+                )),
+                SizedBox(
+                  height: 30,
+                )
               ],
             ),
     );

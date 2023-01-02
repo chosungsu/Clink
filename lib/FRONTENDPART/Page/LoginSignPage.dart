@@ -11,6 +11,7 @@ import 'package:sign_button/constants.dart';
 import 'package:sign_button/create_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../BACKENDPART/Auth/GoogleSignInController.dart';
+import '../../Enums/Variables.dart';
 import '../Route/subuiroute.dart';
 import '../../Tool/AndroidIOS.dart';
 import '../../Tool/Loader.dart';
@@ -57,9 +58,6 @@ class _LoginSignPageState extends State<LoginSignPage>
                   child: Stack(
                     children: [
                       UI(constraint.maxWidth, constraint.maxHeight, _ischecked),
-                      loading == true
-                          ? const Loader(wherein: 'login')
-                          : Container()
                     ],
                   ),
                 );
@@ -100,7 +98,7 @@ class _LoginSignPageState extends State<LoginSignPage>
                         width: 80.w,
                         child: Row(children: [
                           Flexible(
-                            fit: FlexFit.tight,
+                            fit: FlexFit.loose,
                             child: Container(
                               height: 0,
                               color: TextColor_shadowcolor(),
@@ -116,7 +114,7 @@ class _LoginSignPageState extends State<LoginSignPage>
                                 letterSpacing: 2),
                           ),
                           Flexible(
-                            fit: FlexFit.tight,
+                            fit: FlexFit.loose,
                             child: Container(
                               height: 0,
                               color: TextColor_shadowcolor(),
@@ -145,25 +143,8 @@ class _LoginSignPageState extends State<LoginSignPage>
                               buttonSize: ButtonSize
                                   .medium, // small(default), medium, large
                               onPressed: () async {
-                                if (GetPlatform.isWeb) {
-                                  await GoogleSignInController()
-                                      .login(context, ischecked);
-                                } else {
-                                  setState(() {
-                                    loading = true;
-                                  });
-                                  await GoogleSignInController()
-                                      .login(context, ischecked);
-
-                                  setState(() {
-                                    loading = false;
-                                  });
-                                }
-                                Snack.snackbars(
-                                    context: context,
-                                    title: '로그인 완료',
-                                    backgroundcolor: Colors.green,
-                                    bordercolor: draw.backgroundcolor);
+                                await GoogleSignInController()
+                                    .login(context, ischecked);
                               }),
                           const SizedBox(
                             height: 20,
@@ -185,20 +166,8 @@ class _LoginSignPageState extends State<LoginSignPage>
                               buttonSize: ButtonSize
                                   .medium, // small(default), medium, large
                               onPressed: () async {
-                                setState(() {
-                                  loading = true;
-                                });
                                 await GoogleSignInController()
                                     .login(context, ischecked);
-
-                                setState(() {
-                                  loading = false;
-                                });
-                                Snack.snackbars(
-                                    context: context,
-                                    title: '로그인 완료',
-                                    backgroundcolor: Colors.green,
-                                    bordercolor: draw.backgroundcolor);
                               }),
                           Divider(
                             height: 30,
@@ -228,7 +197,7 @@ class _LoginSignPageState extends State<LoginSignPage>
                                             '(선택)자동 로그인 사용',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.normal,
-                                                fontSize: 16,
+                                                fontSize: 15.sp,
                                                 color: draw.color_textstatus,
                                                 letterSpacing: 2),
                                           ),
@@ -246,7 +215,7 @@ class _LoginSignPageState extends State<LoginSignPage>
                                             TextSpan(
                                               style: TextStyle(
                                                   fontWeight: FontWeight.normal,
-                                                  fontSize: 16,
+                                                  fontSize: 15.sp,
                                                   color: draw.color_textstatus,
                                                   letterSpacing: 2),
                                               text:
@@ -255,7 +224,7 @@ class _LoginSignPageState extends State<LoginSignPage>
                                             TextSpan(
                                               style: TextStyle(
                                                   fontWeight: FontWeight.normal,
-                                                  fontSize: 16,
+                                                  fontSize: 15.sp,
                                                   color: Colors.blue.shade400,
                                                   letterSpacing: 2),
                                               text: '앱의 개인정보처리방침',
@@ -270,7 +239,7 @@ class _LoginSignPageState extends State<LoginSignPage>
                                             TextSpan(
                                               style: TextStyle(
                                                   fontWeight: FontWeight.normal,
-                                                  fontSize: 16,
+                                                  fontSize: 15.sp,
                                                   color: draw.color_textstatus,
                                                   letterSpacing: 2),
                                               text: '에 동의하는 것으로 간주합니다.',
@@ -366,20 +335,8 @@ class _LoginSignPageState extends State<LoginSignPage>
                                 : ButtonSize
                                     .medium, // small(default), medium, large
                             onPressed: () async {
-                              setState(() {
-                                loading = true;
-                              });
                               await GoogleSignInController()
                                   .login(context, ischecked);
-
-                              setState(() {
-                                loading = false;
-                              });
-                              Snack.snackbars(
-                                  context: context,
-                                  title: '로그인 완료',
-                                  backgroundcolor: Colors.green,
-                                  bordercolor: draw.backgroundcolor);
                             }),
                         const SizedBox(
                           height: 20,
@@ -402,20 +359,8 @@ class _LoginSignPageState extends State<LoginSignPage>
                                 : ButtonSize
                                     .medium, // small(default), medium, large
                             onPressed: () async {
-                              setState(() {
-                                loading = true;
-                              });
                               await GoogleSignInController()
                                   .login(context, ischecked);
-
-                              setState(() {
-                                loading = false;
-                              });
-                              Snack.snackbars(
-                                  context: context,
-                                  title: '로그인 완료',
-                                  backgroundcolor: Colors.green,
-                                  bordercolor: draw.backgroundcolor);
                             }),
                       ],
                     ),
@@ -458,7 +403,7 @@ class _LoginSignPageState extends State<LoginSignPage>
                                           softWrap: false,
                                           style: TextStyle(
                                               fontWeight: FontWeight.normal,
-                                              fontSize: 20.sp,
+                                              fontSize: 15.sp,
                                               color: TextColor(),
                                               letterSpacing: 2),
                                           overflow: TextOverflow.ellipsis,
@@ -479,7 +424,7 @@ class _LoginSignPageState extends State<LoginSignPage>
                                         TextSpan(
                                           style: TextStyle(
                                               fontWeight: FontWeight.normal,
-                                              fontSize: 16,
+                                              fontSize: 15.sp,
                                               color: TextColor(),
                                               letterSpacing: 2),
                                           text:
@@ -488,7 +433,7 @@ class _LoginSignPageState extends State<LoginSignPage>
                                         TextSpan(
                                           style: TextStyle(
                                               fontWeight: FontWeight.normal,
-                                              fontSize: 16,
+                                              fontSize: 15.sp,
                                               color: Colors.blue.shade400,
                                               letterSpacing: 2),
                                           text: '앱의 개인정보처리방침',
@@ -503,7 +448,7 @@ class _LoginSignPageState extends State<LoginSignPage>
                                         TextSpan(
                                           style: TextStyle(
                                               fontWeight: FontWeight.normal,
-                                              fontSize: 16,
+                                              fontSize: 15.sp,
                                               color: TextColor(),
                                               letterSpacing: 2),
                                           text: '에 동의하는 것으로 간주합니다.',

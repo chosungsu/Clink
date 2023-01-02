@@ -31,3 +31,21 @@ ResponsiveMainUI(landscapechild, portraitchild, orientation) {
                   : portraitchild,
             ));
 }
+
+getHeight(GlobalKey key) {
+  if (key.currentContext != null) {
+    final RenderBox renderBox =
+        key.currentContext!.findRenderObject() as RenderBox;
+    double height = renderBox.size.height;
+    return height;
+  }
+}
+
+getWidth(GlobalKey key) {
+  if (key.currentContext != null) {
+    final RenderBox renderBox =
+        key.currentContext!.findRenderObject() as RenderBox;
+    double width = renderBox.size.width;
+    return width;
+  }
+}

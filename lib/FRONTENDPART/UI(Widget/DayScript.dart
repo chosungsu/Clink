@@ -1,22 +1,17 @@
 // ignore_for_file: prefer_final_fields, non_constant_identifier_names
 
-import 'dart:math';
-import 'dart:ui';
 import 'package:clickbyme/Enums/Variables.dart';
 import 'package:clickbyme/LocalNotiPlatform/NotificationApi.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
-import 'package:clickbyme/UI/Home/Widgets/CreateCalandmemo.dart';
 import 'package:clickbyme/UI/Home/Widgets/MemoFocusedHolder.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../Enums/Event.dart';
 import '../../../Enums/MemoList.dart';
 import '../../../FRONTENDPART/Route/subuiroute.dart';
@@ -55,30 +50,15 @@ class DayScript extends StatefulWidget {
 
 class _DayScriptState extends State<DayScript> {
   //공통변수
-  double translateX = 0.0;
-  double translateY = 0.0;
-  double myWidth = 0.0;
-  bool loading = false;
-  DateTime _selectedDay = DateTime.now();
-  DateTime _focusedDay = DateTime.now();
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  var _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-  Random _rnd = Random();
-  String code = '';
-  late FToast fToast;
   bool isresponsible = false;
-  bool iskeyboardup = false;
   final imagePicker = ImagePicker();
-  final searchNode_first_section = FocusNode();
-  final searchNode_second_section = FocusNode();
-  final searchNode_third_section = FocusNode();
-  final searchNode_forth_section = FocusNode();
+  List<FocusNode> focusnodelist =
+      List<FocusNode>.generate(5, ((index) => FocusNode()));
   late TextEditingController textEditingController1;
   late TextEditingController textEditingController2;
   late TextEditingController textEditingController3;
   late TextEditingController textEditingController4;
   late TextEditingController textEditingController5;
-  String usercode = Hive.box('user_setting').get('usercode');
   final draw = Get.put(navibool());
   //캘린더변수
   late Map<DateTime, List<Event>> _events;
@@ -101,7 +81,6 @@ class _DayScriptState extends State<DayScript> {
   //메모변수
   int _currentValue = 1;
   final scollection = Get.put(selectcollection());
-  final searchNode_add_section = FocusNode();
   late TextEditingController textEditingController_add_sheet;
   List<TextEditingController> controllers = List.empty(growable: true);
   List savepicturelist = [];
@@ -131,11 +110,7 @@ class _DayScriptState extends State<DayScript> {
   @override
   void initState() {
     super.initState();
-    print(widget.id);
-    fToast = FToast();
-    fToast.init(context);
-    _selectedDay = controll_cal.selectedDay;
-    _focusedDay = controll_cal.focusedDay;
+    selectedDay = controll_cal.selectedDay;
     controll_cal.hour1 = '99';
     controll_cal.minute1 = '99';
     cal.repeatwhile = 'no';
@@ -270,13 +245,17 @@ class _DayScriptState extends State<DayScript> {
             setState(() {
               uisetting().setloading(false);
             });
-            CreateCalandmemoSuccessFlushbar('저장완료', fToast);
+            Snack.snackbars(
+                context: context,
+                title: '저장완료함',
+                backgroundcolor: Colors.green,
+                bordercolor: draw.backgroundcolor);
             Future.delayed(const Duration(seconds: 1), () {
               Get.back();
             });
             if (cal.repeatwhile != 'no') {
               code = String.fromCharCodes(Iterable.generate(
-                  5, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+                  5, (_) => chars.codeUnitAt(rnd.nextInt(chars.length))));
             }
             for (int h = 0; h < differ_list.length; h++) {
               await firestore.collection('CalendarDataBase').add({
@@ -502,7 +481,11 @@ class _DayScriptState extends State<DayScript> {
             setState(() {
               uisetting().setloading(false);
             });
-            CreateCalandmemoSuccessFlushbar('저장완료', fToast);
+            Snack.snackbars(
+                context: context,
+                title: '저장완료함',
+                backgroundcolor: Colors.green,
+                bordercolor: draw.backgroundcolor);
             Future.delayed(const Duration(seconds: 1), () {
               Get.back();
             });
@@ -761,7 +744,11 @@ class _DayScriptState extends State<DayScript> {
             setState(() {
               uisetting().setloading(false);
             });
-            CreateCalandmemoSuccessFlushbar('저장완료', fToast);
+            Snack.snackbars(
+                context: context,
+                title: '저장완료함',
+                backgroundcolor: Colors.green,
+                bordercolor: draw.backgroundcolor);
             Future.delayed(const Duration(seconds: 1), () {
               Get.back();
             });
@@ -807,6 +794,7 @@ class _DayScriptState extends State<DayScript> {
             pressed2)) ??
         false;
     if (reloadpage) {
+      controll_cal.setclickday(selectedDay, selectedDay);
       Get.back();
     }
     return reloadpage;
@@ -842,239 +830,490 @@ class _DayScriptState extends State<DayScript> {
   UI() {
     return StatefulBuilder(builder: ((context, setState) {
       return GetBuilder<memosetting>(
-          builder: (_) => SizedBox(
-                height: 100.h,
-                child: Container(
-                    decoration: BoxDecoration(
-                      color: widget.position == 'note'
-                          ? (_color == controll_memo.color
-                              ? _color
-                              : controll_memo.color)
-                          : BGColor(),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                            height: 60,
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 20, right: 10, top: 5, bottom: 5),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  ContainerDesign(
-                                      child: GestureDetector(
-                                        onTap: () async {
-                                          final reloadpage = await Get.dialog(OSDialog(
-                                                  context,
-                                                  '경고',
-                                                  Text(
-                                                      '뒤로 나가시면 작성중인 내용은 사라지게 됩니다. 나가시겠습니까?',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize:
-                                                              contentTextsize(),
-                                                          color:
-                                                              Colors.blueGrey)),
-                                                  pressed2)) ??
-                                              false;
-                                          if (reloadpage) {
-                                            Get.back();
-                                          }
-                                        },
-                                        child: Icon(
-                                          Feather.chevron_left,
-                                          size: 30,
-                                          color: TextColor(),
-                                        ),
-                                      ),
-                                      color: draw.backgroundcolor),
-                                  Flexible(
-                                      fit: FlexFit.tight,
-                                      child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 10, right: 10),
-                                          child: Row(
-                                            children: [
-                                              Flexible(
-                                                fit: FlexFit.tight,
-                                                child: Text(
-                                                  widget.position == 'cal'
-                                                      ? '새 일정 작성'
-                                                      : '새 메모 작성',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize:
-                                                        secondTitleTextsize(),
-                                                    color: widget.position ==
-                                                            'note'
-                                                        ? (controll_memo
-                                                                    .color ==
-                                                                Colors.black
-                                                            ? Colors.white
-                                                            : Colors.black)
-                                                        : Colors.black,
-                                                  ),
-                                                ),
-                                              ),
-                                              widget.position == 'note'
-                                                  ? GetBuilder<memosetting>(
-                                                      builder: (_) => MFHolder(
-                                                          checkbottoms,
-                                                          nodes,
-                                                          scollection,
-                                                          _color,
-                                                          '',
-                                                          controll_memo
-                                                              .ischeckedtohideminus,
-                                                          scollection
-                                                              .controllersall,
-                                                          _colorfont,
-                                                          controll_memo
-                                                              .imagelist))
-                                                  : const SizedBox(),
-                                              widget.position == 'note'
-                                                  ? const SizedBox(
-                                                      width: 10,
-                                                    )
-                                                  : const SizedBox(),
-                                              ContainerDesign(
-                                                  child: GestureDetector(
-                                                    onTap: () async {
-                                                      autosavelogic();
-                                                    },
-                                                    child: Icon(
-                                                      Ionicons.checkmark_done,
-                                                      size: 30,
-                                                      color:
-                                                          draw.color_textstatus,
-                                                    ),
-                                                  ),
-                                                  color: draw.backgroundcolor)
-                                            ],
-                                          ))),
-                                ],
-                              ),
-                            )),
-                        Flexible(
-                            fit: FlexFit.tight,
-                            child: SizedBox(
-                              child: ScrollConfiguration(
-                                behavior: NoBehavior(),
-                                child: SingleChildScrollView(child:
-                                    StatefulBuilder(
-                                        builder: (_, StateSetter setState) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      searchNode_first_section.unfocus();
-                                      searchNode_second_section.unfocus();
-                                      searchNode_third_section.unfocus();
-                                      searchNode_add_section.unfocus();
-                                      for (int i = 0;
-                                          i < scollection.memoindex;
-                                          i++) {
-                                        if (nodes.isNotEmpty) {
-                                          nodes[i].unfocus();
-                                        }
-                                        scollection.memolistcontentin[i] =
-                                            scollection.controllersall[i].text;
-                                      }
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          20, 0, 20, 0),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const SizedBox(
-                                            height: 20,
-                                          ),
-                                          buildSheetTitle(
-                                              controll_cal.selectedDay),
-                                          const SizedBox(
-                                            height: 20,
-                                          ),
-                                          WholeContent(),
-                                          widget.position == 'cal'
-                                              ? const SizedBox(
-                                                  height: 30,
-                                                )
-                                              : const SizedBox(
-                                                  height: 0,
-                                                ),
-                                          widget.position == 'cal'
-                                              ? SetTimeTitle()
-                                              : const SizedBox(
-                                                  height: 0,
-                                                ),
-                                          widget.position == 'cal'
-                                              ? const SizedBox(
-                                                  height: 20,
-                                                )
-                                              : const SizedBox(
-                                                  height: 0,
-                                                ),
-                                          widget.position == 'cal'
-                                              ? Time()
-                                              : const SizedBox(
-                                                  height: 0,
-                                                ),
-                                          widget.position == 'cal'
-                                              ? const SizedBox(
-                                                  height: 30,
-                                                )
-                                              : const SizedBox(
-                                                  height: 0,
-                                                ),
-                                          widget.position == 'cal'
-                                              ? SetCalSummary()
-                                              : const SizedBox(
-                                                  height: 0,
-                                                ),
-                                          widget.position == 'cal'
-                                              ? const SizedBox(
-                                                  height: 30,
-                                                )
-                                              : const SizedBox(
-                                                  height: 0,
-                                                ),
-                                          widget.position == 'cal'
-                                              ? buildAlarmTitleupdateversion()
-                                              : const SizedBox(
-                                                  height: 0,
-                                                ),
-                                          widget.position == 'cal'
-                                              ? const SizedBox(
-                                                  height: 20,
-                                                )
-                                              : const SizedBox(
-                                                  height: 0,
-                                                ),
-                                          widget.position == 'cal'
-                                              ? Alarmupdateversion()
-                                              : const SizedBox(
-                                                  height: 0,
-                                                ),
-                                          const SizedBox(
-                                            height: 50,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                })),
-                              ),
-                            )),
-                      ],
-                    )),
+          builder: (_) => LayoutBuilder(
+                builder: ((context, constraint) {
+                  return Responsivelayout(
+                      constraint.maxWidth,
+                      LSView(constraint.maxHeight),
+                      PRView(constraint.maxHeight));
+                }),
               ));
     }));
+  }
+
+  LSView(maxHeight) {
+    return SizedBox(
+      height: maxHeight,
+      child: Container(
+          decoration: BoxDecoration(
+            color: widget.position == 'note'
+                ? (_color == controll_memo.color ? _color : controll_memo.color)
+                : BGColor(),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                  height: 60,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 20, right: 10, top: 5, bottom: 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        ContainerDesign(
+                            child: GestureDetector(
+                              onTap: () async {
+                                final reloadpage = await Get.dialog(OSDialog(
+                                        context,
+                                        '경고',
+                                        Text(
+                                            '뒤로 나가시면 작성중인 내용은 사라지게 됩니다. 나가시겠습니까?',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: contentTextsize(),
+                                                color: Colors.blueGrey)),
+                                        pressed2)) ??
+                                    false;
+                                if (reloadpage) {
+                                  controll_cal.setclickday(
+                                      selectedDay, selectedDay);
+                                  Get.back();
+                                }
+                              },
+                              child: Icon(
+                                Feather.chevron_left,
+                                size: 30,
+                                color: TextColor(),
+                              ),
+                            ),
+                            color: draw.backgroundcolor),
+                        Flexible(
+                            fit: FlexFit.tight,
+                            child: Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: Row(
+                                  children: [
+                                    Flexible(
+                                      fit: FlexFit.tight,
+                                      child: Text(
+                                        widget.position == 'cal'
+                                            ? '새 일정 작성'
+                                            : '새 메모 작성',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: secondTitleTextsize(),
+                                          color: widget.position == 'note'
+                                              ? (controll_memo.color ==
+                                                      Colors.black
+                                                  ? Colors.white
+                                                  : Colors.black)
+                                              : Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                    widget.position == 'note'
+                                        ? GetBuilder<memosetting>(
+                                            builder: (_) => MFHolder(
+                                                checkbottoms,
+                                                nodes,
+                                                scollection,
+                                                _color,
+                                                '',
+                                                controll_memo
+                                                    .ischeckedtohideminus,
+                                                scollection.controllersall,
+                                                _colorfont,
+                                                controll_memo.imagelist))
+                                        : const SizedBox(),
+                                    widget.position == 'note'
+                                        ? const SizedBox(
+                                            width: 10,
+                                          )
+                                        : const SizedBox(),
+                                    ContainerDesign(
+                                        child: GestureDetector(
+                                          onTap: () async {
+                                            autosavelogic();
+                                          },
+                                          child: Icon(
+                                            Ionicons.checkmark_done,
+                                            size: 30,
+                                            color: draw.color_textstatus,
+                                          ),
+                                        ),
+                                        color: draw.backgroundcolor)
+                                  ],
+                                ))),
+                      ],
+                    ),
+                  )),
+              Flexible(
+                  fit: FlexFit.tight,
+                  child: GestureDetector(
+                    onTap: () {
+                      for (int i = 0; i < focusnodelist.length; i++) {
+                        if (i == 3) {
+                        } else {
+                          focusnodelist[i].unfocus();
+                        }
+                      }
+                      for (int i = 0; i < scollection.memoindex; i++) {
+                        if (nodes.isNotEmpty) {
+                          nodes[i].unfocus();
+                        }
+                        scollection.memolistcontentin[i] =
+                            scollection.controllersall[i].text;
+                      }
+                    },
+                    child: Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        child: Row(
+                          children: [
+                            Flexible(
+                                flex: 1,
+                                child: ScrollConfiguration(
+                                    behavior: NoBehavior(),
+                                    child: SingleChildScrollView(
+                                        physics: const ScrollPhysics(),
+                                        child: Container(
+                                          padding: const EdgeInsets.only(
+                                              left: 10, right: 10),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              const SizedBox(
+                                                height: 20,
+                                              ),
+                                              buildSheetTitle(
+                                                  controll_cal.selectedDay),
+                                              const SizedBox(
+                                                height: 20,
+                                              ),
+                                              WholeContent(),
+                                              widget.position == 'cal'
+                                                  ? const SizedBox(
+                                                      height: 30,
+                                                    )
+                                                  : const SizedBox(
+                                                      height: 0,
+                                                    ),
+                                              widget.position == 'cal'
+                                                  ? SetTimeTitle()
+                                                  : const SizedBox(
+                                                      height: 0,
+                                                    ),
+                                              widget.position == 'cal'
+                                                  ? const SizedBox(
+                                                      height: 20,
+                                                    )
+                                                  : const SizedBox(
+                                                      height: 0,
+                                                    ),
+                                              widget.position == 'cal'
+                                                  ? Time()
+                                                  : const SizedBox(
+                                                      height: 0,
+                                                    ),
+                                              widget.position == 'cal'
+                                                  ? const SizedBox(
+                                                      height: 30,
+                                                    )
+                                                  : const SizedBox(
+                                                      height: 0,
+                                                    ),
+                                              const SizedBox(
+                                                height: 50,
+                                              )
+                                            ],
+                                          ),
+                                        )))),
+                            Flexible(
+                                flex: 1,
+                                child: ScrollConfiguration(
+                                    behavior: NoBehavior(),
+                                    child: SingleChildScrollView(
+                                      physics: const ScrollPhysics(),
+                                      child: Container(
+                                        padding: const EdgeInsets.only(
+                                            left: 10, right: 10),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(
+                                              height: 20,
+                                            ),
+                                            widget.position == 'cal'
+                                                ? SetCalSummary()
+                                                : const SizedBox(
+                                                    height: 0,
+                                                  ),
+                                            widget.position == 'cal'
+                                                ? const SizedBox(
+                                                    height: 30,
+                                                  )
+                                                : const SizedBox(
+                                                    height: 0,
+                                                  ),
+                                            widget.position == 'cal'
+                                                ? buildAlarmTitleupdateversion()
+                                                : const SizedBox(
+                                                    height: 0,
+                                                  ),
+                                            widget.position == 'cal'
+                                                ? const SizedBox(
+                                                    height: 20,
+                                                  )
+                                                : const SizedBox(
+                                                    height: 0,
+                                                  ),
+                                            widget.position == 'cal'
+                                                ? Alarmupdateversion()
+                                                : const SizedBox(
+                                                    height: 0,
+                                                  ),
+                                            const SizedBox(
+                                              height: 50,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ))),
+                          ],
+                        )),
+                  )),
+            ],
+          )),
+    );
+  }
+
+  PRView(maxHeight) {
+    return SizedBox(
+      height: maxHeight,
+      child: Container(
+          decoration: BoxDecoration(
+            color: widget.position == 'note'
+                ? (_color == controll_memo.color ? _color : controll_memo.color)
+                : BGColor(),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                  height: 60,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 20, right: 10, top: 5, bottom: 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        ContainerDesign(
+                            child: GestureDetector(
+                              onTap: () async {
+                                final reloadpage = await Get.dialog(OSDialog(
+                                        context,
+                                        '경고',
+                                        Text(
+                                            '뒤로 나가시면 작성중인 내용은 사라지게 됩니다. 나가시겠습니까?',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: contentTextsize(),
+                                                color: Colors.blueGrey)),
+                                        pressed2)) ??
+                                    false;
+                                if (reloadpage) {
+                                  controll_cal.setclickday(
+                                      selectedDay, selectedDay);
+                                  Get.back();
+                                }
+                              },
+                              child: Icon(
+                                Feather.chevron_left,
+                                size: 30,
+                                color: TextColor(),
+                              ),
+                            ),
+                            color: draw.backgroundcolor),
+                        Flexible(
+                            fit: FlexFit.tight,
+                            child: Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: Row(
+                                  children: [
+                                    Flexible(
+                                      fit: FlexFit.tight,
+                                      child: Text(
+                                        widget.position == 'cal'
+                                            ? '새 일정 작성'
+                                            : '새 메모 작성',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: secondTitleTextsize(),
+                                          color: widget.position == 'note'
+                                              ? (controll_memo.color ==
+                                                      Colors.black
+                                                  ? Colors.white
+                                                  : Colors.black)
+                                              : Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                    widget.position == 'note'
+                                        ? GetBuilder<memosetting>(
+                                            builder: (_) => MFHolder(
+                                                checkbottoms,
+                                                nodes,
+                                                scollection,
+                                                _color,
+                                                '',
+                                                controll_memo
+                                                    .ischeckedtohideminus,
+                                                scollection.controllersall,
+                                                _colorfont,
+                                                controll_memo.imagelist))
+                                        : const SizedBox(),
+                                    widget.position == 'note'
+                                        ? const SizedBox(
+                                            width: 10,
+                                          )
+                                        : const SizedBox(),
+                                    ContainerDesign(
+                                        child: GestureDetector(
+                                          onTap: () async {
+                                            autosavelogic();
+                                          },
+                                          child: Icon(
+                                            Ionicons.checkmark_done,
+                                            size: 30,
+                                            color: draw.color_textstatus,
+                                          ),
+                                        ),
+                                        color: draw.backgroundcolor)
+                                  ],
+                                ))),
+                      ],
+                    ),
+                  )),
+              Flexible(
+                  fit: FlexFit.tight,
+                  child: GestureDetector(
+                    onTap: () {
+                      for (int i = 0; i < focusnodelist.length; i++) {
+                        if (i == 3) {
+                        } else {
+                          focusnodelist[i].unfocus();
+                        }
+                      }
+                      for (int i = 0; i < scollection.memoindex; i++) {
+                        if (nodes.isNotEmpty) {
+                          nodes[i].unfocus();
+                        }
+                        scollection.memolistcontentin[i] =
+                            scollection.controllersall[i].text;
+                      }
+                    },
+                    child: Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        child: ScrollConfiguration(
+                            behavior: NoBehavior(),
+                            child: SingleChildScrollView(
+                                physics: const ScrollPhysics(),
+                                child: Container(
+                                  padding: const EdgeInsets.only(
+                                      left: 10, right: 10),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      buildSheetTitle(controll_cal.selectedDay),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      WholeContent(),
+                                      widget.position == 'cal'
+                                          ? const SizedBox(
+                                              height: 30,
+                                            )
+                                          : const SizedBox(
+                                              height: 0,
+                                            ),
+                                      widget.position == 'cal'
+                                          ? SetTimeTitle()
+                                          : const SizedBox(
+                                              height: 0,
+                                            ),
+                                      widget.position == 'cal'
+                                          ? const SizedBox(
+                                              height: 20,
+                                            )
+                                          : const SizedBox(
+                                              height: 0,
+                                            ),
+                                      widget.position == 'cal'
+                                          ? Time()
+                                          : const SizedBox(
+                                              height: 0,
+                                            ),
+                                      widget.position == 'cal'
+                                          ? const SizedBox(
+                                              height: 30,
+                                            )
+                                          : const SizedBox(
+                                              height: 0,
+                                            ),
+                                      widget.position == 'cal'
+                                          ? SetCalSummary()
+                                          : const SizedBox(
+                                              height: 0,
+                                            ),
+                                      widget.position == 'cal'
+                                          ? const SizedBox(
+                                              height: 30,
+                                            )
+                                          : const SizedBox(
+                                              height: 0,
+                                            ),
+                                      widget.position == 'cal'
+                                          ? buildAlarmTitleupdateversion()
+                                          : const SizedBox(
+                                              height: 0,
+                                            ),
+                                      widget.position == 'cal'
+                                          ? const SizedBox(
+                                              height: 20,
+                                            )
+                                          : const SizedBox(
+                                              height: 0,
+                                            ),
+                                      widget.position == 'cal'
+                                          ? Alarmupdateversion()
+                                          : const SizedBox(
+                                              height: 0,
+                                            ),
+                                      const SizedBox(
+                                        height: 50,
+                                      )
+                                    ],
+                                  ),
+                                )))),
+                  )),
+            ],
+          )),
+    );
   }
 
   buildSheetTitle(DateTime fromDate) {
@@ -1106,13 +1345,12 @@ class _DayScriptState extends State<DayScript> {
   }
 
   WholeContent() {
-    iskeyboardup = MediaQuery.of(context).viewInsets.bottom != 0;
     return widget.position == 'cal'
         ? ContainerDesign(
             child: TextField(
               minLines: 1,
               maxLines: 3,
-              focusNode: searchNode_first_section,
+              focusNode: focusnodelist[0],
               style: TextStyle(fontSize: contentTextsize(), color: TextColor()),
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.only(left: 10),
@@ -1140,7 +1378,7 @@ class _DayScriptState extends State<DayScript> {
                         child: TextField(
                           minLines: 1,
                           maxLines: 1,
-                          focusNode: searchNode_first_section,
+                          focusNode: focusnodelist[0],
                           style: TextStyle(
                               fontSize: contentTextsize(),
                               color: controll_memo.color == Colors.black
@@ -1194,7 +1432,7 @@ class _DayScriptState extends State<DayScript> {
                                   context,
                                   name,
                                   textEditingController_add_sheet,
-                                  searchNode_add_section,
+                                  focusnodelist[4],
                                   'inside',
                                   scollection,
                                   isresponsible);
@@ -1721,172 +1959,173 @@ class _DayScriptState extends State<DayScript> {
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: ((context, index) {
           return Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               Row(
                 children: [
                   Flexible(
-                      fit: FlexFit.tight,
+                      flex: 3,
                       child: GestureDetector(
                         onTap: () {
-                          searchNode_first_section.unfocus();
+                          for (int i = 0; i < focusnodelist.length; i++) {
+                            if (i == 3) {
+                            } else {
+                              focusnodelist[i].unfocus();
+                            }
+                          }
                           Future.delayed(const Duration(milliseconds: 300), () {
                             calendarView(context, widget.id, 'oncreate');
                           });
                         },
-                        child: SizedBox(
-                          child: ContainerDesign(
-                            color: BGColor(),
-                            child: ListTile(
-                                leading: NeumorphicIcon(
-                                  Icons.today,
-                                  size: 30,
-                                  style: NeumorphicStyle(
-                                      shape: NeumorphicShape.convex,
-                                      depth: 2,
-                                      surfaceIntensity: 0.5,
-                                      color: widget.position == 'note'
-                                          ? (controll_memo.color == Colors.black
-                                              ? Colors.white
-                                              : Colors.black)
-                                          : TextColor(),
-                                      lightSource: LightSource.topLeft),
-                                ),
-                                title: GetBuilder<calendarsetting>(
-                                  builder: (_) => Text(
-                                    controll_cal.selectedDay
-                                        .toString()
-                                        .split(' ')[0],
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTitleTextsize(),
-                                      color: widget.position == 'note'
-                                          ? (controll_memo.color == Colors.black
-                                              ? Colors.white
-                                              : Colors.black)
-                                          : TextColor(),
-                                    ),
+                        child: ContainerDesign(
+                          color: BGColor(),
+                          child: ListTile(
+                              leading: NeumorphicIcon(
+                                Icons.today,
+                                size: 30,
+                                style: NeumorphicStyle(
+                                    shape: NeumorphicShape.convex,
+                                    depth: 2,
+                                    surfaceIntensity: 0.5,
+                                    color: widget.position == 'note'
+                                        ? (controll_memo.color == Colors.black
+                                            ? Colors.white
+                                            : Colors.black)
+                                        : TextColor(),
+                                    lightSource: LightSource.topLeft),
+                              ),
+                              title: GetBuilder<calendarsetting>(
+                                builder: (_) => Text(
+                                  controll_cal.selectedDay
+                                      .toString()
+                                      .split(' ')[0],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTitleTextsize(),
+                                    color: widget.position == 'note'
+                                        ? (controll_memo.color == Colors.black
+                                            ? Colors.white
+                                            : Colors.black)
+                                        : TextColor(),
                                   ),
-                                )),
-                          ),
+                                ),
+                              )),
                         ),
                       )),
                   const SizedBox(
                     width: 10,
                   ),
-                  controll_cal.selectedDay == controll_cal.focusedDay
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            ContainerDesign(
-                                child: InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      if (checkdayyang[1] == true) {
-                                        checkdayyang[1] = false;
-                                        checkdayyang[0] = true;
-                                        solar = CalendarConverter.lunarToSolar(
-                                            int.parse(controll_cal.selectedDay
-                                                .toString()
-                                                .split(' ')[0]
-                                                .split('-')[0]),
-                                            int.parse(controll_cal.selectedDay
-                                                .toString()
-                                                .split(' ')[0]
-                                                .split('-')[1]),
-                                            int.parse(controll_cal.selectedDay
-                                                .toString()
-                                                .split(' ')[0]
-                                                .split('-')[2]),
-                                            0,
-                                            Timezone.Korean);
-                                        controll_cal.selectedDay =
-                                            DateFormat('yyyy-MM-dd').parse(
-                                                solar[2].toString() +
-                                                    '-' +
-                                                    solar[1].toString() +
-                                                    '-' +
-                                                    solar[0].toString());
-                                        if (controll_cal.selectedDay !=
-                                            _selectedDay) {
-                                        } else {
-                                          controll_cal.selectedDay =
-                                              _selectedDay;
-                                        }
-                                      } else {
-                                        checkdayyang[0] = false;
-                                        checkdayyang[1] = true;
-                                        lunar = CalendarConverter.solarToLunar(
-                                            int.parse(controll_cal.selectedDay
-                                                .toString()
-                                                .split(' ')[0]
-                                                .split('-')[0]),
-                                            int.parse(controll_cal.selectedDay
-                                                .toString()
-                                                .split(' ')[0]
-                                                .split('-')[1]),
-                                            int.parse(controll_cal.selectedDay
-                                                .toString()
-                                                .split(' ')[0]
-                                                .split('-')[2]),
-                                            Timezone.Korean);
-                                        controll_cal.selectedDay =
-                                            DateFormat('yyyy-MM-dd').parse(
-                                                lunar[2].toString() +
-                                                    '-' +
-                                                    lunar[1].toString() +
-                                                    '-' +
-                                                    lunar[0].toString());
-                                      }
-                                    });
-                                  },
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Text(
-                                        '양력',
-                                        style: TextStyle(
-                                            fontWeight: checkdayyang[0] == true
-                                                ? FontWeight.bold
-                                                : FontWeight.normal,
-                                            fontSize: checkdayyang[0] == true
-                                                ? contentTitleTextsize()
-                                                : 16,
-                                            color: widget.position == 'note'
-                                                ? (controll_memo.color ==
-                                                        Colors.black
-                                                    ? Colors.white
-                                                    : Colors.black)
-                                                : TextColor()),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                        '음력',
-                                        style: TextStyle(
-                                            fontWeight: checkdayyang[1] == true
-                                                ? FontWeight.bold
-                                                : FontWeight.normal,
-                                            fontSize: checkdayyang[1] == true
-                                                ? contentTitleTextsize()
-                                                : 16,
-                                            color: widget.position == 'note'
-                                                ? (controll_memo.color ==
-                                                        Colors.black
-                                                    ? Colors.white
-                                                    : Colors.black)
-                                                : TextColor()),
-                                      ),
-                                    ],
-                                  ),
+                  Flexible(
+                      flex: 1,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ContainerDesign(
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    if (checkdayyang[1] == true) {
+                                      checkdayyang[1] = false;
+                                      checkdayyang[0] = true;
+                                      solar = CalendarConverter.lunarToSolar(
+                                          int.parse(controll_cal.selectedDay
+                                              .toString()
+                                              .split(' ')[0]
+                                              .split('-')[0]),
+                                          int.parse(controll_cal.selectedDay
+                                              .toString()
+                                              .split(' ')[0]
+                                              .split('-')[1]),
+                                          int.parse(controll_cal.selectedDay
+                                              .toString()
+                                              .split(' ')[0]
+                                              .split('-')[2]),
+                                          0,
+                                          Timezone.Korean);
+                                      controll_cal.selectedDay =
+                                          DateFormat('yyyy-MM-dd').parse(
+                                              solar[2].toString() +
+                                                  '-' +
+                                                  solar[1].toString() +
+                                                  '-' +
+                                                  solar[0].toString());
+                                      controll_cal.focusedDay =
+                                          controll_cal.selectedDay;
+                                    } else {
+                                      checkdayyang[0] = false;
+                                      checkdayyang[1] = true;
+                                      lunar = CalendarConverter.solarToLunar(
+                                          int.parse(controll_cal.selectedDay
+                                              .toString()
+                                              .split(' ')[0]
+                                              .split('-')[0]),
+                                          int.parse(controll_cal.selectedDay
+                                              .toString()
+                                              .split(' ')[0]
+                                              .split('-')[1]),
+                                          int.parse(controll_cal.selectedDay
+                                              .toString()
+                                              .split(' ')[0]
+                                              .split('-')[2]),
+                                          Timezone.Korean);
+                                      controll_cal.selectedDay =
+                                          DateFormat('yyyy-MM-dd').parse(
+                                              lunar[2].toString() +
+                                                  '-' +
+                                                  lunar[1].toString() +
+                                                  '-' +
+                                                  lunar[0].toString());
+                                      controll_cal.focusedDay =
+                                          controll_cal.selectedDay;
+                                    }
+                                  });
+                                },
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Text(
+                                      '양력',
+                                      style: TextStyle(
+                                          fontWeight: checkdayyang[0] == true
+                                              ? FontWeight.bold
+                                              : FontWeight.normal,
+                                          fontSize: checkdayyang[0] == true
+                                              ? contentTitleTextsize()
+                                              : 16,
+                                          color: widget.position == 'note'
+                                              ? (controll_memo.color ==
+                                                      Colors.black
+                                                  ? Colors.white
+                                                  : Colors.black)
+                                              : TextColor()),
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      '음력',
+                                      style: TextStyle(
+                                          fontWeight: checkdayyang[1] == true
+                                              ? FontWeight.bold
+                                              : FontWeight.normal,
+                                          fontSize: checkdayyang[1] == true
+                                              ? contentTitleTextsize()
+                                              : 16,
+                                          color: widget.position == 'note'
+                                              ? (controll_memo.color ==
+                                                      Colors.black
+                                                  ? Colors.white
+                                                  : Colors.black)
+                                              : TextColor()),
+                                    ),
+                                  ],
                                 ),
-                                color: BGColor())
-                          ],
-                        )
-                      : const SizedBox(),
+                              ),
+                              color: BGColor())
+                        ],
+                      ))
                 ],
               ),
               const SizedBox(
@@ -2024,13 +2263,20 @@ class _DayScriptState extends State<DayScript> {
                                 ),
                                 trailing: InkWell(
                                   onTap: () {
-                                    searchNode_first_section.unfocus();
+                                    for (int i = 0;
+                                        i < focusnodelist.length;
+                                        i++) {
+                                      if (i == 3) {
+                                      } else {
+                                        focusnodelist[i].unfocus();
+                                      }
+                                    }
                                     Future.delayed(
                                         const Duration(milliseconds: 300), () {
                                       showrepeatdate(
                                           context,
                                           textEditingController4,
-                                          searchNode_forth_section);
+                                          focusnodelist[3]);
                                     });
                                   },
                                   child: Text(
@@ -2116,7 +2362,7 @@ class _DayScriptState extends State<DayScript> {
             child: TextField(
               minLines: 5,
               maxLines: null,
-              focusNode: searchNode_second_section,
+              focusNode: focusnodelist[1],
               style: TextStyle(
                   fontSize: contentTextsize(),
                   color: widget.position == 'note'

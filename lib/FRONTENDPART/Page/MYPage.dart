@@ -36,7 +36,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
     Hive.box('user_setting').put('page_index', 0);
     uiset.mypagelistindex = Hive.box('user_setting').get('currentmypage') ?? 0;
     scrollController = ScrollController();
-    draw.navi = Hive.box('user_setting').get('which_menu_pick');
+    draw.navi = Hive.box('user_setting').get('which_menu_pick') ?? 0;
   }
 
   @override

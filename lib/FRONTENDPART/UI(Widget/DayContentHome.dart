@@ -3,6 +3,7 @@
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
+import 'package:clickbyme/Tool/ResponsiveUI.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -12,67 +13,162 @@ import '../../../Enums/Variables.dart';
 import '../../../Tool/Getx/PeopleAdd.dart';
 import '../../../Tool/Getx/calendarsetting.dart';
 import '../../../Tool/NoBehavior.dart';
+import '../../Tool/AndroidIOS.dart';
 import '../../UI/Home/secondContentNet/ClickShowEachCalendar.dart';
 import 'CalendarView.dart';
 
+GlobalKey PRFlex = GlobalKey();
+
 DayContentHome(id) {
+  return Flexible(
+      fit: FlexFit.tight,
+      child: LayoutBuilder(
+        builder: ((context, constraint) {
+          return Responsivelayout(
+              constraint.maxWidth,
+              LSView(constraint.maxHeight, id),
+              PRView(constraint.maxHeight, id));
+        }),
+      ));
+}
+
+LSView(maxHeight, id) {
   final controll_cals = Get.put(calendarsetting());
   List<Event> getList(DateTime date) {
     return controll_cals.events[date] ?? [];
   }
 
-  return Flexible(
-      fit: FlexFit.tight,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          StreamBuilder<QuerySnapshot>(
-              stream: firestore
-                  .collection('CalendarDataBase')
-                  .where('calname', isEqualTo: id)
-                  .snapshots(),
-              builder: ((context, snapshot) {
-                if (snapshot.hasData) {
-                  if (snapshot.data!.docs.isNotEmpty) {
-                    controll_cals.events.clear();
-                    final valuespace = snapshot.data!.docs;
-                    for (var sp in valuespace) {
-                      final ev_date = sp.get('Date');
-                      final ev_todo = sp.get('Daytodo');
-                      if (controll_cals.events[DateTime.parse(
-                              sp.get('Date').toString().split('일')[0] +
-                                  ' 00:00:00.000Z')] !=
-                          null) {
-                        controll_cals.events[DateTime.parse(
-                                sp.get('Date').toString().split('일')[0] +
-                                    ' 00:00:00.000Z')]!
-                            .add(Event(title: sp.get('Daytodo')));
-                      } else {
-                        controll_cals.events[DateTime.parse(
+  return Row(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Flexible(
+        flex: 1,
+        child: StreamBuilder<QuerySnapshot>(
+            stream: firestore
+                .collection('CalendarDataBase')
+                .where('calname', isEqualTo: id)
+                .snapshots(),
+            builder: ((context, snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data!.docs.isNotEmpty) {
+                  controll_cals.events.clear();
+                  final valuespace = snapshot.data!.docs;
+                  for (var sp in valuespace) {
+                    final ev_date = sp.get('Date');
+                    final ev_todo = sp.get('Daytodo');
+                    if (controll_cals.events[DateTime.parse(
                             sp.get('Date').toString().split('일')[0] +
-                                ' 00:00:00.000Z')] = [
-                          Event(title: sp.get('Daytodo'))
-                        ];
-                      }
+                                ' 00:00:00.000Z')] !=
+                        null) {
+                      controll_cals.events[DateTime.parse(
+                              sp.get('Date').toString().split('일')[0] +
+                                  ' 00:00:00.000Z')]!
+                          .add(Event(title: sp.get('Daytodo')));
+                    } else {
+                      controll_cals.events[DateTime.parse(
+                          sp.get('Date').toString().split('일')[0] +
+                              ' 00:00:00.000Z')] = [
+                        Event(title: sp.get('Daytodo'))
+                      ];
                     }
                   }
                 }
-                return SizedBox(child: calendarView(context, id, 'large'));
-              })),
-          Flexible(
-              fit: FlexFit.tight,
-              child: SizedBox(
-                child: ScrollConfiguration(
+              }
+              return ScrollConfiguration(
                   behavior: NoBehavior(),
                   child: SingleChildScrollView(
-                      physics: const ScrollPhysics(),
-                      child:
-                          StatefulBuilder(builder: (_, StateSetter setState) {
-                        return Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    physics: const ScrollPhysics(),
+                    child: calendarView(context, id, 'large'),
+                  ));
+            })),
+      ),
+      Flexible(
+          flex: 1,
+          child: SizedBox(
+            key: PRFlex,
+            child: ScrollConfiguration(
+              behavior: NoBehavior(),
+              child: SingleChildScrollView(
+                  physics: const ScrollPhysics(),
+                  child: StatefulBuilder(builder: (_, StateSetter setState) {
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            height: 60,
+                          ),
+                          TimeLineView(id),
+                          const SizedBox(
+                            height: 50,
+                          )
+                        ],
+                      ),
+                    );
+                  })),
+            ),
+          )),
+    ],
+  );
+}
+
+PRView(maxHeight, id) {
+  final controll_cals = Get.put(calendarsetting());
+  List<Event> getList(DateTime date) {
+    return controll_cals.events[date] ?? [];
+  }
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      StreamBuilder<QuerySnapshot>(
+          stream: firestore
+              .collection('CalendarDataBase')
+              .where('calname', isEqualTo: id)
+              .snapshots(),
+          builder: ((context, snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data!.docs.isNotEmpty) {
+                controll_cals.events.clear();
+                final valuespace = snapshot.data!.docs;
+                for (var sp in valuespace) {
+                  final ev_date = sp.get('Date');
+                  final ev_todo = sp.get('Daytodo');
+                  if (controll_cals.events[DateTime.parse(
+                          sp.get('Date').toString().split('일')[0] +
+                              ' 00:00:00.000Z')] !=
+                      null) {
+                    controll_cals.events[DateTime.parse(
+                            sp.get('Date').toString().split('일')[0] +
+                                ' 00:00:00.000Z')]!
+                        .add(Event(title: sp.get('Daytodo')));
+                  } else {
+                    controll_cals.events[DateTime.parse(sp
+                            .get('Date')
+                            .toString()
+                            .split('일')[0] +
+                        ' 00:00:00.000Z')] = [Event(title: sp.get('Daytodo'))];
+                  }
+                }
+              }
+            }
+            return SizedBox(child: calendarView(context, id, 'large'));
+          })),
+      Flexible(
+          fit: FlexFit.tight,
+          child: SizedBox(
+            key: PRFlex,
+            child: ScrollConfiguration(
+              behavior: NoBehavior(),
+              child: SingleChildScrollView(
+                  physics: const ScrollPhysics(),
+                  child: StatefulBuilder(builder: (_, StateSetter setState) {
+                    return Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                        child: SizedBox(
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SizedBox(
                                 height: 20,
@@ -83,12 +179,12 @@ DayContentHome(id) {
                               )
                             ],
                           ),
-                        );
-                      })),
-                ),
-              )),
-        ],
-      ));
+                        ));
+                  })),
+            ),
+          )),
+    ],
+  );
 }
 
 TimeLineView(id) {
@@ -508,8 +604,9 @@ TimeLineView(id) {
                               ],
                             );
                           })
-                      : ListTile(
-                          title: Center(
+                      : Container(
+                          alignment: Alignment.center,
+                          height: getHeight(PRFlex) - 70,
                           child: Text(
                             '기록된 일정이 없네요...',
                             style: TextStyle(
@@ -518,7 +615,7 @@ TimeLineView(id) {
                               color: TextColor(),
                             ),
                           ),
-                        ))
+                        )
                 ];
               } else if (snapshot.connectionState == ConnectionState.waiting) {
                 list_timelineview = <Widget>[
@@ -526,8 +623,9 @@ TimeLineView(id) {
                 ];
               } else if (!snapshot.hasData) {
                 list_timelineview = <Widget>[
-                  ListTile(
-                      title: Center(
+                  Container(
+                    alignment: Alignment.center,
+                    height: getHeight(PRFlex) - 70,
                     child: Text(
                       '기록된 일정이 없네요...',
                       style: TextStyle(
@@ -536,7 +634,7 @@ TimeLineView(id) {
                         color: TextColor(),
                       ),
                     ),
-                  ))
+                  )
                 ];
               } else {
                 list_timelineview = <Widget>[

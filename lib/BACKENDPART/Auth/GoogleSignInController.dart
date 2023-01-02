@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, empty_catches
 
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -23,76 +23,76 @@ class GoogleSignInController extends GetxController {
     count = 1;
     try {
       googleSignInAccount = await _googleSignIn.signIn();
-    } catch (e) {
+      String nick = googleSignInAccount!.displayName.toString();
+      String email = googleSignInAccount!.email.toString();
+      var _chars =
+          'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+      Random _rnd = Random();
+      String code = '';
+
+      //내부 저장으로 로그인 정보 저장
+      code = email.toString().substring(0, 3) +
+          email.toString().split('@')[1].substring(0, 2) +
+          String.fromCharCodes(Iterable.generate(
+              5, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+
+      //firestore 저장
+
+      await firestore.collection('User').doc(nick).get().then((value) async {
+        if (value.exists) {
+          await firestore.collection('User').doc(nick).update({
+            'name': nick,
+            'email': email,
+            'login_where': 'google_user',
+            'autologin': ischecked,
+          }).whenComplete(() async {
+            await Hive.box('user_info').put('id', nick);
+            await Hive.box('user_info').put('email', email);
+            await Hive.box('user_info').put('count', count);
+            await Hive.box('user_info').put('autologin', ischecked);
+            await firestore
+                .collection('User')
+                .doc(Hive.box('user_info').get('id'))
+                .get()
+                .then((value) async {
+              if (value.exists) {
+                await Hive.box('user_setting')
+                    .put('usercode', value.data()!['code']);
+                name = nick;
+                email = email;
+                usercode = value.data()!['code'];
+                initScreen(context);
+              } else {}
+            });
+          });
+        } else {
+          await firestore.collection('User').doc(nick).set({
+            'name': nick,
+            'subname': nick,
+            'email': email,
+            'login_where': 'google_user',
+            'autologin': ischecked,
+            'code': code
+          }, SetOptions(merge: true)).whenComplete(() async {
+            await Hive.box('user_info').put('id', nick);
+            await Hive.box('user_info').put('email', email);
+            await Hive.box('user_info').put('count', count);
+            await Hive.box('user_info').put('autologin', ischecked);
+            await Hive.box('user_setting').put('usercode', code);
+            name = nick;
+            email = email;
+            usercode = code;
+            initScreen(context);
+          });
+        }
+      });
+
       update();
       notifyChildrens();
+    } catch (e) {
+      print(e);
+      uiset.setloading(true);
     }
-    String nick = googleSignInAccount!.displayName.toString();
-    String email = googleSignInAccount!.email.toString();
-    var _chars =
-        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-    Random _rnd = Random();
-    String code = '';
-
-    //내부 저장으로 로그인 정보 저장
-    code = email.toString().substring(0, 3) +
-        email.toString().split('@')[1].substring(0, 2) +
-        String.fromCharCodes(Iterable.generate(
-            5, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
-
-    //firestore 저장
-
-    await firestore.collection('User').doc(nick).get().then((value) async {
-      if (value.exists) {
-        await firestore.collection('User').doc(nick).update({
-          'name': nick,
-          'email': email,
-          'login_where': 'google_user',
-          'autologin': ischecked,
-        }).whenComplete(() async {
-          await Hive.box('user_info').put('id', nick);
-          await Hive.box('user_info').put('email', email);
-          await Hive.box('user_info').put('count', count);
-          await Hive.box('user_info').put('autologin', ischecked);
-          await firestore
-              .collection('User')
-              .doc(Hive.box('user_info').get('id'))
-              .get()
-              .then((value) async {
-            if (value.exists) {
-              await Hive.box('user_setting')
-                  .put('usercode', value.data()!['code']);
-              name = nick;
-              email = email;
-              usercode = value.data()!['code'];
-              initScreen();
-            } else {}
-          });
-        });
-      } else {
-        await firestore.collection('User').doc(nick).set({
-          'name': nick,
-          'subname': nick,
-          'email': email,
-          'login_where': 'google_user',
-          'autologin': ischecked,
-          'code': code
-        }, SetOptions(merge: true)).whenComplete(() async {
-          await Hive.box('user_info').put('id', nick);
-          await Hive.box('user_info').put('email', email);
-          await Hive.box('user_info').put('count', count);
-          await Hive.box('user_info').put('autologin', ischecked);
-          await Hive.box('user_setting').put('usercode', code);
-          name = nick;
-          email = email;
-          usercode = code;
-          initScreen();
-        });
-      }
-    });
-
-    update();
-    notifyChildrens();
   }
 
   logout(BuildContext context, String name) async {
