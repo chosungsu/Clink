@@ -1,4 +1,7 @@
+// ignore_for_file: prefer_final_fields, non_constant_identifier_names
+
 import 'dart:math';
+import 'dart:ui';
 import 'package:clickbyme/Enums/Variables.dart';
 import 'package:clickbyme/LocalNotiPlatform/NotificationApi.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
@@ -6,6 +9,7 @@ import 'package:clickbyme/UI/Home/Widgets/CreateCalandmemo.dart';
 import 'package:clickbyme/UI/Home/Widgets/MemoFocusedHolder.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -112,7 +116,6 @@ class _DayScriptState extends State<DayScript> {
     false,
   ];
   bool ischeckedtohideminus = false;
-  bool reloadpage = false;
   List<MemoList> checklisttexts = [];
   Color _color = Colors.white;
   Color _colorfont = Colors.black;
@@ -863,7 +866,7 @@ class _DayScriptState extends State<DayScript> {
                                   ContainerDesign(
                                       child: GestureDetector(
                                         onTap: () async {
-                                          reloadpage = await Get.dialog(OSDialog(
+                                          final reloadpage = await Get.dialog(OSDialog(
                                                   context,
                                                   '경고',
                                                   Text(
@@ -882,17 +885,17 @@ class _DayScriptState extends State<DayScript> {
                                           }
                                         },
                                         child: Icon(
-                                          Icons.keyboard_arrow_left,
+                                          Feather.chevron_left,
                                           size: 30,
-                                          color: draw.color_textstatus,
+                                          color: TextColor(),
                                         ),
                                       ),
                                       color: draw.backgroundcolor),
                                   Flexible(
                                       fit: FlexFit.tight,
                                       child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 10),
+                                          padding: const EdgeInsets.only(
+                                              left: 10, right: 10),
                                           child: Row(
                                             children: [
                                               Flexible(
@@ -943,7 +946,7 @@ class _DayScriptState extends State<DayScript> {
                                                       autosavelogic();
                                                     },
                                                     child: Icon(
-                                                      Icons.done_all,
+                                                      Ionicons.checkmark_done,
                                                       size: 30,
                                                       color:
                                                           draw.color_textstatus,
@@ -1721,230 +1724,171 @@ class _DayScriptState extends State<DayScript> {
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisSize: MainAxisSize.min,
             children: [
-              controll_cal.selectedDay != controll_cal.focusedDay
-                  ? SizedBox(
-                      child: ContainerDesign(
-                        color: BGColor(),
-                        child: ListTile(
-                          leading: NeumorphicIcon(
-                            Icons.today,
-                            size: 30,
-                            style: NeumorphicStyle(
-                                shape: NeumorphicShape.convex,
-                                depth: 2,
-                                surfaceIntensity: 0.5,
-                                color: widget.position == 'note'
-                                    ? (controll_memo.color == Colors.black
-                                        ? Colors.white
-                                        : Colors.black)
-                                    : TextColor(),
-                                lightSource: LightSource.topLeft),
-                          ),
-                          title: Text(
-                            controll_cal.focusedDay.toString().split(' ')[0] +
-                                '부터 ' +
-                                controll_cal.selectedDay
-                                    .toString()
-                                    .split(' ')[0] +
-                                '까지',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTitleTextsize(),
-                              color: widget.position == 'note'
-                                  ? (controll_memo.color == Colors.black
-                                      ? Colors.white
-                                      : Colors.black)
-                                  : TextColor(),
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  : Row(
-                      children: [
-                        Flexible(
-                            fit: FlexFit.tight,
-                            child: GestureDetector(
-                              onTap: () {
-                                searchNode_first_section.unfocus();
-                                Future.delayed(
-                                    const Duration(milliseconds: 300), () {
-                                  calendarView(context, widget.id, 'oncreate');
-                                });
-                              },
-                              child: SizedBox(
-                                child: ContainerDesign(
-                                  color: BGColor(),
-                                  child: ListTile(
-                                      leading: NeumorphicIcon(
-                                        Icons.today,
-                                        size: 30,
-                                        style: NeumorphicStyle(
-                                            shape: NeumorphicShape.convex,
-                                            depth: 2,
-                                            surfaceIntensity: 0.5,
-                                            color: widget.position == 'note'
-                                                ? (controll_memo.color ==
-                                                        Colors.black
-                                                    ? Colors.white
-                                                    : Colors.black)
-                                                : TextColor(),
-                                            lightSource: LightSource.topLeft),
-                                      ),
-                                      title: GetBuilder<calendarsetting>(
-                                        builder: (_) => Text(
-                                          controll_cal.selectedDay
-                                              .toString()
-                                              .split(' ')[0],
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: contentTitleTextsize(),
-                                            color: widget.position == 'note'
-                                                ? (controll_memo.color ==
-                                                        Colors.black
-                                                    ? Colors.white
-                                                    : Colors.black)
-                                                : TextColor(),
-                                          ),
-                                        ),
-                                      )),
+              Row(
+                children: [
+                  Flexible(
+                      fit: FlexFit.tight,
+                      child: GestureDetector(
+                        onTap: () {
+                          searchNode_first_section.unfocus();
+                          Future.delayed(const Duration(milliseconds: 300), () {
+                            calendarView(context, widget.id, 'oncreate');
+                          });
+                        },
+                        child: SizedBox(
+                          child: ContainerDesign(
+                            color: BGColor(),
+                            child: ListTile(
+                                leading: NeumorphicIcon(
+                                  Icons.today,
+                                  size: 30,
+                                  style: NeumorphicStyle(
+                                      shape: NeumorphicShape.convex,
+                                      depth: 2,
+                                      surfaceIntensity: 0.5,
+                                      color: widget.position == 'note'
+                                          ? (controll_memo.color == Colors.black
+                                              ? Colors.white
+                                              : Colors.black)
+                                          : TextColor(),
+                                      lightSource: LightSource.topLeft),
                                 ),
-                              ),
-                            )),
-                        const SizedBox(
-                          width: 10,
+                                title: GetBuilder<calendarsetting>(
+                                  builder: (_) => Text(
+                                    controll_cal.selectedDay
+                                        .toString()
+                                        .split(' ')[0],
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentTitleTextsize(),
+                                      color: widget.position == 'note'
+                                          ? (controll_memo.color == Colors.black
+                                              ? Colors.white
+                                              : Colors.black)
+                                          : TextColor(),
+                                    ),
+                                  ),
+                                )),
+                          ),
                         ),
-                        controll_cal.selectedDay == controll_cal.focusedDay
-                            ? Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  ContainerDesign(
-                                      child: InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            if (checkdayyang[1] == true) {
-                                              checkdayyang[1] = false;
-                                              checkdayyang[0] = true;
-                                              solar = CalendarConverter
-                                                  .lunarToSolar(
-                                                      int.parse(controll_cal
-                                                          .selectedDay
-                                                          .toString()
-                                                          .split(' ')[0]
-                                                          .split('-')[0]),
-                                                      int.parse(controll_cal
-                                                          .selectedDay
-                                                          .toString()
-                                                          .split(' ')[0]
-                                                          .split('-')[1]),
-                                                      int.parse(controll_cal
-                                                          .selectedDay
-                                                          .toString()
-                                                          .split(' ')[0]
-                                                          .split('-')[2]),
-                                                      0,
-                                                      Timezone.Korean);
-                                              controll_cal.selectedDay =
-                                                  DateFormat('yyyy-MM-dd')
-                                                      .parse(solar[2]
-                                                              .toString() +
-                                                          '-' +
-                                                          solar[1].toString() +
-                                                          '-' +
-                                                          solar[0].toString());
-                                              if (controll_cal.selectedDay !=
-                                                  _selectedDay) {
-                                              } else {
-                                                controll_cal.selectedDay =
-                                                    _selectedDay;
-                                              }
-                                            } else {
-                                              checkdayyang[0] = false;
-                                              checkdayyang[1] = true;
-                                              lunar = CalendarConverter
-                                                  .solarToLunar(
-                                                      int.parse(controll_cal
-                                                          .selectedDay
-                                                          .toString()
-                                                          .split(' ')[0]
-                                                          .split('-')[0]),
-                                                      int.parse(controll_cal
-                                                          .selectedDay
-                                                          .toString()
-                                                          .split(' ')[0]
-                                                          .split('-')[1]),
-                                                      int.parse(controll_cal
-                                                          .selectedDay
-                                                          .toString()
-                                                          .split(' ')[0]
-                                                          .split('-')[2]),
-                                                      Timezone.Korean);
-                                              controll_cal.selectedDay =
-                                                  DateFormat('yyyy-MM-dd')
-                                                      .parse(lunar[2]
-                                                              .toString() +
-                                                          '-' +
-                                                          lunar[1].toString() +
-                                                          '-' +
-                                                          lunar[0].toString());
-                                            }
-                                          });
-                                        },
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Text(
-                                              '양력',
-                                              style: TextStyle(
-                                                  fontWeight:
-                                                      checkdayyang[0] == true
-                                                          ? FontWeight.bold
-                                                          : FontWeight.normal,
-                                                  fontSize: checkdayyang[0] ==
-                                                          true
-                                                      ? contentTitleTextsize()
-                                                      : 16,
-                                                  color: widget.position ==
-                                                          'note'
-                                                      ? (controll_memo.color ==
-                                                              Colors.black
-                                                          ? Colors.white
-                                                          : Colors.black)
-                                                      : TextColor()),
-                                            ),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            Text(
-                                              '음력',
-                                              style: TextStyle(
-                                                  fontWeight:
-                                                      checkdayyang[1] == true
-                                                          ? FontWeight.bold
-                                                          : FontWeight.normal,
-                                                  fontSize: checkdayyang[1] ==
-                                                          true
-                                                      ? contentTitleTextsize()
-                                                      : 16,
-                                                  color: widget.position ==
-                                                          'note'
-                                                      ? (controll_memo.color ==
-                                                              Colors.black
-                                                          ? Colors.white
-                                                          : Colors.black)
-                                                      : TextColor()),
-                                            ),
-                                          ],
-                                        ),
+                      )),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  controll_cal.selectedDay == controll_cal.focusedDay
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            ContainerDesign(
+                                child: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      if (checkdayyang[1] == true) {
+                                        checkdayyang[1] = false;
+                                        checkdayyang[0] = true;
+                                        solar = CalendarConverter.lunarToSolar(
+                                            int.parse(controll_cal.selectedDay
+                                                .toString()
+                                                .split(' ')[0]
+                                                .split('-')[0]),
+                                            int.parse(controll_cal.selectedDay
+                                                .toString()
+                                                .split(' ')[0]
+                                                .split('-')[1]),
+                                            int.parse(controll_cal.selectedDay
+                                                .toString()
+                                                .split(' ')[0]
+                                                .split('-')[2]),
+                                            0,
+                                            Timezone.Korean);
+                                        controll_cal.selectedDay =
+                                            DateFormat('yyyy-MM-dd').parse(
+                                                solar[2].toString() +
+                                                    '-' +
+                                                    solar[1].toString() +
+                                                    '-' +
+                                                    solar[0].toString());
+                                        if (controll_cal.selectedDay !=
+                                            _selectedDay) {
+                                        } else {
+                                          controll_cal.selectedDay =
+                                              _selectedDay;
+                                        }
+                                      } else {
+                                        checkdayyang[0] = false;
+                                        checkdayyang[1] = true;
+                                        lunar = CalendarConverter.solarToLunar(
+                                            int.parse(controll_cal.selectedDay
+                                                .toString()
+                                                .split(' ')[0]
+                                                .split('-')[0]),
+                                            int.parse(controll_cal.selectedDay
+                                                .toString()
+                                                .split(' ')[0]
+                                                .split('-')[1]),
+                                            int.parse(controll_cal.selectedDay
+                                                .toString()
+                                                .split(' ')[0]
+                                                .split('-')[2]),
+                                            Timezone.Korean);
+                                        controll_cal.selectedDay =
+                                            DateFormat('yyyy-MM-dd').parse(
+                                                lunar[2].toString() +
+                                                    '-' +
+                                                    lunar[1].toString() +
+                                                    '-' +
+                                                    lunar[0].toString());
+                                      }
+                                    });
+                                  },
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Text(
+                                        '양력',
+                                        style: TextStyle(
+                                            fontWeight: checkdayyang[0] == true
+                                                ? FontWeight.bold
+                                                : FontWeight.normal,
+                                            fontSize: checkdayyang[0] == true
+                                                ? contentTitleTextsize()
+                                                : 16,
+                                            color: widget.position == 'note'
+                                                ? (controll_memo.color ==
+                                                        Colors.black
+                                                    ? Colors.white
+                                                    : Colors.black)
+                                                : TextColor()),
                                       ),
-                                      color: BGColor())
-                                ],
-                              )
-                            : const SizedBox(),
-                      ],
-                    ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        '음력',
+                                        style: TextStyle(
+                                            fontWeight: checkdayyang[1] == true
+                                                ? FontWeight.bold
+                                                : FontWeight.normal,
+                                            fontSize: checkdayyang[1] == true
+                                                ? contentTitleTextsize()
+                                                : 16,
+                                            color: widget.position == 'note'
+                                                ? (controll_memo.color ==
+                                                        Colors.black
+                                                    ? Colors.white
+                                                    : Colors.black)
+                                                : TextColor()),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                color: BGColor())
+                          ],
+                        )
+                      : const SizedBox(),
+                ],
+              ),
               const SizedBox(
                 height: 20,
               ),
@@ -2505,39 +2449,63 @@ addhashtagcollector(
     String s,
     selectcollection scollection,
     bool isresponsive) {
-  Get.bottomSheet(
-          Padding(
-            padding: MediaQuery.of(context).viewInsets,
-            child: Container(
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    )),
-                child: GestureDetector(
-                    onTap: () {
-                      searchNode_add_section.unfocus();
-                    },
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SheetPagememoCollection(
-                            context,
-                            username,
-                            textEditingController_add_sheet,
-                            searchNode_add_section,
-                            s,
-                            scollection,
-                            isresponsive),
-                      ],
-                    ))),
-          ),
-          backgroundColor: Colors.white,
-          isScrollControlled: true,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
-      .whenComplete(() {
+  showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.of(context).orientation == Orientation.portrait
+            ? Get.width
+            : Get.width / 2,
+      ),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        bottomLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+        bottomRight: Radius.circular(20),
+      )),
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Container(
+          margin: const EdgeInsets.only(
+              left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+          child: Padding(
+              padding: MediaQuery.of(context).viewInsets,
+              child: Container(
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      )),
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: StatefulBuilder(
+                    builder: ((context, setState) {
+                      return GestureDetector(
+                          onTap: () {
+                            searchNode_add_section.unfocus();
+                          },
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SheetPagememoCollection(
+                                  context,
+                                  username,
+                                  textEditingController_add_sheet,
+                                  searchNode_add_section,
+                                  s,
+                                  scollection,
+                                  isresponsive),
+                            ],
+                          ));
+                    }),
+                  ))),
+        );
+      }).whenComplete(() {
     textEditingController_add_sheet.clear();
   });
 }

@@ -47,7 +47,7 @@ class _ProfilePageState extends State<ProfilePage>
     uiset.searchpagemove = '';
     fToast = FToast();
     fToast.init(context);
-    Hive.box('user_setting').put('page_index', 2);
+    Hive.box('user_setting').put('page_index', 3);
     _controller = TextEditingController();
     _pController2 = PageController(initialPage: 0, viewportFraction: 1);
   }
@@ -1144,7 +1144,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                                     'user_setting')
                                                                 .put(
                                                                     'page_index',
-                                                                    2);
+                                                                    3);
                                                             uiset.setpageindex(Hive
                                                                     .box(
                                                                         'user_setting')
@@ -1209,7 +1209,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                                     'user_setting')
                                                                 .put(
                                                                     'page_index',
-                                                                    2);
+                                                                    3);
                                                             uiset.setpageindex(Hive
                                                                     .box(
                                                                         'user_setting')

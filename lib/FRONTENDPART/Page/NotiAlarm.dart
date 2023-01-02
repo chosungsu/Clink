@@ -10,6 +10,8 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import '../../BACKENDPART/FIREBASE/PersonalVP.dart';
+import '../../Enums/Variables.dart';
+import '../../Tool/Loader.dart';
 import '../Route/mainroute.dart';
 import '../Route/subuiroute.dart';
 import '../../Tool/AppBarCustom.dart';
@@ -17,6 +19,9 @@ import '../../Tool/Getx/navibool.dart';
 import '../../Tool/NoBehavior.dart';
 import '../../UI/Home/firstContentNet/ChooseCalendar.dart';
 import '../../UI/Home/firstContentNet/DayNoteHome.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+
+import 'DrawerScreen.dart';
 
 class NotiAlarm extends StatefulWidget {
   const NotiAlarm({
@@ -37,7 +42,8 @@ class _NotiAlarmState extends State<NotiAlarm>
   void initState() {
     super.initState();
     draw.navi = 1;
-    Hive.box('user_setting').put('page_index', 5);
+    //Hive.box('user_setting').put('page_index', 5);
+    Hive.box('user_setting').put('page_index', 2);
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -50,14 +56,52 @@ class _NotiAlarmState extends State<NotiAlarm>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: BGColor(),
-        body: SafeArea(
-          child: WillPopScope(
-            onWillPop: _onWillPop,
-            child: UI(),
-          ),
-        ));
+    return GetBuilder<navibool>(
+        builder: (_) => Scaffold(
+            backgroundColor: draw.backgroundcolor,
+            body: SafeArea(
+                child: draw.drawopen == true
+                    ? Stack(
+                        children: [
+                          draw.navi == 0
+                              ? Positioned(
+                                  left: 0,
+                                  child: SizedBox(
+                                    width: 80,
+                                    child: DrawerScreen(
+                                      index: Hive.box('user_setting')
+                                          .get('page_index'),
+                                    ),
+                                  ),
+                                )
+                              : Positioned(
+                                  right: 0,
+                                  child: SizedBox(
+                                    width: 80,
+                                    child: DrawerScreen(
+                                      index: Hive.box('user_setting')
+                                          .get('page_index'),
+                                    ),
+                                  ),
+                                ),
+                          UI(),
+                          uiset.loading == true
+                              ? const Loader(
+                                  wherein: 'route',
+                                )
+                              : Container()
+                        ],
+                      )
+                    : Stack(
+                        children: [
+                          UI(),
+                          uiset.loading == true
+                              ? const Loader(
+                                  wherein: 'route',
+                                )
+                              : Container()
+                        ],
+                      ))));
   }
 
   UI() {
@@ -88,8 +132,8 @@ class _NotiAlarmState extends State<NotiAlarm>
                           AppBarCustom(
                             title: 'notipagetitle'.tr,
                             righticon: true,
-                            doubleicon: true,
-                            iconname: Icons.keyboard_double_arrow_up,
+                            doubleicon: false,
+                            iconname: AntDesign.delete,
                           ),
                           CompanyNotice('home'),
                           allread(),

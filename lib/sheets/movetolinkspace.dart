@@ -386,55 +386,62 @@ addmylink(
   int categorynumber,
   int indexcnt,
 ) {
-  Get.bottomSheet(
-          Container(
-            margin: const EdgeInsets.only(
-                left: 10, right: 10, bottom: kBottomNavigationBarHeight),
-            child: Padding(
-                padding: MediaQuery.of(context).viewInsets,
-                child: Container(
-                    decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                          bottomLeft: Radius.circular(20),
-                          bottomRight: Radius.circular(20),
-                        )),
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
-                    ),
-                    child: StatefulBuilder(
-                      builder: ((context, setState) {
-                        return GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              searchNodeAddSection.unfocus();
-                            });
-                          },
-                          child: linkstation(
-                              context,
-                              textEditingControllerAddSheet,
-                              searchNodeAddSection,
-                              username,
-                              where,
-                              id,
-                              categorynumber,
-                              indexcnt),
-                        );
-                      }),
-                    ))),
-          ),
-          backgroundColor: Colors.transparent,
-          isScrollControlled: true,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
-      .whenComplete(() {
-    if (!linkspaceset.iscompleted) {
-      textEditingControllerAddSheet.clear();
-      linkspaceset.resetcompleted();
-    } else {}
-  });
+  showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.of(context).orientation == Orientation.portrait
+            ? Get.width
+            : Get.width / 2,
+      ),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        bottomLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+        bottomRight: Radius.circular(20),
+      )),
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Container(
+          margin: const EdgeInsets.only(
+              left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+          child: Padding(
+              padding: MediaQuery.of(context).viewInsets,
+              child: Container(
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      )),
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: StatefulBuilder(
+                    builder: ((context, setState) {
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            searchNodeAddSection.unfocus();
+                          });
+                        },
+                        child: linkstation(
+                            context,
+                            textEditingControllerAddSheet,
+                            searchNodeAddSection,
+                            username,
+                            where,
+                            id,
+                            categorynumber,
+                            indexcnt),
+                      );
+                    }),
+                  ))),
+        );
+      }).whenComplete(() {});
 }
 
 linkstation(
@@ -460,7 +467,10 @@ linkstation(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                    width: (MediaQuery.of(context).size.width - 40) * 0.2,
+                    width: MediaQuery.of(context).orientation ==
+                            Orientation.portrait
+                        ? (MediaQuery.of(context).size.width - 40) * 0.2
+                        : (Get.width / 2 - 40) * 0.2,
                     alignment: Alignment.topCenter,
                     color: Colors.black45),
               ],

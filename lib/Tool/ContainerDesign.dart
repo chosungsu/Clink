@@ -2,8 +2,6 @@ import 'package:clickbyme/Enums/Variables.dart';
 import 'package:clickbyme/Tool/Getx/navibool.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-
-import 'MyTheme.dart';
 import 'TextSize.dart';
 
 class ContainerDesign extends StatelessWidget {
@@ -16,7 +14,9 @@ class ContainerDesign extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<navibool>(
         builder: (_) => Container(
-              padding: const EdgeInsets.all(10),
+              alignment: Alignment.center,
+              padding: const EdgeInsets.only(
+                  left: 10, right: 10, top: 10, bottom: 10),
               child: child,
               decoration: BoxDecoration(
                   color: color,

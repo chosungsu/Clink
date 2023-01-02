@@ -58,7 +58,6 @@ GoToLogin(String s) {
   return _time;
 }
 
-func1() => Get.to(() => const NotiAlarm(), transition: Transition.upToDown);
 func2(BuildContext context) async {
   var updateid = '';
   var updateusername = [];

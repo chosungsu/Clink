@@ -42,7 +42,7 @@ Responsivelayout(size, landscape, portrait) {
 }
 
 OSDialog(BuildContext context, String title, content, pressed) {
-  return GetPlatform.isAndroid == true
+  return GetPlatform.isAndroid == true || GetPlatform.isWindows == true
       ? AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
@@ -55,20 +55,20 @@ OSDialog(BuildContext context, String title, content, pressed) {
           content: content,
           actions: <Widget>[
             TextButton(
+              onPressed: pressed,
+              child: Text('Yes',
+                  style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTextsize())),
+            ),
+            TextButton(
               onPressed: () {
                 Navigator.pop(context, false);
               },
               child: Text('No',
                   style: TextStyle(
                       color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTextsize())),
-            ),
-            TextButton(
-              onPressed: pressed,
-              child: Text('Yes',
-                  style: TextStyle(
-                      color: Colors.blue,
                       fontWeight: FontWeight.bold,
                       fontSize: contentTextsize())),
             ),

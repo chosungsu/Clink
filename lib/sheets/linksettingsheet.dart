@@ -839,53 +839,65 @@ linkplacenamechange(
   TextEditingController controller,
   String placestr,
 ) {
-  Get.bottomSheet(
-          Container(
-            margin: const EdgeInsets.only(
-                left: 10, right: 10, bottom: kBottomNavigationBarHeight),
-            child: Padding(
-                padding: MediaQuery.of(context).viewInsets,
-                child: Container(
-                    decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                          bottomLeft: Radius.circular(20),
-                          bottomRight: Radius.circular(20),
-                        )),
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
-                    ),
-                    child: StatefulBuilder(
-                      builder: ((context, setState) {
-                        return GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              node.unfocus();
-                            });
-                          },
-                          child: Container(
-                            decoration: const BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20),
-                                  bottomLeft: Radius.circular(20),
-                                  bottomRight: Radius.circular(20),
-                                )),
-                            child: changenameplace(context, name, code, index,
-                                node, controller, origintext),
-                          ),
-                        );
-                      }),
-                    ))),
-          ),
-          backgroundColor: Colors.transparent,
-          isScrollControlled: true,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
-      .whenComplete(() {
+  showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.of(context).orientation == Orientation.portrait
+            ? Get.width
+            : Get.width / 2,
+      ),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        bottomLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+        bottomRight: Radius.circular(20),
+      )),
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Container(
+          margin: const EdgeInsets.only(
+              left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+          child: Padding(
+              padding: MediaQuery.of(context).viewInsets,
+              child: Container(
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      )),
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: StatefulBuilder(
+                    builder: ((context, setState) {
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            node.unfocus();
+                          });
+                        },
+                        child: Container(
+                          decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                                bottomLeft: Radius.circular(20),
+                                bottomRight: Radius.circular(20),
+                              )),
+                          child: changenameplace(context, name, code, index,
+                              node, controller, origintext),
+                        ),
+                      );
+                    }),
+                  ))),
+        );
+      }).whenComplete(() {
     /*final linkspaceset = Get.put(linkspacesetting());
     linkspaceset.setspecificspacein(
         index,
@@ -921,7 +933,10 @@ changenameplace(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                          width: (MediaQuery.of(context).size.width - 40) * 0.2,
+                          width: MediaQuery.of(context).orientation ==
+                                  Orientation.portrait
+                              ? (MediaQuery.of(context).size.width - 40) * 0.2
+                              : (Get.width / 2 - 40) * 0.2,
                           alignment: Alignment.topCenter,
                           color: Colors.black45),
                     ],
@@ -1129,18 +1144,38 @@ linkplaceshowaddaction(
   String mainid,
 ) {
   final linkspaceset = Get.put(linkspacesetting());
-  Get.bottomSheet(
-          Container(
-            margin: const EdgeInsets.only(top: 30),
-            child: Padding(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
+  showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.of(context).orientation == Orientation.portrait
+            ? Get.width
+            : Get.width / 2,
+      ),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        bottomLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+        bottomRight: Radius.circular(20),
+      )),
+      context: context,
+      isScrollControlled: true,
+      enableDrag: false,
+      isDismissible: linkspaceset.iscompleted ? false : true,
+      builder: (context) {
+        return Container(
+          margin: const EdgeInsets.only(
+              left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+          child: Padding(
+              padding: MediaQuery.of(context).viewInsets,
               child: Container(
                   decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(20),
                         topRight: Radius.circular(20),
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
                       )),
                   padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -1148,16 +1183,9 @@ linkplaceshowaddaction(
                   child: GetBuilder<linkspacesetting>(
                       builder: (_) => SingleChildScrollView(
                           physics: const ScrollPhysics(),
-                          child: addaction(context, mainid)))),
-            ),
-          ),
-          enableDrag: false,
-          isDismissible: linkspaceset.iscompleted ? false : true,
-          backgroundColor: Colors.transparent,
-          isScrollControlled: true,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
-      .whenComplete(() {
+                          child: addaction(context, mainid))))),
+        );
+      }).whenComplete(() {
     final linkspaceset = Get.put(linkspacesetting());
     if (linkspaceset.iscompleted) {
       linkplaceshowaddaction(context, mainid);
@@ -1186,8 +1214,10 @@ addaction(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                            width:
-                                (MediaQuery.of(context).size.width - 40) * 0.2,
+                            width: MediaQuery.of(context).orientation ==
+                                    Orientation.portrait
+                                ? (MediaQuery.of(context).size.width - 40) * 0.2
+                                : (Get.width / 2 - 40) * 0.2,
                             alignment: Alignment.topCenter,
                             color: Colors.black45),
                       ],
@@ -1476,45 +1506,57 @@ linkplaceshowbeforeadd(
   String? path,
   String mainid,
 ) {
-  Get.bottomSheet(
-          Container(
-            margin: const EdgeInsets.only(
-                left: 10, right: 10, bottom: kBottomNavigationBarHeight),
-            child: Padding(
-                padding: MediaQuery.of(context).viewInsets,
-                child: Container(
-                    decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                          bottomLeft: Radius.circular(20),
-                          bottomRight: Radius.circular(20),
-                        )),
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
-                    ),
-                    child: StatefulBuilder(
-                      builder: ((context, setState) {
-                        return Container(
-                          decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                                bottomLeft: Radius.circular(20),
-                                bottomRight: Radius.circular(20),
-                              )),
-                          child: treeplace(context, name, path, mainid),
-                        );
-                      }),
-                    ))),
-          ),
-          backgroundColor: Colors.transparent,
-          isScrollControlled: true,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
-      .whenComplete(() {});
+  showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.of(context).orientation == Orientation.portrait
+            ? Get.width
+            : Get.width / 2,
+      ),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        bottomLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+        bottomRight: Radius.circular(20),
+      )),
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Container(
+          margin: const EdgeInsets.only(
+              left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+          child: Padding(
+              padding: MediaQuery.of(context).viewInsets,
+              child: Container(
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      )),
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: StatefulBuilder(
+                    builder: ((context, setState) {
+                      return Container(
+                        decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              topRight: Radius.circular(20),
+                              bottomLeft: Radius.circular(20),
+                              bottomRight: Radius.circular(20),
+                            )),
+                        child: treeplace(context, name, path, mainid),
+                      );
+                    }),
+                  ))),
+        );
+      }).whenComplete(() {});
 }
 
 treeplace(
@@ -1537,7 +1579,10 @@ treeplace(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                          width: (MediaQuery.of(context).size.width - 40) * 0.2,
+                          width: MediaQuery.of(context).orientation ==
+                                  Orientation.portrait
+                              ? (MediaQuery.of(context).size.width - 40) * 0.2
+                              : (Get.width / 2 - 40) * 0.2,
                           alignment: Alignment.topCenter,
                           color: Colors.black45),
                     ],

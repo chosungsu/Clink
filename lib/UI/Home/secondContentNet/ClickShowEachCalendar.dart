@@ -7,6 +7,7 @@ import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/sheets/pushalarmsettingcal.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -625,27 +626,16 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         GetPlatform.isMobile == false
-                            ? IconBtn(
-                                child: IconButton(
-                                    onPressed: () {
-                                      savelogic();
-                                    },
-                                    icon: Container(
-                                      alignment: Alignment.center,
-                                      width: 30,
-                                      height: 30,
-                                      child: NeumorphicIcon(
-                                        Icons.keyboard_arrow_left,
-                                        size: 30,
-                                        style: const NeumorphicStyle(
-                                            shape: NeumorphicShape.convex,
-                                            depth: 2,
-                                            surfaceIntensity: 0.5,
-                                            color: Colors.black,
-                                            lightSource: LightSource.topLeft),
-                                      ),
-                                    )),
-                                color: Colors.black)
+                            ? ContainerDesign(
+                                child: GestureDetector(
+                                  onTap: () => savelogic(),
+                                  child: Icon(
+                                    Feather.chevron_left,
+                                    size: 30,
+                                    color: draw.color_textstatus,
+                                  ),
+                                ),
+                                color: draw.backgroundcolor)
                             : const SizedBox(),
                         Flexible(
                             fit: FlexFit.tight,
@@ -671,7 +661,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                             savelogic();
                                           },
                                           child: Icon(
-                                            Icons.save_alt,
+                                            Ionicons.checkmark_done,
                                             size: 30,
                                             color: draw.color_textstatus,
                                           ),
@@ -686,7 +676,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                                             deletelogic();
                                           },
                                           child: Icon(
-                                            Icons.delete,
+                                            AntDesign.delete,
                                             size: 30,
                                             color: draw.color_textstatus,
                                           ),

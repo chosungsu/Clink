@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names
 
+import 'dart:ui';
+
 import 'package:clickbyme/BACKENDPART/FIREBASE/PersonalVP.dart';
 import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
 import 'package:clickbyme/Tool/Getx/uisetting.dart';
@@ -24,6 +26,7 @@ import '../../Tool/Loader.dart';
 import '../../Tool/NoBehavior.dart';
 import '../../Tool/AppBarCustom.dart';
 import '../UI(Widget/SpaceinUI.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 class Spacein extends StatefulWidget {
   const Spacein(
@@ -170,8 +173,7 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
                                                         Get.back();
                                                       },
                                                       child: Icon(
-                                                        Icons
-                                                            .keyboard_arrow_left,
+                                                        Feather.chevron_left,
                                                         size: 30,
                                                         color: draw
                                                             .color_textstatus,
@@ -223,8 +225,9 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
                                   height: 20,
                                 ),
                           ScrollConfiguration(
-                              behavior: NoBehavior(),
-                              child: SpaceinUI(widget.id, widget.type, isinit)),
+                            behavior: NoBehavior(),
+                            child: SpaceinUI(widget.id, widget.type, isinit),
+                          )
                         ],
                       )),
                 ),

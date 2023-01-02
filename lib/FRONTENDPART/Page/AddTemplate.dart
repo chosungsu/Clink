@@ -96,7 +96,7 @@ class _AddTemplateState extends State<AddTemplate>
                         children: [
                           AppBarCustom(
                             title: 'spaceaddtitle'.tr,
-                            righticon: true,
+                            righticon: false,
                             doubleicon: false,
                             iconname: Icons.keyboard_double_arrow_up,
                           ),

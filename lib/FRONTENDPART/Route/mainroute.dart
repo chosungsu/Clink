@@ -1,19 +1,16 @@
 // ignore_for_file: non_constant_identifier_names, camel_case_types
 
-import 'package:clickbyme/Enums/Variables.dart';
 import 'package:clickbyme/FRONTENDPART/Page/MYPage.dart';
-import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/ResponsiveUI.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:status_bar_control/status_bar_control.dart';
+import '../Page/NotiAlarm.dart';
 import 'subuiroute.dart';
 import '../Page/SearchPage.dart';
 import '../Page/ProfilePage.dart';
@@ -77,14 +74,14 @@ class _mainrouteState extends State<mainroute>
       draw.setclose();
       Hive.box('user_setting').put('page_opened', false);
     }
-    if (draw.currentpage == 2) {
+    if (draw.currentpage == 3) {
       draw.currentpage = 1;
-      Hive.box('user_setting').put('page_index', 2);
+      Hive.box('user_setting').put('page_index', 3);
       Navigator.of(context).pushReplacement(
         PageTransition(
           type: PageTransitionType.fade,
           child: const mainroute(
-            index: 2,
+            index: 3,
           ),
         ),
       );
@@ -113,6 +110,7 @@ class _mainrouteState extends State<mainroute>
     List pages = [
       const MYPage(),
       SearchPage(secondname: peopleadd.secondname),
+      const NotiAlarm(),
       const ProfilePage(),
     ];
     return OrientationBuilder(builder: ((context, orientation) {

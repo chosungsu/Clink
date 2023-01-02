@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import '../Enums/PageList.dart';
 import '../Enums/Variables.dart';
@@ -16,6 +15,7 @@ import 'Getx/navibool.dart';
 import 'Getx/notishow.dart';
 import 'Getx/uisetting.dart';
 import 'TextSize.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 class AppBarCustom extends StatelessWidget {
   AppBarCustom({
@@ -45,7 +45,7 @@ class AppBarCustom extends StatelessWidget {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     var updateid = '';
     var updateusername = [];
-    List<int> navinumlist = [0, 1, 2];
+    List<int> navinumlist = [0, 1, 2, 3];
     List<PageList> pagenamelist = [];
     final notilist = Get.put(notishow());
     final linkspaceset = Get.put(linkspacesetting());
@@ -80,7 +80,7 @@ class AppBarCustom extends StatelessWidget {
                                             });
                                           },
                                           child: Icon(
-                                            Icons.keyboard_arrow_left,
+                                            Feather.chevron_left,
                                             size: 30,
                                             color: draw.color_textstatus,
                                           ),
@@ -97,7 +97,7 @@ class AppBarCustom extends StatelessWidget {
                                             });
                                           },
                                           child: Icon(
-                                            Icons.menu,
+                                            Ionicons.menu,
                                             size: 30,
                                             color: draw.color_textstatus,
                                           ),
@@ -159,8 +159,8 @@ class AppBarCustom extends StatelessWidget {
                                                                               10,
                                                                         ),
                                                                         Icon(
-                                                                          Icons
-                                                                              .swap_horiz,
+                                                                          AntDesign
+                                                                              .swap,
                                                                           color:
                                                                               draw.color_textstatus,
                                                                         ),
@@ -208,7 +208,7 @@ class AppBarCustom extends StatelessWidget {
                                                                               width: 10,
                                                                             ),
                                                                             Icon(
-                                                                              Icons.swap_horiz,
+                                                                              AntDesign.swap,
                                                                               color: draw.color_textstatus,
                                                                             ),
                                                                           ],
@@ -240,15 +240,20 @@ class AppBarCustom extends StatelessWidget {
                                           children: [
                                             doubleicon == true
                                                 ? Hive.box('user_setting').get(
-                                                            'page_index') ==
-                                                        0
+                                                                'page_index') ==
+                                                            11 ||
+                                                        Hive.box('user_setting')
+                                                                .get(
+                                                                    'page_index') ==
+                                                            12
                                                     ? ContainerDesign(
                                                         child: GestureDetector(
                                                           onTap: () => func4(
                                                               context,
                                                               indexcnt),
                                                           child: Icon(
-                                                            Icons.add_outlined,
+                                                            Ionicons
+                                                                .add_outline,
                                                             size: 30,
                                                             color: draw
                                                                 .color_textstatus,
@@ -256,73 +261,7 @@ class AppBarCustom extends StatelessWidget {
                                                         ),
                                                         color: draw
                                                             .backgroundcolor)
-                                                    : (Hive.box('user_setting').get(
-                                                                    'page_index') ==
-                                                                11 ||
-                                                            Hive.box('user_setting').get(
-                                                                    'page_index') ==
-                                                                12
-                                                        ? ContainerDesign(
-                                                            child:
-                                                                GestureDetector(
-                                                              onTap: () =>
-                                                                  func4(context,
-                                                                      indexcnt),
-                                                              child: Icon(
-                                                                Icons
-                                                                    .add_outlined,
-                                                                size: 30,
-                                                                color: draw
-                                                                    .color_textstatus,
-                                                              ),
-                                                            ),
-                                                            color: draw
-                                                                .backgroundcolor)
-                                                        : (Hive.box('user_setting')
-                                                                    .get(
-                                                                        'page_index') ==
-                                                                3
-                                                            ? ContainerDesign(
-                                                                child:
-                                                                    GestureDetector(
-                                                                  onTap: () => func6(
-                                                                      context,
-                                                                      textEditingController,
-                                                                      searchnode,
-                                                                      'addpage',
-                                                                      '',
-                                                                      99,
-                                                                      indexcnt),
-                                                                  child: Icon(
-                                                                    Icons
-                                                                        .add_outlined,
-                                                                    size: 30,
-                                                                    color: draw
-                                                                        .color_textstatus,
-                                                                  ),
-                                                                ),
-                                                                color: draw
-                                                                    .backgroundcolor)
-                                                            : (Hive.box('user_setting')
-                                                                        .get('page_index') ==
-                                                                    5
-                                                                ? ContainerDesign(
-                                                                    child: GestureDetector(
-                                                                      onTap: () =>
-                                                                          func2(
-                                                                              context),
-                                                                      child:
-                                                                          Icon(
-                                                                        Icons
-                                                                            .delete_outline,
-                                                                        size:
-                                                                            30,
-                                                                        color: draw
-                                                                            .color_textstatus,
-                                                                      ),
-                                                                    ),
-                                                                    color: draw.backgroundcolor)
-                                                                : const SizedBox())))
+                                                    : const SizedBox()
                                                 : const SizedBox(),
                                             Hive.box('user_setting').get(
                                                             'page_index') ==
@@ -330,11 +269,7 @@ class AppBarCustom extends StatelessWidget {
                                                     Hive.box('user_setting')
                                                             .get(
                                                                 'page_index') ==
-                                                        3 ||
-                                                    Hive.box('user_setting')
-                                                            .get(
-                                                                'page_index') ==
-                                                        5
+                                                        3
                                                 ? const SizedBox(
                                                     width: 10,
                                                   )
@@ -346,54 +281,48 @@ class AppBarCustom extends StatelessWidget {
                                             GetBuilder<uisetting>(
                                                 builder: (_) => ContainerDesign(
                                                     child: GestureDetector(
-                                                      onTap: () => iconname ==
-                                                              Icons
-                                                                  .notifications_none
-                                                          ? func1()
-                                                          : (iconname ==
-                                                                  Icons.delete
-                                                              ? func2(context)
-                                                              : (iconname ==
-                                                                      Icons
-                                                                          .keyboard_double_arrow_up
-                                                                  ? func3(
-                                                                      context)
-                                                                  : (iconname ==
-                                                                              Icons
-                                                                                  .star_border ||
-                                                                          iconname ==
-                                                                              Icons
-                                                                                  .star
-                                                                      ? func7(
-                                                                          uiset
-                                                                              .editpagelist[
-                                                                                  0]
-                                                                              .title,
-                                                                          uiset.editpagelist[0].email
-                                                                              .toString(),
-                                                                          uiset.editpagelist[0].username
-                                                                              .toString(),
-                                                                          uiset.editpagelist[0].id
-                                                                              .toString())
-                                                                      : (iconname ==
-                                                                              Icons
-                                                                                  .person_outline
-                                                                          ? (Hive.box('user_info').get('id') == null
-                                                                              ? GoToLogin('isnotfirst')
-                                                                              : setUsers(context, searchnode, textEditingController, Hive.box('user_info').get('id')))
-                                                                          : (iconname == Icons.download ? downloadFileExample(mainid, context) : func6(context, textEditingController, searchnode, 'addpage', '', 99, indexcnt)))))),
-                                                      child: Icon(
-                                                        iconname,
-                                                        size: 30,
-                                                        color: iconname ==
-                                                                Icons.star
-                                                            ? Colors.yellow
-                                                            : draw
-                                                                .color_textstatus,
-                                                      ),
-                                                    ),
-                                                    color:
-                                                        draw.backgroundcolor))
+                                                        onTap: () => iconname ==
+                                                                Ionicons
+                                                                    .add_outline
+                                                            ? (Hive.box('user_setting').get('page_index') == 0
+                                                                ? func4(
+                                                                    context, indexcnt)
+                                                                : func6(
+                                                                    context,
+                                                                    textEditingController,
+                                                                    searchnode,
+                                                                    'addpage',
+                                                                    '',
+                                                                    99,
+                                                                    indexcnt))
+                                                            : (iconname ==
+                                                                    AntDesign
+                                                                        .delete
+                                                                ? func2(context)
+                                                                : (iconname == Icons.star_border ||
+                                                                        iconname ==
+                                                                            Icons
+                                                                                .star
+                                                                    ? func7(
+                                                                        uiset.editpagelist[0].title,
+                                                                        uiset.editpagelist[0].email.toString(),
+                                                                        uiset.editpagelist[0].username.toString(),
+                                                                        uiset.editpagelist[0].id.toString())
+                                                                    : (iconname == Icons.person_outline ? (Hive.box('user_info').get('id') == null ? GoToLogin('isnotfirst') : setUsers(context, searchnode, textEditingController, Hive.box('user_info').get('id'))) : (iconname == Icons.download ? downloadFileExample(mainid, context) : func6(context, textEditingController, searchnode, 'addpage', '', 99, indexcnt))))),
+                                                        child: Container(
+                                                          padding:
+                                                              EdgeInsets.zero,
+                                                          child: Icon(
+                                                            iconname,
+                                                            size: 30,
+                                                            color: iconname ==
+                                                                    Icons.star
+                                                                ? Colors.yellow
+                                                                : draw
+                                                                    .color_textstatus,
+                                                          ),
+                                                        )),
+                                                    color: draw.backgroundcolor))
                                           ],
                                         )
                                       : const SizedBox()
@@ -407,7 +336,9 @@ class AppBarCustom extends StatelessWidget {
                                     width: 10,
                                   )
                                 : const SizedBox(),
-                            draw.navi == 1
+                            navinumlist.contains(Hive.box('user_setting')
+                                        .get('page_index')) &&
+                                    draw.navi == 1
                                 ? draw.drawopen == true ||
                                         Hive.box('user_setting')
                                                 .get('page_opened') ==
@@ -422,7 +353,7 @@ class AppBarCustom extends StatelessWidget {
                                             });
                                           },
                                           child: Icon(
-                                            Icons.keyboard_arrow_right,
+                                            Feather.chevron_right,
                                             size: 30,
                                             color: draw.color_textstatus,
                                           ),
@@ -439,7 +370,7 @@ class AppBarCustom extends StatelessWidget {
                                             });
                                           },
                                           child: Icon(
-                                            Icons.menu,
+                                            Ionicons.menu,
                                             size: 30,
                                             color: draw.color_textstatus,
                                           ),

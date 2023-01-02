@@ -10,6 +10,7 @@ import '../../Tool/NoBehavior.dart';
 import '../../Tool/AppBarCustom.dart';
 import '../UI(Widget/PageUI.dart';
 import 'DrawerScreen.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 class MYPage extends StatefulWidget {
   const MYPage({
@@ -123,8 +124,8 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                               builder: (_) => AppBarCustom(
                                 title: '',
                                 righticon: true,
-                                doubleicon: true,
-                                iconname: Icons.notifications_none,
+                                doubleicon: false,
+                                iconname: Ionicons.add_outline,
                                 textEditingController: _controller,
                                 focusNode: searchNode,
                                 myindex: uiset.mypagelistindex,

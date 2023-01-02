@@ -18,6 +18,7 @@ import '../../Tool/Getx/navibool.dart';
 import '../../Tool/Getx/uisetting.dart';
 import '../../Tool/NoBehavior.dart';
 import '../../Tool/TextSize.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 class Spacepage extends StatefulWidget {
   const Spacepage({
@@ -39,7 +40,7 @@ class _SpacepageState extends State<Spacepage>
   void initState() {
     super.initState();
     _controller = TextEditingController();
-    Hive.box('user_setting').put('page_index', 3);
+    Hive.box('user_setting').put('page_index', 5);
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -89,11 +90,10 @@ class _SpacepageState extends State<Spacepage>
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           AppBarCustom(
-                            title: 'MY',
-                            righticon: true,
-                            doubleicon: true,
-                            iconname: Icons.keyboard_double_arrow_up,
-                          ),
+                              title: 'MY',
+                              righticon: true,
+                              doubleicon: false,
+                              iconname: Ionicons.add_outline),
                           const SizedBox(
                             height: 20,
                           ),

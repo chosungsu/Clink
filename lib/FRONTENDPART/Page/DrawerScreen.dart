@@ -10,6 +10,7 @@ import '../../Enums/Variables.dart';
 import '../../Tool/Getx/PeopleAdd.dart';
 import '../../Tool/Getx/navibool.dart';
 import '../Route/mainroute.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 class DrawerScreen extends StatefulWidget {
   const DrawerScreen({
@@ -52,7 +53,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                       padding: const EdgeInsets.only(top: 30, bottom: 30),
                       child: InkWell(
                         onTap: () {
-                          if (element.containsValue(Icons.view_stream)) {
+                          if (element.containsValue(AntDesign.home)) {
                             draw.setclose();
                             Hive.box('user_setting').put('page_index', 0);
                             uiset.setmypagelistindex(
@@ -68,7 +69,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                                 ),
                               ),
                             );
-                          } else if (element.containsValue(Icons.search)) {
+                          } else if (element.containsValue(Ionicons.search)) {
                             draw.setclose();
                             Hive.box('user_setting').put('page_index', 1);
                             uiset.setpageindex(
@@ -81,7 +82,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
                                 ),
                               ),
                             );
-                          } else if (element.containsValue(Icons.settings)) {
+                          } else if (element
+                              .containsValue(Ionicons.notifications_outline)) {
                             draw.setclose();
                             Hive.box('user_setting').put('page_index', 2);
                             uiset.setpageindex(
@@ -91,6 +93,20 @@ class _DrawerScreenState extends State<DrawerScreen> {
                                 type: PageTransitionType.fade,
                                 child: const mainroute(
                                   index: 2,
+                                ),
+                              ),
+                            );
+                          } else if (element
+                              .containsValue(Ionicons.settings_outline)) {
+                            draw.setclose();
+                            Hive.box('user_setting').put('page_index', 3);
+                            uiset.setpageindex(
+                                Hive.box('user_setting').get('page_index'));
+                            Navigator.of(context).pushReplacement(
+                              PageTransition(
+                                type: PageTransitionType.fade,
+                                child: const mainroute(
+                                  index: 3,
                                 ),
                               ),
                             );
