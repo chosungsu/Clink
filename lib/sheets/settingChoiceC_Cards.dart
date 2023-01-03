@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 
+import '../Tool/NoBehavior.dart';
+
 settingCalendarHome(int index, doc_name, doc_shares, doc_change,
     BuildContext context, doc, doc_theme, doc_view) {
   showModalBottomSheet(
@@ -24,30 +26,32 @@ settingCalendarHome(int index, doc_name, doc_shares, doc_change,
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return Container(
-          margin: const EdgeInsets.all(10),
-          child: Padding(
-              padding: MediaQuery.of(context).viewInsets,
-              child: Container(
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                      )),
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
+        return Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: Container(
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  )),
+              margin: const EdgeInsets.only(
+                  left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+              child: ScrollConfiguration(
+                behavior: NoBehavior(),
+                child: SingleChildScrollView(
+                  physics: const ScrollPhysics(),
+                  child: StatefulBuilder(
+                    builder: ((context, setState) {
+                      return SheetPageCC(context, doc_name, doc_shares,
+                          doc_change, doc, doc_theme, doc_view);
+                    }),
                   ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SheetPageCC(context, doc_name, doc_shares, doc_change,
-                          doc, doc_theme, doc_view),
-                    ],
-                  ))),
-        );
+                ),
+              ),
+            ));
       }).whenComplete(() {});
 }
 

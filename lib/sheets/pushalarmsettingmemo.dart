@@ -15,6 +15,7 @@ import '../Tool/BGColor.dart';
 import '../Tool/FlushbarStyle.dart';
 import '../Tool/IconBtn.dart';
 import '../Tool/Loader.dart';
+import '../Tool/NoBehavior.dart';
 import '../UI/Home/Widgets/CreateCalandmemo.dart';
 
 pushalarmsettingmemo(
@@ -44,65 +45,66 @@ pushalarmsettingmemo(
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return Container(
-          margin: const EdgeInsets.only(
-              left: 10, right: 10, bottom: kBottomNavigationBarHeight),
-          child: Padding(
-              padding: MediaQuery.of(context).viewInsets,
-              child: Container(
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                      )),
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
+        return Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: Container(
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  )),
+              margin: const EdgeInsets.only(
+                  left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+              child: ScrollConfiguration(
+                behavior: NoBehavior(),
+                child: SingleChildScrollView(
+                  physics: const ScrollPhysics(),
+                  child: StatefulBuilder(
+                    builder: ((context, setState) {
+                      return GestureDetector(
+                          onTap: () {
+                            setalarmhourNode.unfocus();
+                            setalarmminuteNode.unfocus();
+                          },
+                          child: SingleChildScrollView(
+                              physics: const NeverScrollableScrollPhysics(),
+                              child: GetBuilder<memosetting>(
+                                builder: (_) => Stack(
+                                  children: [
+                                    GestureDetector(
+                                        onTap: () {
+                                          setalarmhourNode.unfocus();
+                                          setalarmminuteNode.unfocus();
+                                        },
+                                        child: SingleChildScrollView(
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            child: SheetPage(
+                                                context,
+                                                setalarmhourNode,
+                                                setalarmminuteNode,
+                                                controller_hour,
+                                                controller_minute,
+                                                doc_title,
+                                                id,
+                                                fToast))),
+                                    uisetting().loading == true
+                                        ? const Loader_sheets(
+                                            wherein: 'memoeach',
+                                            height: 400,
+                                          )
+                                        : SizedBox(),
+                                  ],
+                                ),
+                              )));
+                    }),
                   ),
-                  child: GetBuilder<memosetting>(
-                      builder: (_) => Padding(
-                          padding: MediaQuery.of(context).viewInsets,
-                          child: Container(
-                            margin: const EdgeInsets.all(10),
-                            decoration: const BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20),
-                                  bottomLeft: Radius.circular(20),
-                                  bottomRight: Radius.circular(20),
-                                )),
-                            child: Stack(
-                              children: [
-                                GestureDetector(
-                                    onTap: () {
-                                      setalarmhourNode.unfocus();
-                                      setalarmminuteNode.unfocus();
-                                    },
-                                    child: SingleChildScrollView(
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        child: SheetPage(
-                                            context,
-                                            setalarmhourNode,
-                                            setalarmminuteNode,
-                                            controller_hour,
-                                            controller_minute,
-                                            doc_title,
-                                            id,
-                                            fToast))),
-                                uisetting().loading == true
-                                    ? const Loader_sheets(
-                                        wherein: 'memoeach',
-                                        height: 400,
-                                      )
-                                    : SizedBox(),
-                              ],
-                            ),
-                          ))))),
-        );
+                ),
+              ),
+            ));
       }).whenComplete(() {});
 }
 

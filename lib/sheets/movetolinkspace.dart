@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, unused_local_variable
 
 import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
+import 'package:clickbyme/Tool/NoBehavior.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -38,27 +39,32 @@ settingseparatedlinkspace(
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return Container(
-          margin: const EdgeInsets.only(
-              left: 10, right: 10, bottom: kBottomNavigationBarHeight),
-          child: Padding(
-              padding: MediaQuery.of(context).viewInsets,
-              child: Container(
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
-                    )),
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom,
+        return Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: Container(
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  )),
+              margin: const EdgeInsets.only(
+                  left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+              child: ScrollConfiguration(
+                behavior: NoBehavior(),
+                child: SingleChildScrollView(
+                  physics: const ScrollPhysics(),
+                  child: StatefulBuilder(
+                    builder: ((context, setState) {
+                      return space(context, pagelist, textEditingController,
+                          searchnode, index);
+                    }),
+                  ),
                 ),
-                child: space(context, pagelist, textEditingController,
-                    searchnode, index),
-              )),
-        );
+              ),
+            ));
       }).whenComplete(() {});
 }
 
@@ -249,25 +255,31 @@ movetolinkspacesecond(BuildContext context, String str) {
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return Container(
-          margin: const EdgeInsets.all(10),
-          child: Padding(
-              padding: MediaQuery.of(context).viewInsets,
-              child: Container(
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
-                    )),
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom,
+        return Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: Container(
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  )),
+              margin: const EdgeInsets.only(
+                  left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+              child: ScrollConfiguration(
+                behavior: NoBehavior(),
+                child: SingleChildScrollView(
+                  physics: const ScrollPhysics(),
+                  child: StatefulBuilder(
+                    builder: ((context, setState) {
+                      return spacesecond(context, str);
+                    }),
+                  ),
                 ),
-                child: spacesecond(context, str),
-              )),
-        );
+              ),
+            ));
       }).whenComplete(() {});
 }
 
@@ -403,23 +415,23 @@ addmylink(
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return Container(
-          margin: const EdgeInsets.only(
-              left: 10, right: 10, bottom: kBottomNavigationBarHeight),
-          child: Padding(
-              padding: MediaQuery.of(context).viewInsets,
-              child: Container(
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                      )),
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
-                  ),
+        return Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: Container(
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  )),
+              margin: const EdgeInsets.only(
+                  left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+              child: ScrollConfiguration(
+                behavior: NoBehavior(),
+                child: SingleChildScrollView(
+                  physics: const ScrollPhysics(),
                   child: StatefulBuilder(
                     builder: ((context, setState) {
                       return GestureDetector(
@@ -439,8 +451,10 @@ addmylink(
                             indexcnt),
                       );
                     }),
-                  ))),
-        );
+                  ),
+                ),
+              ),
+            ));
       }).whenComplete(() {});
 }
 
@@ -793,32 +807,38 @@ SetChangeLink(
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return GetBuilder<memosetting>(
-            builder: (_) => Padding(
-                padding: MediaQuery.of(context).viewInsets,
-                child: Container(
-                  margin: const EdgeInsets.only(
-                      left: 10, right: 10, bottom: kBottomNavigationBarHeight),
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                      )),
-                  child: Stack(
-                    children: [
-                      GestureDetector(
-                          onTap: () {
-                            searchNode.unfocus();
-                          },
-                          child: SizedBox(
-                              child: SetchangeLink(
-                                  context, controller, searchNode, link))),
-                    ],
+        return Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: Container(
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  )),
+              margin: const EdgeInsets.only(
+                  left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+              child: ScrollConfiguration(
+                behavior: NoBehavior(),
+                child: SingleChildScrollView(
+                  physics: const ScrollPhysics(),
+                  child: StatefulBuilder(
+                    builder: ((context, setState) {
+                      return GetBuilder<memosetting>(
+                          builder: (_) => GestureDetector(
+                              onTap: () {
+                                searchNode.unfocus();
+                              },
+                              child: SizedBox(
+                                  child: SetchangeLink(
+                                      context, controller, searchNode, link))));
+                    }),
                   ),
-                )));
+                ),
+              ),
+            ));
       }).whenComplete(() async {
     final linkspaceset = Get.put(linkspacesetting());
     if (linkspaceset.iscompleted) {

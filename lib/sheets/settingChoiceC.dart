@@ -15,6 +15,7 @@ import '../Tool/Getx/calendarsetting.dart';
 import '../Tool/Getx/memosetting.dart';
 import '../Tool/Getx/uisetting.dart';
 import '../Tool/Loader.dart';
+import '../Tool/NoBehavior.dart';
 import '../Tool/TextSize.dart';
 import '../UI/Home/Widgets/CreateCalandmemo.dart';
 
@@ -49,52 +50,62 @@ settingChoiceCal(
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        var controll_memo = Get.put(memosetting());
-        return GetBuilder<memosetting>(
-            builder: (_) => Padding(
-                padding: MediaQuery.of(context).viewInsets,
-                child: Container(
-                  margin: const EdgeInsets.all(10),
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                      )),
-                  child: Stack(
-                    children: [
-                      GestureDetector(
-                          onTap: () {
-                            searchNode.unfocus();
-                          },
-                          child: SizedBox(
-                            child: SheetPageC(
-                                context,
-                                controller,
-                                searchNode,
-                                doc,
-                                doc_type,
-                                doc_color,
-                                doc_name,
-                                doc_made_user,
-                                finallist,
-                                doc_share,
-                                secondname,
-                                fToast),
-                          )),
-                      uisetting().loading == true
-                          ? const Loader_sheets(
-                              wherein: 'cal',
-                              height: 315,
-                            )
-                          : SizedBox(
-                              height: 315,
-                            ),
-                    ],
+        return Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: Container(
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  )),
+              margin: const EdgeInsets.only(
+                  left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+              child: ScrollConfiguration(
+                behavior: NoBehavior(),
+                child: SingleChildScrollView(
+                  physics: const ScrollPhysics(),
+                  child: StatefulBuilder(
+                    builder: ((context, setState) {
+                      return GetBuilder<memosetting>(
+                          builder: (_) => Stack(
+                                children: [
+                                  GestureDetector(
+                                      onTap: () {
+                                        searchNode.unfocus();
+                                      },
+                                      child: SizedBox(
+                                        child: SheetPageC(
+                                            context,
+                                            controller,
+                                            searchNode,
+                                            doc,
+                                            doc_type,
+                                            doc_color,
+                                            doc_name,
+                                            doc_made_user,
+                                            finallist,
+                                            doc_share,
+                                            secondname,
+                                            fToast),
+                                      )),
+                                  uisetting().loading == true
+                                      ? const Loader_sheets(
+                                          wherein: 'cal',
+                                          height: 315,
+                                        )
+                                      : SizedBox(
+                                          height: 315,
+                                        ),
+                                ],
+                              ));
+                    }),
                   ),
-                )));
+                ),
+              ),
+            ));
       }).whenComplete(() {
     controller.clear();
   });

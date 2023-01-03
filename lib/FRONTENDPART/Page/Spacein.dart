@@ -82,9 +82,9 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
         builder: (_) => Scaffold(
             bottomNavigationBar: ADSHOW(),
             backgroundColor: draw.backgroundcolor,
-            floatingActionButton: widget.type == 1
-                ? null
-                : Speeddialspace(context, widget.id, widget.type),
+            floatingActionButton: widget.type == 0
+                ? Speeddialspace(context, widget.id, widget.type)
+                : null,
             body: SafeArea(
                 child: GetBuilder<linkspacesetting>(
               builder: (_) => WillPopScope(
@@ -208,15 +208,25 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
                                       );
                                     }
                                   }))
-                              : GetBuilder<uisetting>(
-                                  builder: (_) => AppBarCustom(
-                                    title: widget.spacename,
-                                    righticon: true,
-                                    doubleicon: false,
-                                    iconname: Icons.download,
-                                    mainid: widget.id,
-                                  ),
-                                ),
+                              : (widget.type == 0
+                                  ? GetBuilder<uisetting>(
+                                      builder: (_) => AppBarCustom(
+                                        title: widget.spacename,
+                                        righticon: true,
+                                        doubleicon: false,
+                                        iconname: Icons.download,
+                                        mainid: widget.id,
+                                      ),
+                                    )
+                                  : GetBuilder<uisetting>(
+                                      builder: (_) => AppBarCustom(
+                                        title: widget.spacename,
+                                        righticon: false,
+                                        doubleicon: false,
+                                        iconname: Icons.download,
+                                        mainid: widget.id,
+                                      ),
+                                    )),
                           isinit == true
                               ? const SizedBox(
                                   height: 0,

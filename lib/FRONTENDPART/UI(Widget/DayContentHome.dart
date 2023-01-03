@@ -606,7 +606,9 @@ TimeLineView(id) {
                           })
                       : Container(
                           alignment: Alignment.center,
-                          height: getHeight(PRFlex) - 70,
+                          height: getHeight(PRFlex) - 70 > 0
+                              ? getHeight(PRFlex) - 70
+                              : -getHeight(PRFlex) + 70,
                           child: Text(
                             '기록된 일정이 없네요...',
                             style: TextStyle(

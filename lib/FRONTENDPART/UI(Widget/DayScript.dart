@@ -1,24 +1,19 @@
 // ignore_for_file: prefer_final_fields, non_constant_identifier_names
 
+import 'package:clickbyme/BACKENDPART/FIREBASE/CalendarVP.dart';
 import 'package:clickbyme/Enums/Variables.dart';
-import 'package:clickbyme/LocalNotiPlatform/NotificationApi.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Home/Widgets/MemoFocusedHolder.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import '../../../Enums/Event.dart';
-import '../../../Enums/MemoList.dart';
 import '../../../FRONTENDPART/Route/subuiroute.dart';
 import '../../../Tool/AndroidIOS.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/ContainerDesign.dart';
-import '../../../Tool/FlushbarStyle.dart';
 import '../../../Tool/Getx/PeopleAdd.dart';
 import '../../../Tool/Getx/calendarsetting.dart';
 import '../../../Tool/Getx/memosetting.dart';
@@ -50,52 +45,17 @@ class DayScript extends StatefulWidget {
 
 class _DayScriptState extends State<DayScript> {
   //공통변수
-  bool isresponsible = false;
-  final imagePicker = ImagePicker();
   List<FocusNode> focusnodelist =
-      List<FocusNode>.generate(5, ((index) => FocusNode()));
+      List<FocusNode>.generate(7, ((index) => FocusNode()));
   late List<TextEditingController> texteditingcontrollerlist;
   final draw = Get.put(navibool());
   final cal_share_person = Get.put(PeopleAdd());
   final controll_cal = Get.put(calendarsetting());
   final controll_memo = Get.put(memosetting());
   final scollection = Get.put(selectcollection());
-
-  //캘린더변수
-  late Map<DateTime, List<Event>> _events;
-  late List finallist;
-  String selectedValue = '선택없음';
-  bool isChecked_pushalarm = false;
-  int differ_date = 0;
-  List differ_list = [];
-  List<bool> alarmtypes = [false, false];
-  var isChecked_pushalarmwhat = 0;
-  String hour = '';
-  String minute = '';
-  final setalarmhourNode = FocusNode();
-  final setalarmminuteNode = FocusNode();
-  List valueid = [];
-
   //메모변수
-  int _currentValue = 1;
   List<TextEditingController> controllers = List.empty(growable: true);
-  List savepicturelist = [];
   List<FocusNode> nodes = [];
-  List<bool> checkbottoms = [
-    false,
-    false,
-    false,
-  ];
-  List<bool> checkdayyang = [
-    true,
-    false,
-  ];
-  bool ischeckedtohideminus = false;
-  List<MemoList> checklisttexts = [];
-  Color _color = Colors.white;
-  Color _colorfont = Colors.black;
-  List<int> lunar = [];
-  List<int> solar = [];
 
   @override
   void didChangeDependencies() {
@@ -119,24 +79,14 @@ class _DayScriptState extends State<DayScript> {
       }
     }));
     selectedDay = controll_cal.selectedDay;
-    controll_cal.hour1 = '99';
-    controll_cal.minute1 = '99';
-    controll_cal.repeatwhile = 'no';
-    controll_cal.repeatdate = 0;
     controll_memo.imagelist.clear();
     Hive.box('user_setting')
         .put('alarm_cal_hour_${cal_share_person.secondname}', '99');
     Hive.box('user_setting')
         .put('alarm_cal_minute_${cal_share_person.secondname}', '99');
     Hive.box('user_setting').put('typecolorcalendar', null);
-    Hive.box('user_setting').put('coloreachmemo', Colors.white.value.toInt());
-    controll_memo.color = Color(Hive.box('user_setting').get('coloreachmemo'));
-    Hive.box('user_setting')
-        .put('coloreachmemofont', Colors.black.value.toInt());
-    controll_memo.colorfont =
-        Color(Hive.box('user_setting').get('coloreachmemofont'));
-    _color = controll_memo.color;
-    _colorfont = controll_memo.colorfont;
+    color = controll_memo.color;
+    colorfont = controll_memo.colorfont;
     checklisttexts.clear();
     scollection.controllersall.clear();
     scollection.memolistin.clear();
@@ -145,694 +95,10 @@ class _DayScriptState extends State<DayScript> {
     Hive.box('user_setting').put('share_cal_person', '');
     cal_share_person.people = [];
     finallist = cal_share_person.people;
-    _events = {};
+    events = {};
     ischeckedtohideminus = controll_memo.ischeckedtohideminus;
     scollection.collection = '';
     selectedValue = Hive.box('user_setting').get('alarming_time') ?? '5분 전';
-  }
-
-  void autosavelogic() {
-    setState(() {
-      uisetting().setloading(true);
-    });
-    var firsttxt = '0' +
-        texteditingcontrollerlist[1].text +
-        ' - 0' +
-        texteditingcontrollerlist[2].text;
-    var secondtxt = '0' +
-        texteditingcontrollerlist[1].text +
-        ' - ' +
-        texteditingcontrollerlist[2].text;
-    var thirdtxt = texteditingcontrollerlist[1].text +
-        ' - 0' +
-        texteditingcontrollerlist[2].text;
-    var forthtxt = texteditingcontrollerlist[1].text +
-        ' - ' +
-        texteditingcontrollerlist[2].text;
-    if (texteditingcontrollerlist[0].text.isNotEmpty) {
-      if (widget.position == 'cal') {
-        controll_cal.selectedDay != controll_cal.selectedDay
-            ? differ_date = int.parse(controll_cal.selectedDay
-                .difference(DateTime.parse(controll_cal.selectedDay.toString()))
-                .inDays
-                .toString())
-            : (controll_cal.repeatwhile != 'no'
-                ? differ_date = controll_cal.repeatdate
-                : differ_date = 0);
-        if (differ_date == 0) {
-        } else {
-          for (int i = 0; i <= differ_date; i++) {
-            if (differ_date == 0) {
-            } else {
-              controll_cal.selectedDay != controll_cal.selectedDay
-                  ? differ_list.add(DateTime(
-                      controll_cal.selectedDay.year,
-                      controll_cal.selectedDay.month,
-                      controll_cal.selectedDay.day + i))
-                  : (controll_cal.repeatwhile == '주'
-                      ? differ_list.add(DateTime(
-                          controll_cal.selectedDay.year,
-                          controll_cal.selectedDay.month,
-                          controll_cal.selectedDay.day + 7 * i))
-                      : (controll_cal.repeatwhile == '월'
-                          ? differ_list.add(DateTime(
-                              controll_cal.selectedDay.year,
-                              controll_cal.selectedDay.month + i,
-                              controll_cal.selectedDay.day))
-                          : differ_list.add(DateTime(
-                              controll_cal.selectedDay.year + i,
-                              controll_cal.selectedDay.month,
-                              controll_cal.selectedDay.day))));
-            }
-          }
-        }
-        firestore.collection('AppNoticeByUsers').add({
-          'title': '[' +
-              controll_cal.calname +
-              '] 캘린더의 일정 ${texteditingcontrollerlist[0].text}이(가) 추가되었습니다.',
-          'date': DateFormat('yyyy-MM-dd hh:mm')
-                  .parse(DateTime.now().toString())
-                  .toString()
-                  .split(' ')[0] +
-              ' ' +
-              DateFormat('yyyy-MM-dd hh:mm')
-                  .parse(DateTime.now().toString())
-                  .toString()
-                  .split(' ')[1]
-                  .split(':')[0] +
-              ':' +
-              DateFormat('yyyy-MM-dd hh:mm')
-                  .parse(DateTime.now().toString())
-                  .toString()
-                  .split(' ')[1]
-                  .split(':')[1],
-          'username': name,
-          'sharename': controll_cal.share,
-          'read': 'no',
-        }).whenComplete(() async {
-          if (differ_list.isNotEmpty) {
-            if (isChecked_pushalarm) {
-              NotificationApi.showNotification(
-                title: '알람설정된 일정 : ' + texteditingcontrollerlist[0].text,
-                body: texteditingcontrollerlist[1].text.split(':')[0].length ==
-                        1
-                    ? (texteditingcontrollerlist[2].text.split(':')[0].length ==
-                            1
-                        ? '예정된 시각 : ' + firsttxt
-                        : '예정된 시각 : ' + secondtxt)
-                    : (texteditingcontrollerlist[2].text.split(':')[0].length ==
-                            1
-                        ? '예정된 시각 : ' + thirdtxt
-                        : '예정된 시각 : ' + forthtxt),
-              );
-            }
-            setState(() {
-              uisetting().setloading(false);
-            });
-            Snack.snackbars(
-                context: context,
-                title: '저장완료함',
-                backgroundcolor: Colors.green,
-                bordercolor: draw.backgroundcolor);
-            Future.delayed(const Duration(seconds: 1), () {
-              Get.back();
-            });
-            if (controll_cal.repeatwhile != 'no') {
-              code = String.fromCharCodes(Iterable.generate(
-                  5, (_) => chars.codeUnitAt(rnd.nextInt(chars.length))));
-            }
-            for (int h = 0; h < differ_list.length; h++) {
-              await firestore.collection('CalendarDataBase').add({
-                'code': code,
-                'whenrepeat': controll_cal.repeatwhile,
-                'whattimecnt': controll_cal.repeatdate,
-                'Daytodo': texteditingcontrollerlist[0].text,
-                'Alarm': isChecked_pushalarm == true
-                    ? Hive.box('user_setting').get('alarming_time')
-                    : '설정off',
-                'Timestart': texteditingcontrollerlist[1].text == '하루종일 일정'
-                    ? texteditingcontrollerlist[1].text + '으로 기록'
-                    : (texteditingcontrollerlist[1].text.split(':')[0].length ==
-                            1
-                        ? (texteditingcontrollerlist[1]
-                                    .text
-                                    .split(':')[1]
-                                    .length ==
-                                1
-                            ? '0' + texteditingcontrollerlist[1].text + '0'
-                            : '0' + texteditingcontrollerlist[1].text)
-                        : (texteditingcontrollerlist[1]
-                                    .text
-                                    .split(':')[1]
-                                    .length ==
-                                1
-                            ? texteditingcontrollerlist[1].text + '0'
-                            : texteditingcontrollerlist[1].text)),
-                'Timefinish': texteditingcontrollerlist[2].text == '하루종일 일정'
-                    ? texteditingcontrollerlist[2].text + '으로 기록'
-                    : (texteditingcontrollerlist[2].text.split(':')[0].length ==
-                            1
-                        ? (texteditingcontrollerlist[2]
-                                    .text
-                                    .split(':')[1]
-                                    .length ==
-                                1
-                            ? '0' + texteditingcontrollerlist[2].text + '0'
-                            : '0' + texteditingcontrollerlist[2].text)
-                        : (texteditingcontrollerlist[2]
-                                    .text
-                                    .split(':')[1]
-                                    .length ==
-                                1
-                            ? texteditingcontrollerlist[2].text + '0'
-                            : texteditingcontrollerlist[2].text)),
-                'Shares': controll_cal.share,
-                'OriginalUser': usercode,
-                'calname': widget.id,
-                'summary': texteditingcontrollerlist[4].text,
-                'Date': DateFormat('yyyy-MM-dd')
-                        .parse(differ_list[h].toString())
-                        .toString()
-                        .split(' ')[0] +
-                    '일',
-              }).then((value) {
-                firestore
-                    .collection('CalendarDataBase')
-                    .doc(value.id)
-                    .collection('AlarmTable')
-                    .doc(cal_share_person.secondname)
-                    .set({
-                  'alarmtype': alarmtypes,
-                  'alarmhour': controll_cal.hour1,
-                  'alarmminute': controll_cal.minute1,
-                  'alarmmake': isChecked_pushalarm,
-                  'calcode': value.id
-                });
-                for (int k = 0; k < controll_cal.share.length; k++) {
-                  if (controll_cal.share[k] != cal_share_person.secondname) {
-                    firestore
-                        .collection('CalendarDataBase')
-                        .doc(value.id)
-                        .collection('AlarmTable')
-                        .doc(controll_cal.share[k])
-                        .get()
-                        .then((value1) {
-                      if (value1.exists) {
-                      } else {
-                        firestore
-                            .collection('CalendarDataBase')
-                            .doc(value.id)
-                            .collection('AlarmTable')
-                            .doc(controll_cal.share[k])
-                            .set({
-                          'alarmtype': alarmtypes,
-                          'alarmhour': '99',
-                          'alarmminute': '99',
-                          'alarmmake': false,
-                          'calcode': value.id
-                        }, SetOptions(merge: true));
-                      }
-                    });
-                  }
-                }
-                if (isChecked_pushalarm) {
-                  if (alarmtypes[0] == true) {
-                    NotificationApi.showScheduledNotification(
-                        id: int.parse(differ_list[h]
-                                    .toString()
-                                    .split(' ')[0]
-                                    .toString()
-                                    .split('-')[0] +
-                                differ_list[h]
-                                    .toString()
-                                    .split(' ')[0]
-                                    .toString()
-                                    .split('-')[1]) +
-                            int.parse(value.id.hashCode.toString()) +
-                            int.parse(cal_share_person.secondname.hashCode
-                                .toString()),
-                        title: texteditingcontrollerlist[0].text + '일정이 다가옵니다',
-                        body: texteditingcontrollerlist[1]
-                                    .text
-                                    .split(':')[0]
-                                    .length ==
-                                1
-                            ? (texteditingcontrollerlist[2]
-                                        .text
-                                        .split(':')[0]
-                                        .length ==
-                                    1
-                                ? '예정된 시각 : ' + firsttxt
-                                : '예정된 시각 : ' + secondtxt)
-                            : (texteditingcontrollerlist[2]
-                                        .text
-                                        .split(':')[0]
-                                        .length ==
-                                    1
-                                ? '예정된 시각 : ' + thirdtxt
-                                : '예정된 시각 : ' + forthtxt),
-                        payload: widget.id,
-                        scheduledate: DateTime.utc(
-                          int.parse(differ_list[h]
-                              .toString()
-                              .split(' ')[0]
-                              .toString()
-                              .substring(0, 4)),
-                          int.parse(differ_list[h]
-                              .toString()
-                              .split(' ')[0]
-                              .toString()
-                              .substring(5, 7)),
-                          int.parse(differ_list[h]
-                                  .toString()
-                                  .split(' ')[0]
-                                  .toString()
-                                  .substring(8, 10)) -
-                              1,
-                          int.parse(controll_cal.hour1),
-                          int.parse(controll_cal.minute1),
-                        ));
-                  } else {
-                    NotificationApi.showScheduledNotification(
-                        id: int.parse(differ_list[h]
-                                    .toString()
-                                    .split(' ')[0]
-                                    .toString()
-                                    .split('-')[0] +
-                                differ_list[h]
-                                    .toString()
-                                    .split(' ')[0]
-                                    .toString()
-                                    .split('-')[1]) +
-                            int.parse(value.id.hashCode.toString()) +
-                            int.parse(cal_share_person.secondname.hashCode
-                                .toString()),
-                        title: texteditingcontrollerlist[0].text + '일정이 다가옵니다',
-                        body: texteditingcontrollerlist[1]
-                                    .text
-                                    .split(':')[0]
-                                    .length ==
-                                1
-                            ? (texteditingcontrollerlist[2]
-                                        .text
-                                        .split(':')[0]
-                                        .length ==
-                                    1
-                                ? '예정된 시각 : ' + firsttxt
-                                : '예정된 시각 : ' + secondtxt)
-                            : (texteditingcontrollerlist[2]
-                                        .text
-                                        .split(':')[0]
-                                        .length ==
-                                    1
-                                ? '예정된 시각 : ' + thirdtxt
-                                : '예정된 시각 : ' + forthtxt),
-                        payload: widget.id,
-                        scheduledate: DateTime.utc(
-                          int.parse(differ_list[h]
-                              .toString()
-                              .split(' ')[0]
-                              .toString()
-                              .substring(0, 4)),
-                          int.parse(differ_list[h]
-                              .toString()
-                              .split(' ')[0]
-                              .toString()
-                              .substring(5, 7)),
-                          int.parse(differ_list[h]
-                              .toString()
-                              .split(' ')[0]
-                              .toString()
-                              .substring(8, 10)),
-                          int.parse(controll_cal.hour1),
-                          int.parse(controll_cal.minute1),
-                        ));
-                  }
-                }
-              });
-            }
-          } else {
-            await firestore.collection('CalendarDataBase').add({
-              'code': '',
-              'whenrepeat': 'no',
-              'whattimecnt': 0,
-              'Daytodo': texteditingcontrollerlist[0].text,
-              'Alarm': isChecked_pushalarm == true
-                  ? Hive.box('user_setting').get('alarming_time')
-                  : '설정off',
-              'Timestart': texteditingcontrollerlist[1].text == '하루종일 일정'
-                  ? texteditingcontrollerlist[1].text + '으로 기록'
-                  : (texteditingcontrollerlist[1].text.split(':')[0].length == 1
-                      ? (texteditingcontrollerlist[1]
-                                  .text
-                                  .split(':')[1]
-                                  .length ==
-                              1
-                          ? '0' + texteditingcontrollerlist[1].text + '0'
-                          : '0' + texteditingcontrollerlist[1].text)
-                      : (texteditingcontrollerlist[1]
-                                  .text
-                                  .split(':')[1]
-                                  .length ==
-                              1
-                          ? texteditingcontrollerlist[1].text + '0'
-                          : texteditingcontrollerlist[1].text)),
-              'Timefinish': texteditingcontrollerlist[2].text == '하루종일 일정'
-                  ? texteditingcontrollerlist[2].text + '으로 기록'
-                  : (texteditingcontrollerlist[2].text.split(':')[0].length == 1
-                      ? (texteditingcontrollerlist[2]
-                                  .text
-                                  .split(':')[1]
-                                  .length ==
-                              1
-                          ? '0' + texteditingcontrollerlist[2].text + '0'
-                          : '0' + texteditingcontrollerlist[2].text)
-                      : (texteditingcontrollerlist[2]
-                                  .text
-                                  .split(':')[1]
-                                  .length ==
-                              1
-                          ? texteditingcontrollerlist[2].text + '0'
-                          : texteditingcontrollerlist[2].text)),
-              'Shares': controll_cal.share,
-              'OriginalUser': usercode,
-              'calname': widget.id,
-              'summary': texteditingcontrollerlist[4].text,
-              'Date': DateFormat('yyyy-MM-dd')
-                      .parse(controll_cal.selectedDay.toString())
-                      .toString()
-                      .split(' ')[0] +
-                  '일',
-            });
-            setState(() {
-              uisetting().setloading(false);
-            });
-            Snack.snackbars(
-                context: context,
-                title: '저장완료함',
-                backgroundcolor: Colors.green,
-                bordercolor: draw.backgroundcolor);
-            Future.delayed(const Duration(seconds: 1), () {
-              Get.back();
-            });
-            firestore
-                .collection('CalendarDataBase')
-                .where('calname', isEqualTo: widget.id)
-                .where('Daytodo', isEqualTo: texteditingcontrollerlist[0].text)
-                .get()
-                .then((value) {
-              for (int i = 0; i < value.docs.length; i++) {
-                valueid.add(value.docs[i].id);
-                firestore
-                    .collection('CalendarDataBase')
-                    .doc(valueid[i])
-                    .collection('AlarmTable')
-                    .doc(cal_share_person.secondname)
-                    .set({
-                  'alarmtype': alarmtypes,
-                  'alarmhour': controll_cal.hour1,
-                  'alarmminute': controll_cal.minute1,
-                  'alarmmake': isChecked_pushalarm,
-                  'calcode': valueid[i]
-                });
-              }
-
-              for (int j = 0; j < valueid.length; j++) {
-                for (int k = 0; k < controll_cal.share.length; k++) {
-                  if (controll_cal.share[k] != cal_share_person.secondname) {
-                    firestore
-                        .collection('CalendarDataBase')
-                        .doc(valueid[j])
-                        .collection('AlarmTable')
-                        .doc(controll_cal.share[k])
-                        .get()
-                        .then((value) {
-                      if (value.exists) {
-                      } else {
-                        firestore
-                            .collection('CalendarDataBase')
-                            .doc(valueid[j])
-                            .collection('AlarmTable')
-                            .doc(controll_cal.share[k])
-                            .set({
-                          'alarmtype': alarmtypes,
-                          'alarmhour': '99',
-                          'alarmminute': '99',
-                          'alarmmake': false,
-                          'calcode': valueid[j]
-                        }, SetOptions(merge: true));
-                      }
-                    });
-                  }
-                }
-                if (isChecked_pushalarm == true) {
-                  if (alarmtypes[0] == true) {
-                    NotificationApi.showNotification(
-                      title: '알람설정된 일정 : ' + texteditingcontrollerlist[1].text,
-                      body: texteditingcontrollerlist[1]
-                                  .text
-                                  .split(':')[0]
-                                  .length ==
-                              1
-                          ? (texteditingcontrollerlist[2]
-                                      .text
-                                      .split(':')[0]
-                                      .length ==
-                                  1
-                              ? '예정된 시각 : ' + firsttxt
-                              : '예정된 시각 : ' + secondtxt)
-                          : (texteditingcontrollerlist[2]
-                                      .text
-                                      .split(':')[0]
-                                      .length ==
-                                  1
-                              ? '예정된 시각 : ' + thirdtxt
-                              : '예정된 시각 : ' + forthtxt),
-                    );
-                    NotificationApi.showScheduledNotification(
-                        id: int.parse(controll_cal.selectedDay
-                                .toString()
-                                .split(' ')[0]
-                                .split('-')[0]) +
-                            int.parse(controll_cal.selectedDay
-                                .toString()
-                                .split(' ')[0]
-                                .split('-')[1]) +
-                            int.parse(valueid[j].hashCode.toString()) +
-                            int.parse(cal_share_person.secondname.hashCode
-                                .toString()),
-                        title: texteditingcontrollerlist[0].text + '일정이 다가옵니다',
-                        body:
-                            texteditingcontrollerlist[1].text.split(':')[0].length ==
-                                    1
-                                ? (texteditingcontrollerlist[2]
-                                            .text
-                                            .split(':')[0]
-                                            .length ==
-                                        1
-                                    ? '예정된 시각 : ' + firsttxt
-                                    : '예정된 시각 : ' + secondtxt)
-                                : (texteditingcontrollerlist[2]
-                                            .text
-                                            .split(':')[0]
-                                            .length ==
-                                        1
-                                    ? '예정된 시각 : ' + thirdtxt
-                                    : '예정된 시각 : ' + forthtxt),
-                        payload: widget.id,
-                        scheduledate: DateTime.utc(
-                          int.parse(controll_cal.selectedDay
-                              .toString()
-                              .toString()
-                              .split(' ')[0]
-                              .toString()
-                              .substring(0, 4)),
-                          int.parse(controll_cal.selectedDay
-                              .toString()
-                              .toString()
-                              .split(' ')[0]
-                              .toString()
-                              .substring(5, 7)),
-                          int.parse(controll_cal.selectedDay
-                              .toString()
-                              .toString()
-                              .split(' ')[0]
-                              .toString()
-                              .substring(8, 10)),
-                          int.parse(controll_cal.hour1),
-                          int.parse(controll_cal.minute1),
-                        ));
-                  } else {
-                    NotificationApi.showNotification(
-                      title: '알람설정된 일정 : ' + texteditingcontrollerlist[0].text,
-                      body: texteditingcontrollerlist[1]
-                                  .text
-                                  .split(':')[0]
-                                  .length ==
-                              1
-                          ? (texteditingcontrollerlist[2]
-                                      .text
-                                      .split(':')[0]
-                                      .length ==
-                                  1
-                              ? '예정된 시각 : ' + firsttxt
-                              : '예정된 시각 : ' + secondtxt)
-                          : (texteditingcontrollerlist[2]
-                                      .text
-                                      .split(':')[0]
-                                      .length ==
-                                  1
-                              ? '예정된 시각 : ' + thirdtxt
-                              : '예정된 시각 : ' + forthtxt),
-                    );
-                    NotificationApi.showScheduledNotification(
-                        id: int.parse(controll_cal.selectedDay
-                                .toString()
-                                .split(' ')[0]
-                                .split('-')[0]) +
-                            int.parse(controll_cal.selectedDay
-                                .toString()
-                                .split(' ')[0]
-                                .split('-')[1]) +
-                            int.parse(valueid[j].hashCode.toString()) +
-                            int.parse(cal_share_person.secondname.hashCode
-                                .toString()),
-                        title: texteditingcontrollerlist[0].text + '일정이 다가옵니다',
-                        body:
-                            texteditingcontrollerlist[1].text.split(':')[0].length ==
-                                    1
-                                ? (texteditingcontrollerlist[2]
-                                            .text
-                                            .split(':')[0]
-                                            .length ==
-                                        1
-                                    ? '예정된 시각 : ' + firsttxt
-                                    : '예정된 시각 : ' + secondtxt)
-                                : (texteditingcontrollerlist[2]
-                                            .text
-                                            .split(':')[0]
-                                            .length ==
-                                        1
-                                    ? '예정된 시각 : ' + thirdtxt
-                                    : '예정된 시각 : ' + forthtxt),
-                        payload: widget.id,
-                        scheduledate: DateTime.utc(
-                          int.parse(controll_cal.selectedDay
-                              .toString()
-                              .toString()
-                              .split(' ')[0]
-                              .toString()
-                              .substring(0, 4)),
-                          int.parse(controll_cal.selectedDay
-                              .toString()
-                              .toString()
-                              .split(' ')[0]
-                              .toString()
-                              .substring(5, 7)),
-                          int.parse(controll_cal.selectedDay
-                              .toString()
-                              .toString()
-                              .split(' ')[0]
-                              .toString()
-                              .substring(8, 10)),
-                          int.parse(controll_cal.hour1),
-                          int.parse(controll_cal.minute1),
-                        ));
-                  }
-                }
-              }
-            });
-          }
-        });
-      } else {
-        firestore.collection('AppNoticeByUsers').add({
-          'title': '메모 ${texteditingcontrollerlist[0].text}이(가) 추가되었습니다.',
-          'date': DateFormat('yyyy-MM-dd hh:mm')
-                  .parse(DateTime.now().toString())
-                  .toString()
-                  .split(' ')[0] +
-              ' ' +
-              DateFormat('yyyy-MM-dd hh:mm')
-                  .parse(DateTime.now().toString())
-                  .toString()
-                  .split(' ')[1]
-                  .split(':')[0] +
-              ':' +
-              DateFormat('yyyy-MM-dd hh:mm')
-                  .parse(DateTime.now().toString())
-                  .toString()
-                  .split(' ')[1]
-                  .split(':')[1],
-          'username': name,
-          'sharename': controll_cal.share,
-          'read': 'no',
-        }).whenComplete(() {
-          for (int i = 0; i < scollection.memolistin.length; i++) {
-            checklisttexts.add(MemoList(
-                memocontent: scollection.memolistcontentin[i],
-                contentindex: scollection.memolistin[i]));
-          }
-          firestore.collection('MemoDataBase').doc().set({
-            'memoTitle': texteditingcontrollerlist[0].text,
-            'Collection':
-                scollection.collection == '' || scollection.collection == null
-                    ? null
-                    : scollection.collection,
-            'memolist': checklisttexts.map((e) => e.memocontent).toList(),
-            'memoindex': checklisttexts.map((e) => e.contentindex).toList(),
-            'OriginalUser': usercode,
-            'alarmok': false,
-            'alarmtime': '99:99',
-            'color': Hive.box('user_setting').get('coloreachmemo') ??
-                _color.value.toInt(),
-            'colorfont': Hive.box('user_setting').get('coloreachmemofont') ??
-                _colorfont.value.toInt(),
-            'Date': DateFormat('yyyy-MM-dd')
-                    .parse(controll_cal.selectedDay.toString())
-                    .toString()
-                    .split(' ')[0] +
-                '일',
-            'homesave': false,
-            'security': false,
-            'photoUrl':
-                controll_memo.imagelist.isEmpty ? [] : controll_memo.imagelist,
-            'voicefile':
-                controll_memo.voicelist.isEmpty ? [] : controll_memo.voicelist,
-            'drawingfile': controll_memo.drawinglist.isEmpty
-                ? []
-                : controll_memo.drawinglist,
-            'pinnumber': '0000',
-            'securewith': 999,
-            'EditDate': DateFormat('yyyy-MM-dd')
-                    .parse(controll_cal.selectedDay.toString())
-                    .toString()
-                    .split(' ')[0] +
-                '일',
-          }, SetOptions(merge: true)).whenComplete(() {
-            setState(() {
-              uisetting().setloading(false);
-            });
-            Snack.snackbars(
-                context: context,
-                title: '저장완료함',
-                backgroundcolor: Colors.green,
-                bordercolor: draw.backgroundcolor);
-            Future.delayed(const Duration(seconds: 1), () {
-              Get.back();
-            });
-          });
-        });
-      }
-    } else {
-      setState(() {
-        uisetting().setloading(false);
-      });
-      Snack.snackbars(
-          context: context,
-          title: '제목이 비어있어요!',
-          backgroundcolor: Colors.red,
-          bordercolor: draw.backgroundcolor);
-    }
   }
 
   @override
@@ -912,7 +178,7 @@ class _DayScriptState extends State<DayScript> {
       child: Container(
           decoration: BoxDecoration(
             color: widget.position == 'note'
-                ? (_color == controll_memo.color ? _color : controll_memo.color)
+                ? (color == controll_memo.color ? color : controll_memo.color)
                 : BGColor(),
           ),
           child: Column(
@@ -984,12 +250,12 @@ class _DayScriptState extends State<DayScript> {
                                                 checkbottoms,
                                                 nodes,
                                                 scollection,
-                                                _color,
+                                                color,
                                                 '',
                                                 controll_memo
                                                     .ischeckedtohideminus,
                                                 scollection.controllersall,
-                                                _colorfont,
+                                                colorfont,
                                                 controll_memo.imagelist))
                                         : const SizedBox(),
                                     widget.position == 'note'
@@ -1000,7 +266,11 @@ class _DayScriptState extends State<DayScript> {
                                     ContainerDesign(
                                         child: GestureDetector(
                                           onTap: () async {
-                                            autosavelogic();
+                                            savecalendarsandmemo(
+                                                context,
+                                                texteditingcontrollerlist,
+                                                widget.position,
+                                                widget.id);
                                           },
                                           child: Icon(
                                             Ionicons.checkmark_done,
@@ -1167,7 +437,7 @@ class _DayScriptState extends State<DayScript> {
       child: Container(
           decoration: BoxDecoration(
             color: widget.position == 'note'
-                ? (_color == controll_memo.color ? _color : controll_memo.color)
+                ? (color == controll_memo.color ? color : controll_memo.color)
                 : BGColor(),
           ),
           child: Column(
@@ -1239,12 +509,12 @@ class _DayScriptState extends State<DayScript> {
                                                 checkbottoms,
                                                 nodes,
                                                 scollection,
-                                                _color,
+                                                color,
                                                 '',
                                                 controll_memo
                                                     .ischeckedtohideminus,
                                                 scollection.controllersall,
-                                                _colorfont,
+                                                colorfont,
                                                 controll_memo.imagelist))
                                         : const SizedBox(),
                                     widget.position == 'note'
@@ -1255,7 +525,11 @@ class _DayScriptState extends State<DayScript> {
                                     ContainerDesign(
                                         child: GestureDetector(
                                           onTap: () async {
-                                            autosavelogic();
+                                            savecalendarsandmemo(
+                                                context,
+                                                texteditingcontrollerlist,
+                                                widget.position,
+                                                widget.id);
                                           },
                                           child: Icon(
                                             Ionicons.checkmark_done,
@@ -1617,10 +891,10 @@ class _DayScriptState extends State<DayScript> {
                                               color: controll_memo.color ==
                                                       Colors.black
                                                   ? Colors.white
-                                                  : _colorfont ==
+                                                  : colorfont ==
                                                           controll_memo
                                                               .colorfont
-                                                      ? _colorfont
+                                                      ? colorfont
                                                       : controll_memo.colorfont,
                                             ),
                                           ),
@@ -2299,105 +1573,94 @@ class _DayScriptState extends State<DayScript> {
                   ),
                 ),
               ),
-              controll_cal.selectedDay == controll_cal.focusedDay
-                  ? const SizedBox(
-                      height: 20,
-                    )
-                  : const SizedBox(
-                      height: 0,
-                    ),
-              controll_cal.selectedDay == controll_cal.focusedDay
-                  ? GetBuilder<calendarsetting>(
-                      builder: (_) => SizedBox(
-                            child: ContainerDesign(
-                              color: BGColor(),
-                              child: ListTile(
-                                leading: NeumorphicIcon(
-                                  Icons.sync,
-                                  size: 30,
-                                  style: NeumorphicStyle(
-                                      shape: NeumorphicShape.convex,
-                                      depth: 2,
-                                      surfaceIntensity: 0.5,
-                                      color: widget.position == 'note'
-                                          ? (controll_memo.color == Colors.black
-                                              ? Colors.white
-                                              : Colors.black)
-                                          : TextColor(),
-                                      lightSource: LightSource.topLeft),
-                                ),
-                                trailing: InkWell(
-                                  onTap: () {
-                                    for (int i = 0;
-                                        i < focusnodelist.length;
-                                        i++) {
-                                      if (i == 3) {
-                                      } else {
-                                        focusnodelist[i].unfocus();
-                                      }
-                                    }
-                                    Future.delayed(
-                                        const Duration(milliseconds: 300), () {
-                                      showrepeatdate(
-                                          context,
-                                          texteditingcontrollerlist[3],
-                                          focusnodelist[3]);
-                                    });
-                                  },
-                                  child: Text(
-                                    'Click',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: contentTextsize(),
-                                        color:
-                                            controll_memo.color == Colors.black
-                                                ? Colors.white
-                                                : TextColor()),
-                                  ),
-                                ),
-                                subtitle: controll_cal.repeatwhile == 'no'
-                                    ? Text(
-                                        '설정값 없음',
-                                        style: TextStyle(
-                                            fontSize: contentTextsize(),
-                                            color: widget.position == 'note'
-                                                ? (controll_memo.color ==
-                                                        Colors.black
-                                                    ? Colors.white
-                                                    : Colors.black)
-                                                : TextColor()),
-                                      )
-                                    : Text(
-                                        controll_cal.repeatwhile +
-                                            '간반복 : ' +
-                                            controll_cal.repeatdate.toString() +
-                                            '회 설정',
-                                        style: TextStyle(
-                                            fontSize: contentTextsize(),
-                                            color: widget.position == 'note'
-                                                ? (controll_memo.color ==
-                                                        Colors.black
-                                                    ? Colors.white
-                                                    : Colors.black)
-                                                : TextColor()),
-                                      ),
-                                title: Text(
-                                  '반복작성설정',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTitleTextsize(),
-                                      color: widget.position == 'note'
-                                          ? (controll_memo.color == Colors.black
-                                              ? Colors.white
-                                              : Colors.black)
-                                          : TextColor()),
-                                ),
+              const SizedBox(
+                height: 20,
+              ),
+              GetBuilder<calendarsetting>(
+                  builder: (_) => SizedBox(
+                        child: ContainerDesign(
+                          color: BGColor(),
+                          child: ListTile(
+                            leading: NeumorphicIcon(
+                              Icons.sync,
+                              size: 30,
+                              style: NeumorphicStyle(
+                                  shape: NeumorphicShape.convex,
+                                  depth: 2,
+                                  surfaceIntensity: 0.5,
+                                  color: widget.position == 'note'
+                                      ? (controll_memo.color == Colors.black
+                                          ? Colors.white
+                                          : Colors.black)
+                                      : TextColor(),
+                                  lightSource: LightSource.topLeft),
+                            ),
+                            trailing: InkWell(
+                              onTap: () {
+                                for (int i = 0; i < focusnodelist.length; i++) {
+                                  if (i == 3) {
+                                  } else {
+                                    focusnodelist[i].unfocus();
+                                  }
+                                }
+                                Future.delayed(
+                                    const Duration(milliseconds: 300), () {
+                                  showrepeatdate(
+                                      context,
+                                      texteditingcontrollerlist[3],
+                                      focusnodelist[3]);
+                                });
+                              },
+                              child: Text(
+                                'Click',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTextsize(),
+                                    color: controll_memo.color == Colors.black
+                                        ? Colors.white
+                                        : TextColor()),
                               ),
                             ),
-                          ))
-                  : const SizedBox(
-                      height: 0,
-                    ),
+                            subtitle: controll_cal.repeatwhile == 'no'
+                                ? Text(
+                                    '설정값 없음',
+                                    style: TextStyle(
+                                        fontSize: contentTextsize(),
+                                        color: widget.position == 'note'
+                                            ? (controll_memo.color ==
+                                                    Colors.black
+                                                ? Colors.white
+                                                : Colors.black)
+                                            : TextColor()),
+                                  )
+                                : Text(
+                                    controll_cal.repeatwhile +
+                                        '간반복 : ' +
+                                        controll_cal.repeatdate.toString() +
+                                        '회 설정',
+                                    style: TextStyle(
+                                        fontSize: contentTextsize(),
+                                        color: widget.position == 'note'
+                                            ? (controll_memo.color ==
+                                                    Colors.black
+                                                ? Colors.white
+                                                : Colors.black)
+                                            : TextColor()),
+                                  ),
+                            title: Text(
+                              '반복작성설정',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTitleTextsize(),
+                                  color: widget.position == 'note'
+                                      ? (controll_memo.color == Colors.black
+                                          ? Colors.white
+                                          : Colors.black)
+                                      : TextColor()),
+                            ),
+                          ),
+                        ),
+                      )),
             ],
           );
         }));
@@ -2636,8 +1899,8 @@ class _DayScriptState extends State<DayScript> {
                       minute = '99';
                       pushalarmsettingcal(
                         context,
-                        setalarmhourNode,
-                        setalarmminuteNode,
+                        focusnodelist[5],
+                        focusnodelist[6],
                         hour,
                         minute,
                         '',
@@ -2777,23 +2040,23 @@ addhashtagcollector(
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return Container(
-          margin: const EdgeInsets.only(
-              left: 10, right: 10, bottom: kBottomNavigationBarHeight),
-          child: Padding(
-              padding: MediaQuery.of(context).viewInsets,
-              child: Container(
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                      )),
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
-                  ),
+        return Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: Container(
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  )),
+              margin: const EdgeInsets.only(
+                  left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+              child: ScrollConfiguration(
+                behavior: NoBehavior(),
+                child: SingleChildScrollView(
+                  physics: const ScrollPhysics(),
                   child: StatefulBuilder(
                     builder: ((context, setState) {
                       return GestureDetector(
@@ -2814,8 +2077,10 @@ addhashtagcollector(
                             ],
                           ));
                     }),
-                  ))),
-        );
+                  ),
+                ),
+              ),
+            ));
       }).whenComplete(() {
     textEditingController_add_sheet.clear();
   });

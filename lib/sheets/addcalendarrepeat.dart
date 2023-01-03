@@ -6,6 +6,7 @@ import 'package:package_info/package_info.dart';
 import '../FRONTENDPART/Route/subuiroute.dart';
 import '../Tool/AndroidIOS.dart';
 import '../Tool/Getx/calendarsetting.dart';
+import '../Tool/NoBehavior.dart';
 import '../Tool/RadioCustom.dart';
 import '../Tool/TextSize.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -32,33 +33,38 @@ showrepeatdate(
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return Container(
-          margin: const EdgeInsets.only(
-              left: 10, right: 10, bottom: kBottomNavigationBarHeight),
-          child: Padding(
-              padding: MediaQuery.of(context).viewInsets,
-              child: Container(
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
-                    )),
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom,
-                ),
+        return Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: Container(
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  )),
+              margin: const EdgeInsets.only(
+                  left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+              child: ScrollConfiguration(
+                behavior: NoBehavior(),
                 child: SingleChildScrollView(
-                    physics: const ScrollPhysics(),
-                    child: Column(
-                      children: [
-                        readycontent(context, textEditingController4,
-                            searchNode_forth_section),
-                      ],
-                    )),
-              )),
-        );
+                  physics: const ScrollPhysics(),
+                  child: StatefulBuilder(
+                    builder: ((context, setState) {
+                      return SingleChildScrollView(
+                          physics: const ScrollPhysics(),
+                          child: Column(
+                            children: [
+                              readycontent(context, textEditingController4,
+                                  searchNode_forth_section),
+                            ],
+                          ));
+                    }),
+                  ),
+                ),
+              ),
+            ));
       }).whenComplete(() {});
 }
 

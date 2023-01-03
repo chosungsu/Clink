@@ -42,9 +42,8 @@ setUsers(
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return Container(
-            margin: const EdgeInsets.only(
-                left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+        return Padding(
+            padding: MediaQuery.of(context).viewInsets,
             child: Container(
               decoration: const BoxDecoration(
                   color: Colors.white,
@@ -54,10 +53,19 @@ setUsers(
                     bottomLeft: Radius.circular(20),
                     bottomRight: Radius.circular(20),
                   )),
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom,
+              margin: const EdgeInsets.only(
+                  left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+              child: ScrollConfiguration(
+                behavior: NoBehavior(),
+                child: SingleChildScrollView(
+                  physics: const ScrollPhysics(),
+                  child: StatefulBuilder(
+                    builder: ((context, setState) {
+                      return sheet1(context, node, controller, name);
+                    }),
+                  ),
+                ),
               ),
-              child: sheet1(context, node, controller, name),
             ));
       }).whenComplete(() {});
 }
@@ -335,17 +343,31 @@ DeleteUserVerify(BuildContext context, String name) {
       )),
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return StatefulBuilder(builder: ((context, setState) {
-          return Container(
-            decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                )),
-            child: sheet2(context),
-          );
-        }));
+        return Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: Container(
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  )),
+              margin: const EdgeInsets.only(
+                  left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+              child: ScrollConfiguration(
+                behavior: NoBehavior(),
+                child: SingleChildScrollView(
+                  physics: const ScrollPhysics(),
+                  child: StatefulBuilder(
+                    builder: ((context, setState) {
+                      return sheet2(context);
+                    }),
+                  ),
+                ),
+              ),
+            ));
       });
 }
 
@@ -564,29 +586,37 @@ sheetmultiprofile(
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return Container(
-          margin: const EdgeInsets.only(
-              left: 10, right: 10, bottom: kBottomNavigationBarHeight),
-          child: Padding(
-              padding: MediaQuery.of(context).viewInsets,
-              child: Container(
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
-                    )),
-                child: GestureDetector(
-                    onTap: () {
-                      node.unfocus();
-                    },
-                    child: SingleChildScrollView(
-                        physics: const NeverScrollableScrollPhysics(),
-                        child: sheet3(context, node, controller, name))),
-              )),
-        );
+        return Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: Container(
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  )),
+              margin: const EdgeInsets.only(
+                  left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+              child: ScrollConfiguration(
+                behavior: NoBehavior(),
+                child: SingleChildScrollView(
+                  physics: const ScrollPhysics(),
+                  child: StatefulBuilder(
+                    builder: ((context, setState) {
+                      return GestureDetector(
+                          onTap: () {
+                            node.unfocus();
+                          },
+                          child: SingleChildScrollView(
+                              physics: const NeverScrollableScrollPhysics(),
+                              child: sheet3(context, node, controller, name)));
+                    }),
+                  ),
+                ),
+              ),
+            ));
       }).whenComplete(() {
     controller.text = '';
   });
@@ -1177,28 +1207,33 @@ showreadycontent(
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return Container(
-          margin: const EdgeInsets.only(
-              left: 10, right: 10, bottom: kBottomNavigationBarHeight),
-          child: Padding(
-              padding: MediaQuery.of(context).viewInsets,
-              child: Container(
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
-                    )),
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom,
+        return Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: Container(
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  )),
+              margin: const EdgeInsets.only(
+                  left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+              child: ScrollConfiguration(
+                behavior: NoBehavior(),
+                child: SingleChildScrollView(
+                  physics: const ScrollPhysics(),
+                  child: StatefulBuilder(
+                    builder: ((context, setState) {
+                      return sheet4(
+                        context,
+                      );
+                    }),
+                  ),
                 ),
-                child: sheet4(
-                  context,
-                ),
-              )),
-        );
+              ),
+            ));
       }).whenComplete(() {});
 }
 

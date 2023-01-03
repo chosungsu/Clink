@@ -12,6 +12,7 @@ import '../../Tool/Getx/calendarsetting.dart';
 import '../../Tool/Getx/category.dart';
 import '../../Tool/Getx/linkspacesetting.dart';
 import '../../Tool/Getx/uisetting.dart';
+import '../../UI/Home/firstContentNet/DayNoteHome.dart';
 import '../../sheets/linksettingsheet.dart';
 
 PageViewStreamParent() {
@@ -147,12 +148,21 @@ PageViewStreamChild3(context, id, index, index2) async {
       .get()
       .then(
     (value) {
-      Get.to(
-          () => Spacein(
-              id: linkspaceset.indextreetmp[index][index2].mainid,
-              type: value.get('type'),
-              spacename: linkspaceset.indextreetmp[index][index2].placestr),
-          transition: Transition.downToUp);
+      if (value.get('type') == 2) {
+        Get.to(
+            () => const DayNoteHome(
+                  title: '',
+                  isfromwhere: 'mypagehome',
+                ),
+            transition: Transition.downToUp);
+      } else {
+        Get.to(
+            () => Spacein(
+                id: linkspaceset.indextreetmp[index][index2].mainid,
+                type: value.get('type'),
+                spacename: linkspaceset.indextreetmp[index][index2].placestr),
+            transition: Transition.downToUp);
+      }
     },
   );
 }

@@ -73,7 +73,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
                                   ),
                                 ),
                               );
-                            } else if (element.containsValue(Ionicons.search)) {
+                            } else if (element
+                                .containsValue(Ionicons.ios_search_outline)) {
                               draw.setclose();
                               Hive.box('user_setting').put('page_index', 1);
                               uiset.setpageindex(

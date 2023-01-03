@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:another_flushbar/flushbar.dart';
 
 import '../Tool/Getx/PeopleAdd.dart';
+import '../Tool/NoBehavior.dart';
 
 addgroupmember(
   BuildContext context,
@@ -34,33 +35,39 @@ addgroupmember(
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return Container(
-          margin: const EdgeInsets.only(
-              left: 10, right: 10, bottom: kBottomNavigationBarHeight),
-          child: Padding(
-              padding: MediaQuery.of(context).viewInsets,
-              child: Container(
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
-                    )),
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom,
+        return Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: Container(
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  )),
+              margin: const EdgeInsets.only(
+                  left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+              child: ScrollConfiguration(
+                behavior: NoBehavior(),
+                child: SingleChildScrollView(
+                  physics: const ScrollPhysics(),
+                  child: StatefulBuilder(
+                    builder: ((context, setState) {
+                      return GestureDetector(
+                          onTap: () {
+                            searchNode.unfocus();
+                          },
+                          child: SingleChildScrollView(
+                            physics: const NeverScrollableScrollPhysics(),
+                            child: SheetPage(
+                                context, searchNode, controller, code),
+                          ));
+                    }),
+                  ),
                 ),
-                child: GestureDetector(
-                    onTap: () {
-                      searchNode.unfocus();
-                    },
-                    child: SingleChildScrollView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      child: SheetPage(context, searchNode, controller, code),
-                    )),
-              )),
-        );
+              ),
+            ));
       }).whenComplete(() {
     controller.clear();
     Hive.box('user_setting').put('user_people', null);

@@ -3,6 +3,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../BACKENDPART/Auth/SecureAuth.dart';
+import '../Tool/NoBehavior.dart';
 import '../Tool/TextSize.dart';
 
 settingsecurityform(
@@ -33,7 +34,6 @@ settingsecurityform(
         return Padding(
             padding: MediaQuery.of(context).viewInsets,
             child: Container(
-              margin: const EdgeInsets.all(10),
               decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -42,10 +42,19 @@ settingsecurityform(
                     bottomLeft: Radius.circular(20),
                     bottomRight: Radius.circular(20),
                   )),
-              child: GestureDetector(
-                onTap: () {},
-                child: SheetSecurity(context, id, doc, doc_pin_number,
-                    doc_what_secure, can_auth),
+              margin: const EdgeInsets.only(
+                  left: 10, right: 10, bottom: kBottomNavigationBarHeight),
+              child: ScrollConfiguration(
+                behavior: NoBehavior(),
+                child: SingleChildScrollView(
+                  physics: const ScrollPhysics(),
+                  child: StatefulBuilder(
+                    builder: ((context, setState) {
+                      return SheetSecurity(context, id, doc, doc_pin_number,
+                          doc_what_secure, can_auth);
+                    }),
+                  ),
+                ),
               ),
             ));
       }).whenComplete(() {});

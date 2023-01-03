@@ -178,7 +178,7 @@ class _mainrouteState extends State<mainroute>
                                         BottomNavigationBarItem(
                                           backgroundColor: BGColor(),
                                           icon: const Icon(
-                                            Ionicons.search,
+                                            Ionicons.ios_search_outline,
                                             size: 25,
                                           ),
                                           label: '검색',
@@ -265,7 +265,7 @@ class _mainrouteState extends State<mainroute>
                                       BottomNavigationBarItem(
                                         backgroundColor: BGColor(),
                                         icon: const Icon(
-                                          Ionicons.search,
+                                          Ionicons.ios_search_outline,
                                           size: 25,
                                         ),
                                         label: '검색',

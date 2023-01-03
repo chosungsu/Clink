@@ -16,7 +16,7 @@ class calendarsetting extends GetxController {
   List sharehomeid = [];
   int sort = Hive.box('user_setting').get('sort_cal_card') ?? 0;
   int repeatdate = 0;
-  String repeatwhile = '주';
+  String repeatwhile = 'no';
   DateTime now = DateTime.now();
   DateTime selectedDay = DateTime.now();
   DateTime focusedDay = DateTime.now();
