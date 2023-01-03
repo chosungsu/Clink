@@ -142,19 +142,31 @@ PageViewRes2(id, snapshot, index) {
 
 PageViewStreamChild3(context, id, index, index2) async {
   final linkspaceset = Get.put(linkspacesetting());
+  var memoname = '';
   await firestore
       .collection('PageView')
       .doc(linkspaceset.indextreetmp[index][index2].uniqueid)
       .get()
       .then(
-    (value) {
+    (value) async {
       if (value.get('type') == 2) {
-        Get.to(
-            () => const DayNoteHome(
-                  title: '',
-                  isfromwhere: 'home',
-                ),
-            transition: Transition.downToUp);
+        await firestore.collection('Pinchannelin').get().then(
+          (value) {
+            final valuespace = value.docs;
+            for (var sp in valuespace) {
+              if (sp.get('uniquecode') ==
+                  linkspaceset.indextreetmp[index][index2].uniqueid) {
+                memoname = sp.get('addname');
+              }
+            }
+            Get.to(
+                () => DayNoteHome(
+                      title: memoname,
+                      isfromwhere: 'home',
+                    ),
+                transition: Transition.downToUp);
+          },
+        );
       } else {
         Get.to(
             () => Spacein(

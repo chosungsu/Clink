@@ -301,7 +301,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           AppBarCustom(
-                            title: 'Memo',
+                            title: widget.title,
                             righticon: true,
                             doubleicon: false,
                             iconname: Ionicons.settings_outline,
