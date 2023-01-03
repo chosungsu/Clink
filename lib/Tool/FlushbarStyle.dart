@@ -3,7 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../UI/Home/firstContentNet/ChooseCalendar.dart';
-import '../UI/Home/firstContentNet/DayNoteHome.dart';
+import '../FRONTENDPART/UI(Widget/DayNoteHome.dart';
 import 'TextSize.dart';
 
 const kPadding = 8.0; // up to you

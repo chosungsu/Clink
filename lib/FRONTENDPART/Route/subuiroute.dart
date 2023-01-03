@@ -47,7 +47,7 @@ void pressed2() {
 GoToMain() {
   //uiset.setmypagelistindex(0);
   Hive.box('user_setting').put('currentmypage', 0);
-  Get.to(() => const mainroute(index: 0), transition: Transition.leftToRight);
+  Get.to(() => const mainroute(index: 0), transition: Transition.fade);
 }
 
 GoToLogin(String s) {

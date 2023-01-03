@@ -12,7 +12,7 @@ import '../../Tool/Getx/calendarsetting.dart';
 import '../../Tool/Getx/category.dart';
 import '../../Tool/Getx/linkspacesetting.dart';
 import '../../Tool/Getx/uisetting.dart';
-import '../../UI/Home/firstContentNet/DayNoteHome.dart';
+import '../../FRONTENDPART/UI(Widget/DayNoteHome.dart';
 import '../../sheets/linksettingsheet.dart';
 
 PageViewStreamParent() {
@@ -152,7 +152,7 @@ PageViewStreamChild3(context, id, index, index2) async {
         Get.to(
             () => const DayNoteHome(
                   title: '',
-                  isfromwhere: 'mypagehome',
+                  isfromwhere: 'home',
                 ),
             transition: Transition.downToUp);
       } else {

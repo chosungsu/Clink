@@ -10,6 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
@@ -18,15 +19,18 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:local_auth/local_auth.dart';
-import '../../../BACKENDPART/Auth/SecureAuth.dart';
-import '../../../FRONTENDPART/Route/subuiroute.dart';
-import '../../../FRONTENDPART/UI(Widget/DayScript.dart';
-import '../../../Tool/Getx/memosetting.dart';
-import '../../../Tool/Getx/selectcollection.dart';
-import '../../../Tool/NoBehavior.dart';
-import '../../../sheets/infoshow.dart';
-import '../Widgets/SortMenuHolder.dart';
-import '../secondContentNet/ClickShowEachNote.dart';
+import '../../BACKENDPART/Auth/SecureAuth.dart';
+import '../../Enums/Variables.dart';
+import '../../Tool/AppBarCustom.dart';
+import '../../Tool/Getx/navibool.dart';
+import '../Route/subuiroute.dart';
+import 'DayScript.dart';
+import '../../Tool/Getx/memosetting.dart';
+import '../../Tool/Getx/selectcollection.dart';
+import '../../Tool/NoBehavior.dart';
+import '../../sheets/infoshow.dart';
+import '../../UI/Home/Widgets/SortMenuHolder.dart';
+import '../../UI/Home/secondContentNet/ClickShowEachNote.dart';
 
 class DayNoteHome extends StatefulWidget {
   const DayNoteHome({Key? key, required this.title, required this.isfromwhere})
@@ -38,13 +42,9 @@ class DayNoteHome extends StatefulWidget {
 }
 
 class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
-  double translateX = 0.0;
-  double translateY = 0.0;
-  double myWidth = 0.0;
   int searchmemo_fromsheet = 0;
   final controll_memo = Get.put(memosetting());
   final scollection = Get.put(selectcollection());
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
   final searchNode = FocusNode();
   final setalarmhourNode = FocusNode();
   final setalarmminuteNode = FocusNode();
@@ -92,6 +92,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
     fToast = FToast();
     fToast.init(context);
     WidgetsBinding.instance.addObserver(this);
+    Hive.box('user_setting').put('page_index', 10);
     Hive.box('user_setting').put('sort_memo_card', 0);
     controll_memo.sort = Hive.box('user_setting').get('sort_memo_card');
     controller = TextEditingController();
@@ -276,225 +277,82 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
 
   UI() {
     double height = MediaQuery.of(context).size.height;
-    return SizedBox(
-      height: height,
-      child: Container(
-          decoration: BoxDecoration(color: BGColor()),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                  height: 80,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 10, right: 10, top: 20, bottom: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Flexible(
-                            fit: FlexFit.tight,
-                            child: Row(
-                              children: [
-                                IconBtn(
-                                    child: IconButton(
-                                        onPressed: () {
-                                          Future.delayed(
-                                              const Duration(seconds: 0), () {
-                                            if (widget.isfromwhere == 'home') {
-                                              GoToMain();
-                                            } else {
-                                              Get.back();
-                                            }
-                                          });
-                                        },
-                                        icon: Container(
-                                          alignment: Alignment.center,
-                                          width: 30,
-                                          height: 30,
-                                          child: NeumorphicIcon(
-                                            Icons.keyboard_arrow_left,
-                                            size: 30,
-                                            style: NeumorphicStyle(
-                                                shape: NeumorphicShape.convex,
-                                                depth: 2,
-                                                surfaceIntensity: 0.5,
-                                                color: TextColor(),
-                                                lightSource:
-                                                    LightSource.topLeft),
-                                          ),
-                                        )),
-                                    color: TextColor()),
-                                SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width - 70,
-                                    child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 10, right: 10),
-                                        child: Row(
-                                          children: [
-                                            Flexible(
-                                              fit: FlexFit.tight,
-                                              child: Text('Memo',
-                                                  style: GoogleFonts.lobster(
-                                                    fontSize: 25,
-                                                    color: TextColor(),
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
-                                            ),
-                                            SortMenuHolder(
-                                                controll_memo.sort, '메모'),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            IconBtn(
-                                                child: IconButton(
-                                                    onPressed: () async {
-                                                      await firestore
-                                                          .collection(
-                                                              'MemoAllAlarm')
-                                                          .doc(usercode)
-                                                          .get()
-                                                          .then(
-                                                        (value) {
-                                                          if (value.exists) {
-                                                            hour = value
-                                                                        .data()![
-                                                                            'alarmtime']
-                                                                        .toString()
-                                                                        .split(':')[
-                                                                            0]
-                                                                        .length ==
-                                                                    1
-                                                                ? '0' +
-                                                                    value
-                                                                        .data()![
-                                                                            'alarmtime']
-                                                                        .toString()
-                                                                        .split(':')[
-                                                                            0]
-                                                                        .toString()
-                                                                : value
-                                                                    .data()![
-                                                                        'alarmtime']
-                                                                    .toString()
-                                                                    .split(
-                                                                        ':')[0]
-                                                                    .toString();
-                                                            minute = value
-                                                                        .data()![
-                                                                            'alarmtime']
-                                                                        .toString()
-                                                                        .split(':')[
-                                                                            1]
-                                                                        .length ==
-                                                                    1
-                                                                ? '0' +
-                                                                    value
-                                                                        .data()![
-                                                                            'alarmtime']
-                                                                        .toString()
-                                                                        .split(':')[
-                                                                            1]
-                                                                        .toString()
-                                                                : value
-                                                                    .data()![
-                                                                        'alarmtime']
-                                                                    .toString()
-                                                                    .split(
-                                                                        ':')[1]
-                                                                    .toString();
-                                                          }
-                                                        },
-                                                      );
-                                                      controll_memo
-                                                          .settimeminute(
-                                                              int.parse(hour),
-                                                              int.parse(minute),
-                                                              '',
-                                                              '');
-                                                      pushalarmsettingmemo(
-                                                          context,
-                                                          setalarmhourNode,
-                                                          setalarmminuteNode,
-                                                          hour,
-                                                          minute,
-                                                          '',
-                                                          '',
-                                                          fToast);
-                                                    },
-                                                    icon: Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      width: 30,
-                                                      height: 30,
-                                                      child: NeumorphicIcon(
-                                                        Icons.settings,
-                                                        size: 30,
-                                                        style: NeumorphicStyle(
-                                                            shape:
-                                                                NeumorphicShape
-                                                                    .convex,
-                                                            depth: 2,
-                                                            surfaceIntensity:
-                                                                0.5,
-                                                            color: TextColor(),
-                                                            lightSource:
-                                                                LightSource
-                                                                    .topLeft),
-                                                      ),
-                                                    )),
-                                                color: TextColor()),
-                                          ],
-                                        ))),
-                              ],
-                            )),
-                      ],
-                    ),
-                  )),
-              ADBox(),
-              Flexible(
-                  fit: FlexFit.tight,
-                  child: SizedBox(
-                    child: ScrollConfiguration(
-                      behavior: NoBehavior(),
-                      child: SingleChildScrollView(
-                          controller: scrollController,
-                          physics: const ScrollPhysics(),
-                          child: StatefulBuilder(
-                              builder: (_, StateSetter setState) {
-                            return Padding(
-                              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  GetBuilder<memosetting>(builder: (_) {
-                                    return controll_memo
-                                                .ischeckedpushmemoalarm ==
-                                            false
-                                        ? Column(
-                                            children: [
-                                              SetRoom(),
-                                              const SizedBox(
-                                                height: 20,
-                                              ),
-                                            ],
-                                          )
-                                        : const SizedBox();
-                                  }),
-                                  listy_My(),
-                                ],
-                              ),
-                            );
-                          })),
-                    ),
-                  )),
-            ],
-          )),
-    );
+    return GetBuilder<navibool>(
+        builder: (_) => AnimatedContainer(
+            transform: Matrix4.translationValues(draw.xoffset, draw.yoffset, 0)
+              ..scale(draw.scalefactor),
+            duration: const Duration(milliseconds: 250),
+            child: GetBuilder<navibool>(
+              builder: (_) => GestureDetector(
+                onTap: () {
+                  draw.drawopen == true
+                      ? setState(() {
+                          draw.drawopen = false;
+                          draw.setclose();
+                          Hive.box('user_setting').put('page_opened', false);
+                        })
+                      : null;
+                },
+                child: SizedBox(
+                  height: height,
+                  child: Container(
+                      color: draw.backgroundcolor,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          AppBarCustom(
+                            title: 'Memo',
+                            righticon: true,
+                            doubleicon: false,
+                            iconname: Ionicons.settings_outline,
+                          ),
+                          GetBuilder<uisetting>(
+                            builder: (_) => Flexible(
+                                fit: FlexFit.tight,
+                                child: SizedBox(
+                                  child: ScrollConfiguration(
+                                      behavior: NoBehavior(),
+                                      child: SingleChildScrollView(
+                                        physics: const ScrollPhysics(),
+                                        child: Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                20, 0, 20, 0),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                const SizedBox(
+                                                  height: 20,
+                                                ),
+                                                GetBuilder<memosetting>(
+                                                    builder: (_) {
+                                                  return controll_memo
+                                                              .ischeckedpushmemoalarm ==
+                                                          false
+                                                      ? Column(
+                                                          children: [
+                                                            SetRoom(),
+                                                            const SizedBox(
+                                                              height: 20,
+                                                            ),
+                                                          ],
+                                                        )
+                                                      : const SizedBox();
+                                                }),
+                                                listy_My(),
+                                              ],
+                                            )),
+                                      )),
+                                )),
+                          ),
+                          ADSHOW(),
+                        ],
+                      )),
+                ),
+              ),
+            )));
   }
 
   ADBox() {
@@ -1324,3 +1182,183 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
     });
   }
 }
+/**
+ * return SizedBox(
+      height: height,
+      child: Container(
+          decoration: BoxDecoration(color: BGColor()),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                  height: 80,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 10, right: 10, top: 20, bottom: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Flexible(
+                            fit: FlexFit.tight,
+                            child: Row(
+                              children: [
+                                IconBtn(
+                                    child: IconButton(
+                                        onPressed: () {
+                                          Future.delayed(
+                                              const Duration(seconds: 0), () {
+                                            if (widget.isfromwhere == 'home') {
+                                              GoToMain();
+                                            } else {
+                                              Get.back();
+                                            }
+                                          });
+                                        },
+                                        icon: Container(
+                                          alignment: Alignment.center,
+                                          width: 30,
+                                          height: 30,
+                                          child: NeumorphicIcon(
+                                            Icons.keyboard_arrow_left,
+                                            size: 30,
+                                            style: NeumorphicStyle(
+                                                shape: NeumorphicShape.convex,
+                                                depth: 2,
+                                                surfaceIntensity: 0.5,
+                                                color: TextColor(),
+                                                lightSource:
+                                                    LightSource.topLeft),
+                                          ),
+                                        )),
+                                    color: TextColor()),
+                                SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width - 70,
+                                    child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 10, right: 10),
+                                        child: Row(
+                                          children: [
+                                            Flexible(
+                                              fit: FlexFit.tight,
+                                              child: Text('Memo',
+                                                  style: GoogleFonts.lobster(
+                                                    fontSize: 25,
+                                                    color: TextColor(),
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
+                                            ),
+                                            SortMenuHolder(
+                                                controll_memo.sort, '메모'),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            IconBtn(
+                                                child: IconButton(
+                                                    onPressed: () async {
+                                                      await firestore
+                                                          .collection(
+                                                              'MemoAllAlarm')
+                                                          .doc(usercode)
+                                                          .get()
+                                                          .then(
+                                                        (value) {
+                                                          if (value.exists) {
+                                                            hour = value
+                                                                        .data()![
+                                                                            'alarmtime']
+                                                                        .toString()
+                                                                        .split(':')[
+                                                                            0]
+                                                                        .length ==
+                                                                    1
+                                                                ? '0' +
+                                                                    value
+                                                                        .data()![
+                                                                            'alarmtime']
+                                                                        .toString()
+                                                                        .split(':')[
+                                                                            0]
+                                                                        .toString()
+                                                                : value
+                                                                    .data()![
+                                                                        'alarmtime']
+                                                                    .toString()
+                                                                    .split(
+                                                                        ':')[0]
+                                                                    .toString();
+                                                            minute = value
+                                                                        .data()![
+                                                                            'alarmtime']
+                                                                        .toString()
+                                                                        .split(':')[
+                                                                            1]
+                                                                        .length ==
+                                                                    1
+                                                                ? '0' +
+                                                                    value
+                                                                        .data()![
+                                                                            'alarmtime']
+                                                                        .toString()
+                                                                        .split(':')[
+                                                                            1]
+                                                                        .toString()
+                                                                : value
+                                                                    .data()![
+                                                                        'alarmtime']
+                                                                    .toString()
+                                                                    .split(
+                                                                        ':')[1]
+                                                                    .toString();
+                                                          }
+                                                        },
+                                                      );
+                                                      controll_memo
+                                                          .settimeminute(
+                                                              int.parse(hour),
+                                                              int.parse(minute),
+                                                              '',
+                                                              '');
+                                                      pushalarmsettingmemo(
+                                                          context,
+                                                          setalarmhourNode,
+                                                          setalarmminuteNode,
+                                                          hour,
+                                                          minute,
+                                                          '',
+                                                          '',
+                                                          fToast);
+                                                    },
+                                                    icon: Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      width: 30,
+                                                      height: 30,
+                                                      child: NeumorphicIcon(
+                                                        Icons.settings,
+                                                        size: 30,
+                                                        style: NeumorphicStyle(
+                                                            shape:
+                                                                NeumorphicShape
+                                                                    .convex,
+                                                            depth: 2,
+                                                            surfaceIntensity:
+                                                                0.5,
+                                                            color: TextColor(),
+                                                            lightSource:
+                                                                LightSource
+                                                                    .topLeft),
+                                                      ),
+                                                    )),
+                                                color: TextColor()),
+                                          ],
+                                        ))),
+                              ],
+                            )),
+                      ],
+                    ),
+                  )),
+            ],
+          )),
+    );
+ */

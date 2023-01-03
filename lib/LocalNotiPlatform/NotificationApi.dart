@@ -7,7 +7,7 @@ import 'package:timezone/timezone.dart' as tz;
 
 import '../FRONTENDPART/Route/subuiroute.dart';
 import '../FRONTENDPART/UI(Widget/DayContentHome.dart';
-import '../UI/Home/firstContentNet/DayNoteHome.dart';
+import '../FRONTENDPART/UI(Widget/DayNoteHome.dart';
 
 class NotificationApi {
   NotificationApi();

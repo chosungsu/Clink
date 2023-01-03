@@ -18,7 +18,7 @@ import '../../Tool/AppBarCustom.dart';
 import '../../Tool/Getx/navibool.dart';
 import '../../Tool/NoBehavior.dart';
 import '../../UI/Home/firstContentNet/ChooseCalendar.dart';
-import '../../UI/Home/firstContentNet/DayNoteHome.dart';
+import '../UI(Widget/DayNoteHome.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 import 'DrawerScreen.dart';
@@ -143,7 +143,7 @@ class _NotiAlarmState extends State<NotiAlarm>
                                   behavior: NoBehavior(),
                                   child: Padding(
                                     padding:
-                                        const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                                        const EdgeInsets.fromLTRB(10, 0, 10, 0),
                                     child: UserNotice(),
                                   ),
                                 ),
@@ -252,92 +252,98 @@ class _NotiAlarmState extends State<NotiAlarm>
                                           ),
                                       transition: Transition.rightToLeft);
                             },
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                ContainerDesign(
-                                  color: readlist[index] == 'no'
-                                      ? draw.backgroundcolor
-                                      : draw.color_textstatus,
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                          height: 100,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width -
-                                              80,
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Flexible(
-                                                  fit: FlexFit.tight,
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        notilist.listad[index]
-                                                            .title,
-                                                        softWrap: true,
-                                                        maxLines: 2,
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            color: readlist[
-                                                                        index] ==
-                                                                    'no'
-                                                                ? draw
-                                                                    .color_textstatus
-                                                                : draw
-                                                                    .backgroundcolor,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize:
-                                                                contentTextsize()),
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      )
-                                                    ],
-                                                  )),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.end,
-                                                children: [
-                                                  Text(
-                                                    notilist.listad[index].date
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                        color: readlist[
-                                                                    index] ==
-                                                                'no'
-                                                            ? draw
-                                                                .color_textstatus
-                                                            : draw
-                                                                .backgroundcolor,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize:
-                                                            contentTextsize()),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          )),
-                                    ],
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const SizedBox(
+                                    height: 10,
                                   ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                )
-                              ],
+                                  ContainerDesign(
+                                    color: readlist[index] == 'no'
+                                        ? draw.backgroundcolor
+                                        : draw.color_textstatus,
+                                    child: Column(
+                                      children: [
+                                        SizedBox(
+                                            height: 100,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width -
+                                                80,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Flexible(
+                                                    fit: FlexFit.tight,
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          notilist.listad[index]
+                                                              .title,
+                                                          softWrap: true,
+                                                          maxLines: 2,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              color: readlist[
+                                                                          index] ==
+                                                                      'no'
+                                                                  ? draw
+                                                                      .color_textstatus
+                                                                  : draw
+                                                                      .backgroundcolor,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize:
+                                                                  contentTextsize()),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        )
+                                                      ],
+                                                    )),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.end,
+                                                  children: [
+                                                    Text(
+                                                      notilist
+                                                          .listad[index].date
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                          color: readlist[
+                                                                      index] ==
+                                                                  'no'
+                                                              ? draw
+                                                                  .color_textstatus
+                                                              : draw
+                                                                  .backgroundcolor,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize:
+                                                              contentTextsize()),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ],
+                                                )
+                                              ],
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  )
+                                ],
+                              ),
                             ));
                       }),
                 );
