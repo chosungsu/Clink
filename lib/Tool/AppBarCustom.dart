@@ -287,8 +287,8 @@ class AppBarCustom extends StatelessWidget {
                                                                 Ionicons
                                                                     .add_outline
                                                             ? (Hive.box('user_setting').get('page_index') == 0
-                                                                ? func4(
-                                                                    context, indexcnt)
+                                                                ? func4_changever(
+                                                                    context)
                                                                 : func6(
                                                                     context,
                                                                     textEditingController,
@@ -297,20 +297,23 @@ class AppBarCustom extends StatelessWidget {
                                                                     '',
                                                                     99,
                                                                     indexcnt))
-                                                            : (iconname ==
-                                                                    AntDesign
-                                                                        .delete
+                                                            : (iconname == AntDesign.delete
                                                                 ? func2(context)
-                                                                : (iconname == Icons.star_border ||
-                                                                        iconname ==
-                                                                            Icons
-                                                                                .star
+                                                                : (iconname == Icons.star_border || iconname == Icons.star
                                                                     ? func7(
-                                                                        uiset.editpagelist[0].title,
-                                                                        uiset.editpagelist[0].email.toString(),
-                                                                        uiset.editpagelist[0].username.toString(),
-                                                                        uiset.editpagelist[0].id.toString())
-                                                                    : (iconname == Icons.person_outline ? (Hive.box('user_info').get('id') == null ? GoToLogin('isnotfirst') : setUsers(context, searchnode, textEditingController, Hive.box('user_info').get('id'))) : (iconname == Icons.download ? downloadFileExample(mainid, context) : func6(context, textEditingController, searchnode, 'addpage', '', 99, indexcnt))))),
+                                                                        uiset
+                                                                            .editpagelist[
+                                                                                0]
+                                                                            .title,
+                                                                        uiset.editpagelist[0].email
+                                                                            .toString(),
+                                                                        uiset.editpagelist[0].username
+                                                                            .toString(),
+                                                                        uiset.editpagelist[0].id
+                                                                            .toString())
+                                                                    : (iconname == Icons.person_outline
+                                                                        ? (Hive.box('user_info').get('id') == null ? GoToLogin('isnotfirst') : setUsers(context, searchnode, textEditingController, Hive.box('user_info').get('id')))
+                                                                        : (iconname == Icons.download ? downloadFileExample(mainid, context) : func6(context, textEditingController, searchnode, 'addpage', '', 99, indexcnt))))),
                                                         child: Container(
                                                           padding:
                                                               EdgeInsets.zero,

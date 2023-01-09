@@ -1,9 +1,13 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names
 import 'package:clickbyme/Tool/Getx/uisetting.dart';
+import 'package:clickbyme/Tool/ResponsiveUI.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:http/http.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import '../../Enums/Variables.dart';
+import '../../Tool/AndroidIOS.dart';
 import '../../Tool/Getx/navibool.dart';
 import '../../Tool/Loader.dart';
 import '../../Tool/NoBehavior.dart';
@@ -11,6 +15,8 @@ import '../../Tool/AppBarCustom.dart';
 import '../UI(Widget/PageUI.dart';
 import 'DrawerScreen.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+
+GlobalKey LSFlex = GlobalKey();
 
 class MYPage extends StatefulWidget {
   const MYPage({
@@ -25,6 +31,12 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
   final searchNode = FocusNode();
   var _controller = TextEditingController();
   final draw = Get.put(navibool());
+  final uiset = Get.put(uisetting());
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
 
   @override
   void initState() {
@@ -97,6 +109,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
   }
 
   Widget GroupBody(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     return OrientationBuilder(builder: ((context, orientation) {
       return GetBuilder<navibool>(
           builder: (_) => AnimatedContainer(
@@ -116,6 +129,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                         : null;
                   },
                   child: SizedBox(
+                    height: height,
                     child: Container(
                         color: draw.backgroundcolor,
                         child: Column(
@@ -134,12 +148,24 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                             const SizedBox(
                               height: 20,
                             ),
-                            ScrollConfiguration(
-                                behavior: NoBehavior(),
-                                child: PageUI1(
-                                    uiset.pagelist[uiset.mypagelistindex].id
-                                        .toString(),
-                                    _controller)),
+                            Flexible(
+                                fit: FlexFit.tight,
+                                child: ScrollConfiguration(
+                                    behavior: NoBehavior(),
+                                    child: LayoutBuilder(
+                                      builder: ((context, constraint) {
+                                        return SingleChildScrollView(
+                                            physics: const ScrollPhysics(),
+                                            child: UI(
+                                                uiset
+                                                    .pagelist[
+                                                        uiset.mypagelistindex]
+                                                    .id,
+                                                _controller,
+                                                constraint.maxWidth,
+                                                constraint.maxHeight));
+                                      }),
+                                    ))),
                           ],
                         )),
                   ),

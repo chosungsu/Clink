@@ -24,6 +24,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
   var controller;
   var controller2;
+  var controller3;
   final searchNode = FocusNode();
   ScrollController scrollController = ScrollController();
   final uiset = Get.put(uisetting());
@@ -34,6 +35,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
     super.initState();
     controller = TextEditingController();
     controller2 = TextEditingController();
+    controller3 = TextEditingController();
     Hive.box('user_setting').put('page_index', 1);
     draw.navi = Hive.box('user_setting').get('which_menu_pick');
   }
@@ -43,6 +45,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
     super.dispose();
     controller.dispose();
     controller2.dispose();
+    controller3.dispose();
     searchNode.dispose();
   }
 
@@ -170,8 +173,8 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                             );
                                           }
                                         }))),
-                            SearchUI(scrollController, controller, height,
-                                controller2, searchNode)
+                            SearchUI(context, scrollController, controller,
+                                height, controller2, searchNode, controller3)
                           ],
                         ),
                       )),

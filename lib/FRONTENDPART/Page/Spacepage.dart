@@ -8,7 +8,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:status_bar_control/status_bar_control.dart';
+import '../../Tool/AndroidIOS.dart';
 import '../Route/mainroute.dart';
 import '../Route/subuiroute.dart';
 import '../../Tool/AppBarCustom.dart';
@@ -105,10 +107,17 @@ class _SpacepageState extends State<Spacepage>
                                     child: SingleChildScrollView(
                                       physics: const ScrollPhysics(),
                                       child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            20, 0, 20, 0),
-                                        child: Pagination(),
-                                      ),
+                                          padding: const EdgeInsets.fromLTRB(
+                                              20, 0, 20, 0),
+                                          child: LayoutBuilder(
+                                            builder: ((context, constraint) {
+                                              return Responsivelayout(
+                                                  constraint.maxWidth,
+                                                  LSView(constraint.maxHeight,
+                                                      constraint.maxWidth),
+                                                  PRView(constraint.maxHeight));
+                                            }),
+                                          )),
                                     )),
                               )),
                           ADSHOW(),
@@ -119,13 +128,114 @@ class _SpacepageState extends State<Spacepage>
             )));
   }
 
-  Pagination() {
-    return Column(
-      children: [choosecategory()],
-    );
+  LSView(maxHeight, maxWidth) {
+    return GetBuilder<linkspacesetting>(
+        builder: (_) => StreamBuilder<QuerySnapshot>(
+              stream: SpacepageStreamParent(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  SpacepageChild1(snapshot);
+
+                  return uiset.pagelist.isEmpty
+                      ? Center(
+                          child: NeumorphicText(
+                            '텅! 비어있어요~',
+                            style: NeumorphicStyle(
+                              shape: NeumorphicShape.flat,
+                              depth: 3,
+                              color: draw.color_textstatus,
+                            ),
+                            textStyle: NeumorphicTextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: contentTitleTextsize(),
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      : SizedBox(
+                          child: GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: maxWidth > 1100
+                                  ? 30.w
+                                  : (maxWidth > 650 ? 50.w : 100.w),
+                              mainAxisSpacing: 10,
+                              crossAxisSpacing: 10,
+                              childAspectRatio: maxWidth > 1100
+                                  ? 2 / 1
+                                  : (maxWidth > 650 ? 5 / 1 : 3 / 1),
+                            ),
+                            physics: const BouncingScrollPhysics(),
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: uiset.pagelist.length,
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  uiset.setmypagelistindex(index);
+                                  StatusBarControl.setColor(BGColor(),
+                                      animated: true);
+                                  draw.setnavi();
+                                  Hive.box('user_setting').put('page_index', 0);
+                                  Get.back();
+                                },
+                                child: ContainerDesign(
+                                    color: draw.backgroundcolor,
+                                    child: Column(children: [
+                                      SizedBox(
+                                          child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Flexible(
+                                              fit: FlexFit.tight,
+                                              child: Text(
+                                                uiset.pagelist[index].title,
+                                                softWrap: true,
+                                                maxLines: 2,
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color:
+                                                        draw.color_textstatus,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize:
+                                                        contentTextsize()),
+                                                overflow: TextOverflow.ellipsis,
+                                              )),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              settingseparatedlinkspace(
+                                                  context,
+                                                  uiset.pagelist,
+                                                  _controller,
+                                                  searchNode,
+                                                  index);
+                                            },
+                                            child: Icon(
+                                              Icons.more_horiz,
+                                              color: draw.color_textstatus,
+                                            ),
+                                          )
+                                        ],
+                                      ))
+                                    ])),
+                              );
+                            },
+                          ),
+                        );
+                }
+                return LinearProgressIndicator(
+                  backgroundColor: draw.backgroundcolor,
+                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+                );
+              },
+            ));
   }
 
-  choosecategory() {
+  PRView(maxHeight) {
     return GetBuilder<linkspacesetting>(
         builder: (_) => StreamBuilder<QuerySnapshot>(
               stream: SpacepageStreamParent(),

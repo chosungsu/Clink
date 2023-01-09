@@ -34,7 +34,7 @@ ReturnByPlatform(actionandroid, actionios, actionweb) {
 }
 
 Responsivelayout(size, landscape, portrait) {
-  if (size > 600) {
+  if (size > 650) {
     return landscape;
   } else {
     return portrait;

@@ -12,6 +12,7 @@ import '../../Tool/Getx/PeopleAdd.dart';
 import '../../Tool/Getx/calendarsetting.dart';
 import '../../Tool/Getx/memosetting.dart';
 
+
 void savecalendarsandmemo(context, texteditingcontrollerlist, position, id) {
   final controllCal = Get.put(calendarsetting());
   final calSharePerson = Get.put(PeopleAdd());

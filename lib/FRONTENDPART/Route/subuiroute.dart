@@ -5,6 +5,8 @@ import 'dart:io';
 import 'package:clickbyme/BACKENDPART/FIREBASE/PersonalVP.dart';
 import 'package:clickbyme/Enums/Variables.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
+import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
+import 'package:clickbyme/sheets/Mainpage/appbarplusbtn.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -45,7 +47,6 @@ void pressed2() {
 }
 
 GoToMain() {
-  //uiset.setmypagelistindex(0);
   Hive.box('user_setting').put('currentmypage', 0);
   Get.to(() => const mainroute(index: 0), transition: Transition.fade);
 }
@@ -129,6 +130,67 @@ func3(BuildContext context) => Future.delayed(const Duration(seconds: 0), () {
         Get.back();
       }
     });
+func4_changever(context) async {
+  var checkid = '';
+  Widget title;
+  Widget content;
+  if (Hive.box('user_setting').get('page_index') == 11 ||
+      Hive.box('user_setting').get('page_index') == 12) {
+    await firestore.collection('Favorplace').get().then((value) {
+      checkid = '';
+      if (value.docs.isEmpty) {
+        checkid = '';
+      } else {
+        final valuespace = value.docs;
+
+        for (int i = 0; i < valuespace.length; i++) {
+          if (valuespace[i]['title'] ==
+              (Hive.box('user_setting').get('currenteditpage') ?? '')) {
+            if (valuespace[i]['setting'] == 'block') {
+            } else {
+              checkid = valuespace[i]['id'];
+            }
+          }
+        }
+      }
+    });
+  } else {
+    await firestore.collection('Pinchannel').get().then((value) {
+      checkid = '';
+      if (value.docs.isEmpty) {
+        checkid = '';
+      } else {
+        final valuespace = value.docs;
+
+        for (int i = 0; i < valuespace.length; i++) {
+          if (valuespace[i]['linkname'] ==
+              uiset.pagelist[Hive.box('user_setting').get('currentmypage')]
+                  .title) {
+            if (valuespace[i]['setting'] == 'block') {
+              if (valuespace[i]['username'] == usercode) {
+                checkid = valuespace[i].id;
+              } else {}
+            } else {
+              checkid = valuespace[i].id;
+            }
+          }
+        }
+      }
+    });
+  }
+  if (checkid != '') {
+    title = Widgets_plusbtn()[0];
+    content = Widgets_plusbtn()[1];
+    AddContent(context, title, content, null);
+  } else {
+    Snack.snackbars(
+        context: context,
+        title: '접근권한이 없어요!',
+        backgroundcolor: Colors.red,
+        bordercolor: draw.backgroundcolor);
+  }
+}
+
 func4(BuildContext context, indexcnt) async {
   var checkid = '';
   if (Hive.box('user_setting').get('page_index') == 11 ||

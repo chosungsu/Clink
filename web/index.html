@@ -79,5 +79,34 @@
       });
     });
   </script>
+  <script>
+    document.addEventListener('wheel', function(e) {
+      e.ctrlKey && e.preventDefault();
+    }, {
+      passive: false,
+    });
+  </script>
+  <script>
+    window.addEventListener('keydown', function(e) {
+      if (event.target == document.body) {
+        // Prevents going back to the previous tab.
+        if (event.key == 'Backspace') {
+          event.preventDefault();
+        }
+      }
+    
+      if (event.metaKey || event.ctrlKey) {
+        switch (event.key) {
+          case '=': // Prevent zooming in.
+          case '-': // Prevent zooming out.
+          case 'd': // Prevent bookmark on Firefox e.g.
+          case 'g': // Prevent open find on Firefox e.g.
+          case 'z': // Prevent restoring tab on Safari.
+            event.preventDefault();
+            break;
+        }
+      }
+    });
+  </script>
 </body>
 </html>

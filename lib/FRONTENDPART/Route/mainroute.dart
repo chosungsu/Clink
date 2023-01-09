@@ -138,69 +138,72 @@ class _mainrouteState extends State<mainroute>
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     ADSHOW(),
-                                    BottomNavigationBar(
-                                      type: BottomNavigationBarType.fixed,
-                                      onTap: (_index) async {
-                                        //Handle button tap
-                                        uiset.setloading(true);
-                                        uiset.searchpagemove = '';
-                                        uiset.textrecognizer = '';
-                                        uiset.setmypagelistindex(
+                                    SizedBox(
+                                        width: Get.width / 2,
+                                        child: BottomNavigationBar(
+                                          type: BottomNavigationBarType.fixed,
+                                          onTap: (_index) async {
+                                            //Handle button tap
+                                            uiset.setloading(true);
+                                            uiset.searchpagemove = '';
+                                            uiset.textrecognizer = '';
+                                            uiset.setmypagelistindex(
+                                                Hive.box('user_setting')
+                                                        .get('currentmypage') ??
+                                                    0);
                                             Hive.box('user_setting')
-                                                    .get('currentmypage') ??
-                                                0);
-                                        Hive.box('user_setting')
-                                            .put('page_index', _index);
-                                        uiset.setpageindex(
-                                            Hive.box('user_setting')
-                                                .get('page_index'));
+                                                .put('page_index', _index);
+                                            uiset.setpageindex(
+                                                Hive.box('user_setting')
+                                                    .get('page_index'));
 
-                                        uiset.setloading(false);
-                                      },
-                                      backgroundColor: draw.backgroundcolor,
-                                      selectedFontSize: 18,
-                                      unselectedFontSize: 18,
-                                      selectedItemColor: Colors.purple.shade300,
-                                      unselectedItemColor:
-                                          draw.color_textstatus,
-                                      showSelectedLabels: false,
-                                      showUnselectedLabels: false,
-                                      currentIndex: uiset.pagenumber,
-                                      items: <BottomNavigationBarItem>[
-                                        BottomNavigationBarItem(
-                                          backgroundColor: BGColor(),
-                                          icon: const Icon(
-                                            AntDesign.home,
-                                            size: 25,
-                                          ),
-                                          label: '홈',
-                                        ),
-                                        BottomNavigationBarItem(
-                                          backgroundColor: BGColor(),
-                                          icon: const Icon(
-                                            Ionicons.ios_search_outline,
-                                            size: 25,
-                                          ),
-                                          label: '검색',
-                                        ),
-                                        BottomNavigationBarItem(
-                                          backgroundColor: BGColor(),
-                                          icon: const Icon(
-                                            Ionicons.notifications_outline,
-                                            size: 25,
-                                          ),
-                                          label: '알림',
-                                        ),
-                                        BottomNavigationBarItem(
-                                          backgroundColor: BGColor(),
-                                          icon: const Icon(
-                                            Ionicons.settings_outline,
-                                            size: 25,
-                                          ),
-                                          label: '설정',
-                                        ),
-                                      ],
-                                    ),
+                                            uiset.setloading(false);
+                                          },
+                                          backgroundColor: draw.backgroundcolor,
+                                          selectedFontSize: 18,
+                                          unselectedFontSize: 18,
+                                          selectedItemColor:
+                                              Colors.purple.shade300,
+                                          unselectedItemColor:
+                                              draw.color_textstatus,
+                                          showSelectedLabels: false,
+                                          showUnselectedLabels: false,
+                                          currentIndex: uiset.pagenumber,
+                                          items: <BottomNavigationBarItem>[
+                                            BottomNavigationBarItem(
+                                              backgroundColor: BGColor(),
+                                              icon: const Icon(
+                                                AntDesign.home,
+                                                size: 25,
+                                              ),
+                                              label: '홈',
+                                            ),
+                                            BottomNavigationBarItem(
+                                              backgroundColor: BGColor(),
+                                              icon: const Icon(
+                                                Ionicons.ios_search_outline,
+                                                size: 25,
+                                              ),
+                                              label: '검색',
+                                            ),
+                                            BottomNavigationBarItem(
+                                              backgroundColor: BGColor(),
+                                              icon: const Icon(
+                                                Ionicons.notifications_outline,
+                                                size: 25,
+                                              ),
+                                              label: '알림',
+                                            ),
+                                            BottomNavigationBarItem(
+                                              backgroundColor: BGColor(),
+                                              icon: const Icon(
+                                                Ionicons.settings_outline,
+                                                size: 25,
+                                              ),
+                                              label: '설정',
+                                            ),
+                                          ],
+                                        )),
                                   ],
                                 ))
                             : ADSHOW());

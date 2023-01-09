@@ -24,9 +24,11 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 void main() async {
   ///flutter를 시작하게 하는 main function입니다.
   ///웹과 앱에서의 환경설정을 다르게 구성해야 하므로 아래처럼 작성되었습니다.
+
   WidgetsFlutterBinding.ensureInitialized();
   if (GetPlatform.isWeb) {
     await Firebase.initializeApp(
+        name: 'linki',
         options: FirebaseOptions(
             apiKey: 'AIzaSyDmkVyvA80pDPV59DNd27yhqLkEgcHHFJU',
             appId: '1:789398252263:web:75abc4946fa7fe798e5042',

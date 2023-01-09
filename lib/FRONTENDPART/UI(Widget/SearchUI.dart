@@ -15,8 +15,8 @@ import '../../../Tool/TextSize.dart';
 import '../../UI/Home/secondContentNet/ShowTips.dart';
 import 'PageUI.dart';
 
-SearchUI(scrollController, TextEditingController controller, double height,
-    TextEditingController controller2, searchNode) {
+SearchUI(context, scrollController, TextEditingController controller,
+    double height, TextEditingController controller2, searchNode, controller3) {
   final uiset = Get.put(uisetting());
   return uiset.searchpagemove == ''
       ? Flexible(
@@ -60,8 +60,8 @@ SearchUI(scrollController, TextEditingController controller, double height,
           ))
       : ScrollConfiguration(
           behavior: NoBehavior(),
-          child: Se_Container2(uiset.editpagelist[0].id.toString(),
-              uiset.editpagelist[0].setting.toString(), controller2));
+          child: Se_Container2(context, uiset.editpagelist[0].id.toString(),
+              uiset.editpagelist[0].setting.toString(), controller3));
 }
 
 Se_Container0(double height, controller, searchNode) {
@@ -488,8 +488,9 @@ Se_Container11(double height, TextEditingController controller, searchNode) {
           ));
 }
 
-Se_Container2(String id, String setting, TextEditingController controller) {
-  return PageUI1(id, controller);
+Se_Container2(
+    context, String id, String setting, TextEditingController controller) {
+  return PageUI1(context, id, controller);
 }
 
 Se_Container3(

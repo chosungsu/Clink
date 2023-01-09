@@ -1,6 +1,3 @@
-// ignore_for_file: camel_case_types
-
-import 'package:device_calendar/device_calendar.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,7 +16,6 @@ class linkspacesetting extends GetxController {
   bool iscompleted = false;
   PlatformFile? pickedFilefirst;
   List? selectedfile;
-  Calendar? selectedcalendar;
   List<bool> ischecked = List.filled(10000, false);
   List<bool> islongchecked = List.filled(10000, false);
   String pickedimg = '';
@@ -136,12 +132,6 @@ class linkspacesetting extends GetxController {
 
   void minusspacetreein(int index) {
     indextreecnt.removeAt(index);
-    update();
-    notifyChildrens();
-  }
-
-  void setcalendar(Calendar calendar) {
-    selectedcalendar = calendar;
     update();
     notifyChildrens();
   }

@@ -35,6 +35,8 @@ dependencies:
   cupertino_icons: 
   intl: 
   responsive_sizer:
+  flutter_localizations: 
+    sdk: flutter
   
   #효과 및 아이콘 라이브러리
   flutter_vector_icons:
@@ -51,11 +53,6 @@ dependencies:
   firebase_core:
   firebase_core_web:
   firebase_storage: 
-  #카카오 sdk
-  kakao_flutter_sdk: 
-  dio: 
-  json_annotation: 
-  shared_preferences: 
   platform: 
   package_info_plus: 
   package_info: 
@@ -78,7 +75,6 @@ dependencies:
   path_provider: 
   device_info_plus: 
   #UI
-  device_calendar:
   outline_gradient_button:
   sign_button:
   fab_circular_menu:
