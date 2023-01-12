@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import '../Enums/PageList.dart';
 import '../Enums/Variables.dart';
@@ -21,8 +22,10 @@ class AppBarCustom extends StatelessWidget {
   AppBarCustom({
     Key? key,
     required this.title,
+    required this.lefticon,
+    required this.lefticonname,
     required this.righticon,
-    required this.iconname,
+    required this.righticonname,
     required this.doubleicon,
     textEditingController,
     focusNode,
@@ -32,8 +35,10 @@ class AppBarCustom extends StatelessWidget {
   }) : super(key: key);
   final String title;
   final bool righticon;
-  final IconData iconname;
+  final IconData righticonname;
   final bool doubleicon;
+  final bool lefticon;
+  final IconData lefticonname;
   int myindex = 0;
   TextEditingController textEditingController = TextEditingController();
   FocusNode searchnode = FocusNode();
@@ -52,6 +57,32 @@ class AppBarCustom extends StatelessWidget {
     final uiset = Get.put(uisetting());
     final draw = Get.put(navibool());
     StatusBarControl.setColor(draw.backgroundcolor, animated: true);
+
+    OnClickedRightIcons(righticonname) {
+      return righticonname == Ionicons.add_outline
+          ? (Hive.box('user_setting').get('page_index') == 0
+              ? func4_changever(context)
+              : func6(context, textEditingController, searchnode, 'addpage', '',
+                  99, indexcnt))
+          : (righticonname == AntDesign.delete
+              ? func2(context)
+              : (righticonname == Icons.star_border ||
+                      righticonname == Icons.star
+                  ? func7(
+                      uiset.editpagelist[0].title,
+                      uiset.editpagelist[0].email.toString(),
+                      uiset.editpagelist[0].username.toString(),
+                      uiset.editpagelist[0].id.toString())
+                  : (righticonname == Icons.person_outline
+                      ? (Hive.box('user_info').get('id') == null
+                          ? GoToLogin('isnotfirst')
+                          : setUsers(context, searchnode, textEditingController,
+                              Hive.box('user_info').get('id')))
+                      : (righticonname == Icons.download
+                          ? downloadFileExample(mainid, context)
+                          : func6(context, textEditingController, searchnode,
+                              'addpage', '', 99, indexcnt)))));
+    }
 
     return StatefulBuilder(builder: ((context, setState) {
       return GetBuilder<navibool>(
@@ -113,116 +144,95 @@ class AppBarCustom extends StatelessWidget {
                                     width: 10,
                                   )
                                 : const SizedBox(),
+                            lefticon == true
+                                ? Row(
+                                    children: [
+                                      GetBuilder<uisetting>(
+                                          builder: (_) => ContainerDesign(
+                                              child: GestureDetector(
+                                                  onTap: () {},
+                                                  child: Container(
+                                                    padding: EdgeInsets.zero,
+                                                    child: Icon(
+                                                      lefticonname,
+                                                      size: 30,
+                                                      color:
+                                                          draw.color_textstatus,
+                                                    ),
+                                                  )),
+                                              color: draw.backgroundcolor))
+                                    ],
+                                  )
+                                : const SizedBox(),
                             Flexible(
                                 child: GetBuilder<uisetting>(
                               builder: (_) => Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  title.toString() == ''
-                                      ? Hive.box('user_setting')
-                                                  .get('page_index') ==
-                                              0
-                                          ? uiset.pagelist.isEmpty
-                                              ? Flexible(
-                                                  fit: FlexFit.tight,
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      ContainerDesign(
-                                                          child:
-                                                              GestureDetector(
-                                                            onTap: (() =>
-                                                                func5()),
-                                                            child: RichText(
-                                                                text: TextSpan(
-                                                                    children: [
-                                                                  WidgetSpan(
-                                                                    style: TextStyle(
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .normal,
-                                                                        fontSize:
-                                                                            contentTitleTextsize(),
-                                                                        color: draw
-                                                                            .color_textstatus),
-                                                                    child: Row(
-                                                                      children: [
-                                                                        Text(
-                                                                          '빈 스페이스',
-                                                                          style: TextStyle(
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontSize: contentTitleTextsize(),
-                                                                              color: draw.color_textstatus),
-                                                                        ),
-                                                                        const SizedBox(
-                                                                          width:
-                                                                              10,
-                                                                        ),
-                                                                        Icon(
-                                                                          AntDesign
-                                                                              .swap,
-                                                                          color:
-                                                                              draw.color_textstatus,
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ])),
+                                  Hive.box('user_setting').get('page_index') ==
+                                          0
+                                      ? Flexible(
+                                          fit: FlexFit.tight,
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              ContainerDesign(
+                                                  child: GestureDetector(
+                                                    onTap: (() => func5()),
+                                                    child: RichText(
+                                                        softWrap: true,
+                                                        text:
+                                                            TextSpan(children: [
+                                                          WidgetSpan(
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                                fontSize:
+                                                                    contentTitleTextsize(),
+                                                                color: draw
+                                                                    .color_textstatus),
+                                                            child: Row(
+                                                              children: [
+                                                                Text(
+                                                                  title
+                                                                      .toString(),
+                                                                  maxLines: 1,
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .start,
+                                                                  style: TextStyle(
+                                                                      fontFamily:
+                                                                          'DancingScript',
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w700,
+                                                                      fontSize:
+                                                                          mainTitleTextsize(),
+                                                                      color: draw
+                                                                          .color_textstatus),
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                ),
+                                                                const SizedBox(
+                                                                  width: 10,
+                                                                ),
+                                                                Icon(
+                                                                  Entypo
+                                                                      .chevron_small_down,
+                                                                  color: draw
+                                                                      .color_textstatus,
+                                                                ),
+                                                              ],
+                                                            ),
                                                           ),
-                                                          color: draw
-                                                              .backgroundcolor)
-                                                    ],
-                                                  ))
-                                              : Flexible(
-                                                  fit: FlexFit.tight,
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      ContainerDesign(
-                                                          child:
-                                                              GestureDetector(
-                                                            onTap: (() =>
-                                                                func5()),
-                                                            child: RichText(
-                                                                softWrap: true,
-                                                                text: TextSpan(
-                                                                    children: [
-                                                                      WidgetSpan(
-                                                                        style: TextStyle(
-                                                                            fontWeight: FontWeight
-                                                                                .normal,
-                                                                            fontSize:
-                                                                                contentTitleTextsize(),
-                                                                            color:
-                                                                                draw.color_textstatus),
-                                                                        child:
-                                                                            Row(
-                                                                          children: [
-                                                                            Text(
-                                                                              uiset.pagelist[uiset.mypagelistindex].title,
-                                                                              maxLines: 1,
-                                                                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: contentTitleTextsize(), color: draw.color_textstatus, overflow: TextOverflow.ellipsis),
-                                                                            ),
-                                                                            const SizedBox(
-                                                                              width: 10,
-                                                                            ),
-                                                                            Icon(
-                                                                              AntDesign.swap,
-                                                                              color: draw.color_textstatus,
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                    ])),
-                                                          ),
-                                                          color: draw
-                                                              .backgroundcolor)
-                                                    ],
-                                                  ))
-                                          : const SizedBox()
+                                                        ])),
+                                                  ),
+                                                  color: draw.backgroundcolor)
+                                            ],
+                                          ))
                                       : Flexible(
                                           fit: FlexFit.tight,
                                           child: SizedBox(
@@ -231,7 +241,8 @@ class AppBarCustom extends StatelessWidget {
                                               maxLines: 1,
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: 'DancingScript',
+                                                  fontWeight: FontWeight.w700,
                                                   fontSize: mainTitleTextsize(),
                                                   color: draw.color_textstatus),
                                               overflow: TextOverflow.ellipsis,
@@ -283,51 +294,24 @@ class AppBarCustom extends StatelessWidget {
                                             GetBuilder<uisetting>(
                                                 builder: (_) => ContainerDesign(
                                                     child: GestureDetector(
-                                                        onTap: () => iconname ==
-                                                                Ionicons
-                                                                    .add_outline
-                                                            ? (Hive.box('user_setting').get('page_index') == 0
-                                                                ? func4_changever(
-                                                                    context)
-                                                                : func6(
-                                                                    context,
-                                                                    textEditingController,
-                                                                    searchnode,
-                                                                    'addpage',
-                                                                    '',
-                                                                    99,
-                                                                    indexcnt))
-                                                            : (iconname == AntDesign.delete
-                                                                ? func2(context)
-                                                                : (iconname == Icons.star_border || iconname == Icons.star
-                                                                    ? func7(
-                                                                        uiset
-                                                                            .editpagelist[
-                                                                                0]
-                                                                            .title,
-                                                                        uiset.editpagelist[0].email
-                                                                            .toString(),
-                                                                        uiset.editpagelist[0].username
-                                                                            .toString(),
-                                                                        uiset.editpagelist[0].id
-                                                                            .toString())
-                                                                    : (iconname == Icons.person_outline
-                                                                        ? (Hive.box('user_info').get('id') == null ? GoToLogin('isnotfirst') : setUsers(context, searchnode, textEditingController, Hive.box('user_info').get('id')))
-                                                                        : (iconname == Icons.download ? downloadFileExample(mainid, context) : func6(context, textEditingController, searchnode, 'addpage', '', 99, indexcnt))))),
+                                                        onTap: () =>
+                                                            OnClickedRightIcons(
+                                                                righticonname),
                                                         child: Container(
                                                           padding:
                                                               EdgeInsets.zero,
                                                           child: Icon(
-                                                            iconname,
+                                                            righticonname,
                                                             size: 30,
-                                                            color: iconname ==
+                                                            color: righticonname ==
                                                                     Icons.star
                                                                 ? Colors.yellow
                                                                 : draw
                                                                     .color_textstatus,
                                                           ),
                                                         )),
-                                                    color: draw.backgroundcolor))
+                                                    color:
+                                                        draw.backgroundcolor))
                                           ],
                                         )
                                       : const SizedBox()

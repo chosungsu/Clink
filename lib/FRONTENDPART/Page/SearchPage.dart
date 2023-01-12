@@ -123,9 +123,11 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                             uiset.searchpagemove == ''
                                 ? AppBarCustom(
                                     title: '',
+                                    lefticon: false,
+                                    lefticonname: Icons.add,
                                     righticon: false,
                                     doubleicon: false,
-                                    iconname: Icons.notifications_none,
+                                    righticonname: Icons.notifications_none,
                                   )
                                 : GetBuilder<uisetting>(
                                     builder: (_) => StreamBuilder<
@@ -139,9 +141,11 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                                 children: [
                                                   AppBarCustom(
                                                     title: uiset.searchpagemove,
+                                                    lefticon: false,
+                                                    lefticonname: Icons.add,
                                                     righticon: true,
                                                     doubleicon: true,
-                                                    iconname: Icons.star,
+                                                    righticonname: Icons.star,
                                                   ),
                                                   const SizedBox(
                                                     height: 20,
@@ -154,8 +158,11 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                                   AppBarCustom(
                                                     title: uiset.searchpagemove,
                                                     righticon: true,
+                                                    lefticon: false,
+                                                    lefticonname: Icons.add,
                                                     doubleicon: true,
-                                                    iconname: Icons.star_border,
+                                                    righticonname:
+                                                        Icons.star_border,
                                                   ),
                                                   const SizedBox(
                                                     height: 20,
@@ -167,8 +174,10 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                             return AppBarCustom(
                                               title: '',
                                               righticon: false,
+                                              lefticon: false,
+                                              lefticonname: Icons.add,
                                               doubleicon: false,
-                                              iconname:
+                                              righticonname:
                                                   Icons.notifications_none,
                                             );
                                           }

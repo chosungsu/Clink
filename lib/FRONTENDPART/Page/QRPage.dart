@@ -40,6 +40,7 @@ class _QRPageState extends State<QRPage>
   void initState() {
     super.initState();
     Hive.box('user_setting').put('page_index', 6);
+    Hive.box('user_setting').put('addtype', '리스트뷰');
     texteditingcontrollerlist =
         List<TextEditingController>.generate(5, ((index) {
       return TextEditingController();
@@ -110,10 +111,16 @@ class _QRPageState extends State<QRPage>
                                     behavior: NoBehavior(),
                                     child: LayoutBuilder(
                                       builder: ((context, constraint) {
-                                        return SingleChildScrollView(
-                                            physics: const ScrollPhysics(),
-                                            child: QR_UI(constraint.maxWidth,
-                                                constraint.maxHeight));
+                                        return Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 20, right: 20),
+                                          child: QR_UI(
+                                              constraint.maxWidth,
+                                              constraint.maxHeight,
+                                              texteditingcontrollerlist,
+                                              focusnodelist,
+                                              widget.type),
+                                        );
                                       }),
                                     )),
                               )),

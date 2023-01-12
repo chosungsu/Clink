@@ -3,25 +3,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
+import '../../FRONTENDPART/Page/QRPage.dart';
 import '../../Tool/TextSize.dart';
 
-Widgets_plusbtn() {
+Widgets_plusbtn(context) {
   Widget title;
   Widget content;
   title = const SizedBox();
   content = Column(
     children: [
       ListTile(
-        onTap: () async {
-          //Pinchannelgetsecond(0, '빈페이지');
-          Get.back();
+        onTap: () {
+          Get.to(
+              () => const QRPage(
+                    type: 0,
+                  ),
+              transition: Transition.fade);
         },
         trailing: const Icon(
-          Ionicons.newspaper_outline,
-          color: Colors.blue,
+          Ionicons.create_outline,
+          color: Colors.black,
         ),
         title: Text(
-          '페이퍼뷰 생성',
+          '직접 생성',
           softWrap: true,
           textAlign: TextAlign.start,
           style: TextStyle(
@@ -33,14 +37,18 @@ Widgets_plusbtn() {
       ),
       ListTile(
         onTap: () {
-          Get.back();
+          Get.to(
+              () => const QRPage(
+                    type: 1,
+                  ),
+              transition: Transition.fade);
         },
         trailing: const Icon(
-          FontAwesome.photo,
-          color: Colors.blue,
+          Ionicons.qr_code_outline,
+          color: Colors.black,
         ),
         title: Text(
-          '포토공간 생성',
+          '복사한 코드로 생성',
           softWrap: true,
           textAlign: TextAlign.start,
           style: TextStyle(
@@ -50,25 +58,6 @@ Widgets_plusbtn() {
           overflow: TextOverflow.ellipsis,
         ),
       ),
-      ListTile(
-        onTap: () async {
-          Get.back();
-        },
-        trailing: const Icon(
-          Feather.box,
-          color: Colors.blue,
-        ),
-        title: Text(
-          '즐겨찾기 생성',
-          softWrap: true,
-          textAlign: TextAlign.start,
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: contentTextsize()),
-          overflow: TextOverflow.ellipsis,
-        ),
-      )
     ],
   );
   return [title, content];

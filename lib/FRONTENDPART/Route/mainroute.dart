@@ -12,6 +12,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import '../../Tool/BGColor.dart';
+import '../Page/MYPage_test.dart';
 import '../Page/NotiAlarm.dart';
 import 'subuiroute.dart';
 import '../Page/SearchPage.dart';
@@ -109,8 +110,15 @@ class _mainrouteState extends State<mainroute>
 
   @override
   Widget build(BuildContext context) {
-    List pages = [
+    /*List pages = [
       const MYPage(),
+      const MYPage_test(),
+      SearchPage(secondname: peopleadd.secondname),
+      const NotiAlarm(),
+      const ProfilePage(),
+    ];*/
+    List pages = [
+      const MYPage_test(),
       SearchPage(secondname: peopleadd.secondname),
       const NotiAlarm(),
       const ProfilePage(),
@@ -170,13 +178,21 @@ class _mainrouteState extends State<mainroute>
                                           showUnselectedLabels: false,
                                           currentIndex: uiset.pagenumber,
                                           items: <BottomNavigationBarItem>[
-                                            BottomNavigationBarItem(
+                                            /*BottomNavigationBarItem(
                                               backgroundColor: BGColor(),
                                               icon: const Icon(
                                                 AntDesign.home,
                                                 size: 25,
                                               ),
                                               label: '홈',
+                                            ),*/
+                                            BottomNavigationBarItem(
+                                              backgroundColor: BGColor(),
+                                              icon: const Icon(
+                                                Entypo.basecamp,
+                                                size: 25,
+                                              ),
+                                              label: '메인',
                                             ),
                                             BottomNavigationBarItem(
                                               backgroundColor: BGColor(),
@@ -260,10 +276,10 @@ class _mainrouteState extends State<mainroute>
                                       BottomNavigationBarItem(
                                         backgroundColor: BGColor(),
                                         icon: const Icon(
-                                          AntDesign.home,
+                                          Entypo.basecamp,
                                           size: 25,
                                         ),
-                                        label: '홈',
+                                        label: '메인',
                                       ),
                                       BottomNavigationBarItem(
                                         backgroundColor: BGColor(),

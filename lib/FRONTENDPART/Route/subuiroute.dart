@@ -22,7 +22,6 @@ import 'package:status_bar_control/status_bar_control.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../Page/AddTemplate.dart';
 import '../Page/LoginSignPage.dart';
-import '../Page/NotiAlarm.dart';
 import '../Page/Spacepage.dart';
 import '../../Tool/AndroidIOS.dart';
 import '../../Tool/BGColor.dart';
@@ -179,8 +178,8 @@ func4_changever(context) async {
     });
   }
   if (checkid != '') {
-    title = Widgets_plusbtn()[0];
-    content = Widgets_plusbtn()[1];
+    title = Widgets_plusbtn(context)[0];
+    content = Widgets_plusbtn(context)[1];
     AddContent(context, title, content, null);
   } else {
     Snack.snackbars(

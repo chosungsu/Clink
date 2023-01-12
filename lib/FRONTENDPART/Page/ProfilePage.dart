@@ -135,9 +135,11 @@ class _ProfilePageState extends State<ProfilePage>
                         children: [
                           AppBarCustom(
                             title: '',
+                            lefticon: false,
+                            lefticonname: Icons.add,
                             righticon: true,
                             doubleicon: false,
-                            iconname: Icons.person_outline,
+                            righticonname: Icons.person_outline,
                           ),
                           Flexible(
                             fit: FlexFit.tight,

@@ -137,9 +137,11 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                             GetBuilder<uisetting>(
                               builder: (_) => AppBarCustom(
                                 title: '',
+                                lefticon: false,
+                                lefticonname: Icons.add,
                                 righticon: true,
                                 doubleicon: false,
-                                iconname: Ionicons.add_outline,
+                                righticonname: Ionicons.add_outline,
                                 textEditingController: _controller,
                                 focusNode: searchNode,
                                 myindex: uiset.mypagelistindex,

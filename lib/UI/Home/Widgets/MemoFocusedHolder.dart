@@ -14,11 +14,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:pdf/pdf.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:printing/printing.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../../../Enums/MemoList.dart';
 import '../../../FRONTENDPART/Route/subuiroute.dart';
@@ -28,7 +24,6 @@ import '../../../Tool/Getx/uisetting.dart';
 import '../../../Tool/IconBtn.dart';
 import '../../../Tool/TextSize.dart';
 import '../../../sheets/showmemocontent.dart';
-import 'package:pdf/widgets.dart' as pw;
 
 MFHolder(
   List<bool> checkbottoms,
@@ -494,7 +489,7 @@ MFHolder_second(
                     memocontent: scollection.memolistcontentin[i],
                     contentindex: scollection.memolistin[i]));
               }
-              final pdfFile = await MakePDF(
+              /*final pdfFile = await MakePDF(
                   text,
                   controll_memo.imagelist,
                   Hive.box('user_setting').get('memocollection') == '' ||
@@ -504,7 +499,7 @@ MFHolder_second(
                               Hive.box('user_setting').get('memocollection')
                           ? Hive.box('user_setting').get('memocollection')
                           : doccollection),
-                  checklisttexts);
+                  checklisttexts);*/
             },
           ),
           FocusedMenuItem(
@@ -801,7 +796,7 @@ Future _deleteFile(String doc) async {
   } else {}
 }
 
-MakePDF(
+/*MakePDF(
   String titletext,
   List savepicturelist,
   collection,
@@ -915,7 +910,7 @@ savefile({
     await file.writeAsBytes(await pdf.save());
   }
   Share.shareFiles(['${directory.path}/$name.pdf']);
-}
+}*/
 
 MFHolder_third(
   List imagelist,

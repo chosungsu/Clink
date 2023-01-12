@@ -302,9 +302,11 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
                         children: [
                           AppBarCustom(
                             title: widget.title,
+                            lefticon: false,
+                            lefticonname: Icons.add,
                             righticon: true,
                             doubleicon: false,
-                            iconname: Ionicons.settings_outline,
+                            righticonname: Ionicons.settings_outline,
                           ),
                           GetBuilder<uisetting>(
                             builder: (_) => Flexible(

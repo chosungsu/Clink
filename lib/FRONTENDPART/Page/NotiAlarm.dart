@@ -130,9 +130,11 @@ class _NotiAlarmState extends State<NotiAlarm>
                         children: [
                           AppBarCustom(
                             title: 'notipagetitle'.tr,
+                            lefticon: false,
+                            lefticonname: Icons.add,
                             righticon: true,
                             doubleicon: false,
-                            iconname: AntDesign.delete,
+                            righticonname: AntDesign.delete,
                           ),
                           CompanyNotice('home'),
                           allread(),

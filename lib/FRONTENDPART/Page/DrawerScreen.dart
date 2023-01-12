@@ -57,7 +57,9 @@ class _DrawerScreenState extends State<DrawerScreen> {
                         padding: const EdgeInsets.only(top: 20, bottom: 20),
                         child: InkWell(
                           onTap: () {
-                            if (element.containsValue(AntDesign.home)) {
+                            //Entypo.basecamp
+                            //AntDesign.home
+                            if (element.containsValue(Entypo.basecamp)) {
                               draw.setclose();
                               Hive.box('user_setting').put('page_index', 0);
                               uiset.setmypagelistindex(Hive.box('user_setting')
@@ -70,6 +72,19 @@ class _DrawerScreenState extends State<DrawerScreen> {
                                   type: PageTransitionType.fade,
                                   child: const mainroute(
                                     index: 0,
+                                  ),
+                                ),
+                              );
+                            } else if (element.containsValue(Entypo.basecamp)) {
+                              draw.setclose();
+                              Hive.box('user_setting').put('page_index', 1);
+                              uiset.setpageindex(
+                                  Hive.box('user_setting').get('page_index'));
+                              Navigator.of(context).pushReplacement(
+                                PageTransition(
+                                  type: PageTransitionType.fade,
+                                  child: const mainroute(
+                                    index: 1,
                                   ),
                                 ),
                               );

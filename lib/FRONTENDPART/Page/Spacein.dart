@@ -212,18 +212,22 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
                                   ? GetBuilder<uisetting>(
                                       builder: (_) => AppBarCustom(
                                         title: widget.spacename,
+                                        lefticon: false,
+                                        lefticonname: Icons.add,
                                         righticon: true,
                                         doubleicon: false,
-                                        iconname: Icons.download,
+                                        righticonname: Icons.download,
                                         mainid: widget.id,
                                       ),
                                     )
                                   : GetBuilder<uisetting>(
                                       builder: (_) => AppBarCustom(
                                         title: widget.spacename,
+                                        lefticon: false,
+                                        lefticonname: Icons.add,
                                         righticon: false,
                                         doubleicon: false,
-                                        iconname: Icons.download,
+                                        righticonname: Icons.download,
                                         mainid: widget.id,
                                       ),
                                     )),

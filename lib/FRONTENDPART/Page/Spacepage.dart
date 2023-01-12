@@ -93,9 +93,11 @@ class _SpacepageState extends State<Spacepage>
                         children: [
                           AppBarCustom(
                               title: 'MY',
+                              lefticon: false,
+                              lefticonname: Icons.add,
                               righticon: true,
                               doubleicon: false,
-                              iconname: Ionicons.add_outline),
+                              righticonname: Ionicons.add_outline),
                           const SizedBox(
                             height: 20,
                           ),

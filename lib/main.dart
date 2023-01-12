@@ -178,7 +178,7 @@ class _SplashPageState extends State<SplashPage> {
                         width: 10,
                       ),
                       NeumorphicText(
-                        'Towiz',
+                        'OnBox',
                         style: const NeumorphicStyle(
                           shape: NeumorphicShape.flat,
                           depth: 3,
@@ -255,7 +255,7 @@ class _SplashPageState extends State<SplashPage> {
                         width: 10,
                       ),
                       NeumorphicText(
-                        'Towiz',
+                        'OnBox',
                         style: const NeumorphicStyle(
                           shape: NeumorphicShape.flat,
                           depth: 3,
