@@ -19,15 +19,18 @@ class Linkspacepage {
   final String uniquecode;
   final String familycode;
   final String? date;
+  final String? codename;
+  final String? canshow;
 
-  Linkspacepage({
-    required this.placestr,
-    required this.type,
-    this.index,
-    required this.uniquecode,
-    required this.familycode,
-    this.date,
-  });
+  Linkspacepage(
+      {required this.placestr,
+      required this.type,
+      this.index,
+      required this.uniquecode,
+      required this.familycode,
+      this.date,
+      this.codename,
+      this.canshow});
 }
 
 class Linkspacetreepage {

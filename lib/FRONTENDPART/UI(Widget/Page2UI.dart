@@ -27,7 +27,7 @@ UI2(id, controller, maxWidth, maxHeight) {
             stream: PageViewStreamParent(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                PageViewRes1(id, snapshot);
+                PageViewRes1_1(id, snapshot);
                 return linkspaceset.indexcnt.isEmpty
                     ? SizedBox(
                         height: maxHeight,
@@ -247,7 +247,8 @@ PageUI0(context, id, controller) {
                                                                         index,
                                                                         index2,
                                                                         controller,
-                                                                        searchNode);
+                                                                        searchNode,
+                                                                        snapshot);
                                                                   },
                                                                   child: Icon(
                                                                     Icons
@@ -527,7 +528,8 @@ PageUI1(context, id, controller) {
                                                                         index,
                                                                         index2,
                                                                         controller,
-                                                                        searchNode);
+                                                                        searchNode,
+                                                                        snapshot);
                                                                   },
                                                                   child: Icon(
                                                                     Icons

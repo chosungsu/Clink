@@ -130,6 +130,7 @@ func3(BuildContext context) => Future.delayed(const Duration(seconds: 0), () {
       }
     });
 func4_changever(context) async {
+  final uiset = Get.put(uisetting());
   var checkid = '';
   Widget title;
   Widget content;
@@ -178,8 +179,8 @@ func4_changever(context) async {
     });
   }
   if (checkid != '') {
-    title = Widgets_plusbtn(context)[0];
-    content = Widgets_plusbtn(context)[1];
+    title = Widgets_plusbtn(context, checkid)[0];
+    content = Widgets_plusbtn(context, checkid)[1];
     AddContent(context, title, content, null);
   } else {
     Snack.snackbars(

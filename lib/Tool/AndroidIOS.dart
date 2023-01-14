@@ -208,3 +208,26 @@ OSDialogthird(BuildContext context, String title, content, pressed) {
           ],
         );
 }
+
+OSDialogWithoutaction(BuildContext context, String title, content) {
+  return GetPlatform.isAndroid == true
+      ? AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Text(title,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTitleTextsize())),
+          content: content,
+        )
+      : CupertinoAlertDialog(
+          title: Text(title,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTitleTextsize())),
+          content: content,
+        );
+}

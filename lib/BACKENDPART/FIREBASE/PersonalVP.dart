@@ -1,5 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:clickbyme/sheets/Mainpage/horizontalbtn.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,13 +15,14 @@ import '../../Tool/Getx/category.dart';
 import '../../Tool/Getx/linkspacesetting.dart';
 import '../../Tool/Getx/uisetting.dart';
 import '../../FRONTENDPART/UI(Widget/DayNoteHome.dart';
+import '../../sheets/BottomSheet/AddContent.dart';
 import '../../sheets/linksettingsheet.dart';
 
 PageViewStreamParent() {
   return firestore.collection('PageView').snapshots();
 }
 
-PageViewRes1(id, snapshot) {
+PageViewRes1_1(id, snapshot) {
   final linkspaceset = Get.put(linkspacesetting());
   linkspaceset.indextreetmp.clear();
   linkspaceset.indexcnt.clear();
@@ -31,16 +34,68 @@ PageViewRes1(id, snapshot) {
     if (sp.get('id') == id) {
       linkspaceset.indextreetmp.add(List.empty(growable: true));
       linkspaceset.indexcnt.add(Linkspacepage(
-          type: sp.get('type'),
-          placestr: sp.get('spacename'),
-          uniquecode: sp.get('id'),
-          index: sp.get('index'),
-          familycode: sp.id));
+        type: sp.get('type'),
+        placestr: sp.get('spacename'),
+        uniquecode: sp.get('id'),
+        index: sp.get('index'),
+        familycode: sp.id,
+        codename: sp.get('codename'),
+        canshow: sp.get('canshow'),
+      ));
     }
   }
   linkspaceset.indexcnt.sort(((a, b) {
     return a.index.compareTo(b.index);
   }));
+}
+
+PageViewRes1_2(
+  id,
+  changeset,
+) async {
+  final linkspaceset = Get.put(linkspacesetting());
+  final uiset = Get.put(uisetting());
+  var insertlist;
+  int changei = 0;
+  String docid = '';
+  String changesetrename = changeset == '나 혼자만'
+      ? 'alone'
+      : (changeset == '팔로워만 공개' ? 'follow' : 'all');
+  uiset.setloading(true);
+  for (int i = 0; i < linkspaceset.indextreetmp.length; i++) {
+    if (linkspaceset.indexcnt[i].codename ==
+        linkspaceset.indexcnt[i].uniquecode +
+            '@' +
+            linkspaceset.indexcnt[i].placestr) {
+      insertlist = Linkspacepage(
+        type: linkspaceset.indexcnt[i].type,
+        placestr: linkspaceset.indexcnt[i].placestr,
+        uniquecode: linkspaceset.indexcnt[i].uniquecode,
+        index: linkspaceset.indexcnt[i].index,
+        familycode: linkspaceset.indexcnt[i].familycode,
+        codename: linkspaceset.indexcnt[i].codename,
+        canshow: changeset,
+      );
+      linkspaceset.indexcnt.removeAt(i);
+      linkspaceset.indexcnt.insert(i, insertlist);
+      changei = i;
+    }
+  }
+  await firestore.collection('PageView').get().then(
+    (value) async {
+      final valuespace = value.docs;
+      for (var sp in valuespace) {
+        if (sp.get('codename') == linkspaceset.indexcnt[changei].codename) {
+          docid = sp.id;
+          await firestore.collection('PageView').doc(docid).update({
+            'canshow': changeset,
+          });
+        }
+      }
+    },
+  ).whenComplete(() {
+    uiset.setloading(false);
+  });
 }
 
 PageViewStreamChild1(context, id, index) async {
@@ -82,18 +137,34 @@ PageViewStreamChild1(context, id, index) async {
 
 PageViewStreamChild2(context, id, index, controller, searchNode) async {
   final linkspaceset = Get.put(linkspacesetting());
+  Widget title;
+  Widget content;
   await firestore.collection('Pinchannel').doc(id).get().then(
     (value) {
       if (value.get('username') == usercode) {
-        linkplacechangeoptions(
-            context,
-            index,
-            linkspaceset.indexcnt[index].placestr,
-            linkspaceset.indexcnt[index].uniquecode,
-            linkspaceset.indexcnt[index].type,
-            controller,
-            searchNode,
-            'pinchannel');
+        title = Widgets_horizontalbtn(
+          context,
+          index,
+          linkspaceset.indexcnt[index].placestr,
+          linkspaceset.indexcnt[index].uniquecode,
+          linkspaceset.indexcnt[index].type,
+          linkspaceset.indexcnt[index].canshow,
+          controller,
+          searchNode,
+          'pinchannel',
+        )[0];
+        content = Widgets_horizontalbtn(
+          context,
+          index,
+          linkspaceset.indexcnt[index].placestr,
+          linkspaceset.indexcnt[index].uniquecode,
+          linkspaceset.indexcnt[index].type,
+          linkspaceset.indexcnt[index].canshow,
+          controller,
+          searchNode,
+          'pinchannel',
+        )[1];
+        AddContent(context, title, content, null);
       } else {
         if (value.get('setting') == 'block') {
           Snack.snackbars(
@@ -102,15 +173,28 @@ PageViewStreamChild2(context, id, index, controller, searchNode) async {
               backgroundcolor: Colors.red,
               bordercolor: draw.backgroundcolor);
         } else {
-          linkplacechangeoptions(
+          title = Widgets_horizontalbtn(
+            context,
+            index,
+            linkspaceset.indexcnt[index].placestr,
+            linkspaceset.indexcnt[index].uniquecode,
+            linkspaceset.indexcnt[index].type,
+            linkspaceset.indexcnt[index].canshow,
+            controller,
+            searchNode,
+            'pinchannel',
+          )[0];
+          content = Widgets_horizontalbtn(
               context,
               index,
               linkspaceset.indexcnt[index].placestr,
               linkspaceset.indexcnt[index].uniquecode,
               linkspaceset.indexcnt[index].type,
+              linkspaceset.indexcnt[index].canshow,
               controller,
               searchNode,
-              'pinchannel');
+              'pinchannel')[1];
+          AddContent(context, title, content, null);
         }
       }
     },
@@ -179,32 +263,64 @@ PageViewStreamChild3(context, id, index, index2) async {
   );
 }
 
-PageViewStreamChild4(context, id, index, index2, controller, searchNode) async {
+PageViewStreamChild4(context, id, index, index2, controller, searchNode,
+    AsyncSnapshot<QuerySnapshot<Object?>> snapshot) async {
   final linkspaceset = Get.put(linkspacesetting());
+  Widget title;
+  Widget content;
+
   await firestore.collection('Pinchannel').doc(id).get().then(
     (value) {
       if (value.get('username') == usercode) {
-        linkplacechangeoptions(
-            context,
-            index2,
-            linkspaceset.indextreetmp[index][index2].placestr,
-            linkspaceset.indextreetmp[index][index2].uniqueid,
-            0,
-            controller,
-            searchNode,
-            'pinchannelin');
+        title = Widgets_horizontalbtn(
+          context,
+          index2,
+          linkspaceset.indexcnt[index].placestr,
+          linkspaceset.indexcnt[index].uniqueid,
+          0,
+          linkspaceset.indexcnt[index].canshow,
+          controller,
+          searchNode,
+          'pinchannelin',
+        )[0];
+        content = Widgets_horizontalbtn(
+          context,
+          index2,
+          linkspaceset.indexcnt[index].placestr,
+          linkspaceset.indexcnt[index].uniqueid,
+          0,
+          linkspaceset.indexcnt[index].canshow,
+          controller,
+          searchNode,
+          'pinchannelin',
+        )[1];
+        AddContent(context, title, content, null);
       } else {
         if (value.get('setting') == 'block') {
         } else {
-          linkplacechangeoptions(
-              context,
-              index2,
-              linkspaceset.indextreetmp[index][index2].placestr,
-              linkspaceset.indextreetmp[index][index2].uniqueid,
-              0,
-              controller,
-              searchNode,
-              'pinchannelin');
+          title = Widgets_horizontalbtn(
+            context,
+            index2,
+            linkspaceset.indexcnt[index].placestr,
+            linkspaceset.indexcnt[index].uniqueid,
+            0,
+            linkspaceset.indexcnt[index].canshow,
+            controller,
+            searchNode,
+            'pinchannelin',
+          )[0];
+          content = Widgets_horizontalbtn(
+            context,
+            index2,
+            linkspaceset.indexcnt[index].placestr,
+            linkspaceset.indexcnt[index].uniqueid,
+            0,
+            linkspaceset.indexcnt[index].canshow,
+            controller,
+            searchNode,
+            'pinchannelin',
+          )[1];
+          AddContent(context, title, content, null);
         }
       }
     },

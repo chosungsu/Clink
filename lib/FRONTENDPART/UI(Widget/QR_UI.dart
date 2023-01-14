@@ -14,70 +14,36 @@ import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../Tool/BGColor.dart';
 import '../../Tool/ContainerDesign.dart';
+import '../../Tool/FlushbarStyle.dart';
 import '../../Tool/Getx/navibool.dart';
+import '../../Tool/Getx/uisetting.dart';
+import '../Route/mainroute.dart';
 
 QR_UI(
     maxWidth,
     maxHeight,
     List<TextEditingController> texteditingcontrollerlist,
     List<FocusNode> focusnodelist,
-    int type) {
+    int type,
+    String id) {
   final searchNode = FocusNode();
   final linkspaceset = Get.put(linkspacesetting());
 
   return SizedBox(
     height: maxHeight,
     width: maxWidth,
-    child: Responsivelayout(
-        maxWidth,
-        LSView(maxWidth, maxHeight, texteditingcontrollerlist, focusnodelist,
-            type),
-        PRView(maxHeight, texteditingcontrollerlist, focusnodelist, type)),
+    child: PRView(maxWidth, maxHeight, texteditingcontrollerlist, focusnodelist,
+        type, id),
   );
 }
 
-LSView(
+PRView(
     maxWidth,
     maxHeight,
     List<TextEditingController> texteditingcontrollerlist,
     List<FocusNode> focusnodelist,
-    int type) {
-  final draw = Get.put(navibool());
-  List titletype0 = ['제목', '타입지정'];
-  List<String> dropdownList = ['리스트뷰', '그리드뷰', '캘린더뷰'];
-  String selectedDropdown = Hive.box('user_setting').get('addtype') ?? '리스트뷰';
-  String textchange1 = '';
-
-  return SizedBox(
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        SizedBox(
-            width: maxWidth * 0.4,
-            height: maxHeight,
-            child: SingleChildScrollView(
-              physics: const ScrollPhysics(),
-              child:
-                  Type0UI(maxHeight, focusnodelist, texteditingcontrollerlist),
-            )),
-        SizedBox(
-          width: maxWidth * 0.4,
-          child: ScrollConfiguration(
-            behavior: NoBehavior(),
-            child: SingleChildScrollView(
-              physics: const ScrollPhysics(),
-              child: Type1UI(maxHeight),
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-PRView(maxHeight, List<TextEditingController> texteditingcontrollerlist,
-    List<FocusNode> focusnodelist, int type) {
+    int type,
+    String id) {
   final searchNode = FocusNode();
   final draw = Get.put(navibool());
   List tabname = ['New', 'History'];
@@ -131,20 +97,25 @@ PRView(maxHeight, List<TextEditingController> texteditingcontrollerlist,
                     })),
               ),
               current[0] == true
-                  ? Type0UI(maxHeight, focusnodelist, texteditingcontrollerlist)
-                  : Type1UI(maxHeight),
+                  ? Type0UI(maxWidth, maxHeight, focusnodelist,
+                      texteditingcontrollerlist, id)
+                  : Type1UI(maxHeight, id),
             ],
           ),
         ));
   }));
 }
 
-Type0UI(maxHeight, List<FocusNode> focusnodelist,
-    List<TextEditingController> texteditingcontrollerlist) {
-  List titletype0 = ['제목', '타입지정'];
+Type0UI(maxWidth, maxHeight, List<FocusNode> focusnodelist,
+    List<TextEditingController> texteditingcontrollerlist, String id) {
+  final uiset = Get.put(uisetting());
+  final linkspaceset = Get.put(linkspacesetting());
+  List titletype0 = ['제목', '코드번호', '뷰타입지정'];
   List<String> dropdownList = ['리스트뷰', '그리드뷰', '캘린더뷰'];
   String selectedDropdown = Hive.box('user_setting').get('addtype') ?? '리스트뷰';
   String textchange1 = '';
+  int indexcnt = linkspaceset.indexcnt.length;
+
   return StatefulBuilder(builder: ((context, setState) {
     return Column(
       children: [
@@ -172,79 +143,106 @@ Type0UI(maxHeight, List<FocusNode> focusnodelist,
                   const SizedBox(
                     height: 20,
                   ),
-                  ContainerDesign(
-                      child: index == 0
-                          ? SizedBox(
-                              height: 30,
-                              child: TextField(
-                                minLines: 1,
-                                maxLines: 1,
-                                focusNode: focusnodelist[index],
-                                style: TextStyle(
-                                    fontSize: contentTextsize(),
-                                    color: TextColor()),
-                                decoration: InputDecoration(
-                                  contentPadding:
-                                      const EdgeInsets.only(left: 10),
-                                  border: InputBorder.none,
-                                  isCollapsed: true,
-                                  hintText: '이곳에 입력...',
-                                  hintStyle: TextStyle(
+                  SizedBox(
+                    width: maxWidth - 50,
+                    child: ContainerDesign(
+                        child: index == 0
+                            ? SizedBox(
+                                height: 30,
+                                child: TextField(
+                                  minLines: 1,
+                                  maxLines: 1,
+                                  focusNode: focusnodelist[index],
+                                  style: TextStyle(
                                       fontSize: contentTextsize(),
-                                      color: Colors.grey.shade400),
+                                      color: TextColor()),
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                        const EdgeInsets.only(left: 10),
+                                    border: InputBorder.none,
+                                    isCollapsed: true,
+                                    hintText: '이곳에 입력...',
+                                    hintStyle: TextStyle(
+                                        fontSize: contentTextsize(),
+                                        color: Colors.grey.shade400),
+                                  ),
+                                  onChanged: (text) {
+                                    setState(() {
+                                      textchange1 = text;
+                                    });
+                                  },
+                                  controller: texteditingcontrollerlist[index],
                                 ),
-                                onChanged: (text) {
-                                  setState(() {
-                                    textchange1 = text;
-                                  });
-                                },
-                                controller: texteditingcontrollerlist[index],
-                              ),
-                            )
-                          : SizedBox(
-                              height: 30,
-                              child: DropdownButton(
-                                value: selectedDropdown,
-                                items: dropdownList.map((String item) {
-                                  return DropdownMenuItem<String>(
-                                    child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(item)),
-                                    value: item,
-                                  );
-                                }).toList(),
-                                style: TextStyle(
-                                    color: draw.color_textstatus,
-                                    fontSize: 20.0),
-                                underline: Container(
-                                  height: 0,
-                                ),
-                                isExpanded: true,
-                                icon: Icon(
-                                  Feather.box,
-                                  color: draw.color_textstatus,
-                                ),
-                                onChanged: (dynamic value) {
-                                  setState(() {
-                                    selectedDropdown = value;
-                                    Hive.box('user_setting')
-                                        .put('addtype', value);
-                                  });
-                                },
-                              ),
-                            ),
-                      color: BGColor()),
+                              )
+                            : (index == 1
+                                ? SizedBox(
+                                    height: 30,
+                                    child: TextField(
+                                      minLines: 1,
+                                      maxLines: 1,
+                                      readOnly: true,
+                                      focusNode: focusnodelist[index],
+                                      style: TextStyle(
+                                          fontSize: contentTextsize(),
+                                          color: TextColor()),
+                                      decoration: InputDecoration(
+                                        contentPadding:
+                                            const EdgeInsets.only(left: 10),
+                                        border: InputBorder.none,
+                                        isCollapsed: true,
+                                        hintText: '고유코드번호가 이곳에 표시됩니다.',
+                                        hintStyle: TextStyle(
+                                            fontSize: contentTextsize(),
+                                            color: Colors.grey.shade400),
+                                      ),
+                                      controller:
+                                          texteditingcontrollerlist[index]
+                                            ..text = id +
+                                                '@' +
+                                                texteditingcontrollerlist[0]
+                                                    .text,
+                                    ),
+                                  )
+                                : SizedBox(
+                                    height: 30,
+                                    child: DropdownButton(
+                                      value: selectedDropdown,
+                                      items: dropdownList.map((String item) {
+                                        return DropdownMenuItem<String>(
+                                          child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(item)),
+                                          value: item,
+                                        );
+                                      }).toList(),
+                                      style: TextStyle(
+                                          color: draw.color_textstatus,
+                                          fontSize: 20.0),
+                                      underline: Container(
+                                        height: 0,
+                                      ),
+                                      isExpanded: true,
+                                      icon: Icon(
+                                        Feather.box,
+                                        color: draw.color_textstatus,
+                                      ),
+                                      onChanged: (dynamic value) {
+                                        setState(() {
+                                          selectedDropdown = value;
+                                          Hive.box('user_setting')
+                                              .put('addtype', value);
+                                        });
+                                      },
+                                    ),
+                                  )),
+                        color: BGColor()),
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
                 ],
               );
             })),
-        QrImage(
-          data: textchange1 + selectedDropdown,
-          version: QrVersions.auto,
-          size: 200.0,
-        ),
         Container(
           height: 30,
         ),
@@ -254,7 +252,38 @@ Type0UI(maxHeight, List<FocusNode> focusnodelist,
                   borderRadius: BorderRadius.circular(20)),
               primary: ButtonColor(),
             ),
-            onPressed: () {},
+            onPressed: () async {
+              if (texteditingcontrollerlist[0].text == '') {
+                Snack.snackbars(
+                    context: context,
+                    title: '제목이 비어있어요!',
+                    backgroundcolor: Colors.red,
+                    bordercolor: draw.backgroundcolor);
+              } else {
+                await firestore.collection('PageView').add({
+                  'id': id,
+                  'spacename': texteditingcontrollerlist[0].text,
+                  'pagename': uiset.pagelist[uiset.mypagelistindex].title,
+                  'type': 0,
+                  'index': indexcnt + 1,
+                  'codename': texteditingcontrollerlist[1].text,
+                  'canshow': '나 혼자만',
+                }).whenComplete(() {
+                  Snack.snackbars(
+                      context: context,
+                      title: '정상적으로 처리되었어요',
+                      backgroundcolor: Colors.green,
+                      bordercolor: draw.backgroundcolor);
+                  linkspaceset.setcompleted(false);
+                  linkspaceset.setspacelink(texteditingcontrollerlist[0].text);
+                  Get.to(
+                      () => const mainroute(
+                            index: 0,
+                          ),
+                      transition: Transition.fadeIn);
+                });
+              }
+            },
             child: SizedBox(
               height: 50,
               width: 80.w,
@@ -289,22 +318,11 @@ Type0UI(maxHeight, List<FocusNode> focusnodelist,
   }));
 }
 
-Type1UI(maxHeight) {
+Type1UI(maxHeight, String id) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(
-        'QR 클립보드',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: contentTitleTextsize(),
-          color: TextColor(),
-        ),
-      ),
-      Container(
-        height: 20,
-      ),
       SizedBox(
           height: maxHeight - 50,
           child: Column(
@@ -320,7 +338,7 @@ Type1UI(maxHeight) {
                 height: 20,
               ),
               Text(
-                '사용하셨던 QR 리스트는 비어있습니다.',
+                '생성하셨던 뷰의 히스토리는 비어있습니다.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: contentTextsize(), color: draw.color_textstatus),

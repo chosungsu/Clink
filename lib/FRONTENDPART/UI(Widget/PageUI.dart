@@ -1,4 +1,5 @@
-// ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names
+/**
+ * // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names
 
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -27,7 +28,7 @@ UI(id, controller, maxWidth, maxHeight) {
             stream: PageViewStreamParent(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                PageViewRes1(id, snapshot);
+                PageViewRes1_1(id, snapshot);
                 return linkspaceset.indexcnt.isEmpty
                     ? SizedBox(
                         height: maxHeight,
@@ -196,7 +197,7 @@ PageUI0(context, id, controller) {
                               InkWell(
                                 onTap: () async {
                                   PageViewStreamChild2(context, id, index,
-                                      controller, searchNode);
+                                      controller, searchNode,);
                                 },
                                 child: Icon(
                                   Icons.more_horiz,
@@ -773,3 +774,5 @@ RecentNotice(maxWidth, index) {
     ],
   );
 }
+
+ */

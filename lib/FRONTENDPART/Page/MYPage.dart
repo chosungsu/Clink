@@ -1,4 +1,5 @@
-// ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names
+/**
+ * // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names
 import 'package:clickbyme/Tool/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/ResponsiveUI.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -176,3 +177,5 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
     }));
   }
 }
+
+ */

@@ -129,7 +129,7 @@ class _NotiAlarmState extends State<NotiAlarm>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           AppBarCustom(
-                            title: 'notipagetitle'.tr,
+                            title: 'Notice',
                             lefticon: false,
                             lefticonname: Icons.add,
                             righticon: true,

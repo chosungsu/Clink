@@ -47,6 +47,12 @@ class uisetting extends GetxController {
     notifyChildrens();
   }
 
+  void removeeditpage() {
+    editpagelist.clear();
+    update();
+    notifyChildrens();
+  }
+
   void seteditpage(
       String what, String username, String email, String id, String setting) {
     searchpagemove = what;

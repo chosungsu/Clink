@@ -2,6 +2,7 @@
 
 import 'package:clickbyme/BACKENDPART/FIREBASE/PersonalVP.dart';
 import 'package:clickbyme/BACKENDPART/FIREBASE/SearchVP.dart';
+import 'package:clickbyme/FRONTENDPART/UI(Widget/Page2UI.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -58,10 +59,17 @@ SearchUI(context, scrollController, TextEditingController controller,
                   })),
             ),
           ))
-      : ScrollConfiguration(
-          behavior: NoBehavior(),
-          child: Se_Container2(context, uiset.editpagelist[0].id.toString(),
-              uiset.editpagelist[0].setting.toString(), controller3));
+      : Flexible(
+          fit: FlexFit.tight,
+          child: SizedBox(
+            child: ScrollConfiguration(
+                behavior: NoBehavior(),
+                child: Se_Container2(
+                    context,
+                    uiset.editpagelist[0].id.toString(),
+                    uiset.editpagelist[0].setting.toString(),
+                    controller3)),
+          ));
 }
 
 Se_Container0(double height, controller, searchNode) {
@@ -385,6 +393,7 @@ Se_Container11(double height, TextEditingController controller, searchNode) {
                                         Hive.box('user_setting')
                                             .put('page_index', 12);
                                         uiset.setfavorpageindex(index);
+                                        uiset.removeeditpage();
                                         uiset.seteditpage(
                                             uiset.favorpagelist[index].title,
                                             uiset.favorpagelist[index].username
@@ -490,7 +499,15 @@ Se_Container11(double height, TextEditingController controller, searchNode) {
 
 Se_Container2(
     context, String id, String setting, TextEditingController controller) {
-  return PageUI1(context, id, controller);
+  return LayoutBuilder(
+    builder: ((context, constraint) {
+      return SingleChildScrollView(
+          physics: const ScrollPhysics(),
+          child:
+              UI2(id, controller, constraint.maxWidth, constraint.maxHeight));
+    }),
+  );
+  //PageUI1(context, id, controller);
 }
 
 Se_Container3(

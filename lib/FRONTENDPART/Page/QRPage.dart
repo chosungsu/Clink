@@ -20,9 +20,11 @@ class QRPage extends StatefulWidget {
   const QRPage({
     Key? key,
     required this.type,
+    required this.id,
   }) : super(key: key);
 
   final int type;
+  final String id;
   @override
   State<StatefulWidget> createState() => _QRPageState();
 }
@@ -62,10 +64,7 @@ class _QRPageState extends State<QRPage>
     return Scaffold(
         backgroundColor: BGColor(),
         body: SafeArea(
-          child: WillPopScope(
-            onWillPop: _onWillPop,
-            child: UI(),
-          ),
+          child: WillPopScope(onWillPop: _onWillPop, child: UI()),
         ));
   }
 
@@ -79,6 +78,9 @@ class _QRPageState extends State<QRPage>
             child: GetBuilder<navibool>(
               builder: (_) => GestureDetector(
                 onTap: () {
+                  for (int i = 0; i < focusnodelist.length; i++) {
+                    focusnodelist[i].unfocus();
+                  }
                   draw.drawopen == true
                       ? setState(() {
                           draw.drawopen = false;
@@ -119,7 +121,8 @@ class _QRPageState extends State<QRPage>
                                               constraint.maxHeight,
                                               texteditingcontrollerlist,
                                               focusnodelist,
-                                              widget.type),
+                                              widget.type,
+                                              widget.id),
                                         );
                                       }),
                                     )),
@@ -141,7 +144,7 @@ class _QRPageState extends State<QRPage>
           () => const mainroute(
                 index: 0,
               ),
-          transition: Transition.downToUp);
+          transition: Transition.fadeIn);
       //Get.back();
     });
     return false;

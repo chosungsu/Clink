@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import '../../FRONTENDPART/Page/QRPage.dart';
 import '../../Tool/TextSize.dart';
 
-Widgets_plusbtn(context) {
+Widgets_plusbtn(context, checkid) {
   Widget title;
   Widget content;
   title = const SizedBox();
@@ -14,10 +14,8 @@ Widgets_plusbtn(context) {
     children: [
       ListTile(
         onTap: () {
-          Get.to(
-              () => const QRPage(
-                    type: 0,
-                  ),
+          Get.back();
+          Get.to(() => QRPage(type: 0, id: checkid),
               transition: Transition.fade);
         },
         trailing: const Icon(
@@ -37,10 +35,8 @@ Widgets_plusbtn(context) {
       ),
       ListTile(
         onTap: () {
-          Get.to(
-              () => const QRPage(
-                    type: 1,
-                  ),
+          Get.back();
+          Get.to(() => QRPage(type: 1, id: checkid),
               transition: Transition.fade);
         },
         trailing: const Icon(
