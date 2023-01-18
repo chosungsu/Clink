@@ -18,6 +18,63 @@ import 'Getx/uisetting.dart';
 import 'TextSize.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
+/**
+ * /*Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              GestureDetector(
+                                                onTap: (() => func5()),
+                                                child: RichText(
+                                                    softWrap: true,
+                                                    text: TextSpan(children: [
+                                                      WidgetSpan(
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            fontSize:
+                                                                contentTitleTextsize(),
+                                                            color: draw
+                                                                .color_textstatus),
+                                                        child: Row(
+                                                          children: [
+                                                            Text(
+                                                              title.toString(),
+                                                              maxLines: 1,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              style: TextStyle(
+                                                                  fontFamily:
+                                                                      'DancingScript',
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  fontSize:
+                                                                      mainTitleTextsize(),
+                                                                  color: draw
+                                                                      .color_textstatus),
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                            Icon(
+                                                              Entypo
+                                                                  .chevron_small_down,
+                                                              color: draw
+                                                                  .color_textstatus,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ])),
+                                              )
+                                            ],
+                                          )*/
+ */
 class AppBarCustom extends StatelessWidget {
   AppBarCustom({
     Key? key,
@@ -47,7 +104,6 @@ class AppBarCustom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
     var updateid = '';
     var updateusername = [];
     List<int> navinumlist = [0, 1, 2, 3];
@@ -95,6 +151,7 @@ class AppBarCustom extends StatelessWidget {
                       child: GetBuilder<navibool>(
                         builder: (_) => Row(
                           mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             navinumlist.contains(Hive.box('user_setting')
                                         .get('page_index')) &&
@@ -170,84 +227,21 @@ class AppBarCustom extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Hive.box('user_setting').get('page_index') ==
-                                          0
-                                      ? Flexible(
-                                          fit: FlexFit.tight,
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              ContainerDesign(
-                                                  child: GestureDetector(
-                                                    onTap: (() => func5()),
-                                                    child: RichText(
-                                                        softWrap: true,
-                                                        text:
-                                                            TextSpan(children: [
-                                                          WidgetSpan(
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal,
-                                                                fontSize:
-                                                                    contentTitleTextsize(),
-                                                                color: draw
-                                                                    .color_textstatus),
-                                                            child: Row(
-                                                              children: [
-                                                                Text(
-                                                                  title
-                                                                      .toString(),
-                                                                  maxLines: 1,
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .start,
-                                                                  style: TextStyle(
-                                                                      fontFamily:
-                                                                          'DancingScript',
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w700,
-                                                                      fontSize:
-                                                                          mainTitleTextsize(),
-                                                                      color: draw
-                                                                          .color_textstatus),
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                ),
-                                                                const SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                                Icon(
-                                                                  Entypo
-                                                                      .chevron_small_down,
-                                                                  color: draw
-                                                                      .color_textstatus,
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ])),
-                                                  ),
-                                                  color: draw.backgroundcolor)
-                                            ],
-                                          ))
-                                      : Flexible(
-                                          fit: FlexFit.tight,
-                                          child: SizedBox(
-                                            child: Text(
-                                              title.toString(),
-                                              maxLines: 1,
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  fontFamily: 'DancingScript',
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: mainTitleTextsize(),
-                                                  color: draw.color_textstatus),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          )),
+                                  Flexible(
+                                      fit: FlexFit.tight,
+                                      child: SizedBox(
+                                        child: Text(
+                                          title.toString(),
+                                          maxLines: 1,
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              fontFamily: 'DancingScript',
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: mainTitleTextsize(),
+                                              color: draw.color_textstatus),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      )),
                                   righticon == true
                                       ? Row(
                                           children: [

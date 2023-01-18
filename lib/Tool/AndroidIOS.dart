@@ -210,7 +210,7 @@ OSDialogthird(BuildContext context, String title, content, pressed) {
 }
 
 OSDialogWithoutaction(BuildContext context, String title, content) {
-  return GetPlatform.isAndroid == true
+  return GetPlatform.isAndroid == true || GetPlatform.isWeb == true
       ? AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),

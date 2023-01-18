@@ -68,7 +68,8 @@ SearchUI(context, scrollController, TextEditingController controller,
                     context,
                     uiset.editpagelist[0].id.toString(),
                     uiset.editpagelist[0].setting.toString(),
-                    controller3)),
+                    controller3,
+                    searchNode)),
           ));
 }
 
@@ -497,14 +498,14 @@ Se_Container11(double height, TextEditingController controller, searchNode) {
           ));
 }
 
-Se_Container2(
-    context, String id, String setting, TextEditingController controller) {
+Se_Container2(context, String id, String setting,
+    TextEditingController controller, searchNode) {
   return LayoutBuilder(
     builder: ((context, constraint) {
       return SingleChildScrollView(
           physics: const ScrollPhysics(),
-          child:
-              UI2(id, controller, constraint.maxWidth, constraint.maxHeight));
+          child: UI2(id, controller, searchNode, constraint.maxWidth,
+              constraint.maxHeight));
     }),
   );
   //PageUI1(context, id, controller);

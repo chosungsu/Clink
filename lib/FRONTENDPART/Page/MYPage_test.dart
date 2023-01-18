@@ -127,43 +127,44 @@ class _MYPage_testState extends State<MYPage_test>
                   },
                   child: SizedBox(
                     height: height,
-                    child: Container(
-                        color: draw.backgroundcolor,
-                        child: Column(
-                          children: [
-                            GetBuilder<uisetting>(
-                              builder: (_) => AppBarCustom(
-                                title: 'OnBox',
-                                lefticon: false,
-                                righticon: true,
-                                doubleicon: false,
-                                lefticonname: Ionicons.add_outline,
-                                righticonname: Ionicons.add_outline,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Flexible(
-                                fit: FlexFit.tight,
-                                child: ScrollConfiguration(
-                                    behavior: NoBehavior(),
-                                    child: LayoutBuilder(
-                                      builder: ((context, constraint) {
-                                        return SingleChildScrollView(
-                                            physics: const ScrollPhysics(),
-                                            child: UI2(
+                    child: GetBuilder<uisetting>(
+                      builder: (controller) {
+                        return Container(
+                            color: draw.backgroundcolor,
+                            child: Column(
+                              children: [
+                                AppBarCustom(
+                                  title: 'OnBox',
+                                  lefticon: false,
+                                  righticon: true,
+                                  doubleicon: false,
+                                  lefticonname: Ionicons.add_outline,
+                                  righticonname: Ionicons.add_outline,
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Flexible(
+                                    fit: FlexFit.tight,
+                                    child: ScrollConfiguration(
+                                        behavior: NoBehavior(),
+                                        child: LayoutBuilder(
+                                          builder: ((context, constraint) {
+                                            return UI2(
                                                 uiset
                                                     .pagelist[
                                                         uiset.mypagelistindex]
                                                     .id,
                                                 _controller,
+                                                searchNode,
                                                 constraint.maxWidth,
-                                                constraint.maxHeight));
-                                      }),
-                                    ))),
-                          ],
-                        )),
+                                                constraint.maxHeight);
+                                          }),
+                                        ))),
+                              ],
+                            ));
+                      },
+                    ),
                   ),
                 ),
               )));
