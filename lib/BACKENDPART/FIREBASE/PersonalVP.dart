@@ -23,7 +23,6 @@ PageViewStreamParent() {
 }
 
 PageViewRes1_1(id, snapshot) {
-  final linkspaceset = Get.put(linkspacesetting());
   linkspaceset.indextreetmp.clear();
   linkspaceset.indexcnt.clear();
   final valuespace = snapshot.data!.docs;
@@ -206,7 +205,6 @@ PageViewStreamParent2() {
 }
 
 PageViewRes2(id, snapshot, index) {
-  final linkspaceset = Get.put(linkspacesetting());
   linkspaceset.indextreetmp[index].clear();
   final valuespace = snapshot.data!.docs;
   for (var sp in valuespace) {
@@ -272,24 +270,22 @@ PageViewStreamChild4(context, id, index, index2, controller, searchNode,
   await firestore.collection('Pinchannel').doc(id).get().then(
     (value) {
       if (value.get('username') == usercode) {
-        title = Widgets_horizontalbtn(
+        title = Widgets_horizontalbtnsecond(
           context,
           index2,
-          linkspaceset.indexcnt[index].placestr,
-          linkspaceset.indexcnt[index].uniqueid,
+          linkspaceset.indextreetmp[index][index2].placestr,
+          linkspaceset.indextreetmp[index][index2].uniqueid,
           0,
-          linkspaceset.indexcnt[index].canshow,
           controller,
           searchNode,
           'pinchannelin',
         )[0];
-        content = Widgets_horizontalbtn(
+        content = Widgets_horizontalbtnsecond(
           context,
           index2,
-          linkspaceset.indexcnt[index].placestr,
-          linkspaceset.indexcnt[index].uniqueid,
+          linkspaceset.indextreetmp[index][index2].placestr,
+          linkspaceset.indextreetmp[index][index2].uniqueid,
           0,
-          linkspaceset.indexcnt[index].canshow,
           controller,
           searchNode,
           'pinchannelin',
@@ -298,24 +294,22 @@ PageViewStreamChild4(context, id, index, index2, controller, searchNode,
       } else {
         if (value.get('setting') == 'block') {
         } else {
-          title = Widgets_horizontalbtn(
+          title = Widgets_horizontalbtnsecond(
             context,
             index2,
-            linkspaceset.indexcnt[index].placestr,
-            linkspaceset.indexcnt[index].uniqueid,
+            linkspaceset.indextreetmp[index][index2].placestr,
+            linkspaceset.indextreetmp[index][index2].uniqueid,
             0,
-            linkspaceset.indexcnt[index].canshow,
             controller,
             searchNode,
             'pinchannelin',
           )[0];
-          content = Widgets_horizontalbtn(
+          content = Widgets_horizontalbtnsecond(
             context,
             index2,
-            linkspaceset.indexcnt[index].placestr,
-            linkspaceset.indexcnt[index].uniqueid,
+            linkspaceset.indextreetmp[index][index2].placestr,
+            linkspaceset.indextreetmp[index][index2].uniqueid,
             0,
-            linkspaceset.indexcnt[index].canshow,
             controller,
             searchNode,
             'pinchannelin',

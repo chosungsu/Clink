@@ -1,11 +1,9 @@
 // ignore_for_file: unused_local_variable, must_be_immutable, non_constant_identifier_names
 
 import 'package:clickbyme/Tool/ContainerDesign.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import '../Enums/PageList.dart';
 import '../Enums/Variables.dart';
@@ -18,63 +16,6 @@ import 'Getx/uisetting.dart';
 import 'TextSize.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
-/**
- * /*Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              GestureDetector(
-                                                onTap: (() => func5()),
-                                                child: RichText(
-                                                    softWrap: true,
-                                                    text: TextSpan(children: [
-                                                      WidgetSpan(
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .normal,
-                                                            fontSize:
-                                                                contentTitleTextsize(),
-                                                            color: draw
-                                                                .color_textstatus),
-                                                        child: Row(
-                                                          children: [
-                                                            Text(
-                                                              title.toString(),
-                                                              maxLines: 1,
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start,
-                                                              style: TextStyle(
-                                                                  fontFamily:
-                                                                      'DancingScript',
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                  fontSize:
-                                                                      mainTitleTextsize(),
-                                                                  color: draw
-                                                                      .color_textstatus),
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                            ),
-                                                            const SizedBox(
-                                                              width: 10,
-                                                            ),
-                                                            Icon(
-                                                              Entypo
-                                                                  .chevron_small_down,
-                                                              color: draw
-                                                                  .color_textstatus,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ])),
-                                              )
-                                            ],
-                                          )*/
- */
 class AppBarCustom extends StatelessWidget {
   AppBarCustom({
     Key? key,
@@ -84,11 +25,11 @@ class AppBarCustom extends StatelessWidget {
     required this.righticon,
     required this.righticonname,
     required this.doubleicon,
-    textEditingController,
-    focusNode,
     myindex,
     indexcnt,
     mainid,
+    this.textcontroller,
+    this.searchnode,
   }) : super(key: key);
   final String title;
   final bool righticon;
@@ -96,9 +37,9 @@ class AppBarCustom extends StatelessWidget {
   final bool doubleicon;
   final bool lefticon;
   final IconData lefticonname;
+  var textcontroller;
+  var searchnode;
   int myindex = 0;
-  TextEditingController textEditingController = TextEditingController();
-  FocusNode searchnode = FocusNode();
   int indexcnt = linkspaceset.indexcnt.length;
   String mainid = Hive.box('user_setting').get('widgetid') ?? '';
 
@@ -113,32 +54,6 @@ class AppBarCustom extends StatelessWidget {
     final uiset = Get.put(uisetting());
     final draw = Get.put(navibool());
     StatusBarControl.setColor(draw.backgroundcolor, animated: true);
-
-    OnClickedRightIcons(righticonname) {
-      return righticonname == Ionicons.add_outline
-          ? (Hive.box('user_setting').get('page_index') == 0
-              ? func4_changever(context)
-              : func6(context, textEditingController, searchnode, 'addpage', '',
-                  99, indexcnt))
-          : (righticonname == AntDesign.delete
-              ? func2(context)
-              : (righticonname == Icons.star_border ||
-                      righticonname == Icons.star
-                  ? func7(
-                      uiset.editpagelist[0].title,
-                      uiset.editpagelist[0].email.toString(),
-                      uiset.editpagelist[0].username.toString(),
-                      uiset.editpagelist[0].id.toString())
-                  : (righticonname == Icons.person_outline
-                      ? (Hive.box('user_info').get('id') == null
-                          ? GoToLogin('isnotfirst')
-                          : setUsers(context, searchnode, textEditingController,
-                              Hive.box('user_info').get('id')))
-                      : (righticonname == Icons.download
-                          ? downloadFileExample(mainid, context)
-                          : func6(context, textEditingController, searchnode,
-                              'addpage', '', 99, indexcnt)))));
-    }
 
     return StatefulBuilder(builder: ((context, setState) {
       return GetBuilder<navibool>(
@@ -256,8 +171,13 @@ class AppBarCustom extends StatelessWidget {
                                                     ? ContainerDesign(
                                                         child: GestureDetector(
                                                           onTap: () => func4(
-                                                              context,
-                                                              indexcnt),
+                                                            context,
+                                                            textcontroller,
+                                                            searchnode,
+                                                            'addpage',
+                                                            '',
+                                                            99,
+                                                          ),
                                                           child: Icon(
                                                             Ionicons
                                                                 .add_outline,
@@ -288,9 +208,13 @@ class AppBarCustom extends StatelessWidget {
                                             GetBuilder<uisetting>(
                                                 builder: (_) => ContainerDesign(
                                                     child: GestureDetector(
-                                                        onTap: () =>
-                                                            OnClickedRightIcons(
-                                                                righticonname),
+                                                        onTap: () {
+                                                          textcontroller.text =
+                                                              '';
+                                                          OnClickedRightIcons(
+                                                              context,
+                                                              righticonname);
+                                                        },
                                                         child: Container(
                                                           padding:
                                                               EdgeInsets.zero,
@@ -364,5 +288,49 @@ class AppBarCustom extends StatelessWidget {
                         ),
                       )))));
     }));
+  }
+
+  OnClickedRightIcons(context, righticonname) {
+    return righticonname == Ionicons.add_outline
+        ? (Hive.box('user_setting').get('page_index') == 0
+            ? func4(
+                context,
+                textcontroller,
+                searchnode,
+                'addpage',
+                '',
+                99,
+              )
+            : func6(
+                context,
+                textcontroller,
+                searchnode,
+                'addpage',
+                '',
+                99,
+              ))
+        : (righticonname == AntDesign.delete
+            ? func2(context)
+            : (righticonname == Icons.star_border || righticonname == Icons.star
+                ? func7(
+                    uiset.editpagelist[0].title,
+                    uiset.editpagelist[0].email.toString(),
+                    uiset.editpagelist[0].username.toString(),
+                    uiset.editpagelist[0].id.toString())
+                : (righticonname == Icons.person_outline
+                    ? (Hive.box('user_info').get('id') == null
+                        ? GoToLogin('isnotfirst')
+                        : setUsers(context, searchnode, textcontroller,
+                            Hive.box('user_info').get('id')))
+                    : (righticonname == Icons.download
+                        ? downloadFileExample(mainid, context)
+                        : func6(
+                            context,
+                            textcontroller,
+                            searchnode,
+                            'addpage',
+                            '',
+                            99,
+                          )))));
   }
 }

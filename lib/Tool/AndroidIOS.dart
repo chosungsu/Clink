@@ -1,10 +1,9 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get_utils/src/platform/platform.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import 'TextSize.dart';
 
@@ -34,10 +33,42 @@ ReturnByPlatform(actionandroid, actionios, actionweb) {
 }
 
 Responsivelayout(size, landscape, portrait) {
-  if (size > 650) {
-    return landscape;
+  if (Device.screenType == ScreenType.desktop) {
+    if (Device.orientation == Orientation.landscape) {
+      return landscape;
+    } else {
+      return portrait;
+    }
+  } else if (Device.screenType == ScreenType.mobile) {
+    if (Device.orientation == Orientation.landscape) {
+      return landscape;
+    } else {
+      return portrait;
+    }
   } else {
-    return portrait;
+    if (Device.orientation == Orientation.landscape) {
+      return landscape;
+    } else {
+      return portrait;
+    }
+  }
+}
+
+getHeight(GlobalKey key) {
+  if (key.currentContext != null) {
+    final RenderBox renderBox =
+        key.currentContext!.findRenderObject() as RenderBox;
+    double height = renderBox.size.height;
+    return height;
+  }
+}
+
+getWidth(GlobalKey key) {
+  if (key.currentContext != null) {
+    final RenderBox renderBox =
+        key.currentContext!.findRenderObject() as RenderBox;
+    double width = renderBox.size.width;
+    return width;
   }
 }
 

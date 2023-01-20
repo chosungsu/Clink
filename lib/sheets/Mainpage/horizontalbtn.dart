@@ -2,7 +2,6 @@
 
 import 'package:clickbyme/BACKENDPART/FIREBASE/PersonalVP.dart';
 import 'package:clickbyme/Enums/Radio.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
@@ -14,7 +13,6 @@ import '../../Tool/FlushbarStyle.dart';
 import '../../Tool/Getx/category.dart';
 import '../../Tool/Getx/linkspacesetting.dart';
 import '../../Tool/Getx/uisetting.dart';
-import '../../Tool/RadioCustom.dart';
 import '../../Tool/TextSize.dart';
 
 Widgets_horizontalbtn(
@@ -52,11 +50,23 @@ Widgets_horizontalbtn(
             Get.back();
             controller.text = placestr;
             if (s == 'pinchannel') {
-              func6(context, controller, searchNode, 'editnametemplate',
-                  uniquecode, type, 0);
+              func6(
+                context,
+                controller,
+                searchNode,
+                'editnametemplate',
+                uniquecode,
+                type,
+              );
             } else {
-              func6(context, controller, searchNode, 'editnametemplatein',
-                  uniquecode, index, 0);
+              func6(
+                context,
+                controller,
+                searchNode,
+                'editnametemplatein',
+                uniquecode,
+                index,
+              );
             }
           },
           trailing: const Icon(
@@ -68,9 +78,7 @@ Widgets_horizontalbtn(
             softWrap: true,
             textAlign: TextAlign.start,
             style: TextStyle(
-                color: placestr == 'calendar'
-                    ? Colors.grey.shade300
-                    : Colors.black,
+                color: Colors.black,
                 fontWeight: FontWeight.bold,
                 fontSize: contentTextsize()),
             overflow: TextOverflow.ellipsis,
@@ -85,8 +93,7 @@ Widgets_horizontalbtn(
                 builder: (context) {
                   return GetBuilder<uisetting>(builder: ((controller) {
                     return SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.85,
-                        height: MediaQuery.of(context).size.height * 0.5,
+                        width: Get.width / 2,
                         child: StatefulBuilder(
                           builder: (context, setState) {
                             return Column(
@@ -176,7 +183,7 @@ Widgets_horizontalbtn(
             final reloadpage = await Get.dialog(OSDialog(context, '경고', Builder(
                   builder: (context) {
                     return SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.85,
+                      width: Get.width / 2,
                       child: SingleChildScrollView(
                         child: Text('정말 이 링크를 삭제하시겠습니까?',
                             style: TextStyle(
@@ -192,87 +199,44 @@ Widgets_horizontalbtn(
               Get.back();
               var parentid;
               var changeindex;
-              if (s == 'pinchannel') {
-                await firestore.collection('PageView').get().then((value) {
-                  for (int i = 0; i < value.docs.length; i++) {
-                    if (value.docs[i].get('spacename') == placestr &&
-                        value.docs[i].get('id') == uniquecode &&
-                        value.docs[i].get('type') == type) {
-                      id = value.docs[i].id;
-                      changeindex = value.docs[i].get('index');
-                    }
+              await firestore.collection('PageView').get().then((value) {
+                for (int i = 0; i < value.docs.length; i++) {
+                  if (value.docs[i].get('spacename') == placestr &&
+                      value.docs[i].get('id') == uniquecode &&
+                      value.docs[i].get('type') == type) {
+                    id = value.docs[i].id;
+                    changeindex = value.docs[i].get('index');
                   }
-                  firestore.collection('PageView').doc(id).delete();
-                }).whenComplete(() async {
-                  await firestore
-                      .collection('Pinchannelin')
-                      .get()
-                      .then((value) {
-                    for (int i = 0; i < value.docs.length; i++) {
-                      if (value.docs[i].get('uniquecode') == id) {
-                        parentid = value.docs[i].id;
-                        updateid.add(parentid);
-                      }
-                    }
-                    if (updateid.isEmpty) {
-                    } else {
-                      for (int j = 0; j < updateid.length; j++) {
-                        firestore
-                            .collection('Pinchannelin')
-                            .doc(updateid[j])
-                            .delete();
-                      }
-                    }
-                  }).whenComplete(() async {
-                    updateid.clear();
-                    updateindex.clear();
-                    Snack.snackbars(
-                        context: context,
-                        title: '삭제완료!',
-                        backgroundcolor: Colors.red,
-                        bordercolor: draw.backgroundcolor);
-                    await firestore.collection('PageView').get().then((value) {
-                      for (int i = 0; i < value.docs.length; i++) {
-                        if (value.docs[i].get('index') > changeindex) {
-                          updateid.add(value.docs[i].id);
-                          updateindex.add(value.docs[i].get('index'));
-                        }
-                      }
-                      if (updateid.isEmpty) {
-                      } else {
-                        for (int j = 0; j < updateid.length; j++) {
-                          firestore
-                              .collection('PageView')
-                              .doc(updateid[j])
-                              .update({'index': updateindex[j] - 1});
-                        }
-                      }
-                    }).whenComplete(() {
-                      linkspaceset.setcompleted(false);
-                    });
-                  });
-                });
-              } else {
+                }
+                firestore.collection('PageView').doc(id).delete();
+              }).whenComplete(() async {
                 await firestore.collection('Pinchannelin').get().then((value) {
                   for (int i = 0; i < value.docs.length; i++) {
-                    if (value.docs[i].get('addname') == placestr &&
-                        value.docs[i].get('uniquecode') == uniquecode &&
-                        value.docs[i].get('index') == index) {
-                      id = value.docs[i].id;
-                      changeindex = value.docs[i].get('index');
+                    if (value.docs[i].get('uniquecode') == id) {
+                      parentid = value.docs[i].id;
+                      updateid.add(parentid);
                     }
                   }
-                  firestore.collection('Pinchannelin').doc(id).delete();
+                  if (updateid.isEmpty) {
+                  } else {
+                    for (int j = 0; j < updateid.length; j++) {
+                      firestore
+                          .collection('Pinchannelin')
+                          .doc(updateid[j])
+                          .delete();
+                    }
+                  }
                 }).whenComplete(() async {
                   updateid.clear();
                   updateindex.clear();
-                  await firestore
-                      .collection('Pinchannelin')
-                      .get()
-                      .then((value) {
+                  Snack.snackbars(
+                      context: context,
+                      title: '삭제완료!',
+                      backgroundcolor: Colors.red,
+                      bordercolor: draw.backgroundcolor);
+                  await firestore.collection('PageView').get().then((value) {
                     for (int i = 0; i < value.docs.length; i++) {
-                      if (value.docs[i].get('uniquecode') == uniquecode &&
-                          value.docs[i].get('index') > changeindex) {
+                      if (value.docs[i].get('index') > changeindex) {
                         updateid.add(value.docs[i].id);
                         updateindex.add(value.docs[i].get('index'));
                       }
@@ -281,34 +245,177 @@ Widgets_horizontalbtn(
                     } else {
                       for (int j = 0; j < updateid.length; j++) {
                         firestore
-                            .collection('Pinchannelin')
+                            .collection('PageView')
                             .doc(updateid[j])
                             .update({'index': updateindex[j] - 1});
                       }
                     }
-                  }).whenComplete(() async {
-                    Snack.snackbars(
-                        context: context,
-                        title: '삭제완료!',
-                        backgroundcolor: Colors.red,
-                        bordercolor: draw.backgroundcolor);
+                  }).whenComplete(() {
                     linkspaceset.setcompleted(false);
-                    firestore.collection('Calendar').get().then((value) {
-                      if (value.docs.isNotEmpty) {
-                        for (int j = 0; j < value.docs.length; j++) {
-                          final messageuniquecode = value.docs[j]['parentid'];
-                          if (messageuniquecode == id) {
-                            firestore
-                                .collection('Calendar')
-                                .doc(value.docs[j].id)
-                                .delete();
-                          }
-                        }
-                      } else {}
-                    }).whenComplete(() {});
                   });
                 });
-              }
+              });
+            }
+          },
+          trailing: const Icon(
+            AntDesign.delete,
+            color: Colors.red,
+          ),
+          title: Text(
+            '삭제',
+            softWrap: true,
+            textAlign: TextAlign.start,
+            style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: contentTextsize()),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    );
+  });
+  return [title, content];
+}
+
+Widgets_horizontalbtnsecond(
+  context,
+  index,
+  placestr,
+  uniquecode,
+  type,
+  controller,
+  searchNode,
+  String s,
+) {
+  Widget title;
+  Widget content;
+  final linkspaceset = Get.put(linkspacesetting());
+  final cg = Get.put(category());
+  final uiset = Get.put(uisetting());
+  final List<Linkspacepage> listspacepageset = [];
+  bool loading = false;
+  var id;
+  var updateid = [];
+  var updateindex = [];
+
+  title = const SizedBox();
+  content = StatefulBuilder(builder: (_, StateSetter setState) {
+    return Column(
+      children: [
+        ListTile(
+          onTap: () {
+            Get.back();
+            controller.text = placestr;
+            if (s == 'pinchannel') {
+              func6(
+                context,
+                controller,
+                searchNode,
+                'editnametemplate',
+                uniquecode,
+                type,
+              );
+            } else {
+              func6(
+                context,
+                controller,
+                searchNode,
+                'editnametemplatein',
+                uniquecode,
+                index,
+              );
+            }
+          },
+          trailing: const Icon(
+            AntDesign.edit,
+            color: Colors.black,
+          ),
+          title: Text(
+            '이름 변경',
+            softWrap: true,
+            textAlign: TextAlign.start,
+            style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: contentTextsize()),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        ListTile(
+          onTap: () async {
+            final reloadpage = await Get.dialog(OSDialog(context, '경고', Builder(
+                  builder: (context) {
+                    return SizedBox(
+                      width: Get.width / 2,
+                      child: SingleChildScrollView(
+                        child: Text('정말 이 링크를 삭제하시겠습니까?',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentTextsize(),
+                                color: Colors.blueGrey)),
+                      ),
+                    );
+                  },
+                ), pressed2)) ??
+                false;
+            if (reloadpage) {
+              Get.back();
+              var parentid;
+              var changeindex;
+
+              await firestore.collection('Pinchannelin').get().then((value) {
+                for (int i = 0; i < value.docs.length; i++) {
+                  if (value.docs[i].get('addname') == placestr &&
+                      value.docs[i].get('uniquecode') == uniquecode &&
+                      value.docs[i].get('index') == index) {
+                    id = value.docs[i].id;
+                    changeindex = value.docs[i].get('index');
+                  }
+                }
+                firestore.collection('Pinchannelin').doc(id).delete();
+              }).whenComplete(() async {
+                updateid.clear();
+                updateindex.clear();
+                await firestore.collection('Pinchannelin').get().then((value) {
+                  for (int i = 0; i < value.docs.length; i++) {
+                    if (value.docs[i].get('uniquecode') == uniquecode &&
+                        value.docs[i].get('index') > changeindex) {
+                      updateid.add(value.docs[i].id);
+                      updateindex.add(value.docs[i].get('index'));
+                    }
+                  }
+                  if (updateid.isEmpty) {
+                  } else {
+                    for (int j = 0; j < updateid.length; j++) {
+                      firestore
+                          .collection('Pinchannelin')
+                          .doc(updateid[j])
+                          .update({'index': updateindex[j] - 1});
+                    }
+                  }
+                }).whenComplete(() async {
+                  Snack.snackbars(
+                      context: context,
+                      title: '삭제완료!',
+                      backgroundcolor: Colors.red,
+                      bordercolor: draw.backgroundcolor);
+                  linkspaceset.setcompleted(false);
+                  firestore.collection('Calendar').get().then((value) {
+                    if (value.docs.isNotEmpty) {
+                      for (int j = 0; j < value.docs.length; j++) {
+                        final messageuniquecode = value.docs[j]['parentid'];
+                        if (messageuniquecode == id) {
+                          firestore
+                              .collection('Calendar')
+                              .doc(value.docs[j].id)
+                              .delete();
+                        }
+                      }
+                    } else {}
+                  }).whenComplete(() {});
+                });
+              });
             }
           },
           trailing: const Icon(

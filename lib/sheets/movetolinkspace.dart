@@ -18,7 +18,6 @@ import '../Tool/Getx/uisetting.dart';
 
 settingseparatedlinkspace(
     BuildContext context,
-    List<PageList> pagelist,
     TextEditingController textEditingController,
     FocusNode searchnode,
     int index) {
@@ -58,8 +57,8 @@ settingseparatedlinkspace(
                   physics: const ScrollPhysics(),
                   child: StatefulBuilder(
                     builder: ((context, setState) {
-                      return space(context, pagelist, textEditingController,
-                          searchnode, index);
+                      return space(
+                          context, textEditingController, searchnode, index);
                     }),
                   ),
                 ),
@@ -70,7 +69,6 @@ settingseparatedlinkspace(
 
 space(
   BuildContext context,
-  List<PageList> pagelist,
   TextEditingController textEditingController,
   FocusNode searchnode,
   int index,
@@ -100,15 +98,13 @@ space(
               const SizedBox(
                 height: 20,
               ),
-              content(
-                  context, pagelist, textEditingController, searchnode, index),
+              content(context, textEditingController, searchnode, index),
             ],
           )));
 }
 
 content(
   BuildContext context,
-  List<PageList> pagelist,
   TextEditingController textEditingController,
   FocusNode searchnode,
   int index,
@@ -144,9 +140,9 @@ content(
         ListTile(
           onTap: () {
             Get.back();
-            textEditingController.text = pagelist[index].title;
+            textEditingController.text = uiset.pagelist[index].title;
             SetChangeLink(context, textEditingController, searchnode,
-                pagelist[index].title);
+                uiset.pagelist[index].title);
           },
           trailing: const Icon(
             Icons.edit,
@@ -188,31 +184,46 @@ content(
               await firestore.collection('Pinchannel').get().then((value) {
                 for (int i = 0; i < value.docs.length; i++) {
                   if (value.docs[i].get('username') == usercode &&
-                      value.docs[i].get('linkname') == pagelist[index].title &&
-                      value.docs[i].id == pagelist[index].id) {
+                      value.docs[i].get('linkname') ==
+                          uiset.pagelist[index].title &&
+                      value.docs[i].id == uiset.pagelist[index].id) {
                     id = value.docs[i].id;
                   }
                 }
                 firestore.collection('Pinchannel').doc(id).delete();
               }).whenComplete(() async {
-                final idlist = [];
-                await firestore.collection('Pinchannelin').get().then((value) {
+                var ids;
+                await firestore.collection('PageView').get().then((value) {
                   for (int i = 0; i < value.docs.length; i++) {
-                    if (value.docs[i].get('nodeid') == pagelist[index].id) {
-                      id = value.docs[i].id;
-                      uniquecodelist.add(value.docs[i].get('uniquecode'));
-                      firestore.collection('Pinchannelin').doc(id).delete();
+                    if (value.docs[i].get('id') == id) {
+                      ids = value.docs[i].id;
                     }
                   }
-                }).whenComplete(() {
-                  uiset.setloading(false);
+                  firestore.collection('PageView').doc(ids).delete();
+                }).whenComplete(() async {
+                  final idlist = [];
+                  await firestore
+                      .collection('Pinchannelin')
+                      .get()
+                      .then((value) {
+                    for (int i = 0; i < value.docs.length; i++) {
+                      if (value.docs[i].get('uniquecode') ==
+                          uiset.pagelist[index].id) {
+                        id = value.docs[i].id;
+                        uniquecodelist.add(value.docs[i].get('uniquecode'));
+                        firestore.collection('Pinchannelin').doc(id).delete();
+                      }
+                    }
+                  }).whenComplete(() {
+                    uiset.setloading(false);
 
-                  linkspaceset.resetspacelink();
-                  for (int k = 0; k < uniquecodelist.length; k++) {
-                    linkspaceset.setspacelink(uniquecodelist[k]);
-                  }
-                  Get.back();
-                  linkspaceset.setcompleted(true);
+                    linkspaceset.resetspacelink();
+                    for (int k = 0; k < uniquecodelist.length; k++) {
+                      linkspaceset.setspacelink(uniquecodelist[k]);
+                    }
+                    Get.back();
+                    linkspaceset.setcompleted(true);
+                  });
                 });
               });
             }
@@ -396,7 +407,6 @@ addmylink(
   String where,
   String id,
   int categorynumber,
-  int indexcnt,
 ) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -441,14 +451,14 @@ addmylink(
                           });
                         },
                         child: linkstation(
-                            context,
-                            textEditingControllerAddSheet,
-                            searchNodeAddSection,
-                            username,
-                            where,
-                            id,
-                            categorynumber,
-                            indexcnt),
+                          context,
+                          textEditingControllerAddSheet,
+                          searchNodeAddSection,
+                          username,
+                          where,
+                          id,
+                          categorynumber,
+                        ),
                       );
                     }),
                   ),
@@ -466,7 +476,6 @@ linkstation(
   String where,
   String id,
   int categorynumber,
-  int indexcnt,
 ) {
   return SizedBox(
       child: Padding(
@@ -497,14 +506,14 @@ linkstation(
           height: 20,
         ),
         contentthird(
-            context,
-            textEditingControllerAddSheet,
-            searchNodeAddSection,
-            username,
-            where,
-            id,
-            categorynumber,
-            indexcnt),
+          context,
+          textEditingControllerAddSheet,
+          searchNodeAddSection,
+          username,
+          where,
+          id,
+          categorynumber,
+        ),
         const SizedBox(
           height: 20,
         ),
@@ -523,12 +532,9 @@ titlethird(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-              where == 'addtemplate'
-                  ? '스페이스 추가'
-                  : (where == 'editnametemplate' ||
-                          where == 'editnametemplatein'
-                      ? '이름 변경'
-                      : '페이지 추가'),
+              where == 'editnametemplate' || where == 'editnametemplatein'
+                  ? '이름 변경'
+                  : '페이지 추가',
               style: const TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -545,243 +551,162 @@ contentthird(
   String where,
   String id,
   int categorynumber,
-  int indexcnt,
+) {
+  return Column(
+    children: [
+      ContainerTextFieldDesign(
+        searchNodeAddSection: searchNodeAddSection,
+        string: where == 'editnametemplate' || where == 'editnametemplatein'
+            ? '변경할 스페이스 이름 입력'
+            : '추가할 페이지 제목 입력',
+        textEditingControllerAddSheet: textEditingControllerAddSheet,
+      ),
+      const SizedBox(
+        height: 30,
+      ),
+      SizedBox(
+        height: 50,
+        child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              primary: ButtonColor(),
+            ),
+            onPressed: () async {
+              Summitthird(context, textEditingControllerAddSheet,
+                  searchNodeAddSection, username, where, id, categorynumber);
+            },
+            child: Center(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                    child: NeumorphicText(
+                      linkspaceset.iscompleted == false ? '생성하기' : '처리중...',
+                      style: const NeumorphicStyle(
+                        shape: NeumorphicShape.flat,
+                        depth: 3,
+                        color: Colors.white,
+                      ),
+                      textStyle: NeumorphicTextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTextsize(),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )),
+      ),
+    ],
+  );
+}
+
+Summitthird(
+  BuildContext context,
+  TextEditingController textEditingControllerAddSheet,
+  FocusNode searchNodeAddSection,
+  String username,
+  String where,
+  String id,
+  int categorynumber,
 ) {
   final updatelist = [];
   final uiset = Get.put(uisetting());
   final linkspaceset = Get.put(linkspacesetting());
   final initialtext = textEditingControllerAddSheet.text;
   var updateid;
-
-  return StatefulBuilder(builder: (_, StateSetter setState) {
-    return Column(
-      children: [
-        ContainerTextFieldDesign(
-          searchNodeAddSection: searchNodeAddSection,
-          string: where == 'addtemplate'
-              ? '추가할 스페이스 제목 입력'
-              : (where == 'editnametemplate' || where == 'editnametemplatein'
-                  ? '변경할 스페이스 이름 입력'
-                  : '추가할 페이지 제목 입력'),
-          textEditingControllerAddSheet: textEditingControllerAddSheet,
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-        SizedBox(
-          height: 50,
-          child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                primary: ButtonColor(),
-              ),
-              onPressed: () async {
-                if (textEditingControllerAddSheet.text.isEmpty) {
-                  Snack.snackbars(
-                      context: context,
-                      title: where == 'addtemplate'
-                          ? '추가할 스페이스 제목이 비어있어요!'
-                          : (where == 'editnametemplate' ||
-                                  where == 'editnametemplatein'
-                              ? '변경할 스페이스 제목이 비어있어요!'
-                              : '추가할 페이지 제목이 비어있어요!'),
-                      backgroundcolor: Colors.red,
-                      bordercolor: draw.backgroundcolor);
-                } else {
-                  linkspaceset.setcompleted(true);
-                  if (where == 'addtemplate') {
-                    if (categorynumber == 0) {
-                      firestore.collection('PageView').add({
-                        'id': id,
-                        'spacename': textEditingControllerAddSheet.text,
-                        'urllist': [],
-                        'pagename': uiset.pagelist[uiset.mypagelistindex].title,
-                        'type': categorynumber,
-                        'index': indexcnt
-                      }).whenComplete(() {
-                        Snack.snackbars(
-                            context: context,
-                            title: '정상적으로 처리되었어요',
-                            backgroundcolor: Colors.green,
-                            bordercolor: draw.backgroundcolor);
-                        linkspaceset.setcompleted(false);
-                        linkspaceset
-                            .setspacelink(textEditingControllerAddSheet.text);
-                        Get.back(result: true);
-                      });
-                    } else if (categorynumber == 1) {
-                      firestore.collection('PageView').add({
-                        'id': id,
-                        'spacename': textEditingControllerAddSheet.text,
-                        'calendarname': textEditingControllerAddSheet.text,
-                        'pagename': uiset.pagelist[uiset.mypagelistindex].title,
-                        'type': categorynumber,
-                        'index': indexcnt
-                      }).whenComplete(() {
-                        Snack.snackbars(
-                            context: context,
-                            title: '정상적으로 처리되었어요',
-                            backgroundcolor: Colors.green,
-                            bordercolor: draw.backgroundcolor);
-                        linkspaceset.setcompleted(false);
-                        linkspaceset
-                            .setspacelink(textEditingControllerAddSheet.text);
-                        Get.back(result: true);
-                      });
-                    } else if (categorynumber == 2) {
-                      firestore.collection('PageView').add({
-                        'id': id,
-                        'spacename': textEditingControllerAddSheet.text,
-                        'todolist': [],
-                        'pagename': uiset.pagelist[uiset.mypagelistindex].title,
-                        'type': categorynumber,
-                        'index': indexcnt
-                      }).whenComplete(() {
-                        Snack.snackbars(
-                            context: context,
-                            title: '정상적으로 처리되었어요',
-                            backgroundcolor: Colors.green,
-                            bordercolor: draw.backgroundcolor);
-                        linkspaceset.setcompleted(false);
-                        linkspaceset
-                            .setspacelink(textEditingControllerAddSheet.text);
-                        Get.back(result: true);
-                      });
-                    } else if (categorynumber == 3) {
-                      firestore.collection('PageView').add({
-                        'id': id,
-                        'spacename': textEditingControllerAddSheet.text,
-                        'memolist': [],
-                        'pagename': uiset.pagelist[uiset.mypagelistindex].title,
-                        'type': categorynumber,
-                        'index': indexcnt
-                      }).whenComplete(() {
-                        Snack.snackbars(
-                            context: context,
-                            title: '정상적으로 처리되었어요',
-                            backgroundcolor: Colors.green,
-                            bordercolor: draw.backgroundcolor);
-                        linkspaceset.setcompleted(false);
-                        linkspaceset
-                            .setspacelink(textEditingControllerAddSheet.text);
-                        Get.back(result: true);
-                      });
-                    }
-                  } else if (where == 'editnametemplate') {
-                    firestore.collection('PageView').get().then((value) {
-                      for (int i = 0; i < value.docs.length; i++) {
-                        if (value.docs[i].get('id') == id &&
-                            value.docs[i].get('type') == categorynumber &&
-                            value.docs[i].get('spacename') == initialtext) {
-                          updateid = value.docs[i].id;
-                        }
-                      }
-                      firestore.collection('PageView').doc(updateid).update({
-                        'spacename': textEditingControllerAddSheet.text
-                      }).whenComplete(() {
-                        Snack.snackbars(
-                            context: context,
-                            title: '정상적으로 처리되었어요',
-                            backgroundcolor: Colors.green,
-                            bordercolor: draw.backgroundcolor);
-                        linkspaceset.setcompleted(false);
-                        linkspaceset
-                            .setspacelink(textEditingControllerAddSheet.text);
-                        Get.back(result: true);
-                      });
-                    });
-                  } else if (where == 'editnametemplatein') {
-                    var parentid;
-                    firestore.collection('Pinchannelin').get().then((value) {
-                      if (value.docs.isNotEmpty) {
-                        for (int j = 0; j < value.docs.length; j++) {
-                          final messageuniquecode = value.docs[j]['uniquecode'];
-                          final messageindex = value.docs[j]['index'];
-                          if (messageindex == categorynumber &&
-                              messageuniquecode == id) {
-                            parentid = value.docs[j].id;
-                            firestore
-                                .collection('Pinchannelin')
-                                .doc(value.docs[j].id)
-                                .update({
-                              'addname': textEditingControllerAddSheet.text
-                            });
-                          }
-                        }
-                      } else {}
-                    }).whenComplete(() {
-                      firestore.collection('Calendar').get().then((value) {
-                        if (value.docs.isNotEmpty) {
-                          for (int j = 0; j < value.docs.length; j++) {
-                            final messageuniquecode = value.docs[j]['parentid'];
-                            if (messageuniquecode == parentid) {
-                              firestore
-                                  .collection('Calendar')
-                                  .doc(value.docs[j].id)
-                                  .update({
-                                'calname': textEditingControllerAddSheet.text
-                              });
-                            }
-                          }
-                        } else {}
-                      }).whenComplete(() {
-                        Snack.snackbars(
-                            context: context,
-                            title: '정상적으로 처리되었어요',
-                            backgroundcolor: Colors.green,
-                            bordercolor: draw.backgroundcolor);
-                        linkspaceset.setcompleted(false);
-                        linkspaceset
-                            .setspacelink(textEditingControllerAddSheet.text);
-                        Get.back(result: true);
-                      });
-                    });
-                  } else {
-                    firestore.collection('Pinchannel').add({
-                      'username': username,
-                      'linkname': textEditingControllerAddSheet.text,
-                      'setting': 'block'
-                    }).whenComplete(() {
-                      Snack.snackbars(
-                          context: context,
-                          title: '정상적으로 처리되었어요',
-                          backgroundcolor: Colors.green,
-                          bordercolor: draw.backgroundcolor);
-                      linkspaceset.setcompleted(false);
-                      linkspaceset
-                          .setspacelink(textEditingControllerAddSheet.text);
-                      Get.back(result: true);
-                    });
-                  }
-                }
-              },
-              child: Center(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: NeumorphicText(
-                        linkspaceset.iscompleted == false ? '생성하기' : '처리중...',
-                        style: const NeumorphicStyle(
-                          shape: NeumorphicShape.flat,
-                          depth: 3,
-                          color: Colors.white,
-                        ),
-                        textStyle: NeumorphicTextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: contentTextsize(),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )),
-        ),
-      ],
-    );
-  });
+  int indexcnt = linkspaceset.indexcnt.length;
+  if (textEditingControllerAddSheet.text.isEmpty) {
+    Snack.snackbars(
+        context: context,
+        title: where == 'editnametemplate' || where == 'editnametemplatein'
+            ? '변경할 스페이스 제목이 비어있어요!'
+            : '추가할 페이지 제목이 비어있어요!',
+        backgroundcolor: Colors.red,
+        bordercolor: draw.backgroundcolor);
+  } else {
+    linkspaceset.setcompleted(true);
+    if (where == 'editnametemplate') {
+      firestore.collection('PageView').get().then((value) {
+        for (int i = 0; i < value.docs.length; i++) {
+          if (value.docs[i].get('id') == id &&
+              value.docs[i].get('type') == categorynumber &&
+              value.docs[i].get('spacename') == initialtext) {
+            updateid = value.docs[i].id;
+          }
+        }
+        firestore.collection('PageView').doc(updateid).update(
+            {'spacename': textEditingControllerAddSheet.text}).whenComplete(() {
+          Snack.snackbars(
+              context: context,
+              title: '정상적으로 처리되었어요',
+              backgroundcolor: Colors.green,
+              bordercolor: draw.backgroundcolor);
+          linkspaceset.setcompleted(false);
+          linkspaceset.setspacelink(textEditingControllerAddSheet.text);
+          Get.back(result: true);
+        });
+      });
+    } else if (where == 'editnametemplatein') {
+      var parentid;
+      firestore.collection('Pinchannelin').get().then((value) {
+        if (value.docs.isNotEmpty) {
+          for (int j = 0; j < value.docs.length; j++) {
+            final messageuniquecode = value.docs[j]['uniquecode'];
+            final messageindex = value.docs[j]['index'];
+            if (messageindex == categorynumber && messageuniquecode == id) {
+              parentid = value.docs[j].id;
+              firestore
+                  .collection('Pinchannelin')
+                  .doc(value.docs[j].id)
+                  .update({'addname': textEditingControllerAddSheet.text});
+            }
+          }
+        } else {}
+      }).whenComplete(() {
+        firestore.collection('Calendar').get().then((value) {
+          if (value.docs.isNotEmpty) {
+            for (int j = 0; j < value.docs.length; j++) {
+              final messageuniquecode = value.docs[j]['parentid'];
+              if (messageuniquecode == parentid) {
+                firestore
+                    .collection('Calendar')
+                    .doc(value.docs[j].id)
+                    .update({'calname': textEditingControllerAddSheet.text});
+              }
+            }
+          } else {}
+        }).whenComplete(() {
+          Snack.snackbars(
+              context: context,
+              title: '정상적으로 처리되었어요',
+              backgroundcolor: Colors.green,
+              bordercolor: draw.backgroundcolor);
+          linkspaceset.setcompleted(false);
+          linkspaceset.setspacelink(textEditingControllerAddSheet.text);
+          Get.back(result: true);
+        });
+      });
+    } else {
+      firestore.collection('Pinchannel').add({
+        'username': username,
+        'linkname': textEditingControllerAddSheet.text,
+        'setting': 'block',
+        'email': useremail
+      }).whenComplete(() {
+        Snack.snackbars(
+            context: context,
+            title: '정상적으로 처리되었어요',
+            backgroundcolor: Colors.green,
+            bordercolor: draw.backgroundcolor);
+        linkspaceset.setcompleted(false);
+        linkspaceset.setspacelink(textEditingControllerAddSheet.text);
+        Get.back(result: true);
+      });
+    }
+  }
 }
 
 SetChangeLink(
@@ -915,122 +840,116 @@ contentforth(BuildContext context, FocusNode searchNode,
   final linkspaceset = Get.put(linkspacesetting());
   final uiset = Get.put(uisetting());
 
-  return StatefulBuilder(builder: (_, StateSetter setState) {
-    return SizedBox(
-        child: Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ContainerTextFieldDesign(
-          searchNodeAddSection: searchNode,
-          string: '변경할 제목입력',
-          textEditingControllerAddSheet: controller,
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        SizedBox(
-            height: 50,
-            child: Row(
-              children: [
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(100)),
-                        primary: Colors.blue,
-                      ),
-                      onPressed: () async {
-                        if (controller.text.isEmpty) {
-                          Snack.snackbars(
-                              context: context,
-                              title: '변경할 이름이 비어있어요',
-                              backgroundcolor: Colors.red,
-                              bordercolor: draw.backgroundcolor);
-                        } else {
-                          updatelist.clear();
-                          uiset.setloading(true);
-                          var id = '';
-                          uiset.setloading(false);
-                          Get.back();
-                          firestore
-                              .collection('Pinchannel')
-                              .get()
-                              .then((value) {
-                            for (int i = 0; i < value.docs.length; i++) {
-                              if (value.docs[i].get('linkname') == link) {
-                                if (value.docs[i].get('username') == usercode) {
-                                  id = value.docs[i].id;
-                                }
-                              }
-                            }
-                            firestore.collection('Pinchannel').doc(id).update({
-                              'linkname': controller.text,
-                            });
-                          });
-                          firestore
-                              .collection('Favorplace')
-                              .get()
-                              .then((value) {
-                            for (int i = 0; i < value.docs.length; i++) {
-                              if (value.docs[i].get('title') == link) {
-                                if (value.docs[i].get('originuser') ==
-                                    usercode) {
-                                  id = value.docs[i].id;
-                                }
-                              }
-                            }
-                            firestore.collection('Favorplace').doc(id).update({
-                              'title': controller.text,
-                            });
-                          });
-                          linkspaceset.setcompleted(true);
-                        }
-                      },
-                      child: GetBuilder<uisetting>(
-                        builder: (_) => Center(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              uiset.loading == true
-                                  ? Center(
-                                      child: NeumorphicText(
-                                        '처리중',
-                                        style: const NeumorphicStyle(
-                                          shape: NeumorphicShape.flat,
-                                          depth: 3,
-                                          color: Colors.white,
-                                        ),
-                                        textStyle: NeumorphicTextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: contentTextsize(),
-                                        ),
+  return Column(
+    mainAxisSize: MainAxisSize.min,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      ContainerTextFieldDesign(
+        searchNodeAddSection: searchNode,
+        string: '변경할 제목입력',
+        textEditingControllerAddSheet: controller,
+      ),
+      const SizedBox(
+        height: 20,
+      ),
+      SizedBox(
+          height: 50,
+          child: Row(
+            children: [
+              Flexible(
+                fit: FlexFit.tight,
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100)),
+                      primary: Colors.blue,
+                    ),
+                    onPressed: () async {
+                      SummitForth(context, controller, updatelist, link);
+                    },
+                    child: GetBuilder<uisetting>(
+                      builder: (_) => Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            uiset.loading == true
+                                ? Center(
+                                    child: NeumorphicText(
+                                      '처리중',
+                                      style: const NeumorphicStyle(
+                                        shape: NeumorphicShape.flat,
+                                        depth: 3,
+                                        color: Colors.white,
                                       ),
-                                    )
-                                  : Center(
-                                      child: NeumorphicText(
-                                        '변경',
-                                        style: const NeumorphicStyle(
-                                          shape: NeumorphicShape.flat,
-                                          depth: 3,
-                                          color: Colors.white,
-                                        ),
-                                        textStyle: NeumorphicTextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: contentTextsize(),
-                                        ),
+                                      textStyle: NeumorphicTextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentTextsize(),
                                       ),
-                                    )
-                            ],
-                          ),
+                                    ),
+                                  )
+                                : Center(
+                                    child: NeumorphicText(
+                                      '변경',
+                                      style: const NeumorphicStyle(
+                                        shape: NeumorphicShape.flat,
+                                        depth: 3,
+                                        color: Colors.white,
+                                      ),
+                                      textStyle: NeumorphicTextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentTextsize(),
+                                      ),
+                                    ),
+                                  )
+                          ],
                         ),
-                      )),
-                )
-              ],
-            )),
-      ],
-    ));
-  });
+                      ),
+                    )),
+              )
+            ],
+          )),
+    ],
+  );
+}
+
+SummitForth(context, controller, updatelist, link) {
+  if (controller.text.isEmpty) {
+    Snack.snackbars(
+        context: context,
+        title: '변경할 이름이 비어있어요',
+        backgroundcolor: Colors.red,
+        bordercolor: draw.backgroundcolor);
+  } else {
+    updatelist.clear();
+    uiset.setloading(true);
+    var id = '';
+    uiset.setloading(false);
+    Get.back();
+    firestore.collection('Pinchannel').get().then((value) {
+      for (int i = 0; i < value.docs.length; i++) {
+        if (value.docs[i].get('linkname') == link) {
+          if (value.docs[i].get('username') == usercode) {
+            id = value.docs[i].id;
+          }
+        }
+      }
+      firestore.collection('Pinchannel').doc(id).update({
+        'linkname': controller.text,
+      });
+    });
+    firestore.collection('Favorplace').get().then((value) {
+      for (int i = 0; i < value.docs.length; i++) {
+        if (value.docs[i].get('title') == link) {
+          if (value.docs[i].get('originuser') == usercode) {
+            id = value.docs[i].id;
+          }
+        }
+      }
+      firestore.collection('Favorplace').doc(id).update({
+        'title': controller.text,
+      });
+    });
+    linkspaceset.setcompleted(true);
+  }
 }

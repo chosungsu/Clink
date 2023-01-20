@@ -1,12 +1,14 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:clickbyme/FRONTENDPART/Route/subuiroute.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import '../../FRONTENDPART/Page/QRPage.dart';
 import '../../Tool/TextSize.dart';
 
-Widgets_plusbtn(context, checkid) {
+Widgets_plusbtn(
+    context, checkid, textcontroller, searchnode, where, id, categorypicknum) {
   Widget title;
   Widget content;
   title = const SizedBox();
@@ -15,15 +17,15 @@ Widgets_plusbtn(context, checkid) {
       ListTile(
         onTap: () {
           Get.back();
-          Get.to(() => QRPage(type: 0, id: checkid),
-              transition: Transition.fade);
+          func6(
+              context, textcontroller, searchnode, where, id, categorypicknum);
         },
         trailing: const Icon(
           Ionicons.create_outline,
           color: Colors.black,
         ),
         title: Text(
-          '직접 생성',
+          '페이지 생성',
           softWrap: true,
           textAlign: TextAlign.start,
           style: TextStyle(
@@ -36,7 +38,7 @@ Widgets_plusbtn(context, checkid) {
       ListTile(
         onTap: () {
           Get.back();
-          Get.to(() => QRPage(type: 1, id: checkid),
+          Get.to(() => QRPage(type: 0, id: checkid),
               transition: Transition.fade);
         },
         trailing: const Icon(
@@ -44,7 +46,7 @@ Widgets_plusbtn(context, checkid) {
           color: Colors.black,
         ),
         title: Text(
-          '복사한 코드로 생성',
+          '박스 생성',
           softWrap: true,
           textAlign: TextAlign.start,
           style: TextStyle(

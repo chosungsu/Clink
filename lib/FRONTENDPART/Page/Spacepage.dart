@@ -211,7 +211,6 @@ class _SpacepageState extends State<Spacepage>
                                             onTap: () {
                                               settingseparatedlinkspace(
                                                   context,
-                                                  uiset.pagelist,
                                                   _controller,
                                                   searchNode,
                                                   index);
@@ -319,7 +318,6 @@ class _SpacepageState extends State<Spacepage>
                                                   onTap: () {
                                                     settingseparatedlinkspace(
                                                         context,
-                                                        uiset.pagelist,
                                                         _controller,
                                                         searchNode,
                                                         index);

@@ -1,21 +1,16 @@
-/**
- * // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names
+// ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names, camel_case_types
 import 'package:clickbyme/Tool/Getx/uisetting.dart';
-import 'package:clickbyme/Tool/ResponsiveUI.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:http/http.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import '../../Enums/Variables.dart';
-import '../../Tool/AndroidIOS.dart';
+import '../../Tool/AppBarCustom.dart';
 import '../../Tool/Getx/navibool.dart';
 import '../../Tool/Loader.dart';
 import '../../Tool/NoBehavior.dart';
-import '../../Tool/AppBarCustom.dart';
-import '../UI(Widget/PageUI.dart';
+import '../UI(Widget/MYPageUI.dart';
 import 'DrawerScreen.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 GlobalKey LSFlex = GlobalKey();
 
@@ -30,9 +25,8 @@ class MYPage extends StatefulWidget {
 class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
   var scrollController;
   final searchNode = FocusNode();
-  var _controller = TextEditingController();
+  var textcontroller = TextEditingController();
   final draw = Get.put(navibool());
-  final uiset = Get.put(uisetting());
 
   @override
   void didChangeDependencies() {
@@ -41,7 +35,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    _controller = TextEditingController();
+    textcontroller = TextEditingController();
     super.initState();
     listpinlink.clear();
     uiset.showtopbutton = false;
@@ -55,7 +49,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
   @override
   void dispose() {
     super.dispose();
-    _controller.dispose();
+    textcontroller.dispose();
     scrollController.dispose();
   }
 
@@ -131,51 +125,49 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                   },
                   child: SizedBox(
                     height: height,
-                    child: Container(
-                        color: draw.backgroundcolor,
-                        child: Column(
-                          children: [
-                            GetBuilder<uisetting>(
-                              builder: (_) => AppBarCustom(
-                                title: '',
-                                lefticon: false,
-                                lefticonname: Icons.add,
-                                righticon: true,
-                                doubleicon: false,
-                                righticonname: Ionicons.add_outline,
-                                textEditingController: _controller,
-                                focusNode: searchNode,
-                                myindex: uiset.mypagelistindex,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Flexible(
-                                fit: FlexFit.tight,
-                                child: ScrollConfiguration(
-                                    behavior: NoBehavior(),
-                                    child: LayoutBuilder(
-                                      builder: ((context, constraint) {
-                                        return SingleChildScrollView(
-                                            physics: const ScrollPhysics(),
-                                            child: UI(
+                    child: GetBuilder<uisetting>(
+                      builder: (controller) {
+                        return Container(
+                            color: draw.backgroundcolor,
+                            child: Column(
+                              children: [
+                                AppBarCustom(
+                                  title: 'OnBox',
+                                  lefticon: false,
+                                  righticon: true,
+                                  doubleicon: false,
+                                  lefticonname: Ionicons.add_outline,
+                                  righticonname: Ionicons.add_outline,
+                                  textcontroller: textcontroller,
+                                  searchnode: searchNode,
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Flexible(
+                                    fit: FlexFit.tight,
+                                    child: ScrollConfiguration(
+                                        behavior: NoBehavior(),
+                                        child: LayoutBuilder(
+                                          builder: ((context, constraint) {
+                                            return UI(
                                                 uiset
                                                     .pagelist[
                                                         uiset.mypagelistindex]
                                                     .id,
-                                                _controller,
+                                                textcontroller,
+                                                searchNode,
                                                 constraint.maxWidth,
-                                                constraint.maxHeight));
-                                      }),
-                                    ))),
-                          ],
-                        )),
+                                                constraint.maxHeight);
+                                          }),
+                                        ))),
+                              ],
+                            ));
+                      },
+                    ),
                   ),
                 ),
               )));
     }));
   }
 }
-
- */

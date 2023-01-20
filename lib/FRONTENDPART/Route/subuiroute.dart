@@ -20,7 +20,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../Page/AddTemplate.dart';
 import '../Page/LoginSignPage.dart';
 import '../Page/Spacepage.dart';
 import '../../Tool/AndroidIOS.dart';
@@ -129,7 +128,7 @@ func3(BuildContext context) => Future.delayed(const Duration(seconds: 0), () {
         Get.back();
       }
     });
-func4_changever(context) async {
+func4(context, textcontroller, searchnode, where, id, categorypicknum) async {
   final uiset = Get.put(uisetting());
   var checkid = '';
   Widget title;
@@ -179,70 +178,11 @@ func4_changever(context) async {
     });
   }
   if (checkid != '') {
-    title = Widgets_plusbtn(context, checkid)[0];
-    content = Widgets_plusbtn(context, checkid)[1];
+    title = Widgets_plusbtn(context, checkid, textcontroller, searchnode, where,
+        id, categorypicknum)[0];
+    content = Widgets_plusbtn(context, checkid, textcontroller, searchnode,
+        where, id, categorypicknum)[1];
     AddContent(context, title, content, null);
-  } else {
-    Snack.snackbars(
-        context: context,
-        title: '접근권한이 없어요!',
-        backgroundcolor: Colors.red,
-        bordercolor: draw.backgroundcolor);
-  }
-}
-
-func4(BuildContext context, indexcnt) async {
-  var checkid = '';
-  if (Hive.box('user_setting').get('page_index') == 11 ||
-      Hive.box('user_setting').get('page_index') == 12) {
-    await firestore.collection('Favorplace').get().then((value) {
-      checkid = '';
-      if (value.docs.isEmpty) {
-        checkid = '';
-      } else {
-        final valuespace = value.docs;
-
-        for (int i = 0; i < valuespace.length; i++) {
-          if (valuespace[i]['title'] ==
-              (Hive.box('user_setting').get('currenteditpage') ?? '')) {
-            if (valuespace[i]['setting'] == 'block') {
-            } else {
-              checkid = valuespace[i]['id'];
-            }
-          }
-        }
-      }
-    });
-  } else {
-    await firestore.collection('Pinchannel').get().then((value) {
-      checkid = '';
-      if (value.docs.isEmpty) {
-        checkid = '';
-      } else {
-        final valuespace = value.docs;
-
-        for (int i = 0; i < valuespace.length; i++) {
-          if (valuespace[i]['linkname'] ==
-              uiset.pagelist[uiset.mypagelistindex].title) {
-            if (valuespace[i]['setting'] == 'block') {
-              if (valuespace[i]['username'] == usercode) {
-                checkid = valuespace[i].id;
-              } else {}
-            } else {
-              checkid = valuespace[i].id;
-            }
-          }
-        }
-      }
-    });
-  }
-  if (checkid != '') {
-    Get.to(
-        () => AddTemplate(
-              id: checkid,
-              indexcnt: indexcnt,
-            ),
-        transition: Transition.upToDown);
   } else {
     Snack.snackbars(
         context: context,
@@ -257,15 +197,22 @@ func5() {
 }
 
 func6(
-    BuildContext context,
-    TextEditingController textEditingController,
-    FocusNode searchnode,
-    String where,
-    String id,
-    int categorypicknumber,
-    int indexcnt) {
-  addmylink(context, usercode, textEditingController, searchnode, where, id,
-      categorypicknumber, indexcnt);
+  BuildContext context,
+  TextEditingController textEditingController,
+  FocusNode searchnode,
+  String where,
+  String id,
+  int categorypicknumber,
+) {
+  addmylink(
+    context,
+    usercode,
+    textEditingController,
+    searchnode,
+    where,
+    id,
+    categorypicknumber,
+  );
 }
 
 func7(String title, String email, String origin, String id) async {

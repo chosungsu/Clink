@@ -2,7 +2,7 @@
 
 import 'package:clickbyme/BACKENDPART/FIREBASE/PersonalVP.dart';
 import 'package:clickbyme/BACKENDPART/FIREBASE/SearchVP.dart';
-import 'package:clickbyme/FRONTENDPART/UI(Widget/Page2UI.dart';
+import 'package:clickbyme/FRONTENDPART/UI(Widget/MYPageUI.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -14,7 +14,6 @@ import '../../../Tool/Getx/uisetting.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
 import '../../UI/Home/secondContentNet/ShowTips.dart';
-import 'PageUI.dart';
 
 SearchUI(context, scrollController, TextEditingController controller,
     double height, TextEditingController controller2, searchNode, controller3) {
@@ -504,7 +503,7 @@ Se_Container2(context, String id, String setting,
     builder: ((context, constraint) {
       return SingleChildScrollView(
           physics: const ScrollPhysics(),
-          child: UI2(id, controller, searchNode, constraint.maxWidth,
+          child: UI(id, controller, searchNode, constraint.maxWidth,
               constraint.maxHeight));
     }),
   );
