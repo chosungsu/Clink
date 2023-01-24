@@ -38,7 +38,6 @@ PageViewRes1_1(id, snapshot) {
         uniquecode: sp.get('id'),
         index: sp.get('index'),
         familycode: sp.id,
-        codename: sp.get('codename'),
         canshow: sp.get('canshow'),
       ));
     }
@@ -163,7 +162,7 @@ PageViewStreamChild2(context, id, index, controller, searchNode) async {
           searchNode,
           'pinchannel',
         )[1];
-        AddContent(context, title, content, null);
+        AddContent(context, title, content, searchNode);
       } else {
         if (value.get('setting') == 'block') {
           Snack.snackbars(
@@ -193,7 +192,7 @@ PageViewStreamChild2(context, id, index, controller, searchNode) async {
               controller,
               searchNode,
               'pinchannel')[1];
-          AddContent(context, title, content, null);
+          AddContent(context, title, content, searchNode);
         }
       }
     },
@@ -263,7 +262,6 @@ PageViewStreamChild3(context, id, index, index2) async {
 
 PageViewStreamChild4(context, id, index, index2, controller, searchNode,
     AsyncSnapshot<QuerySnapshot<Object?>> snapshot) async {
-  final linkspaceset = Get.put(linkspacesetting());
   Widget title;
   Widget content;
 
@@ -290,7 +288,7 @@ PageViewStreamChild4(context, id, index, index2, controller, searchNode,
           searchNode,
           'pinchannelin',
         )[1];
-        AddContent(context, title, content, null);
+        AddContent(context, title, content, searchNode);
       } else {
         if (value.get('setting') == 'block') {
         } else {
@@ -314,7 +312,7 @@ PageViewStreamChild4(context, id, index, index2, controller, searchNode,
             searchNode,
             'pinchannelin',
           )[1];
-          AddContent(context, title, content, null);
+          AddContent(context, title, content, searchNode);
         }
       }
     },
@@ -463,7 +461,6 @@ SpacepageStreamParent() {
 }
 
 SpacepageChild1(snapshot) {
-  final uiset = Get.put(uisetting());
   uiset.pagelist.clear();
   final valuespace = snapshot.data!.docs;
   for (var sp in valuespace) {

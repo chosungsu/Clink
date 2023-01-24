@@ -32,7 +32,7 @@ ReturnByPlatform(actionandroid, actionios, actionweb) {
   }
 }
 
-Responsivelayout(size, landscape, portrait) {
+Responsivelayout(landscape, portrait) {
   if (Device.screenType == ScreenType.desktop) {
     if (Device.orientation == Orientation.landscape) {
       return landscape;
@@ -51,6 +51,15 @@ Responsivelayout(size, landscape, portrait) {
     } else {
       return portrait;
     }
+  }
+}
+
+Responsivedrawer(dtview, mview) {
+  if (Device.screenType == ScreenType.desktop ||
+      Device.screenType == ScreenType.tablet) {
+    return dtview;
+  } else {
+    return mview;
   }
 }
 

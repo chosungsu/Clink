@@ -69,7 +69,7 @@ class _LoginSignPageState extends State<LoginSignPage>
 
   Widget UI(double maxWidth, double maxHeight, bool ischecked) {
     return Responsivelayout(
-        maxWidth, LSView(ischecked, maxHeight), PRView(ischecked, maxHeight));
+        LSView(ischecked, maxHeight), PRView(ischecked, maxHeight));
   }
 
   LSView(bool ischecked, double maxHeight) {

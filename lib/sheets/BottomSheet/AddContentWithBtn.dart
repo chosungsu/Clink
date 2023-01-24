@@ -1,11 +1,15 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 
+import '../../Enums/Variables.dart';
+import '../../Tool/BGColor.dart';
 import '../../Tool/NoBehavior.dart';
+import '../../Tool/TextSize.dart';
 
-AddContent(context, title, content, searchnode) {
+AddContentWithBtn(context, title, content, btn, searchnode) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
       constraints: BoxConstraints(
@@ -43,10 +47,10 @@ AddContent(context, title, content, searchnode) {
                   child: StatefulBuilder(
                     builder: ((context, setState) {
                       return GestureDetector(
-                        onTap: () {
+                        onTap: (() {
                           searchnode.unfocus();
-                        },
-                        child: infos(context, title, content),
+                        }),
+                        child: infos(context, title, content, btn),
                       );
                     }),
                   ),
@@ -56,7 +60,7 @@ AddContent(context, title, content, searchnode) {
       }).whenComplete(() {});
 }
 
-infos(context, title, content) {
+infos(context, title, content, btn) {
   return SizedBox(
       child: Padding(
           padding:
@@ -91,6 +95,10 @@ infos(context, title, content) {
                 height: 20,
               ),
               content,
+              const SizedBox(
+                height: 30,
+              ),
+              btn,
               const SizedBox(
                 height: 20,
               ),

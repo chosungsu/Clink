@@ -292,23 +292,14 @@ class AppBarCustom extends StatelessWidget {
 
   OnClickedRightIcons(context, righticonname) {
     return righticonname == Ionicons.add_outline
-        ? (Hive.box('user_setting').get('page_index') == 0
-            ? func4(
-                context,
-                textcontroller,
-                searchnode,
-                'addpage',
-                '',
-                99,
-              )
-            : func6(
-                context,
-                textcontroller,
-                searchnode,
-                'addpage',
-                '',
-                99,
-              ))
+        ? func4(
+            context,
+            textcontroller,
+            searchnode,
+            'addpage',
+            '',
+            99,
+          )
         : (righticonname == AntDesign.delete
             ? func2(context)
             : (righticonname == Icons.star_border || righticonname == Icons.star
@@ -324,13 +315,6 @@ class AppBarCustom extends StatelessWidget {
                             Hive.box('user_info').get('id')))
                     : (righticonname == Icons.download
                         ? downloadFileExample(mainid, context)
-                        : func6(
-                            context,
-                            textcontroller,
-                            searchnode,
-                            'addpage',
-                            '',
-                            99,
-                          )))));
+                        : null))));
   }
 }

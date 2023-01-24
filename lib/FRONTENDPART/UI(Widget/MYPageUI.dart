@@ -33,7 +33,6 @@ UI(id, controller, searchnode, maxWidth, maxHeight) {
                         height: maxHeight,
                         width: maxWidth,
                         child: Responsivelayout(
-                            maxWidth,
                             PageUI0(context, id, controller, searchnode,
                                 maxHeight, maxWidth),
                             PageUI1(context, id, controller, searchnode,
@@ -53,108 +52,104 @@ UI(id, controller, searchnode, maxWidth, maxHeight) {
 
 PageUI0(context, id, controller, searchnode, maxHeight, maxWidth) {
   final searchNode = FocusNode();
-  final linkspaceset = Get.put(linkspacesetting());
-  return Row(
-    children: [
-      Container(
-        width: 220,
-        padding: const EdgeInsets.only(left: 20, right: 20),
-        child: Room(maxHeight, 220, controller, searchnode, 'ls'),
-      ),
-      VerticalDivider(
-        width: maxWidth * 0.1,
-        color: draw.backgroundcolor,
-      ),
-      GetBuilder<uisetting>(
-        builder: (controller) {
-          return SizedBox(
+  return GetBuilder<linkspacesetting>(
+    builder: (_) {
+      return Row(
+        children: [
+          Container(
+            width: 220,
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            child: Room(maxHeight, 220, controller, searchnode, 'ls'),
+          ),
+          VerticalDivider(
+            width: maxWidth * 0.1,
+            color: draw.backgroundcolor,
+          ),
+          SizedBox(
               width: maxWidth - 220 - maxWidth * 0.1,
               height: maxHeight,
               child: WhatInPageScreen(context, id, controller, searchNode,
-                  maxWidth - 220 - maxWidth * 0.1, maxHeight));
-        },
-      )
-    ],
+                  maxWidth - 220 - maxWidth * 0.1, maxHeight))
+        ],
+      );
+    },
   );
 }
 
 PageUI1(context, id, controller, searchnode, maxHeight, maxWidth) {
   final searchNode = FocusNode();
-  final linkspaceset = Get.put(linkspacesetting());
   return SingleChildScrollView(
-    physics: const ScrollPhysics(),
-    child: Column(
-      children: [
-        Container(
-          height: 120,
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          child: Room(120, maxWidth, controller, searchnode, 'pr'),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        GetBuilder<uisetting>(
-          builder: (controller) {
-            return WhatInPageScreen(
-                context, id, controller, searchNode, maxWidth, maxHeight);
-          },
-        )
-      ],
-    ),
-  );
+      physics: const ScrollPhysics(),
+      child: GetBuilder<linkspacesetting>(
+        builder: (_) {
+          return Column(
+            children: [
+              Container(
+                height: 120,
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                child: Room(120, maxWidth, controller, searchnode, 'pr'),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              WhatInPageScreen(
+                  context, id, controller, searchNode, maxWidth, maxHeight)
+            ],
+          );
+        },
+      ));
 }
 
 Room(maxHeight, maxWidth, controller, searchnode, string) {
-  return GetBuilder<linkspacesetting>(
-      builder: (_) => StreamBuilder<QuerySnapshot>(
-            stream: SpacepageStreamParent(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                SpacepageChild1(snapshot);
+  return StreamBuilder<QuerySnapshot>(
+    stream: SpacepageStreamParent(),
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        SpacepageChild1(snapshot);
 
-                return uiset.pagelist.isEmpty
-                    ? SizedBox(
-                        height: maxHeight,
-                        width: maxWidth,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              AntDesign.frowno,
-                              color: Colors.orange,
-                              size: 30,
-                            ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            Text(
-                              '페이지가 없습니다',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: contentTextsize(),
-                                  color: draw.color_textstatus),
-                            ),
-                          ],
-                        ),
-                      )
-                    : UserRoomScreen(
-                        maxHeight, maxWidth, controller, searchnode, string);
-              }
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 30,
-                    width: 30,
-                    child: CircularProgressIndicator(
-                      color: draw.color_textstatus,
+        return uiset.pagelist.isEmpty
+            ? SizedBox(
+                height: maxHeight,
+                width: maxWidth,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      AntDesign.frowno,
+                      color: Colors.orange,
+                      size: 30,
                     ),
-                  )
-                ],
-              );
-            },
-          ));
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Text(
+                      '페이지가 없습니다',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: contentTextsize(),
+                          color: draw.color_textstatus),
+                    ),
+                  ],
+                ),
+              )
+            : UserRoomScreen(
+                maxHeight, maxWidth, controller, searchnode, string);
+      }
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(
+            height: 30,
+            width: 30,
+            child: CircularProgressIndicator(
+              color: draw.color_textstatus,
+            ),
+          )
+        ],
+      );
+    },
+  );
 }
 
 UserRoomScreen(maxHeight, maxWidth, controller, searchnode, position) {
@@ -264,8 +259,6 @@ UserRoomScreen(maxHeight, maxWidth, controller, searchnode, position) {
                                     StatusBarControl.setColor(BGColor(),
                                         animated: true);
                                     draw.setnavi();
-                                    Get.offAll(() => const mainroute(index: 0),
-                                        transition: Transition.fade);
                                   },
                                   onLongPress: () {
                                     settingseparatedlinkspace(
@@ -318,7 +311,6 @@ NotInPageScreen(maxHeight, maxWidth, controller, searchnode) {
     width: maxWidth,
     height: maxHeight,
     child: Responsivelayout(
-        maxWidth,
         SizedBox(
           height: maxHeight,
           width: maxWidth,
@@ -401,7 +393,6 @@ NotInPageScreen(maxHeight, maxWidth, controller, searchnode) {
 
 WhatInPageScreen(context, id, controller, searchNode, maxWidth, maxHeight) {
   return Responsivelayout(
-      maxWidth,
       SizedBox(
         width: maxWidth,
         child: SingleChildScrollView(

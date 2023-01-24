@@ -23,9 +23,7 @@ DayContentHome(id) {
       fit: FlexFit.tight,
       child: LayoutBuilder(
         builder: ((context, constraint) {
-          return Responsivelayout(
-              constraint.maxWidth,
-              LSView(constraint.maxHeight, id),
+          return Responsivelayout(LSView(constraint.maxHeight, id),
               PRView(constraint.maxHeight, id));
         }),
       ));

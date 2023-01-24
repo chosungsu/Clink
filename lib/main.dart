@@ -139,9 +139,7 @@ class _SplashPageState extends State<SplashPage> {
                       children: [
                         Column(
                           children: [
-                            Responsivelayout(
-                                constraint.maxWidth,
-                                SameView(constraint.maxHeight),
+                            Responsivelayout(SameView(constraint.maxHeight),
                                 SameView(constraint.maxHeight))
                           ],
                         )
@@ -170,7 +168,7 @@ class _SplashPageState extends State<SplashPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
-                        Ionicons.bookmark_outline,
+                        Ionicons.crop,
                         size: 30,
                         color: Colors.blue,
                       ),
@@ -178,7 +176,7 @@ class _SplashPageState extends State<SplashPage> {
                         width: 10,
                       ),
                       NeumorphicText(
-                        'OnBox',
+                        'LOBBY',
                         style: const NeumorphicStyle(
                           shape: NeumorphicShape.flat,
                           depth: 3,
@@ -247,7 +245,7 @@ class _SplashPageState extends State<SplashPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
-                        Ionicons.bookmark_outline,
+                        Ionicons.crop,
                         size: 30,
                         color: Colors.blue,
                       ),
@@ -255,7 +253,7 @@ class _SplashPageState extends State<SplashPage> {
                         width: 10,
                       ),
                       NeumorphicText(
-                        'OnBox',
+                        'LOBBY',
                         style: const NeumorphicStyle(
                           shape: NeumorphicShape.flat,
                           depth: 3,

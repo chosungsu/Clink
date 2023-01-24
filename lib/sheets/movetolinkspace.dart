@@ -109,12 +109,6 @@ content(
   FocusNode searchnode,
   int index,
 ) {
-  final uiset = Get.put(uisetting());
-  final linkspaceset = Get.put(linkspacesetting());
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  final updatelist = [];
-  final uniquecodelist = [];
-
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
       children: [
@@ -164,7 +158,7 @@ content(
             final reloadpage = await Get.dialog(OSDialog(context, '경고', Builder(
                   builder: (context) {
                     return SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.85,
+                      width: MediaQuery.of(context).size.width * 0.5,
                       child: SingleChildScrollView(
                         child: Text('정말 이 링크를 삭제하시겠습니까?',
                             style: TextStyle(
@@ -177,8 +171,7 @@ content(
                 ), pressed2)) ??
                 false;
             if (reloadpage) {
-              uiset.setloading(true);
-              updatelist.clear();
+              linkspaceset.setcompleted(true);
 
               var id = '';
               await firestore.collection('Pinchannel').get().then((value) {
@@ -210,19 +203,12 @@ content(
                       if (value.docs[i].get('uniquecode') ==
                           uiset.pagelist[index].id) {
                         id = value.docs[i].id;
-                        uniquecodelist.add(value.docs[i].get('uniquecode'));
                         firestore.collection('Pinchannelin').doc(id).delete();
                       }
                     }
                   }).whenComplete(() {
-                    uiset.setloading(false);
-
-                    linkspaceset.resetspacelink();
-                    for (int k = 0; k < uniquecodelist.length; k++) {
-                      linkspaceset.setspacelink(uniquecodelist[k]);
-                    }
+                    linkspaceset.setcompleted(false);
                     Get.back();
-                    linkspaceset.setcompleted(true);
                   });
                 });
               });
@@ -401,7 +387,6 @@ contentsecond(BuildContext context, String str) {
 
 addmylink(
   BuildContext context,
-  String username,
   TextEditingController textEditingControllerAddSheet,
   FocusNode searchNodeAddSection,
   String where,
@@ -413,7 +398,7 @@ addmylink(
       constraints: BoxConstraints(
         maxWidth: MediaQuery.of(context).orientation == Orientation.portrait
             ? Get.width
-            : Get.width / 2,
+            : Get.width / 3,
       ),
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -454,7 +439,6 @@ addmylink(
                           context,
                           textEditingControllerAddSheet,
                           searchNodeAddSection,
-                          username,
                           where,
                           id,
                           categorynumber,
@@ -472,7 +456,6 @@ linkstation(
   BuildContext context,
   TextEditingController textEditingControllerAddSheet,
   FocusNode searchNodeAddSection,
-  String username,
   String where,
   String id,
   int categorynumber,
@@ -493,7 +476,7 @@ linkstation(
                     width: MediaQuery.of(context).orientation ==
                             Orientation.portrait
                         ? (MediaQuery.of(context).size.width - 40) * 0.2
-                        : (Get.width / 2 - 40) * 0.2,
+                        : (Get.width / 3 - 40) * 0.2,
                     alignment: Alignment.topCenter,
                     color: Colors.black45),
               ],
@@ -509,7 +492,6 @@ linkstation(
           context,
           textEditingControllerAddSheet,
           searchNodeAddSection,
-          username,
           where,
           id,
           categorynumber,
@@ -535,10 +517,10 @@ titlethird(
               where == 'editnametemplate' || where == 'editnametemplatein'
                   ? '이름 변경'
                   : '페이지 추가',
-              style: const TextStyle(
+              style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
-                  fontSize: 25))
+                  fontSize: secondTitleTextsize()))
         ],
       ));
 }
@@ -547,7 +529,6 @@ contentthird(
   BuildContext context,
   TextEditingController textEditingControllerAddSheet,
   FocusNode searchNodeAddSection,
-  String username,
   String where,
   String id,
   int categorynumber,
@@ -574,7 +555,7 @@ contentthird(
             ),
             onPressed: () async {
               Summitthird(context, textEditingControllerAddSheet,
-                  searchNodeAddSection, username, where, id, categorynumber);
+                  searchNodeAddSection, where, id, categorynumber);
             },
             child: Center(
               child: Row(
@@ -607,14 +588,12 @@ Summitthird(
   BuildContext context,
   TextEditingController textEditingControllerAddSheet,
   FocusNode searchNodeAddSection,
-  String username,
   String where,
   String id,
   int categorynumber,
 ) {
   final updatelist = [];
   final uiset = Get.put(uisetting());
-  final linkspaceset = Get.put(linkspacesetting());
   final initialtext = textEditingControllerAddSheet.text;
   var updateid;
   int indexcnt = linkspaceset.indexcnt.length;
@@ -691,7 +670,7 @@ Summitthird(
       });
     } else {
       firestore.collection('Pinchannel').add({
-        'username': username,
+        'username': usercode,
         'linkname': textEditingControllerAddSheet.text,
         'setting': 'block',
         'email': useremail
@@ -764,17 +743,7 @@ SetChangeLink(
                 ),
               ),
             ));
-      }).whenComplete(() async {
-    final linkspaceset = Get.put(linkspacesetting());
-    if (linkspaceset.iscompleted) {
-      linkspaceset.resetcompleted();
-      Snack.snackbars(
-          context: context,
-          title: '정상적으로 처리되었어요',
-          backgroundcolor: Colors.green,
-          bordercolor: draw.backgroundcolor);
-    } else {}
-  });
+      }).whenComplete(() async {});
 }
 
 SetchangeLink(BuildContext context, TextEditingController controller,
@@ -836,9 +805,6 @@ contentforth(BuildContext context, FocusNode searchNode,
     TextEditingController controller, String link) {
   final updatelist = [];
   final uniquecodelist = [];
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  final linkspaceset = Get.put(linkspacesetting());
-  final uiset = Get.put(uisetting());
 
   return Column(
     mainAxisSize: MainAxisSize.min,
@@ -873,7 +839,7 @@ contentforth(BuildContext context, FocusNode searchNode,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            uiset.loading == true
+                            linkspaceset.iscompleted == true
                                 ? Center(
                                     child: NeumorphicText(
                                       '처리중',
@@ -922,10 +888,9 @@ SummitForth(context, controller, updatelist, link) {
         bordercolor: draw.backgroundcolor);
   } else {
     updatelist.clear();
-    uiset.setloading(true);
     var id = '';
-    uiset.setloading(false);
-    Get.back();
+    linkspaceset.setcompleted(true);
+
     firestore.collection('Pinchannel').get().then((value) {
       for (int i = 0; i < value.docs.length; i++) {
         if (value.docs[i].get('linkname') == link) {
@@ -943,13 +908,19 @@ SummitForth(context, controller, updatelist, link) {
         if (value.docs[i].get('title') == link) {
           if (value.docs[i].get('originuser') == usercode) {
             id = value.docs[i].id;
+            firestore.collection('Favorplace').doc(id).update({
+              'title': controller.text,
+            });
           }
         }
       }
-      firestore.collection('Favorplace').doc(id).update({
-        'title': controller.text,
-      });
     });
-    linkspaceset.setcompleted(true);
+    Snack.snackbars(
+        context: context,
+        title: '정상적으로 처리되었어요',
+        backgroundcolor: Colors.green,
+        bordercolor: draw.backgroundcolor);
+    Get.back();
+    linkspaceset.setcompleted(false);
   }
 }

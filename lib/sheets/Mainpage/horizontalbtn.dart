@@ -14,6 +14,7 @@ import '../../Tool/Getx/category.dart';
 import '../../Tool/Getx/linkspacesetting.dart';
 import '../../Tool/Getx/uisetting.dart';
 import '../../Tool/TextSize.dart';
+import '../movetolinkspace.dart';
 
 Widgets_horizontalbtn(
   context,
@@ -50,7 +51,7 @@ Widgets_horizontalbtn(
             Get.back();
             controller.text = placestr;
             if (s == 'pinchannel') {
-              func6(
+              addmylink(
                 context,
                 controller,
                 searchNode,
@@ -59,13 +60,13 @@ Widgets_horizontalbtn(
                 type,
               );
             } else {
-              func6(
+              addmylink(
                 context,
                 controller,
                 searchNode,
                 'editnametemplatein',
                 uniquecode,
-                index,
+                type,
               );
             }
           },
@@ -308,7 +309,7 @@ Widgets_horizontalbtnsecond(
             Get.back();
             controller.text = placestr;
             if (s == 'pinchannel') {
-              func6(
+              addmylink(
                 context,
                 controller,
                 searchNode,
@@ -317,13 +318,13 @@ Widgets_horizontalbtnsecond(
                 type,
               );
             } else {
-              func6(
+              addmylink(
                 context,
                 controller,
                 searchNode,
                 'editnametemplatein',
                 uniquecode,
-                index,
+                type,
               );
             }
           },
@@ -360,7 +361,6 @@ Widgets_horizontalbtnsecond(
                 ), pressed2)) ??
                 false;
             if (reloadpage) {
-              Get.back();
               var parentid;
               var changeindex;
 
@@ -413,7 +413,9 @@ Widgets_horizontalbtnsecond(
                         }
                       }
                     } else {}
-                  }).whenComplete(() {});
+                  }).whenComplete(() {
+                    Get.back();
+                  });
                 });
               });
             }

@@ -132,7 +132,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                             child: Column(
                               children: [
                                 AppBarCustom(
-                                  title: 'OnBox',
+                                  title: 'LOBBY',
                                   lefticon: false,
                                   righticon: true,
                                   doubleicon: false,

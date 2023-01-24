@@ -163,9 +163,7 @@ class _DayScriptState extends State<DayScript> {
       return GetBuilder<memosetting>(
           builder: (_) => LayoutBuilder(
                 builder: ((context, constraint) {
-                  return Responsivelayout(
-                      constraint.maxWidth,
-                      LSView(constraint.maxHeight),
+                  return Responsivelayout(LSView(constraint.maxHeight),
                       PRView(constraint.maxHeight));
                 }),
               ));

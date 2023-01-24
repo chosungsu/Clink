@@ -114,7 +114,6 @@ class _SpacepageState extends State<Spacepage>
                                           child: LayoutBuilder(
                                             builder: ((context, constraint) {
                                               return Responsivelayout(
-                                                  constraint.maxWidth,
                                                   LSView(constraint.maxHeight,
                                                       constraint.maxWidth),
                                                   PRView(constraint.maxHeight));

@@ -182,7 +182,7 @@ func4(context, textcontroller, searchnode, where, id, categorypicknum) async {
         id, categorypicknum)[0];
     content = Widgets_plusbtn(context, checkid, textcontroller, searchnode,
         where, id, categorypicknum)[1];
-    AddContent(context, title, content, null);
+    AddContent(context, title, content, searchnode);
   } else {
     Snack.snackbars(
         context: context,
@@ -194,25 +194,6 @@ func4(context, textcontroller, searchnode, where, id, categorypicknum) async {
 
 func5() {
   Get.to(() => const Spacepage(), transition: Transition.upToDown);
-}
-
-func6(
-  BuildContext context,
-  TextEditingController textEditingController,
-  FocusNode searchnode,
-  String where,
-  String id,
-  int categorypicknumber,
-) {
-  addmylink(
-    context,
-    usercode,
-    textEditingController,
-    searchnode,
-    where,
-    id,
-    categorypicknumber,
-  );
 }
 
 func7(String title, String email, String origin, String id) async {
