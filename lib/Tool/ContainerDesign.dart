@@ -46,7 +46,7 @@ class ContainerTextFieldDesign extends StatelessWidget {
           border: Border.all(color: Colors.black, width: 2)),
       child: TextField(
         focusNode: searchNodeAddSection,
-        style: TextStyle(fontSize: contentTextsize(), color: Colors.black),
+        style: TextStyle(fontSize: contentTextsize(), color: Colors.black45),
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.only(left: 10),
           border: InputBorder.none,

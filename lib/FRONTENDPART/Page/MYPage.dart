@@ -12,8 +12,6 @@ import '../../Tool/NoBehavior.dart';
 import '../UI(Widget/MYPageUI.dart';
 import 'DrawerScreen.dart';
 
-GlobalKey LSFlex = GlobalKey();
-
 class MYPage extends StatefulWidget {
   const MYPage({
     Key? key,
@@ -27,6 +25,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
   final searchNode = FocusNode();
   var textcontroller = TextEditingController();
   final draw = Get.put(navibool());
+  final uiset = Get.put(uisetting());
 
   @override
   void didChangeDependencies() {
@@ -108,12 +107,11 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
     return OrientationBuilder(builder: ((context, orientation) {
       return GetBuilder<navibool>(
           builder: (_) => AnimatedContainer(
-              transform:
-                  Matrix4.translationValues(draw.xoffset, draw.yoffset, 0)
-                    ..scale(draw.scalefactor),
-              duration: const Duration(milliseconds: 250),
-              child: GetBuilder<navibool>(
-                builder: (_) => GestureDetector(
+                transform:
+                    Matrix4.translationValues(draw.xoffset, draw.yoffset, 0)
+                      ..scale(draw.scalefactor),
+                duration: const Duration(milliseconds: 250),
+                child: GestureDetector(
                   onTap: () {
                     draw.drawopen == true
                         ? setState(() {
@@ -167,7 +165,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-              )));
+              ));
     }));
   }
 }

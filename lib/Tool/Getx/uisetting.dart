@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../Enums/PageList.dart';
+import '../../Enums/Variables.dart';
+import '../../FRONTENDPART/Route/subuiroute.dart';
 
 class uisetting extends GetxController {
   bool loading = false;
@@ -11,6 +13,7 @@ class uisetting extends GetxController {
   bool showtopbutton = false;
   String eventtitle = '';
   String eventurl = '';
+  List updateid = [];
   List<PageList> pagelist = [];
   List<PageList> searchpagelist = [];
   List<PageList> favorpagelist = [];
@@ -112,8 +115,36 @@ class uisetting extends GetxController {
     notifyChildrens();
   }
 
-  void setuserspace(String title, String user, String email, String id) {
-    pagelist.add(PageList(title: title, username: user, email: email, id: id));
+  void setuserspace({init = true}) async {
+    await firestore.collection('Pinchannel').get().then((value) async {
+      updateid.clear();
+      pagelist.clear();
+      for (var element in value.docs) {
+        if (element.data()['username'] == usercode) {
+          updateid.add(element.data()['linkname']);
+          pagelist.add(PageList(
+              title: element.data()['linkname'],
+              id: element.id,
+              setting: element.data()['setting']));
+        }
+      }
+      if (updateid.isEmpty) {
+        await firestore.collection('Pinchannel').add({
+          'username': usercode,
+          'linkname': '빈 스페이스',
+          'email': useremail,
+          'setting': 'block'
+        }).then((value1) {
+          pagelist
+              .add(PageList(title: '빈 스페이스', id: value1.id, setting: 'block'));
+        });
+      }
+    }).whenComplete(() {
+      if (init) {
+        go();
+      }
+    });
+
     update();
     notifyChildrens();
   }
@@ -129,5 +160,9 @@ class uisetting extends GetxController {
     favorpagelist.clear();
     update();
     notifyChildrens();
+  }
+
+  void go() {
+    GoToMain();
   }
 }

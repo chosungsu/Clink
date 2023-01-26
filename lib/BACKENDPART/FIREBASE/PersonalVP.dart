@@ -1,24 +1,37 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, prefer_typing_uninitialized_variables, unused_local_variable
 
-import 'package:clickbyme/sheets/Mainpage/horizontalbtn.dart';
+import 'package:clickbyme/Enums/Radio.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
-
 import '../../Enums/Linkpage.dart';
 import '../../Enums/PageList.dart';
 import '../../Enums/Variables.dart';
 import '../../FRONTENDPART/Page/Spacein.dart';
+import '../../FRONTENDPART/Route/subuiroute.dart';
+import '../../Tool/AndroidIOS.dart';
+import '../../Tool/BGColor.dart';
+import '../../Tool/ContainerDesign.dart';
 import '../../Tool/FlushbarStyle.dart';
 import '../../Tool/Getx/calendarsetting.dart';
 import '../../Tool/Getx/category.dart';
 import '../../Tool/Getx/linkspacesetting.dart';
 import '../../Tool/Getx/uisetting.dart';
 import '../../FRONTENDPART/UI(Widget/DayNoteHome.dart';
+import '../../Tool/TextSize.dart';
 import '../../sheets/BottomSheet/AddContent.dart';
-import '../../sheets/linksettingsheet.dart';
+import '../../sheets/BottomSheet/AddContentWithBtn.dart';
+import '../../sheets/movetolinkspace.dart';
 
-PageViewStreamParent() {
+///Getx 호출
+final linkspaceset = Get.put(linkspacesetting());
+final controll_cals = Get.put(calendarsetting());
+final uiset = Get.put(uisetting());
+final cg = Get.put(category());
+
+///이 아래는 StreamBuilder기반 코드 작성
+PageViewStreamParent1() {
   return firestore.collection('PageView').snapshots();
 }
 
@@ -51,8 +64,6 @@ PageViewRes1_2(
   id,
   changeset,
 ) async {
-  final linkspaceset = Get.put(linkspacesetting());
-  final uiset = Get.put(uisetting());
   var insertlist;
   int changei = 0;
   String docid = '';
@@ -96,20 +107,29 @@ PageViewRes1_2(
   });
 }
 
-PageViewStreamChild1(context, id, index) async {
-  final linkspaceset = Get.put(linkspacesetting());
+pageaddlogic(context, id, index) async {
+  final List<Linkspacepage> listspacepageset = [];
   return await firestore.collection('Pinchannel').doc(id).get().then(
-    (value) {
+    (value) async {
       if (value.get('username') == usercode) {
-        linkmadetreeplace(
-          context,
-          usercode,
-          uiset.pagelist[0].title,
-          linkspaceset.indexcnt[index].placestr,
-          linkspaceset.indextreetmp[index].length,
-          linkspaceset.indexcnt[index].familycode,
-          linkspaceset.indexcnt[index].type,
-        );
+        await firestore.collection('Pinchannelin').add({
+          'addname': '빈 제목',
+          'placestr': linkspaceset.indexcnt[index].placestr,
+          'index': linkspaceset.indextreetmp[index].length,
+          'uniquecode': linkspaceset.indexcnt[index].familycode,
+          'type': linkspaceset.indexcnt[index].type,
+          'spaceentercontent': linkspaceset.indexcnt[index].type == 1 ? '' : []
+        }).whenComplete(() {
+          Snack.snackbars(
+              context: context,
+              title: '성공적으로 추가되었습니다',
+              backgroundcolor: Colors.green,
+              bordercolor: draw.backgroundcolor);
+        });
+        linkspaceset.setspacetreein(Linkspacetreepage(
+            subindex: index,
+            placestr: '빈 제목',
+            uniqueid: linkspaceset.indexcnt[index].familycode));
       } else {
         if (value.get('setting') == 'block') {
           Snack.snackbars(
@@ -118,23 +138,32 @@ PageViewStreamChild1(context, id, index) async {
               backgroundcolor: Colors.red,
               bordercolor: draw.backgroundcolor);
         } else {
-          linkmadetreeplace(
-            context,
-            usercode,
-            uiset.pagelist[0].title,
-            linkspaceset.indexcnt[index].placestr,
-            linkspaceset.indextreetmp[index].length,
-            linkspaceset.indexcnt[index].familycode,
-            linkspaceset.indexcnt[index].type,
-          );
+          await firestore.collection('Pinchannelin').add({
+            'addname': '빈 제목',
+            'placestr': linkspaceset.indexcnt[index].placestr,
+            'index': linkspaceset.indextreetmp[index].length,
+            'uniquecode': linkspaceset.indexcnt[index].familycode,
+            'type': linkspaceset.indexcnt[index].type,
+            'spaceentercontent':
+                linkspaceset.indexcnt[index].type == 1 ? '' : []
+          }).whenComplete(() {
+            Snack.snackbars(
+                context: context,
+                title: '성공적으로 추가되었습니다',
+                backgroundcolor: Colors.green,
+                bordercolor: draw.backgroundcolor);
+          });
+          linkspaceset.setspacetreein(Linkspacetreepage(
+              subindex: index,
+              placestr: '빈 제목',
+              uniqueid: linkspaceset.indexcnt[index].familycode));
         }
       }
     },
   );
 }
 
-PageViewStreamChild2(context, id, index, controller, searchNode) async {
-  final linkspaceset = Get.put(linkspacesetting());
+pageeditlogic(context, id, index, controller, searchNode) async {
   Widget title;
   Widget content;
   await firestore.collection('Pinchannel').doc(id).get().then(
@@ -142,9 +171,10 @@ PageViewStreamChild2(context, id, index, controller, searchNode) async {
       if (value.get('username') == usercode) {
         title = Widgets_horizontalbtn(
           context,
+          id,
           index,
           linkspaceset.indexcnt[index].placestr,
-          linkspaceset.indexcnt[index].uniquecode,
+          linkspaceset.indexcnt[index].familycode,
           linkspaceset.indexcnt[index].type,
           linkspaceset.indexcnt[index].canshow,
           controller,
@@ -153,9 +183,10 @@ PageViewStreamChild2(context, id, index, controller, searchNode) async {
         )[0];
         content = Widgets_horizontalbtn(
           context,
+          id,
           index,
           linkspaceset.indexcnt[index].placestr,
-          linkspaceset.indexcnt[index].uniquecode,
+          linkspaceset.indexcnt[index].familycode,
           linkspaceset.indexcnt[index].type,
           linkspaceset.indexcnt[index].canshow,
           controller,
@@ -173,9 +204,10 @@ PageViewStreamChild2(context, id, index, controller, searchNode) async {
         } else {
           title = Widgets_horizontalbtn(
             context,
+            id,
             index,
             linkspaceset.indexcnt[index].placestr,
-            linkspaceset.indexcnt[index].uniquecode,
+            linkspaceset.indexcnt[index].familycode,
             linkspaceset.indexcnt[index].type,
             linkspaceset.indexcnt[index].canshow,
             controller,
@@ -184,9 +216,10 @@ PageViewStreamChild2(context, id, index, controller, searchNode) async {
           )[0];
           content = Widgets_horizontalbtn(
               context,
+              id,
               index,
               linkspaceset.indexcnt[index].placestr,
-              linkspaceset.indexcnt[index].uniquecode,
+              linkspaceset.indexcnt[index].familycode,
               linkspaceset.indexcnt[index].type,
               linkspaceset.indexcnt[index].canshow,
               controller,
@@ -222,7 +255,6 @@ PageViewRes2(id, snapshot, index) {
 }
 
 PageViewStreamChild3(context, id, index, index2) async {
-  final linkspaceset = Get.put(linkspacesetting());
   var memoname = '';
   await firestore
       .collection('PageView')
@@ -324,9 +356,6 @@ PageViewStreamParent3() {
 }
 
 PageViewStreamChild5(context, id) {
-  final linkspaceset = Get.put(linkspacesetting());
-  final controll_cals = Get.put(calendarsetting());
-
   firestore.collection('Calendar').get().then(
     (value) {
       linkspaceset.inindextreetmp.clear();
@@ -351,7 +380,6 @@ PageViewStreamChild5(context, id) {
 }
 
 AddTemplateStreamFamily(spaceindata, id) {
-  final cg = Get.put(category());
   return firestore.collection('PageView').get().then((value) {
     spaceindata.clear();
     uiset.pageviewlist.clear();
@@ -469,6 +497,841 @@ SpacepageChild1(snapshot) {
     if (messageuser == usercode) {
       uiset.pagelist
           .add(PageList(title: messagetitle, username: messageuser, id: sp.id));
+    }
+  }
+}
+
+/// 이 아래에는 바텀시트를 통해 db에 접근하는 로직 작성
+Widgets_editpageconsole(
+  context,
+  textcontroller,
+  searchnode,
+  index,
+) {
+  Widget title, title2, title3;
+  Widget content, content2, content3;
+  Widget bnt3;
+
+  title = const SizedBox();
+  content = Column(
+    children: [
+      ListTile(
+        onTap: () {
+          Get.back();
+        },
+        trailing: const Icon(
+          Icons.settings,
+          color: Colors.black,
+        ),
+        title: Text(
+          '접근 권한 설정',
+          softWrap: true,
+          textAlign: TextAlign.start,
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: contentTextsize()),
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
+      ListTile(
+        onTap: () {
+          Get.back();
+          title3 = Widgets_editpagesecond(context, textcontroller, searchnode,
+              uiset.pagelist[index].title)[0];
+          content3 = Widgets_editpagesecond(context, textcontroller, searchnode,
+              uiset.pagelist[index].title)[1];
+          bnt3 = Widgets_editpagesecond(context, textcontroller, searchnode,
+              uiset.pagelist[index].title)[2];
+          AddContentWithBtn(context, title3, content3, bnt3, searchnode);
+        },
+        trailing: const Icon(
+          Icons.edit,
+          color: Colors.black,
+        ),
+        title: Text(
+          '이름 바꾸기',
+          softWrap: true,
+          textAlign: TextAlign.start,
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: contentTextsize()),
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
+      ListTile(
+        onTap: () async {
+          final reloadpage = await Get.dialog(OSDialog(context, '경고', Builder(
+                builder: (context) {
+                  return SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    child: SingleChildScrollView(
+                      child: Text('정말 이 링크를 삭제하시겠습니까?',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: contentTextsize(),
+                              color: Colors.blueGrey)),
+                    ),
+                  );
+                },
+              ), pressed2)) ??
+              false;
+          if (reloadpage) {
+            linkspaceset.setcompleted(true);
+
+            var id = '';
+            await firestore.collection('Pinchannel').get().then((value) {
+              for (int i = 0; i < value.docs.length; i++) {
+                if (value.docs[i].get('username') == usercode &&
+                    value.docs[i].get('linkname') ==
+                        uiset.pagelist[index].title &&
+                    value.docs[i].id == uiset.pagelist[index].id) {
+                  id = value.docs[i].id;
+                }
+              }
+              firestore.collection('Pinchannel').doc(id).delete();
+            }).whenComplete(() async {
+              var ids;
+              await firestore.collection('PageView').get().then((value) {
+                for (int i = 0; i < value.docs.length; i++) {
+                  if (value.docs[i].get('id') == id) {
+                    ids = value.docs[i].id;
+                  }
+                }
+                firestore.collection('PageView').doc(ids).delete();
+              }).whenComplete(() async {
+                final idlist = [];
+                await firestore.collection('Pinchannelin').get().then((value) {
+                  for (int i = 0; i < value.docs.length; i++) {
+                    if (value.docs[i].get('uniquecode') ==
+                        uiset.pagelist[index].id) {
+                      id = value.docs[i].id;
+                      firestore.collection('Pinchannelin').doc(id).delete();
+                    }
+                  }
+                }).whenComplete(() {
+                  linkspaceset.setcompleted(false);
+                  Get.back();
+                });
+              });
+            });
+          }
+        },
+        trailing: const Icon(
+          Icons.delete,
+          color: Colors.red,
+        ),
+        title: Text(
+          '삭제하기',
+          softWrap: true,
+          textAlign: TextAlign.start,
+          style: TextStyle(
+              color: Colors.red,
+              fontWeight: FontWeight.bold,
+              fontSize: contentTextsize()),
+          overflow: TextOverflow.ellipsis,
+        ),
+      )
+    ],
+  );
+  return [title, content];
+}
+
+Widgets_editpagesecond(
+  context,
+  textcontroller,
+  searchnode,
+  prevtitle,
+) {
+  Widget title;
+  Widget content;
+  Widget btn;
+  final updatelist = [];
+  final uniquecodelist = [];
+  textcontroller.text = prevtitle;
+
+  title = SizedBox(
+      height: 50,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('이름 변경',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: secondTitleTextsize()))
+        ],
+      ));
+  content = Column(
+    mainAxisSize: MainAxisSize.min,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      ContainerTextFieldDesign(
+        searchNodeAddSection: searchnode,
+        string: '변경할 제목입력',
+        textEditingControllerAddSheet: textcontroller,
+      ),
+    ],
+  );
+  btn = SizedBox(
+      height: 50,
+      child: Row(
+        children: [
+          Flexible(
+            fit: FlexFit.tight,
+            child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(100)),
+                  primary: Colors.blue,
+                ),
+                onPressed: () async {
+                  SummitEditpage(
+                      context, textcontroller, updatelist, prevtitle);
+                },
+                child: GetBuilder<uisetting>(
+                  builder: (_) => Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        uiset.loading == true
+                            ? Center(
+                                child: Text(
+                                  '처리중',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentTextsize(),
+                                      color: Colors.white),
+                                ),
+                              )
+                            : Center(
+                                child: Text(
+                                  '변경',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentTextsize(),
+                                      color: Colors.white),
+                                ),
+                              )
+                      ],
+                    ),
+                  ),
+                )),
+          )
+        ],
+      ));
+  return [title, content, btn];
+}
+
+Widgets_horizontalbtn(
+  context,
+  parentid,
+  index,
+  placestr,
+  uniquecode,
+  type,
+  canshow,
+  controller,
+  searchNode,
+  String s,
+) {
+  Widget title, title2;
+  Widget content, content2;
+  Widget btn2;
+  final List<Linkspacepage> listspacepageset = [];
+  bool loading = false;
+  var id;
+  var updateid = [];
+  var updateindex = [];
+  var radiogroups = [0, 1, 2];
+  String changeset = canshow == '나 혼자만'
+      ? radiogroup1[0]
+      : (canshow == '팔로워만 공개' ? radiogroup1[1] : radiogroup1[2]);
+
+  title = const SizedBox();
+  content = StatefulBuilder(builder: (_, StateSetter setState) {
+    return Column(
+      children: [
+        ListTile(
+          onTap: () {
+            Get.back();
+            controller.text = placestr;
+            title2 = SizedBox(
+                height: 50,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('이름 변경',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: secondTitleTextsize()))
+                  ],
+                ));
+            content2 = ContainerTextFieldDesign(
+              searchNodeAddSection: searchNode,
+              string: '변경할 이름 입력',
+              textEditingControllerAddSheet: controller,
+            );
+            btn2 = SizedBox(
+              height: 50,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    primary: ButtonColor(),
+                  ),
+                  onPressed: () async {
+                    SummitEditBox(context, controller, searchNode,
+                        'editnametemplate', uniquecode, type, parentid);
+                  },
+                  child: Center(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Text(
+                            uiset.loading == false ? '변경' : '처리중',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentTextsize(),
+                                color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )),
+            );
+            AddContentWithBtn(context, title2, content2, btn2, searchNode);
+          },
+          trailing: const Icon(
+            AntDesign.edit,
+            color: Colors.black,
+          ),
+          title: Text(
+            '이름 변경',
+            softWrap: true,
+            textAlign: TextAlign.start,
+            style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: contentTextsize()),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        ListTile(
+          onTap: () {
+            Get.dialog(OSDialogWithoutaction(
+              context,
+              '선택',
+              Builder(
+                builder: (context) {
+                  return GetBuilder<uisetting>(builder: ((controller) {
+                    return SizedBox(
+                        width: Get.width / 2,
+                        child: StatefulBuilder(
+                          builder: (context, setState) {
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ListView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: radiogroup1.length,
+                                  physics: const BouncingScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    return RadioListTile<String>(
+                                      title: Text(radiogroup1[index]),
+                                      value: radiogroup1[index],
+                                      groupValue: changeset,
+                                      onChanged: (value) async {
+                                        setState(() {
+                                          changeset = value!;
+                                        });
+                                        await PageViewRes1_2(id, changeset);
+                                      },
+                                    );
+                                  },
+                                ),
+                                uiset.loading == true
+                                    ? SizedBox(
+                                        height: 20,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: const [
+                                            SizedBox(
+                                              height: 10,
+                                              width: 10,
+                                              child: Center(
+                                                  child:
+                                                      CircularProgressIndicator()),
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                    : const SizedBox()
+                              ],
+                            );
+                          },
+                        ));
+                  }));
+                },
+              ),
+            )).whenComplete(() {
+              Get.back();
+            });
+          },
+          trailing: const Icon(
+            Ionicons.eye_outline,
+            color: Colors.black,
+          ),
+          title: Text(
+            '공개범위 변경',
+            softWrap: true,
+            textAlign: TextAlign.start,
+            style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: contentTextsize()),
+            overflow: TextOverflow.ellipsis,
+          ),
+          subtitle: GetBuilder<uisetting>(
+            builder: (controller) {
+              return Text(
+                'now : ' + changeset,
+                softWrap: true,
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.normal,
+                    fontSize: contentTextsize()),
+                overflow: TextOverflow.ellipsis,
+              );
+            },
+          ),
+        ),
+        ListTile(
+          onTap: () async {
+            final reloadpage = await Get.dialog(OSDialog(context, '경고', Builder(
+                  builder: (context) {
+                    return SizedBox(
+                      width: Get.width / 2,
+                      child: SingleChildScrollView(
+                        child: Text('정말 이 링크를 삭제하시겠습니까?',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentTextsize(),
+                                color: Colors.blueGrey)),
+                      ),
+                    );
+                  },
+                ), pressed2)) ??
+                false;
+            if (reloadpage) {
+              Get.back();
+              var parentid;
+              var changeindex;
+              await firestore.collection('PageView').get().then((value) {
+                for (int i = 0; i < value.docs.length; i++) {
+                  if (value.docs[i].get('spacename') == placestr &&
+                      value.docs[i].get('id') == uniquecode &&
+                      value.docs[i].get('type') == type) {
+                    id = value.docs[i].id;
+                    changeindex = value.docs[i].get('index');
+                  }
+                }
+                firestore.collection('PageView').doc(id).delete();
+              }).whenComplete(() async {
+                await firestore.collection('Pinchannelin').get().then((value) {
+                  for (int i = 0; i < value.docs.length; i++) {
+                    if (value.docs[i].get('uniquecode') == id) {
+                      parentid = value.docs[i].id;
+                      updateid.add(parentid);
+                    }
+                  }
+                  if (updateid.isEmpty) {
+                  } else {
+                    for (int j = 0; j < updateid.length; j++) {
+                      firestore
+                          .collection('Pinchannelin')
+                          .doc(updateid[j])
+                          .delete();
+                    }
+                  }
+                }).whenComplete(() async {
+                  updateid.clear();
+                  updateindex.clear();
+                  Snack.snackbars(
+                      context: context,
+                      title: '삭제완료!',
+                      backgroundcolor: Colors.red,
+                      bordercolor: draw.backgroundcolor);
+                  await firestore.collection('PageView').get().then((value) {
+                    for (int i = 0; i < value.docs.length; i++) {
+                      if (value.docs[i].get('index') > changeindex) {
+                        updateid.add(value.docs[i].id);
+                        updateindex.add(value.docs[i].get('index'));
+                      }
+                    }
+                    if (updateid.isEmpty) {
+                    } else {
+                      for (int j = 0; j < updateid.length; j++) {
+                        firestore
+                            .collection('PageView')
+                            .doc(updateid[j])
+                            .update({'index': updateindex[j] - 1});
+                      }
+                    }
+                  }).whenComplete(() {
+                    linkspaceset.setcompleted(false);
+                  });
+                });
+              });
+            }
+          },
+          trailing: const Icon(
+            AntDesign.delete,
+            color: Colors.red,
+          ),
+          title: Text(
+            '삭제',
+            softWrap: true,
+            textAlign: TextAlign.start,
+            style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: contentTextsize()),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    );
+  });
+  return [title, content];
+}
+
+Widgets_horizontalbtnsecond(
+  context,
+  index,
+  placestr,
+  uniquecode,
+  type,
+  controller,
+  searchNode,
+  String s,
+) {
+  Widget title, title2;
+  Widget content, content2;
+  Widget btn2;
+  final linkspaceset = Get.put(linkspacesetting());
+  final cg = Get.put(category());
+  final uiset = Get.put(uisetting());
+  final List<Linkspacepage> listspacepageset = [];
+  bool loading = false;
+  var id;
+  var updateid = [];
+  var updateindex = [];
+
+  title = const SizedBox();
+  content = StatefulBuilder(builder: (_, StateSetter setState) {
+    return Column(
+      children: [
+        ListTile(
+          onTap: () {
+            Get.back();
+            controller.text = placestr;
+            title2 = SizedBox(
+                height: 50,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('이름 변경',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: secondTitleTextsize()))
+                  ],
+                ));
+            content2 = ContainerTextFieldDesign(
+              searchNodeAddSection: searchNode,
+              string: '변경할 이름 입력',
+              textEditingControllerAddSheet: controller,
+            );
+            btn2 = SizedBox(
+              height: 50,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    primary: ButtonColor(),
+                  ),
+                  onPressed: () async {
+                    SummitEditBox(context, controller, searchNode,
+                        'editnametemplatein', uniquecode, type, '');
+                  },
+                  child: Center(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Text(
+                            uiset.loading == false ? '변경' : '처리중',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentTextsize(),
+                                color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )),
+            );
+            AddContentWithBtn(context, title2, content2, btn2, searchNode);
+          },
+          trailing: const Icon(
+            AntDesign.edit,
+            color: Colors.black,
+          ),
+          title: Text(
+            '이름 변경',
+            softWrap: true,
+            textAlign: TextAlign.start,
+            style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: contentTextsize()),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        ListTile(
+          onTap: () async {
+            final reloadpage = await Get.dialog(OSDialog(context, '경고', Builder(
+                  builder: (context) {
+                    return SizedBox(
+                      width: Get.width / 2,
+                      child: SingleChildScrollView(
+                        child: Text('정말 이 링크를 삭제하시겠습니까?',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentTextsize(),
+                                color: Colors.blueGrey)),
+                      ),
+                    );
+                  },
+                ), pressed2)) ??
+                false;
+            if (reloadpage) {
+              var parentid;
+              var changeindex;
+
+              await firestore.collection('Pinchannelin').get().then((value) {
+                for (int i = 0; i < value.docs.length; i++) {
+                  if (value.docs[i].get('addname') == placestr &&
+                      value.docs[i].get('uniquecode') == uniquecode &&
+                      value.docs[i].get('index') == index) {
+                    id = value.docs[i].id;
+                    changeindex = value.docs[i].get('index');
+                  }
+                }
+                firestore.collection('Pinchannelin').doc(id).delete();
+              }).whenComplete(() async {
+                updateid.clear();
+                updateindex.clear();
+                await firestore.collection('Pinchannelin').get().then((value) {
+                  for (int i = 0; i < value.docs.length; i++) {
+                    if (value.docs[i].get('uniquecode') == uniquecode &&
+                        value.docs[i].get('index') > changeindex) {
+                      updateid.add(value.docs[i].id);
+                      updateindex.add(value.docs[i].get('index'));
+                    }
+                  }
+                  if (updateid.isEmpty) {
+                  } else {
+                    for (int j = 0; j < updateid.length; j++) {
+                      firestore
+                          .collection('Pinchannelin')
+                          .doc(updateid[j])
+                          .update({'index': updateindex[j] - 1});
+                    }
+                  }
+                }).whenComplete(() async {
+                  Snack.snackbars(
+                      context: context,
+                      title: '삭제완료!',
+                      backgroundcolor: Colors.red,
+                      bordercolor: draw.backgroundcolor);
+                  linkspaceset.setcompleted(false);
+                  firestore.collection('Calendar').get().then((value) {
+                    if (value.docs.isNotEmpty) {
+                      for (int j = 0; j < value.docs.length; j++) {
+                        final messageuniquecode = value.docs[j]['parentid'];
+                        if (messageuniquecode == id) {
+                          firestore
+                              .collection('Calendar')
+                              .doc(value.docs[j].id)
+                              .delete();
+                        }
+                      }
+                    } else {}
+                  }).whenComplete(() {
+                    Get.back();
+                  });
+                });
+              });
+            }
+          },
+          trailing: const Icon(
+            AntDesign.delete,
+            color: Colors.red,
+          ),
+          title: Text(
+            '삭제',
+            softWrap: true,
+            textAlign: TextAlign.start,
+            style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: contentTextsize()),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    );
+  });
+  return [title, content];
+}
+
+SummitEditpage(context, controller, updatelist, prevtitle) async {
+  if (controller.text.isEmpty) {
+    Snack.snackbars(
+        context: context,
+        title: '변경할 이름이 비어있어요',
+        backgroundcolor: Colors.red,
+        bordercolor: draw.backgroundcolor);
+  } else {
+    updatelist.clear();
+    var id = '';
+    uiset.setloading(true);
+
+    await firestore.collection('Pinchannel').get().then((value) {
+      for (int i = 0; i < value.docs.length; i++) {
+        if (value.docs[i].get('linkname') == prevtitle) {
+          if (value.docs[i].get('username') == usercode) {
+            id = value.docs[i].id;
+          }
+        }
+      }
+      firestore.collection('Pinchannel').doc(id).update({
+        'linkname': controller.text,
+      });
+    }).whenComplete(() async {
+      await firestore.collection('Favorplace').get().then((value) {
+        for (int i = 0; i < value.docs.length; i++) {
+          if (value.docs[i].get('title') == prevtitle) {
+            if (value.docs[i].get('originuser') == usercode) {
+              id = value.docs[i].id;
+              firestore.collection('Favorplace').doc(id).update({
+                'title': controller.text,
+              });
+            }
+          }
+        }
+      }).whenComplete(() {
+        Snack.snackbars(
+            context: context,
+            title: '정상적으로 처리되었어요',
+            backgroundcolor: Colors.green,
+            bordercolor: draw.backgroundcolor);
+        uiset.setloading(false);
+        Get.back();
+        uiset.setuserspace(init: false);
+      });
+    });
+  }
+}
+
+SummitEditBox(
+  context,
+  textEditingControllerAddSheet,
+  searchNodeAddSection,
+  where,
+  id,
+  categorynumber,
+  parentid,
+) {
+  final updatelist = [];
+  final initialtext = textEditingControllerAddSheet.text;
+  var updateid;
+  int indexcnt = linkspaceset.indexcnt.length;
+  if (textEditingControllerAddSheet.text.isEmpty) {
+    Snack.snackbars(
+        context: context,
+        title: where == 'editnametemplate' || where == 'editnametemplatein'
+            ? '변경할 제목이 비어있어요!'
+            : '추가할 페이지 제목이 비어있어요!',
+        backgroundcolor: Colors.red,
+        bordercolor: draw.backgroundcolor);
+  } else {
+    uiset.setloading(true);
+    if (where == 'editnametemplate') {
+      firestore.collection('PageView').doc(id).update(
+          {'spacename': textEditingControllerAddSheet.text}).whenComplete(() {
+        Snack.snackbars(
+            context: context,
+            title: '정상적으로 처리되었어요',
+            backgroundcolor: Colors.green,
+            bordercolor: draw.backgroundcolor);
+        uiset.setloading(false);
+        linkspaceset.setspacelink(textEditingControllerAddSheet.text);
+        Get.back();
+      });
+    } else {
+      var parentid;
+      firestore.collection('Pinchannelin').get().then((value) {
+        if (value.docs.isNotEmpty) {
+          for (int j = 0; j < value.docs.length; j++) {
+            final messageuniquecode = value.docs[j]['uniquecode'];
+            final messageindex = value.docs[j]['index'];
+            if (messageindex == categorynumber && messageuniquecode == id) {
+              parentid = value.docs[j].id;
+              firestore
+                  .collection('Pinchannelin')
+                  .doc(value.docs[j].id)
+                  .update({'addname': textEditingControllerAddSheet.text});
+            }
+          }
+        } else {}
+      }).whenComplete(() {
+        firestore.collection('Calendar').get().then((value) {
+          if (value.docs.isNotEmpty) {
+            for (int j = 0; j < value.docs.length; j++) {
+              final messageuniquecode = value.docs[j]['parentid'];
+              if (messageuniquecode == parentid) {
+                firestore
+                    .collection('Calendar')
+                    .doc(value.docs[j].id)
+                    .update({'calname': textEditingControllerAddSheet.text});
+              }
+            }
+          } else {}
+        }).whenComplete(() {
+          Snack.snackbars(
+              context: context,
+              title: '정상적으로 처리되었어요',
+              backgroundcolor: Colors.green,
+              bordercolor: draw.backgroundcolor);
+          uiset.setloading(false);
+          linkspaceset.setspacelink(textEditingControllerAddSheet.text);
+          Get.back();
+        });
+      });
     }
   }
 }

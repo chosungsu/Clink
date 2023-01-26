@@ -102,6 +102,7 @@ func2(BuildContext context) async {
 }
 
 func3(BuildContext context) => Future.delayed(const Duration(seconds: 0), () {
+      final linkspaceset = Get.put(linkspacesetting());
       if (linkspaceset.color == draw.backgroundcolor) {
         StatusBarControl.setColor(draw.backgroundcolor, animated: true);
       } else {
@@ -197,6 +198,7 @@ func5() {
 }
 
 func7(String title, String email, String origin, String id) async {
+  final uiset = Get.put(uisetting());
   var deleteid = '';
 
   await firestore.collection('Favorplace').get().then((value) {

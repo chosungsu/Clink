@@ -112,14 +112,36 @@ class PeopleAdd extends GetxController {
     notifyChildrens();
   }
 
-  void secondnameset(String name, String code) {
-    firestore
-        .collection('User')
-        .doc(Hive.box('user_info').get('id'))
-        .update({'subname': name});
-    code = code;
+  void secondnameset(String username, String usercode) {
+    firestore.collection('User').doc(name).update({'subname': username});
+    code = usercode;
 
     secondname = name;
+    update();
+    notifyChildrens();
+  }
+
+  void secondnameload({init = true}) async {
+    await firestore
+        .collection('User')
+        .where('name', isEqualTo: name)
+        .get()
+        .then(
+      (value) {
+        if (value.docs.isEmpty) {
+          firestore.collection('User').doc(name).update({'subname': name});
+          code = usercode;
+          secondname = name;
+        } else {
+          firestore
+              .collection('User')
+              .doc(name)
+              .update({'subname': value.docs[0].get('subname')});
+          code = value.docs[0].get('code');
+          secondname = value.docs[0].get('subname');
+        }
+      },
+    );
     update();
     notifyChildrens();
   }

@@ -17,8 +17,6 @@ import 'Enums/PushNotification.dart';
 import 'Enums/Variables.dart';
 import 'FRONTENDPART/Route/subuiroute.dart';
 import 'LocalNotiPlatform/NotificationApi.dart';
-import 'Tool/Getx/PeopleAdd.dart';
-import 'Tool/Getx/notishow.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 void main() async {
@@ -100,20 +98,12 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  late AnimationController scaleController;
-  late Animation<double> scaleAnimation;
-  bool islogined = false;
-  final peopleadd = Get.put(PeopleAdd());
-  final notilist = Get.put(notishow());
-  List updateid = [];
-  bool isread = false;
   String name = Hive.box('user_info').get('id') ?? '';
 
   @override
   void initState() {
     super.initState();
     checkForInitialMessage();
-    initScreen(context);
   }
 
   @override
@@ -191,48 +181,60 @@ class _SplashPageState extends State<SplashPage> {
                   )),
                 ),
                 SizedBox(
-                  width: 40.w,
-                  child: name == ''
-                      ? SizedBox(
-                          width: 30.w,
-                          height: 50,
-                          child: GestureDetector(
-                            onTap: () {
-                              GoToLogin('first');
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.transparent,
-                                borderRadius: BorderRadius.circular(15),
-                                border: Border.all(
-                                  color: Colors.grey,
-                                  width: 2,
+                    width: 40.w,
+                    child: name == ''
+                        ? SizedBox(
+                            width: 30.w,
+                            height: 50,
+                            child: GestureDetector(
+                              onTap: () {
+                                GoToLogin('first');
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  borderRadius: BorderRadius.circular(15),
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 2,
+                                  ),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('Get Start',
+                                        style: TextStyle(
+                                            color: TextColor(),
+                                            fontSize: contentTextsize())),
+                                  ],
                                 ),
                               ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('Get Start',
-                                      style: TextStyle(
-                                          color: TextColor(),
-                                          fontSize: contentTextsize())),
-                                ],
-                              ),
                             ),
-                          ),
-                        )
-                      : SpinKitThreeBounce(
-                          size: 30,
-                          itemBuilder: (BuildContext context, int index) {
-                            return DecoratedBox(
-                              decoration: BoxDecoration(
-                                  color: Colors.blue.shade200,
-                                  shape: BoxShape.circle),
-                            );
-                          },
-                        ),
-                ),
+                          )
+                        : FutureBuilder(
+                            future: initScreen(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                      ConnectionState.done &&
+                                  snapshot.hasData) {
+                                //GoToMain();
+                                return SizedBox();
+                              } else {
+                                return SpinKitThreeBounce(
+                                  size: 30,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return DecoratedBox(
+                                      decoration: BoxDecoration(
+                                          color: Colors.blue.shade200,
+                                          shape: BoxShape.circle),
+                                    );
+                                  },
+                                );
+                              }
+                            },
+                          )),
               ],
             )
           : Column(
@@ -302,16 +304,29 @@ class _SplashPageState extends State<SplashPage> {
                               ),
                             ),
                           )
-                        : SpinKitThreeBounce(
-                            size: 25,
-                            itemBuilder: (BuildContext context, int index) {
-                              return DecoratedBox(
-                                decoration: BoxDecoration(
-                                    color: Colors.blue.shade200,
-                                    shape: BoxShape.circle),
-                              );
+                        : FutureBuilder(
+                            future: initScreen(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                      ConnectionState.done &&
+                                  snapshot.hasData) {
+                                //GoToMain();
+                                return SizedBox();
+                              } else {
+                                return SpinKitThreeBounce(
+                                  size: 30,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return DecoratedBox(
+                                      decoration: BoxDecoration(
+                                          color: Colors.blue.shade200,
+                                          shape: BoxShape.circle),
+                                    );
+                                  },
+                                );
+                              }
                             },
-                          ),
+                          )
                   ],
                 )),
                 SizedBox(

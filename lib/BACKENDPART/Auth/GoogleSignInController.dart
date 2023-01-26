@@ -61,7 +61,7 @@ class GoogleSignInController extends GetxController {
                 name = nick;
                 email = email;
                 usercode = value.data()!['code'];
-                initScreen(context);
+                initScreen();
               } else {}
             });
           });
@@ -82,7 +82,7 @@ class GoogleSignInController extends GetxController {
             name = nick;
             email = email;
             usercode = code;
-            initScreen(context);
+            initScreen();
           });
         }
       });

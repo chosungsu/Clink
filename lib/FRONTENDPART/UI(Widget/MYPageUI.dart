@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names
 
 import 'package:clickbyme/Tool/ContainerDesign.dart';
-import 'package:clickbyme/Tool/Getx/uisetting.dart';
+import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -14,40 +14,41 @@ import '../../../Tool/Getx/linkspacesetting.dart';
 import '../../../Tool/TextSize.dart';
 import '../../BACKENDPART/FIREBASE/PersonalVP.dart';
 import '../../Tool/AndroidIOS.dart';
-import '../../sheets/movetolinkspace.dart';
-import '../Route/mainroute.dart';
+import '../../Tool/Getx/uisetting.dart';
+
+final uiset = Get.put(uisetting());
+final linkspaceset = Get.put(linkspacesetting());
 
 UI(id, controller, searchnode, maxWidth, maxHeight) {
-  final searchNode = FocusNode();
-
-  return GetBuilder<linkspacesetting>(
-      builder: (_) => StreamBuilder<QuerySnapshot>(
-            stream: PageViewStreamParent(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                PageViewRes1_1(id, snapshot);
-                return linkspaceset.indexcnt.isEmpty
-                    ? NotInPageScreen(
-                        maxHeight, maxWidth, controller, searchnode)
-                    : SizedBox(
-                        height: maxHeight,
-                        width: maxWidth,
-                        child: Responsivelayout(
-                            PageUI0(context, id, controller, searchnode,
-                                maxHeight, maxWidth),
-                            PageUI1(context, id, controller, searchnode,
-                                maxHeight, maxWidth)),
-                      );
-              } else if (!snapshot.hasData) {
-                return NotInPageScreen(
-                    maxHeight, maxWidth, controller, searchnode);
-              }
-              return LinearProgressIndicator(
-                backgroundColor: draw.backgroundcolor,
-                valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
-              );
-            },
-          ));
+  return GetBuilder<uisetting>(
+    builder: (_) {
+      return StreamBuilder<QuerySnapshot>(
+        stream: PageViewStreamParent1(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            PageViewRes1_1(id, snapshot);
+            return linkspaceset.indexcnt.isEmpty
+                ? NotInPageScreen(maxHeight, maxWidth, controller, searchnode)
+                : SizedBox(
+                    height: maxHeight,
+                    width: maxWidth,
+                    child: Responsivelayout(
+                        PageUI0(context, id, controller, searchnode, maxHeight,
+                            maxWidth),
+                        PageUI1(context, id, controller, searchnode, maxHeight,
+                            maxWidth)),
+                  );
+          } else if (!snapshot.hasData) {
+            return NotInPageScreen(maxHeight, maxWidth, controller, searchnode);
+          }
+          return LinearProgressIndicator(
+            backgroundColor: draw.backgroundcolor,
+            valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+          );
+        },
+      );
+    },
+  );
 }
 
 PageUI0(context, id, controller, searchnode, maxHeight, maxWidth) {
@@ -101,58 +102,65 @@ PageUI1(context, id, controller, searchnode, maxHeight, maxWidth) {
 }
 
 Room(maxHeight, maxWidth, controller, searchnode, string) {
-  return StreamBuilder<QuerySnapshot>(
-    stream: SpacepageStreamParent(),
-    builder: (context, snapshot) {
-      if (snapshot.hasData) {
-        SpacepageChild1(snapshot);
+  return GetBuilder<uisetting>(
+    builder: (_) {
+      return StreamBuilder<QuerySnapshot>(
+        stream: SpacepageStreamParent(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            SpacepageChild1(snapshot);
 
-        return uiset.pagelist.isEmpty
-            ? SizedBox(
-                height: maxHeight,
-                width: maxWidth,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      AntDesign.frowno,
-                      color: Colors.orange,
-                      size: 30,
+            return uiset.pagelist.isEmpty
+                ? SizedBox(
+                    height: maxHeight,
+                    width: maxWidth,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          AntDesign.frowno,
+                          color: Colors.orange,
+                          size: 30,
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Text(
+                          '페이지가 없습니다',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: contentTextsize(),
+                              color: draw.color_textstatus),
+                        ),
+                      ],
                     ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Text(
-                      '페이지가 없습니다',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: contentTextsize(),
-                          color: draw.color_textstatus),
-                    ),
-                  ],
+                  )
+                : UserRoomScreen(
+                    maxHeight, maxWidth, controller, searchnode, string);
+          }
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 30,
+                width: 30,
+                child: CircularProgressIndicator(
+                  color: draw.color_textstatus,
                 ),
               )
-            : UserRoomScreen(
-                maxHeight, maxWidth, controller, searchnode, string);
-      }
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 30,
-            width: 30,
-            child: CircularProgressIndicator(
-              color: draw.color_textstatus,
-            ),
-          )
-        ],
+            ],
+          );
+        },
       );
     },
   );
 }
 
 UserRoomScreen(maxHeight, maxWidth, controller, searchnode, position) {
+  Widget title;
+  Widget content;
+  Widget btn;
   return ContainerDesign(
     color: draw.backgroundcolor,
     child: SizedBox(
@@ -195,8 +203,12 @@ UserRoomScreen(maxHeight, maxWidth, controller, searchnode, position) {
                                     draw.setnavi();
                                   },
                                   onLongPress: () {
-                                    settingseparatedlinkspace(
-                                        context, controller, searchnode, index);
+                                    title = Widgets_editpageconsole(context,
+                                        controller, searchnode, index)[0];
+                                    content = Widgets_editpageconsole(context,
+                                        controller, searchnode, index)[1];
+                                    AddContent(
+                                        context, title, content, searchnode);
                                   },
                                   child: Container(
                                     height: 40,
@@ -261,8 +273,12 @@ UserRoomScreen(maxHeight, maxWidth, controller, searchnode, position) {
                                     draw.setnavi();
                                   },
                                   onLongPress: () {
-                                    settingseparatedlinkspace(
-                                        context, controller, searchnode, index);
+                                    title = Widgets_editpageconsole(context,
+                                        controller, searchnode, index)[0];
+                                    content = Widgets_editpageconsole(context,
+                                        controller, searchnode, index)[1];
+                                    AddContent(
+                                        context, title, content, searchnode);
                                   },
                                   child: Container(
                                     height: 40,
@@ -433,8 +449,7 @@ WhatInPageScreen(context, id, controller, searchNode, maxWidth, maxHeight) {
                                         ),
                                         InkWell(
                                           onTap: () async {
-                                            PageViewStreamChild1(
-                                                context, id, index);
+                                            pageaddlogic(context, id, index);
                                           },
                                           child: Icon(
                                             Icons.add_circle_outline,
@@ -446,8 +461,8 @@ WhatInPageScreen(context, id, controller, searchNode, maxWidth, maxHeight) {
                                         ),
                                         InkWell(
                                           onTap: () async {
-                                            PageViewStreamChild2(context, id,
-                                                index, controller, searchNode);
+                                            pageeditlogic(context, id, index,
+                                                controller, searchNode);
                                           },
                                           child: Icon(
                                             Icons.more_horiz,
@@ -710,7 +725,7 @@ WhatInPageScreen(context, id, controller, searchNode, maxWidth, maxHeight) {
                                   ),
                                   InkWell(
                                     onTap: () async {
-                                      PageViewStreamChild1(context, id, index);
+                                      pageaddlogic(context, id, index);
                                     },
                                     child: Icon(
                                       Icons.add_circle_outline,
@@ -722,7 +737,7 @@ WhatInPageScreen(context, id, controller, searchNode, maxWidth, maxHeight) {
                                   ),
                                   InkWell(
                                     onTap: () async {
-                                      PageViewStreamChild2(context, id, index,
+                                      pageeditlogic(context, id, index,
                                           controller, searchNode);
                                     },
                                     child: Icon(

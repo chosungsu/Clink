@@ -39,8 +39,8 @@ class notishow extends GetxController {
     notifyChildrens();
   }
 
-  void isreadnoti() async {
-    firestore.collection('AppNoticeByUsers').get().then((value) {
+  void isreadnoti({init = true}) async {
+    await firestore.collection('AppNoticeByUsers').get().then((value) {
       updateid.clear();
       for (var element in value.docs) {
         if (element.data()['username'] == name ||

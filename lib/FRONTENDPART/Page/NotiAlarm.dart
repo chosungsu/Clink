@@ -1,6 +1,5 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/Getx/notishow.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
@@ -10,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import '../../BACKENDPART/FIREBASE/PersonalVP.dart';
-import '../../Enums/Variables.dart';
+import '../../Tool/Getx/uisetting.dart';
 import '../../Tool/Loader.dart';
 import '../Route/mainroute.dart';
 import '../Route/subuiroute.dart';
@@ -35,6 +34,7 @@ class _NotiAlarmState extends State<NotiAlarm>
     with WidgetsBindingObserver, TickerProviderStateMixin {
   final notilist = Get.put(notishow());
   final draw = Get.put(navibool());
+  final uiset = Get.put(uisetting());
   final readlist = [];
   final listid = [];
 

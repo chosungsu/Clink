@@ -15,9 +15,10 @@ import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
 import '../../UI/Home/secondContentNet/ShowTips.dart';
 
+final uiset = Get.put(uisetting());
+
 SearchUI(context, scrollController, TextEditingController controller,
     double height, TextEditingController controller2, searchNode, controller3) {
-  final uiset = Get.put(uisetting());
   return uiset.searchpagemove == ''
       ? Flexible(
           fit: FlexFit.tight,
