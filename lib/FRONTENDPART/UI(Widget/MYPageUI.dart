@@ -198,9 +198,6 @@ UserRoomScreen(maxHeight, maxWidth, controller, searchnode, position) {
                               child: GestureDetector(
                                   onTap: () {
                                     uiset.setmypagelistindex(index);
-                                    StatusBarControl.setColor(BGColor(),
-                                        animated: true);
-                                    draw.setnavi();
                                   },
                                   onLongPress: () {
                                     title = Widgets_editpageconsole(context,
@@ -229,20 +226,22 @@ UserRoomScreen(maxHeight, maxWidth, controller, searchnode, position) {
                               height: 10,
                             ),
                             SizedBox(
-                              width: 70,
-                              height: 30,
-                              child: Text(
-                                uiset.pagelist[index].title,
-                                softWrap: true,
-                                maxLines: 1,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    height: 1,
-                                    color: draw.color_textstatus,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: contentTextsize()),
-                              ),
-                            )
+                                width: 70,
+                                height: 30,
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Text(
+                                    uiset.pagelist[index].title,
+                                    softWrap: true,
+                                    maxLines: 1,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        height: 1,
+                                        color: draw.color_textstatus,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentTextsize()),
+                                  ),
+                                ))
                           ],
                         ),
                       )
@@ -268,9 +267,6 @@ UserRoomScreen(maxHeight, maxWidth, controller, searchnode, position) {
                               child: GestureDetector(
                                   onTap: () {
                                     uiset.setmypagelistindex(index);
-                                    StatusBarControl.setColor(BGColor(),
-                                        animated: true);
-                                    draw.setnavi();
                                   },
                                   onLongPress: () {
                                     title = Widgets_editpageconsole(context,
@@ -299,21 +295,22 @@ UserRoomScreen(maxHeight, maxWidth, controller, searchnode, position) {
                               width: 10,
                             ),
                             SizedBox(
-                              width: 90,
-                              height: 30,
-                              child: Text(
-                                uiset.pagelist[index].title,
-                                softWrap: true,
-                                maxLines: 1,
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    height: 1.5,
-                                    color: draw.color_textstatus,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: contentTextsize()),
-                                overflow: TextOverflow.clip,
-                              ),
-                            )
+                                width: 90,
+                                height: 30,
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Text(
+                                    uiset.pagelist[index].title,
+                                    softWrap: true,
+                                    maxLines: 1,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        height: 1.5,
+                                        color: draw.color_textstatus,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentTextsize()),
+                                  ),
+                                ))
                           ],
                         ),
                       ));
