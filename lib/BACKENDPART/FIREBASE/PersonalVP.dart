@@ -684,7 +684,7 @@ Widgets_editpagesecond(
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(100)),
-                  primary: Colors.blue,
+                  backgroundColor: Colors.blue,
                 ),
                 onPressed: () async {
                   SummitEditpage(
@@ -781,7 +781,7 @@ Widgets_horizontalbtn(
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
-                    primary: ButtonColor(),
+                    backgroundColor: ButtonColor(),
                   ),
                   onPressed: () async {
                     SummitEditBox(context, controller, searchNode,
@@ -1069,7 +1069,7 @@ Widgets_horizontalbtnsecond(
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
-                    primary: ButtonColor(),
+                    backgroundColor: ButtonColor(),
                   ),
                   onPressed: () async {
                     SummitEditBox(context, controller, searchNode,

@@ -39,3 +39,13 @@ double contentTextsize() {
           : ts = 20);
   return ts;
 }
+
+double contentsmallTextsize() {
+  double ts = 0;
+  Hive.box('user_setting').get('which_text_size') == null
+      ? ts = 13
+      : (Hive.box('user_setting').get('which_text_size') == 0
+          ? ts = 13
+          : ts = 15);
+  return ts;
+}

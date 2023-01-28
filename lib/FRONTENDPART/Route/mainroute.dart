@@ -66,12 +66,10 @@ class _mainrouteState extends State<mainroute>
   }
 
   Future<bool> _onWillPop2() async {
-    StatusBarControl.setColor(draw.backgroundcolor, animated: true);
     uiset
         .setmypagelistindex(Hive.box('user_setting').get('currentmypage') ?? 0);
     if (draw.drawopen == true) {
       draw.setclose();
-      Hive.box('user_setting').put('page_opened', false);
     }
     if (draw.currentpage == 3) {
       draw.currentpage = 1;

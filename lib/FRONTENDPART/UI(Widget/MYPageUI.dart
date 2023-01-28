@@ -169,7 +169,7 @@ UserRoomScreen(maxHeight, maxWidth, controller, searchnode, position) {
       child: ListView.builder(
           physics: const BouncingScrollPhysics(),
           scrollDirection: position == 'pr' ? Axis.horizontal : Axis.vertical,
-          shrinkWrap: true,
+          shrinkWrap: false,
           itemCount: uiset.pagelist.length,
           itemBuilder: (context, index) {
             return Padding(
@@ -230,6 +230,7 @@ UserRoomScreen(maxHeight, maxWidth, controller, searchnode, position) {
                                 height: 30,
                                 child: SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
+                                  physics: const ScrollPhysics(),
                                   child: Text(
                                     uiset.pagelist[index].title,
                                     softWrap: true,
@@ -294,18 +295,20 @@ UserRoomScreen(maxHeight, maxWidth, controller, searchnode, position) {
                             const SizedBox(
                               width: 10,
                             ),
-                            SizedBox(
+                            Container(
                                 width: 90,
-                                height: 30,
+                                height: 50,
+                                alignment: Alignment.center,
                                 child: SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
+                                  physics: const ScrollPhysics(),
                                   child: Text(
                                     uiset.pagelist[index].title,
                                     softWrap: true,
                                     maxLines: 1,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                        height: 1.5,
+                                        height: 1,
                                         color: draw.color_textstatus,
                                         fontWeight: FontWeight.bold,
                                         fontSize: contentTextsize()),
@@ -415,8 +418,8 @@ WhatInPageScreen(context, id, controller, searchNode, maxWidth, maxHeight) {
               direction: Axis.horizontal,
               children: List.generate(linkspaceset.indexcnt.length, (index) {
                 return Container(
-                  width: maxWidth / 3,
-                  margin: const EdgeInsets.only(bottom: 20, right: 20),
+                  width: maxWidth,
+                  margin: const EdgeInsets.only(right: 20),
                   child: Column(
                     children: [
                       GestureDetector(
@@ -434,16 +437,21 @@ WhatInPageScreen(context, id, controller, searchNode, maxWidth, maxHeight) {
                                           MainAxisAlignment.start,
                                       children: [
                                         Flexible(
-                                          fit: FlexFit.tight,
-                                          child: Text(
-                                            linkspaceset
-                                                .indexcnt[index].placestr,
-                                            style: TextStyle(
-                                                color: draw.color_textstatus,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: contentTextsize()),
-                                          ),
-                                        ),
+                                            fit: FlexFit.tight,
+                                            child: SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal,
+                                              physics: const ScrollPhysics(),
+                                              child: Text(
+                                                linkspaceset
+                                                    .indexcnt[index].placestr,
+                                                style: TextStyle(
+                                                    color:
+                                                        draw.color_textstatus,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize:
+                                                        contentTextsize()),
+                                              ),
+                                            )),
                                         InkWell(
                                           onTap: () async {
                                             pageaddlogic(context, id, index);
@@ -679,6 +687,9 @@ WhatInPageScreen(context, id, controller, searchNode, maxWidth, maxHeight) {
                                       }))
                                 ],
                               )))),
+                      const SizedBox(
+                        height: 20,
+                      ),
                     ],
                   ),
                 );

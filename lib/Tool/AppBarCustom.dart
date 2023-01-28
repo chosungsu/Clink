@@ -1,5 +1,6 @@
 // ignore_for_file: unused_local_variable, must_be_immutable, non_constant_identifier_names
 
+import 'package:clickbyme/BACKENDPART/FIREBASE/SettingVP.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -311,8 +312,7 @@ class AppBarCustom extends StatelessWidget {
                 : (righticonname == Icons.person_outline
                     ? (Hive.box('user_info').get('id') == null
                         ? GoToLogin('isnotfirst')
-                        : setUsers(context, searchnode, textcontroller,
-                            Hive.box('user_info').get('id')))
+                        : SPIconclick(context, textcontroller, searchnode))
                     : (righticonname == Icons.download
                         ? downloadFileExample(mainid, context)
                         : null))));

@@ -16,6 +16,7 @@ import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:status_bar_control/status_bar_control.dart';
@@ -55,6 +56,14 @@ GoToLogin(String s) {
   });
 
   return _time;
+}
+
+Future getAppInfo({tomail = false}) async {
+  info = await PackageInfo.fromPlatform();
+  versioninfo = info.version;
+  if (tomail) {
+    return {"앱 버전": versioninfo};
+  } else {}
 }
 
 func2(BuildContext context) async {
@@ -179,6 +188,7 @@ func4(context, textcontroller, searchnode, where, id, categorypicknum) async {
     });
   }
   if (checkid != '') {
+    uiset.checktf(true);
     title = Widgets_plusbtn(context, checkid, textcontroller, searchnode, where,
         id, categorypicknum)[0];
     content = Widgets_plusbtn(context, checkid, textcontroller, searchnode,

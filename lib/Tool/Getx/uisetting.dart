@@ -9,6 +9,7 @@ import '../../FRONTENDPART/Route/subuiroute.dart';
 
 class uisetting extends GetxController {
   bool loading = false;
+  bool isfilledtextfield = true;
   int pagenumber = 0;
   bool showtopbutton = false;
   String eventtitle = '';
@@ -28,6 +29,12 @@ class uisetting extends GetxController {
 
   void setloading(bool what) {
     loading = what;
+    update();
+    notifyChildrens();
+  }
+
+  void checktf(bool what) {
+    isfilledtextfield = what;
     update();
     notifyChildrens();
   }

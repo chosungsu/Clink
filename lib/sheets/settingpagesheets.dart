@@ -1386,7 +1386,7 @@ content4(
 
 Future<String> _getEmailBody() async {
   Map<String, dynamic> userInfo = _getUserInfo();
-  Map<String, dynamic> appInfo = await _getAppInfo();
+  Map<String, dynamic> appInfo = await getAppInfo(tomail: true);
   Map<String, dynamic> deviceInfo = await _getDeviceInfo();
 
   String body = "";
@@ -1453,9 +1453,4 @@ Map<String, dynamic> _readIosDeviceInfo(IosDeviceInfo info) {
   var machine = info.utsname.machine;
 
   return {"OS 버전": "$systemName $version", "기기": "$machine"};
-}
-
-Future<Map<String, dynamic>> _getAppInfo() async {
-  PackageInfo info = await PackageInfo.fromPlatform();
-  return {"앱 버전": info.version};
 }

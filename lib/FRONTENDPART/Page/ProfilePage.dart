@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:clickbyme/FRONTENDPART/Route/subuiroute.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -33,10 +34,9 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage>
     with TickerProviderStateMixin {
-  var _controller = TextEditingController();
-  late final PageController _pController2;
+  TextEditingController _controller = TextEditingController();
   ScrollController scrollController = ScrollController();
-  late FToast fToast;
+  late final PageController _pController2;
   final searchNode = FocusNode();
   final draw = Get.put(navibool());
   final uiset = Get.put(uisetting());
@@ -45,8 +45,6 @@ class _ProfilePageState extends State<ProfilePage>
   void initState() {
     super.initState();
     uiset.searchpagemove = '';
-    fToast = FToast();
-    fToast.init(context);
     Hive.box('user_setting').put('page_index', 3);
     _controller = TextEditingController();
     _pController2 = PageController(initialPage: 0, viewportFraction: 1);
@@ -54,17 +52,10 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   void dispose() {
-    //notilist.noticontroller.dispose();
     super.dispose();
     _controller.dispose();
     _pController2.dispose();
     scrollController.dispose();
-    //notilist.noticontroller.dispose();
-  }
-
-  Future<void> _getAppInfo() async {
-    info = await PackageInfo.fromPlatform();
-    versioninfo = info.version;
   }
 
   @override
@@ -140,6 +131,8 @@ class _ProfilePageState extends State<ProfilePage>
                             righticon: true,
                             doubleicon: false,
                             righticonname: Icons.person_outline,
+                            textcontroller: _controller,
+                            searchnode: searchNode,
                           ),
                           Flexible(
                             fit: FlexFit.tight,
@@ -158,7 +151,7 @@ class _ProfilePageState extends State<ProfilePage>
                                         onPageChanged: ((value) {
                                           setState(() {
                                             showsharegroups = false;
-                                            _getAppInfo();
+                                            getAppInfo();
                                             if (value == 0) {
                                               draw.currentpage = 1;
                                             } else {}

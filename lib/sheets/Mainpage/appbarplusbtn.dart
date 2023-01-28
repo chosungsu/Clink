@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, unused_local_variable, prefer_typing_uninitialized_variables
 
 import 'package:clickbyme/sheets/BottomSheet/AddContentWithBtn.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +10,6 @@ import '../../Tool/ContainerDesign.dart';
 import '../../Tool/FlushbarStyle.dart';
 import '../../Tool/Getx/uisetting.dart';
 import '../../Tool/TextSize.dart';
-import '../movetolinkspace.dart';
 
 Widgets_plusbtn(
     context, checkid, textcontroller, searchnode, where, id, categorypicknum) {
@@ -106,6 +105,8 @@ Widgets_plusbtncontent1(
   Widget title;
   Widget content;
   Widget btn;
+  final uiset = Get.put(uisetting());
+
   title = SizedBox(
       height: 50,
       child: Column(
@@ -132,34 +133,60 @@ Widgets_plusbtncontent1(
       ),
     ],
   );
-  btn = SizedBox(
-    height: 50,
-    child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          primary: ButtonColor(),
-        ),
-        onPressed: () async {
-          clickbtn1(context, textcontroller, where, id, categorypicknum);
-        },
-        child: Center(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: Text(
-                  linkspaceset.iscompleted == false ? '생성하기' : '처리중...',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: contentTextsize(),
-                  ),
+  btn = GetBuilder<uisetting>(
+    builder: (controller) {
+      return Column(
+        children: [
+          SizedBox(
+            height: 50,
+            child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  backgroundColor: ButtonColor(),
                 ),
-              ),
-            ],
+                onPressed: () async {
+                  clickbtn1(
+                      context, textcontroller, where, id, categorypicknum);
+                },
+                child: Center(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: Text(
+                          linkspaceset.iscompleted == false ? '생성하기' : '처리중...',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTextsize(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
           ),
-        )),
+          uiset.isfilledtextfield == true
+              ? const SizedBox()
+              : Column(
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      '입력란이 비어있어요!',
+                      style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: contentsmallTextsize(),
+                          color: Colors.red),
+                      overflow: TextOverflow.fade,
+                    )
+                  ],
+                )
+        ],
+      );
+    },
   );
   return [title, content, btn];
 }
@@ -194,34 +221,59 @@ Widgets_plusbtncontent2(
       ),
     ],
   );
-  btn = SizedBox(
-    height: 50,
-    child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          primary: ButtonColor(),
-        ),
-        onPressed: () async {
-          clickbtn2(context, textcontroller, checkid);
-        },
-        child: Center(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: Text(
-                  linkspaceset.iscompleted == false ? '생성하기' : '처리중...',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: contentTextsize(),
-                  ),
+  btn = GetBuilder<uisetting>(
+    builder: (controller) {
+      return Column(
+        children: [
+          SizedBox(
+            height: 50,
+            child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  backgroundColor: ButtonColor(),
                 ),
-              ),
-            ],
+                onPressed: () async {
+                  clickbtn2(context, textcontroller, checkid);
+                },
+                child: Center(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: Text(
+                          linkspaceset.iscompleted == false ? '생성하기' : '처리중...',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTextsize(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
           ),
-        )),
+          uiset.isfilledtextfield == true
+              ? const SizedBox()
+              : Column(
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      '입력란이 비어있어요!',
+                      style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: contentsmallTextsize(),
+                          color: Colors.red),
+                      overflow: TextOverflow.fade,
+                    )
+                  ],
+                )
+        ],
+      );
+    },
   );
   return [title, content, btn];
 }
@@ -232,14 +284,9 @@ clickbtn1(context, textcontroller, where, id, categorynumber) {
   final initialtext = textcontroller.text;
   var updateid;
   int indexcnt = linkspaceset.indexcnt.length;
+
   if (textcontroller.text.isEmpty) {
-    Snack.snackbars(
-        context: context,
-        title: where == 'editnametemplate' || where == 'editnametemplatein'
-            ? '변경할 스페이스 제목이 비어있어요!'
-            : '추가할 페이지 제목이 비어있어요!',
-        backgroundcolor: Colors.red,
-        bordercolor: draw.backgroundcolor);
+    uiset.checktf(false);
   } else {
     linkspaceset.setcompleted(true);
     if (where == 'editnametemplate') {
@@ -328,11 +375,7 @@ clickbtn1(context, textcontroller, where, id, categorynumber) {
 clickbtn2(context, textcontroller, checkid) {
   int indexcnt = linkspaceset.indexcnt.length;
   if (textcontroller.text == '') {
-    Snack.snackbars(
-        context: context,
-        title: '제목이 비어있어요!',
-        backgroundcolor: Colors.red,
-        bordercolor: draw.backgroundcolor);
+    uiset.checktf(false);
   } else {
     linkspaceset.setcompleted(true);
     firestore.collection('PageView').add({
