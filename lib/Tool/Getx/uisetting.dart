@@ -1,8 +1,10 @@
 // ignore_for_file: camel_case_types
 
+import 'package:clickbyme/Enums/Profile_item.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
 import '../../Enums/PageList.dart';
 import '../../Enums/Variables.dart';
 import '../../FRONTENDPART/Route/subuiroute.dart';
@@ -10,6 +12,8 @@ import '../../FRONTENDPART/Route/subuiroute.dart';
 class uisetting extends GetxController {
   bool loading = false;
   bool isfilledtextfield = true;
+  int profileindex = 0;
+  List profilescreen = [];
   int pagenumber = 0;
   bool showtopbutton = false;
   String eventtitle = '';
@@ -28,13 +32,28 @@ class uisetting extends GetxController {
   String textrecognizer = '';
 
   void setloading(bool what) {
+    ///setloading
+    ///
+    ///모든 UI상에서 로딩중인지를 판단하는 데에 사용된다.
     loading = what;
     update();
     notifyChildrens();
   }
 
   void checktf(bool what) {
+    ///checktf
+    ///
+    ///텍스트필드가 비어있는 경우 경고문구를 버튼 아래에 띄워준다.
     isfilledtextfield = what;
+    update();
+    notifyChildrens();
+  }
+
+  void checkprofilepageindex(int what) {
+    ///checkprofilepageindex
+    ///
+    ///프로필페이지에서 UI 변경 시에 사용된다.
+    profileindex = what;
     update();
     notifyChildrens();
   }
@@ -148,10 +167,55 @@ class uisetting extends GetxController {
       }
     }).whenComplete(() {
       if (init) {
-        go();
+        GoToMain();
       }
     });
 
+    update();
+    notifyChildrens();
+  }
+
+  void setprofilespace({init = true}) async {
+    ///setprofilespace
+    ///
+    ///프로필페이지에서 컨테이너공간을 만드는데 사용된다.
+    List listopt = [
+      Icons.tune,
+      AntDesign.notification,
+      MaterialCommunityIcons.ab_testing,
+      MaterialCommunityIcons.account_group,
+      Icons.portrait
+    ];
+    List title = [
+      'profilepagetitleone',
+      'profilepagetitletwo',
+      'profilepagetitlethird',
+      'profilepagetitleforth',
+      'profilepagetitlefifth'
+    ];
+    List subtitles = [
+      [
+        'profilepagetitleonebyone',
+        'profilepagetitleonebytwo',
+        'profilepagetitleonebythird',
+      ],
+      [
+        'profilepagetitletwobyone',
+        'profilepagetitletwobytwo',
+      ],
+      [
+        'profilepagetitlethirdbyone',
+      ],
+      [
+        'profilepagetitleforthbyone',
+        'profilepagetitleforthbytwo',
+      ],
+      ['profilepagetitlefifthbyone', 'profilepagetitlefifthbytwo']
+    ];
+    for (int i = 0; i < 5; i++) {
+      profilescreen.add(Profile_item(
+          icondata: listopt[i], title: title[i], subtitles: subtitles[i]));
+    }
     update();
     notifyChildrens();
   }
@@ -167,9 +231,5 @@ class uisetting extends GetxController {
     favorpagelist.clear();
     update();
     notifyChildrens();
-  }
-
-  void go() {
-    GoToMain();
   }
 }

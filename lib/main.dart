@@ -104,6 +104,7 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
     checkForInitialMessage();
+    initScreen();
   }
 
   @override
@@ -212,27 +213,14 @@ class _SplashPageState extends State<SplashPage> {
                               ),
                             ),
                           )
-                        : FutureBuilder(
-                            future: initScreen(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                      ConnectionState.done &&
-                                  snapshot.hasData) {
-                                //GoToMain();
-                                return SizedBox();
-                              } else {
-                                return SpinKitThreeBounce(
-                                  size: 30,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return DecoratedBox(
-                                      decoration: BoxDecoration(
-                                          color: Colors.blue.shade200,
-                                          shape: BoxShape.circle),
-                                    );
-                                  },
-                                );
-                              }
+                        : SpinKitThreeBounce(
+                            size: 30,
+                            itemBuilder: (BuildContext context, int index) {
+                              return DecoratedBox(
+                                decoration: BoxDecoration(
+                                    color: Colors.blue.shade200,
+                                    shape: BoxShape.circle),
+                              );
                             },
                           )),
               ],
@@ -304,27 +292,14 @@ class _SplashPageState extends State<SplashPage> {
                               ),
                             ),
                           )
-                        : FutureBuilder(
-                            future: initScreen(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                      ConnectionState.done &&
-                                  snapshot.hasData) {
-                                //GoToMain();
-                                return SizedBox();
-                              } else {
-                                return SpinKitThreeBounce(
-                                  size: 30,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return DecoratedBox(
-                                      decoration: BoxDecoration(
-                                          color: Colors.blue.shade200,
-                                          shape: BoxShape.circle),
-                                    );
-                                  },
-                                );
-                              }
+                        : SpinKitThreeBounce(
+                            size: 30,
+                            itemBuilder: (BuildContext context, int index) {
+                              return DecoratedBox(
+                                decoration: BoxDecoration(
+                                    color: Colors.blue.shade200,
+                                    shape: BoxShape.circle),
+                              );
                             },
                           )
                   ],

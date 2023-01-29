@@ -13,7 +13,7 @@ class navibool extends GetxController {
   double xoffset = 0;
   double yoffset = 0;
   double scalefactor = 1;
-  int navi = Hive.box('user_setting').get('which_menu_pick') ?? 1;
+  int navi = Hive.box('user_setting').get('which_menu_pick') ?? 0;
   Color backgroundcolor =
       Hive.box('user_setting').get('which_color_background') == null
           ? MyTheme.colorWhite
@@ -26,7 +26,6 @@ class navibool extends GetxController {
           : (Hive.box('user_setting').get('which_color_background') == 0
               ? MyTheme.colorblack_drawer
               : MyTheme.colorWhite_drawer);
-  var color_navi;
 
   void setpagecurrent(int what) {
     currentpage = what;
@@ -67,6 +66,9 @@ class navibool extends GetxController {
   }
 
   void setnavicolor() {
+    ///setnavicolor
+    ///
+    ///바탕색을 결정
     Hive.box('user_setting').get('which_color_background') == null
         ? backgroundcolor = MyTheme.colorWhite
         : (Hive.box('user_setting').get('which_color_background') == 0
@@ -79,6 +81,15 @@ class navibool extends GetxController {
             ? color_textstatus = MyTheme.colorblack_drawer
             : color_textstatus = MyTheme.colorWhite_drawer);
     StatusBarControl.setColor(backgroundcolor, animated: true);
+    update();
+    notifyChildrens();
+  }
+
+  void setts(int what) {
+    ///setts
+    ///
+    ///글자 크기를 결정
+    Hive.box('user_setting').put('which_text_size', what);
     update();
     notifyChildrens();
   }

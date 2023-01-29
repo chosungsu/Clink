@@ -1,7 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:clickbyme/Tool/BGColor.dart';
-import 'package:clickbyme/Tool/FlushbarStyle.dart';
 import 'package:clickbyme/Tool/Getx/navibool.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -11,10 +10,8 @@ import 'package:sign_button/constants.dart';
 import 'package:sign_button/create_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../BACKENDPART/Auth/GoogleSignInController.dart';
-import '../../Enums/Variables.dart';
 import '../Route/subuiroute.dart';
 import '../../Tool/AndroidIOS.dart';
-import '../../Tool/Loader.dart';
 import '../../Tool/TextSize.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 

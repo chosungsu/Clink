@@ -26,5 +26,9 @@ Future initScreen() async {
      * setuserspace : pinchannel db에서 page contents를 로드함(존재하지 않는 경우 : default값).
      */
     uiset.setuserspace(init: true);
+    /**
+     * setuserspace : pinchannel db에서 page contents를 로드함(존재하지 않는 경우 : default값).
+     */
+    uiset.setprofilespace(init: true);
   }
 }

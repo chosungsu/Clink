@@ -49,55 +49,32 @@ class _mainrouteState extends State<mainroute>
     WidgetsBinding.instance.removeObserver(this);
   }
 
-  Future<bool> _onWillPop() async {
-    if (draw.drawopen == true) {
-      draw.setclose();
-    }
-    return await Get.dialog(OSDialog(
-            context,
-            '종료',
-            Text('앱을 종료하시겠습니까?',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: contentTextsize())),
-            pressed1)) ??
-        false;
-  }
-
-  Future<bool> _onWillPop2() async {
+  Future<bool> onWillPop() async {
     uiset
         .setmypagelistindex(Hive.box('user_setting').get('currentmypage') ?? 0);
     if (draw.drawopen == true) {
       draw.setclose();
     }
-    if (draw.currentpage == 3) {
-      draw.currentpage = 1;
-      Hive.box('user_setting').put('page_index', 3);
-      Navigator.of(context).pushReplacement(
-        PageTransition(
-          type: PageTransitionType.fade,
-          child: const mainroute(
-            index: 3,
-          ),
-        ),
-      );
+    if (uiset.profileindex != 0) {
+      uiset.checkprofilepageindex(0);
     } else if (uiset.searchpagemove != '') {
       uiset.searchpagemove = '';
       uiset.textrecognizer = '';
       searchNode.unfocus();
       Hive.box('user_setting').put('page_index', 1);
+    } else if (uiset.pagenumber != 0) {
+      Get.to(() => const mainroute(index: 0), transition: Transition.fade);
     } else {
-      Hive.box('user_setting').put('page_index', 0);
-
-      Navigator.of(context).pushReplacement(
-        PageTransition(
-          type: PageTransitionType.fade,
-          child: const mainroute(
-            index: 0,
-          ),
-        ),
-      );
+      return await Get.dialog(OSDialog(
+              context,
+              '종료',
+              Text('앱을 종료하시겠습니까?',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTextsize())),
+              pressed1)) ??
+          false;
     }
     return false;
   }
@@ -115,10 +92,7 @@ class _mainrouteState extends State<mainroute>
               return Scaffold(
                 backgroundColor: draw.backgroundcolor,
                 body: WillPopScope(
-                    onWillPop: Hive.box('user_setting').get('page_index') == 0
-                        ? _onWillPop
-                        : _onWillPop2,
-                    child: pages[uiset.pagenumber]),
+                    onWillPop: onWillPop, child: pages[uiset.pagenumber]),
                 bottomNavigationBar: ADSHOW(),
               );
             })));
