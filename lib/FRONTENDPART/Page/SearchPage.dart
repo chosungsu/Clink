@@ -8,15 +8,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../Enums/Variables.dart';
 import '../../Tool/Getx/navibool.dart';
 import '../UI(Widget/SearchUI.dart';
 import 'DrawerScreen.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({Key? key, required this.secondname}) : super(key: key);
-  final String secondname;
+  const SearchPage({Key? key}) : super(key: key);
   @override
   State<StatefulWidget> createState() => _SearchPageState();
 }
@@ -37,7 +35,6 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
     controller2 = TextEditingController();
     controller3 = TextEditingController();
     Hive.box('user_setting').put('page_index', 1);
-    draw.navi = Hive.box('user_setting').get('which_menu_pick');
   }
 
   @override

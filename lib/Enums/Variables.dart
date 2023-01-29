@@ -13,6 +13,7 @@ import '../Tool/Getx/navibool.dart';
 import '../Tool/Getx/notishow.dart';
 import '../Tool/Getx/selectcollection.dart';
 import '../Tool/Getx/uisetting.dart';
+import 'Expandable.dart';
 import 'Linkpage.dart';
 import 'MemoList.dart';
 import 'PageList.dart';
@@ -49,7 +50,7 @@ bool showsharegroups = false;
 final friendnamelist = [];
 late PackageInfo info;
 String versioninfo = '';
-int pagesetnumber = 0;
+List<Expandable> licensedata = [];
 //Here are DayScript Variables
 DateTime selectedDay = DateTime.now();
 var chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';

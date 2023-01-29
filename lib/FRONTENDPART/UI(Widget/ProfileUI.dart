@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names
 
+import 'package:clickbyme/BACKENDPART/FIREBASE/SettingVP.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
@@ -10,17 +12,21 @@ import '../../../Enums/Variables.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/Getx/linkspacesetting.dart';
 import '../../../Tool/TextSize.dart';
+import '../../Enums/Expandable.dart';
 import '../../Tool/AndroidIOS.dart';
 import '../../Tool/Getx/PeopleAdd.dart';
 import '../../Tool/Getx/uisetting.dart';
 import '../../sheets/addgroupmember.dart';
 import '../../sheets/settingpagesheets.dart';
-import 'ShowLicense.dart';
+import '../../sheets/userinfotalk.dart';
 
 final uiset = Get.put(uisetting());
 final linkspaceset = Get.put(linkspacesetting());
 final peopleadd = Get.put(PeopleAdd());
 
+///UI
+///
+///ProfilePage의 UI
 UI(controller, searchnode, scrollcontroller, pcontroller, maxWidth, maxHeight) {
   return GetBuilder<uisetting>(builder: (_) {
     return SingleChildScrollView(
@@ -40,13 +46,19 @@ UI(controller, searchnode, scrollcontroller, pcontroller, maxWidth, maxHeight) {
                           maxWidth, maxHeight, searchnode, controller)
                       : (uiset.profileindex == 1
                           ? TestScreen(maxWidth, maxHeight)
-                          : TestScreen(maxWidth, maxHeight)),
+                          : (uiset.profileindex == 2
+                              ? FriendScreen(maxWidth, maxHeight)
+                              : LicenseHome(maxWidth, maxHeight))),
                 ],
               ));
         }));
   });
 }
 
+///OptionChoice
+///
+///ProfilePage의 기본UI
+///각종 옵션들을 Opt_body에서 보여줌.
 OptionChoice(maxWidth, maxHeight, searchnode, controller) {
   return GestureDetector(
     onTap: () {
@@ -173,6 +185,9 @@ proptview(maxWidth, searchnode, controller) {
       ));
 }
 
+///Opt_body
+///
+///uiset.profilescreen으로 옵션들을 기입받았고 이를 인덱스별로 보여줌.
 Opt_body(index, searchnode, controller) {
   return StatefulBuilder(
     builder: (context, setState) {
@@ -203,15 +218,16 @@ Opt_body(index, searchnode, controller) {
                         if (index2 == 0) {
                           addgroupmember(
                               context, searchnode, controller, peopleadd.code);
-                        } else {}
+                        } else {
+                          uiset.checkprofilepageindex(2);
+                        }
                       } else {
                         if (index2 == 0) {
                           var url = Uri.parse(
                               'https://linkaiteam.github.io/LINKAITEAM/개인정보처리방침');
                           launchUrl(url);
                         } else {
-                          Get.to(() => const ShowLicense(),
-                              transition: Transition.rightToLeft);
+                          uiset.checkprofilepageindex(3);
                         }
                       }
                     },
@@ -547,6 +563,9 @@ Opt_body(index, searchnode, controller) {
   );
 }
 
+///TestScreen
+///
+///실험실 공간으로 같은 페이지를 UI변경.
 TestScreen(maxWidth, maxHeight) {
   return GestureDetector(
     onTap: () {
@@ -613,5 +632,262 @@ prtestview(maxWidth, maxHeight) {
         ),
       ],
     ),
+  );
+}
+
+///FriendScreen
+///
+///친구리스트를 보여주는 공간으로 같은 페이지 UI변경.
+FriendScreen(maxWidth, maxHeight) {
+  return GestureDetector(
+    onTap: () {
+      FocusManager.instance.primaryFocus?.unfocus();
+    },
+    child: SizedBox(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Responsivelayout(lsfriendview(maxWidth, maxHeight),
+              prfriendview(maxWidth, maxHeight))
+        ],
+      ),
+    ),
+  );
+}
+
+lsfriendview(maxWidth, maxHeight) {
+  return SizedBox(
+      width: maxWidth * 0.6, height: maxHeight, child: Samefrview());
+}
+
+prfriendview(maxWidth, maxHeight) {
+  return SizedBox(height: maxHeight, child: Samefrview());
+}
+
+Samefrview() {
+  return StreamBuilder<QuerySnapshot>(
+    stream: Settingfriendpage(),
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        Settingfriend_res1(snapshot);
+        return peopleadd.friendlist.isEmpty
+            ? SizedBox(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      AntDesign.frowno,
+                      color: Colors.orange,
+                      size: 30,
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Text(
+                      '친구리스트가 비어있습니다.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: contentTextsize(),
+                          color: draw.color_textstatus),
+                    ),
+                  ],
+                ),
+              )
+            : SizedBox(
+                child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ListView.builder(
+                      physics: const ScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: peopleadd.friendlist.length,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                userinfotalk(
+                                    context, index, peopleadd.friendlist);
+                              },
+                              child: Container(
+                                  decoration: BoxDecoration(
+                                      color: BGColor(),
+                                      borderRadius: BorderRadius.circular(0),
+                                      border: Border.all(
+                                          width: 1,
+                                          color: BGColor_shadowcolor())),
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Container(
+                                            alignment: Alignment.center,
+                                            height: 25,
+                                            width: 25,
+                                            child: Text(
+                                                peopleadd.friendlist[index]
+                                                    .toString()
+                                                    .substring(0, 1),
+                                                style: TextStyle(
+                                                    color:
+                                                        BGColor_shadowcolor(),
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18)),
+                                            decoration: BoxDecoration(
+                                              color: TextColor_shadowcolor(),
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Flexible(
+                                            fit: FlexFit.tight,
+                                            child: Text(
+                                              peopleadd.friendlist[index],
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize(),
+                                                  color: TextColor()),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      )
+                                    ],
+                                  )),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            )
+                          ],
+                        );
+                      }),
+                ],
+              ));
+      } else if (snapshot.connectionState == ConnectionState.waiting) {
+        return SizedBox(
+            child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [Center(child: CircularProgressIndicator())],
+        ));
+      }
+      return SizedBox(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              AntDesign.frowno,
+              color: Colors.orange,
+              size: 30,
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Text(
+              '친구리스트가 비어있습니다.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: contentTextsize(), color: draw.color_textstatus),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+///LicenseHome
+///
+///앱이 사용한 라이선스 리스트를 보여주는 공간으로 같은 페이지 UI변경.
+LicenseHome(maxWidth, maxHeight) {
+  return GetBuilder<uisetting>(builder: (_) {
+    return GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      child: SizedBox(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Responsivelayout(lslicenseview(maxWidth, maxHeight),
+                prlicenseview(maxWidth, maxHeight))
+          ],
+        ),
+      ),
+    );
+  });
+}
+
+lslicenseview(maxWidth, maxHeight) {
+  return SizedBox(
+      width: maxWidth * 0.6, height: maxHeight, child: buildPanel());
+}
+
+prlicenseview(maxWidth, maxHeight) {
+  return SizedBox(height: maxHeight, child: buildPanel());
+}
+
+buildPanel() {
+  return StatefulBuilder(
+    builder: (context, setState) {
+      return SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        physics: const ScrollPhysics(),
+        child: ExpansionPanelList(
+            expansionCallback: ((panelIndex, isExpanded) {
+              setState(() {
+                licensedata[panelIndex].isExpanded = !isExpanded;
+              });
+            }),
+            dividerColor: BGColor_shadowcolor(),
+            children: licensedata.map<ExpansionPanel>((Expandable expandable) {
+              return ExpansionPanel(
+                  canTapOnHeader: true,
+                  backgroundColor: Colors.grey.shade300,
+                  headerBuilder: ((context, isExpanded) {
+                    return ListTile(
+                      title: Text(
+                        expandable.title,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTitleTextsize(),
+                            color: Colors.black),
+                      ),
+                    );
+                  }),
+                  body: ListTile(
+                    subtitle: Text(
+                      expandable.sub,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTextsize(),
+                          color: Colors.black),
+                    ),
+                  ),
+                  isExpanded: expandable.isExpanded);
+            }).toList()),
+      );
+    },
   );
 }

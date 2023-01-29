@@ -9,7 +9,6 @@ import 'package:status_bar_control/status_bar_control.dart';
 import '../Enums/PageList.dart';
 import '../Enums/Variables.dart';
 import '../FRONTENDPART/Route/subuiroute.dart';
-import '../sheets/settingpagesheets.dart';
 import 'Getx/linkspacesetting.dart';
 import 'Getx/navibool.dart';
 import 'Getx/notishow.dart';
@@ -304,11 +303,7 @@ class AppBarCustom extends StatelessWidget {
         : (righticonname == AntDesign.delete
             ? func2(context)
             : (righticonname == Icons.star_border || righticonname == Icons.star
-                ? func7(
-                    uiset.editpagelist[0].title,
-                    uiset.editpagelist[0].email.toString(),
-                    uiset.editpagelist[0].username.toString(),
-                    uiset.editpagelist[0].id.toString())
+                ? func7()
                 : (righticonname == Icons.person_outline
                     ? (Hive.box('user_info').get('id') == null
                         ? GoToLogin('isnotfirst')

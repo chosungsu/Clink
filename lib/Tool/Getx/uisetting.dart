@@ -1,4 +1,4 @@
-// ignore_for_file: camel_case_types
+// ignore_for_file: camel_case_types, non_constant_identifier_names
 
 import 'package:clickbyme/Enums/Profile_item.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +14,8 @@ class uisetting extends GetxController {
   bool isfilledtextfield = true;
   int profileindex = 0;
   List profilescreen = [];
+  List<String> licenses_title = List.empty(growable: true);
+  List<String> licenses_content = List.empty(growable: true);
   int pagenumber = 0;
   bool showtopbutton = false;
   String eventtitle = '';
@@ -31,28 +33,28 @@ class uisetting extends GetxController {
   String searchpagemove = '';
   String textrecognizer = '';
 
+  ///setloading
+  ///
+  ///모든 UI상에서 로딩중인지를 판단하는 데에 사용된다.
   void setloading(bool what) {
-    ///setloading
-    ///
-    ///모든 UI상에서 로딩중인지를 판단하는 데에 사용된다.
     loading = what;
     update();
     notifyChildrens();
   }
 
+  ///checktf
+  ///
+  ///텍스트필드가 비어있는 경우 경고문구를 버튼 아래에 띄워준다.
   void checktf(bool what) {
-    ///checktf
-    ///
-    ///텍스트필드가 비어있는 경우 경고문구를 버튼 아래에 띄워준다.
     isfilledtextfield = what;
     update();
     notifyChildrens();
   }
 
+  ///checkprofilepageindex
+  ///
+  ///프로필페이지에서 UI 변경 시에 사용된다.
   void checkprofilepageindex(int what) {
-    ///checkprofilepageindex
-    ///
-    ///프로필페이지에서 UI 변경 시에 사용된다.
     profileindex = what;
     update();
     notifyChildrens();
@@ -141,6 +143,9 @@ class uisetting extends GetxController {
     notifyChildrens();
   }
 
+  ///setuserspace
+  ///
+  ///유저의 페이지를 생성시키는데 사용된다.
   void setuserspace({init = true}) async {
     await firestore.collection('Pinchannel').get().then((value) async {
       updateid.clear();
@@ -175,10 +180,10 @@ class uisetting extends GetxController {
     notifyChildrens();
   }
 
+  ///setprofilespace
+  ///
+  ///프로필페이지에서 컨테이너공간을 만드는데 사용된다.
   void setprofilespace({init = true}) async {
-    ///setprofilespace
-    ///
-    ///프로필페이지에서 컨테이너공간을 만드는데 사용된다.
     List listopt = [
       Icons.tune,
       AntDesign.notification,
@@ -216,6 +221,13 @@ class uisetting extends GetxController {
       profilescreen.add(Profile_item(
           icondata: listopt[i], title: title[i], subtitles: subtitles[i]));
     }
+    update();
+    notifyChildrens();
+  }
+
+  void setlicense(String title, String content) async {
+    licenses_title.insert(0, title);
+    licenses_content.insert(0, content);
     update();
     notifyChildrens();
   }

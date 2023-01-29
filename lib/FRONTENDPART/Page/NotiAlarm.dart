@@ -42,7 +42,6 @@ class _NotiAlarmState extends State<NotiAlarm>
   void initState() {
     super.initState();
     Hive.box('user_setting').put('page_index', 2);
-    draw.navi = Hive.box('user_setting').get('which_menu_pick');
     WidgetsBinding.instance.addObserver(this);
   }
 

@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:status_bar_control/status_bar_control.dart';
 import '../Page/MYPage.dart';
 import '../Page/NotiAlarm.dart';
 import 'subuiroute.dart';
@@ -30,6 +28,12 @@ class _mainrouteState extends State<mainroute>
   final peopleadd = Get.put(PeopleAdd());
   final draw = Get.put(navibool());
   final searchNode = FocusNode();
+  List pages = [
+    const MYPage(),
+    const SearchPage(),
+    const NotiAlarm(),
+    const ProfilePage(),
+  ];
 
   @override
   void initState() {
@@ -81,12 +85,6 @@ class _mainrouteState extends State<mainroute>
 
   @override
   Widget build(BuildContext context) {
-    List pages = [
-      const MYPage(),
-      SearchPage(secondname: peopleadd.secondname),
-      const NotiAlarm(),
-      const ProfilePage(),
-    ];
     return GetBuilder<navibool>(
         builder: (_) => GetBuilder<uisetting>(builder: ((_) {
               return Scaffold(

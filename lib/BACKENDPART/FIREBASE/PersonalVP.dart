@@ -22,7 +22,6 @@ import '../../FRONTENDPART/UI(Widget/DayNoteHome.dart';
 import '../../Tool/TextSize.dart';
 import '../../sheets/BottomSheet/AddContent.dart';
 import '../../sheets/BottomSheet/AddContentWithBtn.dart';
-import '../../sheets/movetolinkspace.dart';
 
 ///Getx 호출
 final linkspaceset = Get.put(linkspacesetting());

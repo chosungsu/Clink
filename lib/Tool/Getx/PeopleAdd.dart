@@ -18,6 +18,7 @@ class PeopleAdd extends GetxController {
   final Random _rnd = Random();
   List defaulthomeviewlist = [];
   List userviewlist = [];
+  List friendlist = [];
 
   void setcode() {
     firestore

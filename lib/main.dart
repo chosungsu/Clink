@@ -91,6 +91,9 @@ class MyApp extends StatelessWidget {
 }
 
 class SplashPage extends StatefulWidget {
+  ///SplashPage Class
+  ///
+  ///initScreen으로 앱 최초 실행시 필요한 세팅을 해주고 UI 띄운다.
   const SplashPage({Key? key}) : super(key: key);
 
   @override
@@ -140,10 +143,11 @@ class _SplashPageState extends State<SplashPage> {
                 ))));
   }
 
+  ///SameView
+  ///
+  ///Landscape와 Portrait뷰가 동일한 경우의 위젯입니다.
+  ///name이 공백일 경우 버튼, 공백이 아닌 경우 로딩을 띄운다.
   Widget SameView(double maxHeight) {
-    ///Landscape와 Portrait뷰가 동일한 경우의 위젯입니다.
-    ///name이 공백일 경우 버튼, 공백이 아닌 경우 로딩을 띄운다.
-
     return SizedBox(
       height: maxHeight <= 100 ? 300 : maxHeight,
       child: maxHeight <= 300
@@ -313,6 +317,9 @@ class _SplashPageState extends State<SplashPage> {
   }
 }
 
+///checkForInitialMessage
+///
+///알람을 받은 현황이 있는지 체크합니다.
 void checkForInitialMessage() async {
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     PushNotification notifications = PushNotification(

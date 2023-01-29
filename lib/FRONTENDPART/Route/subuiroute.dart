@@ -31,7 +31,6 @@ import '../../Tool/Getx/navibool.dart';
 import '../../Tool/Getx/notishow.dart';
 import '../../Tool/Getx/uisetting.dart';
 import '../../Tool/TextSize.dart';
-import '../../sheets/movetolinkspace.dart';
 import 'mainroute.dart';
 
 void pressed1() {
@@ -207,9 +206,13 @@ func5() {
   Get.to(() => const Spacepage(), transition: Transition.upToDown);
 }
 
-func7(String title, String email, String origin, String id) async {
+func7() async {
   final uiset = Get.put(uisetting());
   var deleteid = '';
+  var title = uiset.editpagelist[0].title;
+  var email = uiset.editpagelist[0].email!;
+  var origin = uiset.editpagelist[0].username!;
+  var id = uiset.editpagelist[0].id!;
 
   await firestore.collection('Favorplace').get().then((value) {
     if (value.docs.isEmpty) {
