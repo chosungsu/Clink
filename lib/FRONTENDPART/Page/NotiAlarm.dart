@@ -41,7 +41,6 @@ class _NotiAlarmState extends State<NotiAlarm>
   @override
   void initState() {
     super.initState();
-    Hive.box('user_setting').put('page_index', 2);
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -62,23 +61,21 @@ class _NotiAlarmState extends State<NotiAlarm>
                     ? Stack(
                         children: [
                           draw.navi == 0
-                              ? Positioned(
+                              ? const Positioned(
                                   left: 0,
                                   child: SizedBox(
                                     width: 80,
                                     child: DrawerScreen(
-                                      index: Hive.box('user_setting')
-                                          .get('page_index'),
+                                      index: 2,
                                     ),
                                   ),
                                 )
-                              : Positioned(
+                              : const Positioned(
                                   right: 0,
                                   child: SizedBox(
                                     width: 80,
                                     child: DrawerScreen(
-                                      index: Hive.box('user_setting')
-                                          .get('page_index'),
+                                      index: 2,
                                     ),
                                   ),
                                 ),
@@ -380,20 +377,5 @@ class _NotiAlarmState extends State<NotiAlarm>
         );
       },
     );
-  }
-
-  Future<bool> _onWillPop() async {
-    Future.delayed(const Duration(seconds: 0), () {
-      StatusBarControl.setColor(draw.backgroundcolor, animated: true);
-      draw.setnavi();
-      Hive.box('user_setting').put('page_index', 0);
-      Get.to(
-          () => const mainroute(
-                index: 0,
-              ),
-          transition: Transition.downToUp);
-      //Get.back();
-    });
-    return false;
   }
 }

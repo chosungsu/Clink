@@ -213,7 +213,6 @@ class uisetting extends GetxController {
       ],
       [
         'profilepagetitleforthbyone',
-        'profilepagetitleforthbytwo',
       ],
       ['profilepagetitlefifthbyone', 'profilepagetitlefifthbytwo']
     ];

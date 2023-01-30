@@ -3,11 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-
-import '../../Enums/Variables.dart';
-import '../../Tool/BGColor.dart';
 import '../../Tool/NoBehavior.dart';
-import '../../Tool/TextSize.dart';
 
 AddContentWithBtn(context, title, content, btn, searchnode) {
   showModalBottomSheet(

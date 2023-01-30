@@ -39,7 +39,6 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
     listpinlink.clear();
     uiset.showtopbutton = false;
     uiset.searchpagemove = '';
-    Hive.box('user_setting').put('page_index', 0);
     uiset.mypagelistindex = Hive.box('user_setting').get('currentmypage') ?? 0;
     scrollController = ScrollController();
     draw.navi = Hive.box('user_setting').get('which_menu_pick') ?? 0;
@@ -62,24 +61,18 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                     ? Stack(
                         children: [
                           draw.navi == 0
-                              ? Positioned(
+                              ? const Positioned(
                                   left: 0,
                                   child: SizedBox(
                                     width: 80,
-                                    child: DrawerScreen(
-                                      index: Hive.box('user_setting')
-                                          .get('page_index'),
-                                    ),
+                                    child: DrawerScreen(index: 0),
                                   ),
                                 )
-                              : Positioned(
+                              : const Positioned(
                                   right: 0,
                                   child: SizedBox(
                                     width: 80,
-                                    child: DrawerScreen(
-                                      index: Hive.box('user_setting')
-                                          .get('page_index'),
-                                    ),
+                                    child: DrawerScreen(index: 0),
                                   ),
                                 ),
                           GroupBody(context),

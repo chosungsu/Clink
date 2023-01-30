@@ -34,7 +34,6 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
     controller = TextEditingController();
     controller2 = TextEditingController();
     controller3 = TextEditingController();
-    Hive.box('user_setting').put('page_index', 1);
   }
 
   @override
@@ -61,10 +60,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                             left: 0,
                             child: SizedBox(
                               width: 80,
-                              child: DrawerScreen(
-                                index:
-                                    Hive.box('user_setting').get('page_index'),
-                              ),
+                              child: DrawerScreen(index: 1),
                             ),
                           )
                         : Positioned(
@@ -72,8 +68,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                             child: SizedBox(
                               width: 80,
                               child: DrawerScreen(
-                                index:
-                                    Hive.box('user_setting').get('page_index'),
+                                index: 1,
                               ),
                             ),
                           ),

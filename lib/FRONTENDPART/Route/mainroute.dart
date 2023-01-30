@@ -16,8 +16,7 @@ import '../../Tool/Getx/PeopleAdd.dart';
 import '../../Tool/Getx/navibool.dart';
 
 class mainroute extends StatefulWidget {
-  const mainroute({Key? key, required this.index}) : super(key: key);
-  final int index;
+  const mainroute({Key? key}) : super(key: key);
   @override
   State<mainroute> createState() => _mainrouteState();
 }
@@ -38,10 +37,9 @@ class _mainrouteState extends State<mainroute>
   @override
   void initState() {
     super.initState();
-    Hive.box('user_setting').put('page_index', 0);
+    uiset.pagenumber = 0;
     uiset.mypagelistindex = Hive.box('user_setting').get('currentmypage') ?? 0;
     WidgetsBinding.instance.addObserver(this);
-    uiset.pagenumber = widget.index;
     uiset.searchpagemove = '';
     uiset.textrecognizer = '';
   }
@@ -65,9 +63,9 @@ class _mainrouteState extends State<mainroute>
       uiset.searchpagemove = '';
       uiset.textrecognizer = '';
       searchNode.unfocus();
-      Hive.box('user_setting').put('page_index', 1);
+      uiset.pagenumber = 1;
     } else if (uiset.pagenumber != 0) {
-      Get.to(() => const mainroute(index: 0), transition: Transition.fade);
+      Get.to(() => const mainroute(), transition: Transition.fade);
     } else {
       return await Get.dialog(OSDialog(
               context,

@@ -92,7 +92,7 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
     fToast = FToast();
     fToast.init(context);
     WidgetsBinding.instance.addObserver(this);
-    Hive.box('user_setting').put('page_index', 10);
+    uiset.pagenumber = 10;
     Hive.box('user_setting').put('sort_memo_card', 0);
     controll_memo.sort = Hive.box('user_setting').get('sort_memo_card');
     controller = TextEditingController();

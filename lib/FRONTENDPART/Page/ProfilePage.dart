@@ -15,7 +15,6 @@ import '../../Tool/Getx/navibool.dart';
 import '../../Tool/Getx/uisetting.dart';
 import '../../Tool/NoBehavior.dart';
 import '../../Tool/AppBarCustom.dart';
-import '../../sheets/userinfotalk.dart';
 import '../UI(Widget/ProfileUI.dart';
 import 'DrawerScreen.dart';
 
@@ -29,7 +28,6 @@ class _ProfilePageState extends State<ProfilePage>
     with TickerProviderStateMixin {
   TextEditingController _controller = TextEditingController();
   ScrollController scrollController = ScrollController();
-  late final PageController _pController2;
   final searchNode = FocusNode();
   final draw = Get.put(navibool());
   final uiset = Get.put(uisetting());
@@ -40,16 +38,14 @@ class _ProfilePageState extends State<ProfilePage>
     Settinglicensepage();
     uiset.searchpagemove = '';
     uiset.profileindex = 0;
-    Hive.box('user_setting').put('page_index', 3);
+    uiset.pagenumber = 3;
     _controller = TextEditingController();
-    _pController2 = PageController(initialPage: 0, viewportFraction: 1);
   }
 
   @override
   void dispose() {
     super.dispose();
     _controller.dispose();
-    _pController2.dispose();
     scrollController.dispose();
   }
 
@@ -63,23 +59,21 @@ class _ProfilePageState extends State<ProfilePage>
                   ? Stack(
                       children: [
                         draw.navi == 0
-                            ? Positioned(
+                            ? const Positioned(
                                 left: 0,
                                 child: SizedBox(
                                   width: 80,
                                   child: DrawerScreen(
-                                    index: Hive.box('user_setting')
-                                        .get('page_index'),
+                                    index: 3,
                                   ),
                                 ),
                               )
-                            : Positioned(
+                            : const Positioned(
                                 right: 0,
                                 child: SizedBox(
                                   width: 80,
                                   child: DrawerScreen(
-                                    index: Hive.box('user_setting')
-                                        .get('page_index'),
+                                    index: 3,
                                   ),
                                 ),
                               ),
@@ -119,16 +113,18 @@ class _ProfilePageState extends State<ProfilePage>
                       color: BGColor(),
                       child: Column(
                         children: [
-                          AppBarCustom(
-                            title: '',
-                            lefticon: false,
-                            lefticonname: Icons.add,
-                            righticon: true,
-                            doubleicon: false,
-                            righticonname: Icons.person_outline,
-                            textcontroller: _controller,
-                            searchnode: searchNode,
-                          ),
+                          GetBuilder<uisetting>(builder: (_) {
+                            return AppBarCustom(
+                              title: '',
+                              lefticon: false,
+                              lefticonname: Icons.add,
+                              righticon: uiset.profileindex == 0 ? true : false,
+                              doubleicon: false,
+                              righticonname: Icons.person_outline,
+                              textcontroller: _controller,
+                              searchnode: searchNode,
+                            );
+                          }),
                           Flexible(
                             fit: FlexFit.tight,
                             child: SizedBox(
@@ -140,7 +136,6 @@ class _ProfilePageState extends State<ProfilePage>
                                           _controller,
                                           searchNode,
                                           scrollController,
-                                          _pController2,
                                           constraint.maxWidth,
                                           constraint.maxHeight);
                                     }),
@@ -441,256 +436,6 @@ class _ProfilePageState extends State<ProfilePage>
             )
           ],
         ),
-      ),
-    );
-  }
-
-  G_Container1(double height) {
-    return SizedBox(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('전체',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: contentTitleTextsize(),
-                color: TextColor(),
-              )),
-          const SizedBox(
-            height: 10,
-          ),
-          Text(
-            '유저이름을 클릭하여 프로필 확인',
-            maxLines: 2,
-            softWrap: true,
-            style: TextStyle(
-              fontWeight: FontWeight.normal,
-              fontSize: 15,
-              color: TextColor(),
-            ),
-          ),
-          G_Container1_body()
-        ],
-      ),
-    );
-  }
-
-  G_Container1_body() {
-    return StreamBuilder<QuerySnapshot>(
-      stream: firestore.collection('PeopleList').snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          friendnamelist.clear();
-          final valuespace = snapshot.data!.docs;
-          for (var sp in valuespace) {
-            if (sp.id == name) {
-              for (int i = 0; i < sp.get('friends').length; i++) {
-                friendnamelist.add(sp.get('friends')[i]);
-              }
-            }
-          }
-          friendnamelist.sort(((a, b) {
-            return a.toString().compareTo(b.toString());
-          }));
-          return friendnamelist.isEmpty
-              ? SizedBox(
-                  width: MediaQuery.of(context).size.width - 40,
-                  height: draw.navi == 0
-                      ? MediaQuery.of(context).size.height - 80 - 20 - 20 - 130
-                      : MediaQuery.of(context).size.height -
-                          80 -
-                          70 -
-                          20 -
-                          20 -
-                          130,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Center(
-                        child: NeumorphicText(
-                          '친구리스트가 비어있습니다.',
-                          style: NeumorphicStyle(
-                            shape: NeumorphicShape.flat,
-                            depth: 3,
-                            color: TextColor_shadowcolor(),
-                          ),
-                          textStyle: NeumorphicTextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTitleTextsize(),
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              : SizedBox(
-                  height: draw.navi == 0
-                      ? MediaQuery.of(context).size.height - 80 - 20 - 20 - 130
-                      : MediaQuery.of(context).size.height -
-                          80 -
-                          70 -
-                          20 -
-                          20 -
-                          130,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      ListView.builder(
-                          physics: const ScrollPhysics(),
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: friendnamelist.length,
-                          itemBuilder: (context, index) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    userinfotalk(
-                                        context, index, friendnamelist);
-                                  },
-                                  child: Container(
-                                      width: MediaQuery.of(context).size.width -
-                                          40,
-                                      decoration: BoxDecoration(
-                                          color: BGColor(),
-                                          borderRadius:
-                                              BorderRadius.circular(0),
-                                          border: Border.all(
-                                              width: 1,
-                                              color: Colors.blue.shade200)),
-                                      child: Column(
-                                        children: [
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
-                                              Container(
-                                                alignment: Alignment.center,
-                                                height: 25,
-                                                width: 25,
-                                                child: Text(
-                                                    friendnamelist[index]
-                                                        .toString()
-                                                        .substring(0, 1),
-                                                    style: TextStyle(
-                                                        color:
-                                                            BGColor_shadowcolor(),
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 18)),
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      TextColor_shadowcolor(),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          100),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
-                                              Flexible(
-                                                fit: FlexFit.tight,
-                                                child: Text(
-                                                  friendnamelist[index],
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize:
-                                                          contentTextsize(),
-                                                      color: TextColor()),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          )
-                                        ],
-                                      )),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                )
-                              ],
-                            );
-                          }),
-                    ],
-                  ));
-        } else if (snapshot.connectionState == ConnectionState.waiting) {
-          return SizedBox(
-              height: draw.navi == 0
-                  ? MediaQuery.of(context).size.height - 80 - 20 - 20 - 130
-                  : MediaQuery.of(context).size.height -
-                      80 -
-                      70 -
-                      20 -
-                      20 -
-                      130,
-              width: MediaQuery.of(context).size.width - 40,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [Center(child: CircularProgressIndicator())],
-              ));
-        }
-        return SizedBox(
-          height: draw.navi == 0
-              ? MediaQuery.of(context).size.height - 80 - 20 - 20 - 130
-              : MediaQuery.of(context).size.height - 80 - 70 - 20 - 20 - 130,
-          width: MediaQuery.of(context).size.width - 40,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: NeumorphicText(
-                  '친구리스트가 비어있습니다.',
-                  style: NeumorphicStyle(
-                    shape: NeumorphicShape.flat,
-                    depth: 3,
-                    color: TextColor_shadowcolor(),
-                  ),
-                  textStyle: NeumorphicTextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: contentTitleTextsize(),
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              )
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  S_Container0(double height) {
-    return SizedBox(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text('설정',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: secondTitleTextsize(),
-                color: TextColor(),
-              )),
-        ],
       ),
     );
   }

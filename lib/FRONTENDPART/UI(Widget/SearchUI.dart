@@ -184,8 +184,7 @@ Se_Container01(double height, controller, searchNode) {
                                                 onTap: () {
                                                   searchNode.unfocus();
                                                   controller.clear();
-                                                  Hive.box('user_setting')
-                                                      .put('page_index', 11);
+                                                  uiset.setpageindex(11);
                                                   uiset.setsearchpageindex(
                                                       index);
                                                   uiset.seteditpage(
@@ -391,8 +390,7 @@ Se_Container11(double height, TextEditingController controller, searchNode) {
                                       onTap: () {
                                         searchNode.unfocus();
                                         controller.clear();
-                                        Hive.box('user_setting')
-                                            .put('page_index', 12);
+                                        uiset.setpageindex(12);
                                         uiset.setfavorpageindex(index);
                                         uiset.removeeditpage();
                                         uiset.seteditpage(

@@ -68,8 +68,7 @@ class AppBarCustom extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            navinumlist.contains(Hive.box('user_setting')
-                                        .get('page_index')) &&
+                            navinumlist.contains(uiset.pagenumber) &&
                                     draw.navi == 0
                                 ? draw.drawopen == true ||
                                         Hive.box('user_setting')
@@ -109,8 +108,7 @@ class AppBarCustom extends StatelessWidget {
                                         ),
                                         color: draw.backgroundcolor)
                                 : const SizedBox(),
-                            navinumlist.contains(Hive.box('user_setting')
-                                        .get('page_index')) &&
+                            navinumlist.contains(uiset.pagenumber) &&
                                     draw.navi == 0
                                 ? const SizedBox(
                                     width: 10,
@@ -161,13 +159,8 @@ class AppBarCustom extends StatelessWidget {
                                       ? Row(
                                           children: [
                                             doubleicon == true
-                                                ? Hive.box('user_setting').get(
-                                                                'page_index') ==
-                                                            11 ||
-                                                        Hive.box('user_setting')
-                                                                .get(
-                                                                    'page_index') ==
-                                                            12
+                                                ? uiset.pagenumber == 11 ||
+                                                        uiset.pagenumber == 12
                                                     ? ContainerDesign(
                                                         child: GestureDetector(
                                                           onTap: () => func4(
@@ -190,13 +183,8 @@ class AppBarCustom extends StatelessWidget {
                                                             .backgroundcolor)
                                                     : const SizedBox()
                                                 : const SizedBox(),
-                                            Hive.box('user_setting').get(
-                                                            'page_index') ==
-                                                        0 ||
-                                                    Hive.box('user_setting')
-                                                            .get(
-                                                                'page_index') ==
-                                                        3
+                                            uiset.pagenumber == 0 ||
+                                                    uiset.pagenumber == 3
                                                 ? const SizedBox(
                                                     width: 10,
                                                   )
@@ -236,15 +224,13 @@ class AppBarCustom extends StatelessWidget {
                                 ],
                               ),
                             )),
-                            navinumlist.contains(Hive.box('user_setting')
-                                        .get('page_index')) &&
+                            navinumlist.contains(uiset.pagenumber) &&
                                     draw.navi == 1
                                 ? const SizedBox(
                                     width: 10,
                                   )
                                 : const SizedBox(),
-                            navinumlist.contains(Hive.box('user_setting')
-                                        .get('page_index')) &&
+                            navinumlist.contains(uiset.pagenumber) &&
                                     draw.navi == 1
                                 ? draw.drawopen == true ||
                                         Hive.box('user_setting')

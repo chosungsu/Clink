@@ -22,7 +22,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../Page/LoginSignPage.dart';
-import '../Page/Spacepage.dart';
 import '../../Tool/AndroidIOS.dart';
 import '../../Tool/BGColor.dart';
 import '../../Tool/FlushbarStyle.dart';
@@ -46,7 +45,7 @@ void pressed2() {
 
 GoToMain() {
   Hive.box('user_setting').put('currentmypage', 0);
-  Get.to(() => const mainroute(index: 0), transition: Transition.fade);
+  Get.to(() => const mainroute(), transition: Transition.fade);
 }
 
 GoToLogin(String s) {
@@ -111,28 +110,17 @@ func2(BuildContext context) async {
 
 func3(BuildContext context) => Future.delayed(const Duration(seconds: 0), () {
       final linkspaceset = Get.put(linkspacesetting());
+      final uiset = Get.put(uisetting());
       if (linkspaceset.color == draw.backgroundcolor) {
         StatusBarControl.setColor(draw.backgroundcolor, animated: true);
       } else {
         StatusBarControl.setColor(linkspaceset.color, animated: true);
       }
-      if (Hive.box('user_setting').get('page_index') == 3 ||
-          Hive.box('user_setting').get('page_index') == 4 ||
-          Hive.box('user_setting').get('page_index') == 5) {
-        Hive.box('user_setting').put('page_index', 0);
-        Get.to(
-            () => const mainroute(
-                  index: 0,
-                ),
-            transition: Transition.downToUp);
-        /*Navigator.of(context).pushReplacement(
-          PageTransition(
-            type: PageTransitionType.fade,
-            child: const mainroute(
-              index: 0,
-            ),
-          ),
-        );*/
+      if (uiset.pagenumber == 3 ||
+          uiset.pagenumber == 4 ||
+          uiset.pagenumber == 5) {
+        uiset.setpageindex(0);
+        Get.to(() => const mainroute(), transition: Transition.downToUp);
       } else {
         Get.back();
       }
@@ -142,8 +130,7 @@ func4(context, textcontroller, searchnode, where, id, categorypicknum) async {
   var checkid = '';
   Widget title;
   Widget content;
-  if (Hive.box('user_setting').get('page_index') == 11 ||
-      Hive.box('user_setting').get('page_index') == 12) {
+  if (uiset.pagenumber == 11 || uiset.pagenumber == 12) {
     await firestore.collection('Favorplace').get().then((value) {
       checkid = '';
       if (value.docs.isEmpty) {
@@ -200,10 +187,6 @@ func4(context, textcontroller, searchnode, where, id, categorypicknum) async {
         backgroundcolor: Colors.red,
         bordercolor: draw.backgroundcolor);
   }
-}
-
-func5() {
-  Get.to(() => const Spacepage(), transition: Transition.upToDown);
 }
 
 func7() async {
