@@ -20,9 +20,14 @@ import '../Tool/BGColor.dart';
 import '../Tool/ContainerDesign.dart';
 import '../Tool/FlushbarStyle.dart';
 import '../Tool/Getx/PeopleAdd.dart';
+import '../Tool/Getx/uisetting.dart';
 import '../Tool/NoBehavior.dart';
 import '../Tool/TextSize.dart';
 import '../UI/Home/firstContentNet/HomeView.dart';
+
+final linkspaceset = Get.put(linkspacesetting());
+final uiset = Get.put(uisetting());
+final peopleadd = Get.put(PeopleAdd());
 
 linksetting(
   BuildContext context,
@@ -117,11 +122,6 @@ content(
   BuildContext context,
   String name,
 ) {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  String usercode = Hive.box('user_setting').get('usercode');
-  final linkspaceset = Get.put(linkspacesetting());
-  final peopleadd = Get.put(PeopleAdd());
-
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
       children: [
@@ -394,7 +394,6 @@ linkmadeplace(
               ),
             ));
       }).whenComplete(() {
-    final linkspaceset = Get.put(linkspacesetting());
     linkspaceset.indextreetmp.add(List.empty(growable: true));
   });
 }
@@ -453,7 +452,6 @@ titlesecond(
 }
 
 contentsecond(BuildContext context, int type) {
-  final linkspaceset = Get.put(linkspacesetting());
   final List listin1 = ['링크', '이미지 및 파일'];
   final List listin3 = ['링크', '이미지 및 파일'];
   final List listin4 = ['링크', '이미지 및 파일'];
@@ -570,14 +568,6 @@ linkplacenamechange(
               ),
             ));
       }).whenComplete(() {
-    /*final linkspaceset = Get.put(linkspacesetting());
-    linkspaceset.setspecificspacein(
-        index,
-        Linkspacetreepage(
-            subindex: linkspaceset.indextreecnt.length,
-            placestr: placestr,
-            uniqueid: code));
-    linkspaceset.minusspacein(index + 1);*/
     controller.text == '';
   });
 }
@@ -655,10 +645,6 @@ contentforth(
   TextEditingController controller,
   String origintext,
 ) {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-  final List<Linkspacepage> listspacepageset = [];
-  bool isloading = false;
   var id;
   var updateid = [];
   var updateindex = [];
@@ -694,7 +680,7 @@ contentforth(
                 primary: ButtonColor(),
               ),
               onPressed: () async {
-                linkspaceset.setcompleted(true);
+                uiset.setloading(true);
                 if (controller.text.isEmpty) {
                   Snack.snackbars(
                       context: context,
@@ -730,7 +716,7 @@ contentforth(
                     }
                   });
                 }
-                linkspaceset.setcompleted(false);
+                uiset.setloading(false);
                 Get.back();
               },
               child: Center(
@@ -790,7 +776,6 @@ linkmadetreeplace(
   String uniquecode,
   int type,
 ) async {
-  final linkspaceset = Get.put(linkspacesetting());
   final List<Linkspacepage> listspacepageset = [];
   var id;
   await firestore.collection('Pinchannelin').add({
@@ -815,7 +800,6 @@ linkplaceshowaddaction(
   BuildContext context,
   String mainid,
 ) {
-  final linkspaceset = Get.put(linkspacesetting());
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
       constraints: BoxConstraints(
@@ -833,7 +817,7 @@ linkplaceshowaddaction(
       context: context,
       isScrollControlled: true,
       enableDrag: false,
-      isDismissible: linkspaceset.iscompleted ? false : true,
+      isDismissible: uiset.loading ? false : true,
       builder: (context) {
         return Padding(
             padding: MediaQuery.of(context).viewInsets,
@@ -864,8 +848,7 @@ linkplaceshowaddaction(
               ),
             ));
       }).whenComplete(() {
-    final linkspaceset = Get.put(linkspacesetting());
-    if (linkspaceset.iscompleted) {
+    if (uiset.loading) {
       linkplaceshowaddaction(context, mainid);
     } else {
       linkspaceset.resetsearchfile();
@@ -877,7 +860,6 @@ addaction(
   BuildContext context,
   String mainid,
 ) {
-  final linkspaceset = Get.put(linkspacesetting());
   return SizedBox(
       child: Padding(
           padding:
@@ -920,7 +902,6 @@ contentaddaction(
   BuildContext context,
   String mainid,
 ) {
-  final linkspaceset = Get.put(linkspacesetting());
   final List<Linkspacepage> listspacepageset = [];
   var id;
   FilePickerResult? res;
@@ -938,9 +919,9 @@ contentaddaction(
                         allowMultiple: true,
                         onFileLoading: (status) {
                           if (status == FilePickerStatus.done) {
-                            linkspaceset.setcompleted(false);
+                            uiset.setloading(false);
                           } else {
-                            linkspaceset.setcompleted(true);
+                            uiset.setloading(true);
                           }
                         },
                         lockParentWindow: true);
@@ -1098,13 +1079,6 @@ contentaddaction(
                           const SizedBox(
                             height: 20,
                           ),
-                          // MaterialButton(
-                          //   minWidth: double.infinity,
-                          //   height: 45,
-                          //   onPressed: () {},
-                          //   color: Colors.black,
-                          //   child: Text('Upload', style: TextStyle(color: Colors.white),),
-                          // )
                         ],
                       )
                     : Container(),
@@ -1114,7 +1088,6 @@ contentaddaction(
 }
 
 bottomaddaction(BuildContext context, int numberfileslen, String mainid) {
-  final linkspaceset = Get.put(linkspacesetting());
   return GetBuilder<linkspacesetting>(
       builder: (_) => Column(
             children: [
@@ -1127,7 +1100,7 @@ bottomaddaction(BuildContext context, int numberfileslen, String mainid) {
                   child: SizedBox(
                       width: 80.w,
                       child: Center(
-                        child: !linkspaceset.iscompleted
+                        child: !uiset.loading
                             ? Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
@@ -1163,14 +1136,14 @@ bottomaddaction(BuildContext context, int numberfileslen, String mainid) {
                     end: Alignment.bottomRight,
                   ),
                   strokeWidth: 2,
-                  backgroundColor: !linkspaceset.iscompleted
+                  backgroundColor: !uiset.loading
                       ? Colors.blue.shade300
                       : Colors.grey.shade300,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   radius: const Radius.circular(10),
                   onTap: () {
-                    !linkspaceset.iscompleted ? uploadfiles(mainid) : null;
+                    !uiset.loading ? uploadfiles(mainid) : null;
                   },
                 ),
               ),
@@ -1293,7 +1266,6 @@ contentfifth(
   String? path,
   String mainid,
 ) {
-  final linkspaceset = Get.put(linkspacesetting());
   final List<Linkspacepage> listspacepageset = [];
   var id;
 

@@ -37,7 +37,6 @@ class _mainrouteState extends State<mainroute>
   @override
   void initState() {
     super.initState();
-    uiset.pagenumber = 0;
     uiset.mypagelistindex = Hive.box('user_setting').get('currentmypage') ?? 0;
     WidgetsBinding.instance.addObserver(this);
     uiset.searchpagemove = '';
@@ -65,6 +64,7 @@ class _mainrouteState extends State<mainroute>
       searchNode.unfocus();
       uiset.pagenumber = 1;
     } else if (uiset.pagenumber != 0) {
+      uiset.setpageindex(0);
       Get.to(() => const mainroute(), transition: Transition.fade);
     } else {
       return await Get.dialog(OSDialog(

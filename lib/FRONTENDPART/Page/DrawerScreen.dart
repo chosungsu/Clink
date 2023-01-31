@@ -8,21 +8,21 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import '../../Enums/Variables.dart';
 import '../../Tool/Getx/navibool.dart';
+import '../../Tool/Getx/uisetting.dart';
 import '../Route/mainroute.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 class DrawerScreen extends StatefulWidget {
   const DrawerScreen({
     Key? key,
-    required this.index,
   }) : super(key: key);
-  final int index;
   @override
   State<StatefulWidget> createState() => _DrawerScreenState();
 }
 
 class _DrawerScreenState extends State<DrawerScreen> {
   final draw = Get.put(navibool());
+  final uiset = Get.put(uisetting());
 
   @override
   void initState() {
@@ -41,12 +41,12 @@ class _DrawerScreenState extends State<DrawerScreen> {
           behavior: NoBehavior(),
           child: SingleChildScrollView(
               physics: const ScrollPhysics(),
-              child: View(context, drawerItems_view, widget.index)),
+              child: View(context, drawerItems_view)),
         ));
   }
 }
 
-View(BuildContext context, List<Map> drawerItems, int index) {
+View(BuildContext context, List<Map> drawerItems) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.start,
     children: drawerItems.map((element) {
@@ -78,7 +78,7 @@ View(BuildContext context, List<Map> drawerItems, int index) {
                   children: [
                     Icon(
                       element['icon'],
-                      color: drawerItems.indexOf(element) == index
+                      color: drawerItems.indexOf(element) == uiset.pagenumber
                           ? Colors.purple.shade300
                           : draw.color_textstatus,
                     ),

@@ -15,6 +15,7 @@ import '../../Tool/FlushbarStyle.dart';
 import '../../Tool/Getx/PeopleAdd.dart';
 import '../../Tool/Getx/calendarsetting.dart';
 import '../../Tool/Getx/navibool.dart';
+import '../../Tool/Getx/uisetting.dart';
 import 'DayContentHome.dart';
 
 SpaceinUI(
@@ -37,6 +38,7 @@ DefaultUI(id, type) {
   final searchNode = FocusNode();
   final peopleadd = Get.put(PeopleAdd());
   final draw = Get.put(navibool());
+  final uiset = Get.put(uisetting());
   final controll_cals = Get.put(calendarsetting());
   final linkspaceset = Get.put(linkspacesetting());
   linkspaceset.ischecked = List.filled(10000, false);
@@ -123,7 +125,7 @@ DefaultUI(id, type) {
                                     'viewsetting': 0,
                                     'share': []
                                   }).whenComplete(() {
-                                    linkspaceset.setcompleted(false);
+                                    uiset.setloading(false);
                                   });
                                 });
                               },

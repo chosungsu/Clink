@@ -65,18 +65,14 @@ class _NotiAlarmState extends State<NotiAlarm>
                                   left: 0,
                                   child: SizedBox(
                                     width: 80,
-                                    child: DrawerScreen(
-                                      index: 2,
-                                    ),
+                                    child: DrawerScreen(),
                                   ),
                                 )
                               : const Positioned(
                                   right: 0,
                                   child: SizedBox(
                                     width: 80,
-                                    child: DrawerScreen(
-                                      index: 2,
-                                    ),
+                                    child: DrawerScreen(),
                                   ),
                                 ),
                           UI(),

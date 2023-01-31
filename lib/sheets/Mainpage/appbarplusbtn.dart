@@ -11,6 +11,8 @@ import '../../Tool/FlushbarStyle.dart';
 import '../../Tool/Getx/uisetting.dart';
 import '../../Tool/TextSize.dart';
 
+final uiset = Get.put(uisetting());
+
 Widgets_plusbtn(
     context, checkid, textcontroller, searchnode, where, id, categorypicknum) {
   Widget title;
@@ -105,7 +107,6 @@ Widgets_plusbtncontent1(
   Widget title;
   Widget content;
   Widget btn;
-  final uiset = Get.put(uisetting());
 
   title = SizedBox(
       height: 50,
@@ -280,7 +281,6 @@ Widgets_plusbtncontent2(
 
 clickbtn1(context, textcontroller, where, id, categorynumber) {
   final updatelist = [];
-  final uiset = Get.put(uisetting());
   final initialtext = textcontroller.text;
   var updateid;
   int indexcnt = linkspaceset.indexcnt.length;
@@ -288,7 +288,7 @@ clickbtn1(context, textcontroller, where, id, categorynumber) {
   if (textcontroller.text.isEmpty) {
     uiset.checktf(false);
   } else {
-    linkspaceset.setcompleted(true);
+    uiset.setloading(true);
     if (where == 'editnametemplate') {
       firestore.collection('PageView').get().then((value) {
         for (int i = 0; i < value.docs.length; i++) {
@@ -307,7 +307,7 @@ clickbtn1(context, textcontroller, where, id, categorynumber) {
               title: '정상적으로 처리되었어요',
               backgroundcolor: Colors.green,
               bordercolor: draw.backgroundcolor);
-          linkspaceset.setcompleted(false);
+          uiset.setloading(false);
           linkspaceset.setspacelink(textcontroller.text);
           Get.back(result: true);
         });
@@ -347,7 +347,7 @@ clickbtn1(context, textcontroller, where, id, categorynumber) {
               title: '정상적으로 처리되었어요',
               backgroundcolor: Colors.green,
               bordercolor: draw.backgroundcolor);
-          linkspaceset.setcompleted(false);
+          uiset.setloading(false);
           linkspaceset.setspacelink(textcontroller.text);
           Get.back(result: true);
         });
@@ -364,7 +364,7 @@ clickbtn1(context, textcontroller, where, id, categorynumber) {
             title: '정상적으로 처리되었어요',
             backgroundcolor: Colors.green,
             bordercolor: draw.backgroundcolor);
-        linkspaceset.setcompleted(false);
+        uiset.setloading(false);
         linkspaceset.setspacelink(textcontroller.text);
         Get.back(result: true);
       });
@@ -377,7 +377,7 @@ clickbtn2(context, textcontroller, checkid) {
   if (textcontroller.text == '') {
     uiset.checktf(false);
   } else {
-    linkspaceset.setcompleted(true);
+    uiset.setloading(true);
     firestore.collection('PageView').add({
       'id': checkid,
       'spacename': textcontroller.text,
@@ -391,7 +391,7 @@ clickbtn2(context, textcontroller, checkid) {
           title: '정상적으로 처리되었어요',
           backgroundcolor: Colors.green,
           bordercolor: draw.backgroundcolor);
-      linkspaceset.setcompleted(false);
+      uiset.setloading(false);
       linkspaceset.setspacelink(textcontroller.text);
       Get.back();
     });

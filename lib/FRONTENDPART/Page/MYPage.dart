@@ -65,14 +65,14 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                   left: 0,
                                   child: SizedBox(
                                     width: 80,
-                                    child: DrawerScreen(index: 0),
+                                    child: DrawerScreen(),
                                   ),
                                 )
                               : const Positioned(
                                   right: 0,
                                   child: SizedBox(
                                     width: 80,
-                                    child: DrawerScreen(index: 0),
+                                    child: DrawerScreen(),
                                   ),
                                 ),
                           GroupBody(context),

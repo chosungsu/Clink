@@ -364,11 +364,13 @@ searchfiles(
 
 uploadfiles(String mainid) async {
   final linkspaceset = Get.put(linkspacesetting());
+  final uiset = Get.put(uisetting());
   final path = mainid + '/';
   var ref;
   var snapshot;
   final urllist = [];
-  linkspaceset.setcompleted(true);
+
+  uiset.setloading(true);
   for (int i = 0; i < linkspaceset.selectedfile!.length; i++) {
     ref = FirebaseStorage.instance
         .ref()
@@ -390,7 +392,7 @@ uploadfiles(String mainid) async {
     }
     await firestore.collection('Pinchannelin').doc(mainid).update(
         {'spaceentercontent': linkspaceset.changeurllist}).whenComplete(() {
-      linkspaceset.setcompleted(false);
+      uiset.setloading(false);
     });
   });
   Get.back();
@@ -471,6 +473,8 @@ Future<void> deleteFileExample(String mainid, BuildContext context) async {
   String downloadname = '';
   final storageRef = FirebaseStorage.instance.ref();
   final linkspaceset = Get.put(linkspacesetting());
+  final uiset = Get.put(uisetting());
+
   downloadfile.add(linkspaceset
       .inindextreetmp[linkspaceset.islongchecked.indexOf(true)].substrcode);
   downloadname = downloadfile[0];
@@ -491,7 +495,7 @@ Future<void> deleteFileExample(String mainid, BuildContext context) async {
       }
       await firestore.collection('Pinchannelin').doc(mainid).update(
           {'spaceentercontent': linkspaceset.changeurllist}).whenComplete(() {
-        linkspaceset.setcompleted(false);
+        uiset.setloading(false);
         Snack.snackbars(
             context: context,
             title: '삭제가 완료됨.',

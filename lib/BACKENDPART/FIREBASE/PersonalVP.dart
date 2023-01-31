@@ -1,7 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, prefer_typing_uninitialized_variables, unused_local_variable
 
 import 'package:clickbyme/Enums/Radio.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
@@ -66,42 +65,11 @@ PageViewRes1_2(
   var insertlist;
   int changei = 0;
   String docid = '';
-  String changesetrename = changeset == '나 혼자만'
-      ? 'alone'
-      : (changeset == '팔로워만 공개' ? 'follow' : 'all');
   uiset.setloading(true);
-  for (int i = 0; i < linkspaceset.indextreetmp.length; i++) {
-    if (linkspaceset.indexcnt[i].codename ==
-        linkspaceset.indexcnt[i].uniquecode +
-            '@' +
-            linkspaceset.indexcnt[i].placestr) {
-      insertlist = Linkspacepage(
-        type: linkspaceset.indexcnt[i].type,
-        placestr: linkspaceset.indexcnt[i].placestr,
-        uniquecode: linkspaceset.indexcnt[i].uniquecode,
-        index: linkspaceset.indexcnt[i].index,
-        familycode: linkspaceset.indexcnt[i].familycode,
-        codename: linkspaceset.indexcnt[i].codename,
-        canshow: changeset,
-      );
-      linkspaceset.indexcnt.removeAt(i);
-      linkspaceset.indexcnt.insert(i, insertlist);
-      changei = i;
-    }
-  }
-  await firestore.collection('PageView').get().then(
-    (value) async {
-      final valuespace = value.docs;
-      for (var sp in valuespace) {
-        if (sp.get('codename') == linkspaceset.indexcnt[changei].codename) {
-          docid = sp.id;
-          await firestore.collection('PageView').doc(docid).update({
-            'canshow': changeset,
-          });
-        }
-      }
-    },
-  ).whenComplete(() {
+  await firestore
+      .collection('PageView')
+      .doc(id)
+      .update({'canshow': changeset}).whenComplete(() {
     uiset.setloading(false);
   });
 }
@@ -170,7 +138,7 @@ pageeditlogic(context, id, index, controller, searchNode) async {
       if (value.get('username') == usercode) {
         title = Widgets_horizontalbtn(
           context,
-          id,
+          linkspaceset.indexcnt[index].uniquecode,
           index,
           linkspaceset.indexcnt[index].placestr,
           linkspaceset.indexcnt[index].familycode,
@@ -182,7 +150,7 @@ pageeditlogic(context, id, index, controller, searchNode) async {
         )[0];
         content = Widgets_horizontalbtn(
           context,
-          id,
+          linkspaceset.indexcnt[index].uniquecode,
           index,
           linkspaceset.indexcnt[index].placestr,
           linkspaceset.indexcnt[index].familycode,
@@ -203,7 +171,7 @@ pageeditlogic(context, id, index, controller, searchNode) async {
         } else {
           title = Widgets_horizontalbtn(
             context,
-            id,
+            linkspaceset.indexcnt[index].uniquecode,
             index,
             linkspaceset.indexcnt[index].placestr,
             linkspaceset.indexcnt[index].familycode,
@@ -215,7 +183,7 @@ pageeditlogic(context, id, index, controller, searchNode) async {
           )[0];
           content = Widgets_horizontalbtn(
               context,
-              id,
+              linkspaceset.indexcnt[index].uniquecode,
               index,
               linkspaceset.indexcnt[index].placestr,
               linkspaceset.indexcnt[index].familycode,
@@ -235,15 +203,14 @@ PageViewStreamParent2() {
   return firestore.collection('Pinchannelin').snapshots();
 }
 
-PageViewRes2(id, snapshot, index) {
+PageViewRes2(snapshot, index) {
   linkspaceset.indextreetmp[index].clear();
   final valuespace = snapshot.data!.docs;
   for (var sp in valuespace) {
-    spacename = sp.get('addname');
     if (linkspaceset.indexcnt[index].familycode == sp.get('uniquecode')) {
       linkspaceset.indextreetmp[index].add(Linkspacetreepage(
           subindex: sp.get('index'),
-          placestr: spacename,
+          placestr: sp.get('addname'),
           mainid: sp.id,
           uniqueid: sp.get('uniquecode')));
     }
@@ -291,8 +258,7 @@ PageViewStreamChild3(context, id, index, index2) async {
   );
 }
 
-PageViewStreamChild4(context, id, index, index2, controller, searchNode,
-    AsyncSnapshot<QuerySnapshot<Object?>> snapshot) async {
+PageViewStreamChild4(context, id, index, index2, controller, searchNode) async {
   Widget title;
   Widget content;
 
@@ -301,9 +267,10 @@ PageViewStreamChild4(context, id, index, index2, controller, searchNode,
       if (value.get('username') == usercode) {
         title = Widgets_horizontalbtnsecond(
           context,
+          linkspaceset.indextreetmp[index][index2].uniqueid,
           index2,
           linkspaceset.indextreetmp[index][index2].placestr,
-          linkspaceset.indextreetmp[index][index2].uniqueid,
+          linkspaceset.indextreetmp[index][index2].mainid,
           0,
           controller,
           searchNode,
@@ -311,9 +278,10 @@ PageViewStreamChild4(context, id, index, index2, controller, searchNode,
         )[0];
         content = Widgets_horizontalbtnsecond(
           context,
+          linkspaceset.indextreetmp[index][index2].uniqueid,
           index2,
           linkspaceset.indextreetmp[index][index2].placestr,
-          linkspaceset.indextreetmp[index][index2].uniqueid,
+          linkspaceset.indextreetmp[index][index2].mainid,
           0,
           controller,
           searchNode,
@@ -325,9 +293,10 @@ PageViewStreamChild4(context, id, index, index2, controller, searchNode,
         } else {
           title = Widgets_horizontalbtnsecond(
             context,
+            linkspaceset.indextreetmp[index][index2].uniqueid,
             index2,
             linkspaceset.indextreetmp[index][index2].placestr,
-            linkspaceset.indextreetmp[index][index2].uniqueid,
+            linkspaceset.indextreetmp[index][index2].mainid,
             0,
             controller,
             searchNode,
@@ -335,9 +304,10 @@ PageViewStreamChild4(context, id, index, index2, controller, searchNode,
           )[0];
           content = Widgets_horizontalbtnsecond(
             context,
+            linkspaceset.indextreetmp[index][index2].uniqueid,
             index2,
             linkspaceset.indextreetmp[index][index2].placestr,
-            linkspaceset.indextreetmp[index][index2].uniqueid,
+            linkspaceset.indextreetmp[index][index2].mainid,
             0,
             controller,
             searchNode,
@@ -577,7 +547,7 @@ Widgets_editpageconsole(
               ), pressed2)) ??
               false;
           if (reloadpage) {
-            linkspaceset.setcompleted(true);
+            uiset.setloading(true);
 
             var id = '';
             await firestore.collection('Pinchannel').get().then((value) {
@@ -610,7 +580,7 @@ Widgets_editpageconsole(
                     }
                   }
                 }).whenComplete(() {
-                  linkspaceset.setcompleted(false);
+                  uiset.setloading(false);
                   Get.back();
                 });
               });
@@ -740,7 +710,6 @@ Widgets_horizontalbtn(
   Widget content, content2;
   Widget btn2;
   final List<Linkspacepage> listspacepageset = [];
-  bool loading = false;
   var id;
   var updateid = [];
   var updateindex = [];
@@ -850,7 +819,8 @@ Widgets_horizontalbtn(
                                         setState(() {
                                           changeset = value!;
                                         });
-                                        await PageViewRes1_2(id, changeset);
+                                        await PageViewRes1_2(
+                                            uniquecode, changeset);
                                       },
                                     );
                                   },
@@ -933,25 +903,19 @@ Widgets_horizontalbtn(
                 ), pressed2)) ??
                 false;
             if (reloadpage) {
+              uiset.setloading(true);
               Get.back();
-              var parentid;
-              var changeindex;
-              await firestore.collection('PageView').get().then((value) {
-                for (int i = 0; i < value.docs.length; i++) {
-                  if (value.docs[i].get('spacename') == placestr &&
-                      value.docs[i].get('id') == uniquecode &&
-                      value.docs[i].get('type') == type) {
-                    id = value.docs[i].id;
-                    changeindex = value.docs[i].get('index');
-                  }
-                }
-                firestore.collection('PageView').doc(id).delete();
-              }).whenComplete(() async {
+              var boxparentid;
+              await firestore
+                  .collection('PageView')
+                  .doc(uniquecode)
+                  .delete()
+                  .whenComplete(() async {
                 await firestore.collection('Pinchannelin').get().then((value) {
                   for (int i = 0; i < value.docs.length; i++) {
-                    if (value.docs[i].get('uniquecode') == id) {
-                      parentid = value.docs[i].id;
-                      updateid.add(parentid);
+                    if (value.docs[i].get('uniquecode') == uniquecode) {
+                      boxparentid = value.docs[i].id;
+                      updateid.add(boxparentid);
                     }
                   }
                   if (updateid.isEmpty) {
@@ -973,7 +937,7 @@ Widgets_horizontalbtn(
                       bordercolor: draw.backgroundcolor);
                   await firestore.collection('PageView').get().then((value) {
                     for (int i = 0; i < value.docs.length; i++) {
-                      if (value.docs[i].get('index') > changeindex) {
+                      if (value.docs[i].get('index') > index) {
                         updateid.add(value.docs[i].id);
                         updateindex.add(value.docs[i].get('index'));
                       }
@@ -988,7 +952,7 @@ Widgets_horizontalbtn(
                       }
                     }
                   }).whenComplete(() {
-                    linkspaceset.setcompleted(false);
+                    uiset.setloading(false);
                   });
                 });
               });
@@ -1017,6 +981,7 @@ Widgets_horizontalbtn(
 
 Widgets_horizontalbtnsecond(
   context,
+  parentid,
   index,
   placestr,
   uniquecode,
@@ -1028,11 +993,7 @@ Widgets_horizontalbtnsecond(
   Widget title, title2;
   Widget content, content2;
   Widget btn2;
-  final linkspaceset = Get.put(linkspacesetting());
-  final cg = Get.put(category());
-  final uiset = Get.put(uisetting());
   final List<Linkspacepage> listspacepageset = [];
-  bool loading = false;
   var id;
   var updateid = [];
   var updateindex = [];
@@ -1072,7 +1033,7 @@ Widgets_horizontalbtnsecond(
                   ),
                   onPressed: () async {
                     SummitEditBox(context, controller, searchNode,
-                        'editnametemplatein', uniquecode, type, '');
+                        'editnametemplatein', uniquecode, index, parentid);
                   },
                   child: Center(
                     child: Row(
@@ -1127,13 +1088,13 @@ Widgets_horizontalbtnsecond(
                 ), pressed2)) ??
                 false;
             if (reloadpage) {
-              var parentid;
+              uiset.setloading(true);
               var changeindex;
 
               await firestore.collection('Pinchannelin').get().then((value) {
                 for (int i = 0; i < value.docs.length; i++) {
                   if (value.docs[i].get('addname') == placestr &&
-                      value.docs[i].get('uniquecode') == uniquecode &&
+                      value.docs[i].get('uniquecode') == parentid &&
                       value.docs[i].get('index') == index) {
                     id = value.docs[i].id;
                     changeindex = value.docs[i].get('index');
@@ -1145,7 +1106,7 @@ Widgets_horizontalbtnsecond(
                 updateindex.clear();
                 await firestore.collection('Pinchannelin').get().then((value) {
                   for (int i = 0; i < value.docs.length; i++) {
-                    if (value.docs[i].get('uniquecode') == uniquecode &&
+                    if (value.docs[i].get('uniquecode') == parentid &&
                         value.docs[i].get('index') > changeindex) {
                       updateid.add(value.docs[i].id);
                       updateindex.add(value.docs[i].get('index'));
@@ -1166,22 +1127,8 @@ Widgets_horizontalbtnsecond(
                       title: '삭제완료!',
                       backgroundcolor: Colors.red,
                       bordercolor: draw.backgroundcolor);
-                  linkspaceset.setcompleted(false);
-                  firestore.collection('Calendar').get().then((value) {
-                    if (value.docs.isNotEmpty) {
-                      for (int j = 0; j < value.docs.length; j++) {
-                        final messageuniquecode = value.docs[j]['parentid'];
-                        if (messageuniquecode == id) {
-                          firestore
-                              .collection('Calendar')
-                              .doc(value.docs[j].id)
-                              .delete();
-                        }
-                      }
-                    } else {}
-                  }).whenComplete(() {
-                    Get.back();
-                  });
+                  uiset.setloading(false);
+                  Get.back();
                 });
               });
             }
@@ -1262,7 +1209,7 @@ SummitEditBox(
   searchNodeAddSection,
   where,
   id,
-  categorynumber,
+  type,
   parentid,
 ) {
   final updatelist = [];
@@ -1292,14 +1239,12 @@ SummitEditBox(
         Get.back();
       });
     } else {
-      var parentid;
       firestore.collection('Pinchannelin').get().then((value) {
         if (value.docs.isNotEmpty) {
           for (int j = 0; j < value.docs.length; j++) {
             final messageuniquecode = value.docs[j]['uniquecode'];
             final messageindex = value.docs[j]['index'];
-            if (messageindex == categorynumber && messageuniquecode == id) {
-              parentid = value.docs[j].id;
+            if (messageindex == type && messageuniquecode == parentid) {
               firestore
                   .collection('Pinchannelin')
                   .doc(value.docs[j].id)
@@ -1308,28 +1253,14 @@ SummitEditBox(
           }
         } else {}
       }).whenComplete(() {
-        firestore.collection('Calendar').get().then((value) {
-          if (value.docs.isNotEmpty) {
-            for (int j = 0; j < value.docs.length; j++) {
-              final messageuniquecode = value.docs[j]['parentid'];
-              if (messageuniquecode == parentid) {
-                firestore
-                    .collection('Calendar')
-                    .doc(value.docs[j].id)
-                    .update({'calname': textEditingControllerAddSheet.text});
-              }
-            }
-          } else {}
-        }).whenComplete(() {
-          Snack.snackbars(
-              context: context,
-              title: '정상적으로 처리되었어요',
-              backgroundcolor: Colors.green,
-              bordercolor: draw.backgroundcolor);
-          uiset.setloading(false);
-          linkspaceset.setspacelink(textEditingControllerAddSheet.text);
-          Get.back();
-        });
+        Snack.snackbars(
+            context: context,
+            title: '정상적으로 처리되었어요',
+            backgroundcolor: Colors.green,
+            bordercolor: draw.backgroundcolor);
+        uiset.setloading(false);
+        linkspaceset.setspacelink(textEditingControllerAddSheet.text);
+        Get.back();
       });
     }
   }

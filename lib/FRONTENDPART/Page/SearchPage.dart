@@ -60,16 +60,14 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                             left: 0,
                             child: SizedBox(
                               width: 80,
-                              child: DrawerScreen(index: 1),
+                              child: DrawerScreen(),
                             ),
                           )
                         : Positioned(
                             right: 0,
                             child: SizedBox(
                               width: 80,
-                              child: DrawerScreen(
-                                index: 1,
-                              ),
+                              child: DrawerScreen(),
                             ),
                           ),
                     HomeUi(),

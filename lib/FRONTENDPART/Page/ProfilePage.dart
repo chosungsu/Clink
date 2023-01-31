@@ -63,18 +63,14 @@ class _ProfilePageState extends State<ProfilePage>
                                 left: 0,
                                 child: SizedBox(
                                   width: 80,
-                                  child: DrawerScreen(
-                                    index: 3,
-                                  ),
+                                  child: DrawerScreen(),
                                 ),
                               )
                             : const Positioned(
                                 right: 0,
                                 child: SizedBox(
                                   width: 80,
-                                  child: DrawerScreen(
-                                    index: 3,
-                                  ),
+                                  child: DrawerScreen(),
                                 ),
                               ),
                         ProfileBody(context),
