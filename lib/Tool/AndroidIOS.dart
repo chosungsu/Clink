@@ -9,7 +9,6 @@ import 'TextSize.dart';
 
 CodeByPlatform(actionandroid, actionios, actionweb) {
   if (GetPlatform.isWeb) {
-    print('here');
     actionweb;
   } else {
     if (GetPlatform.isAndroid) {

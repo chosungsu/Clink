@@ -38,7 +38,7 @@ class _ProfilePageState extends State<ProfilePage>
     Settinglicensepage();
     uiset.searchpagemove = '';
     uiset.profileindex = 0;
-    uiset.pagenumber = 3;
+    uiset.pagenumber = 2;
     _controller = TextEditingController();
   }
 

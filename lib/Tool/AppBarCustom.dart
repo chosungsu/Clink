@@ -1,4 +1,4 @@
-// ignore_for_file: unused_local_variable, must_be_immutable, non_constant_identifier_names
+// ignore_for_file: unused_local_variable, must_be_immutable, non_constant_identifier_names, prefer_typing_uninitialized_variables
 
 import 'package:clickbyme/BACKENDPART/FIREBASE/SettingVP.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
@@ -181,7 +181,24 @@ class AppBarCustom extends StatelessWidget {
                                                         ),
                                                         color: draw
                                                             .backgroundcolor)
-                                                    : const SizedBox()
+                                                    : (uiset.pagenumber == 0
+                                                        ? ContainerDesign(
+                                                            child:
+                                                                GestureDetector(
+                                                              onTap: () {
+                                                                draw.setopennoti();
+                                                              },
+                                                              child: Icon(
+                                                                Ionicons
+                                                                    .notifications_outline,
+                                                                size: 30,
+                                                                color: draw
+                                                                    .color_textstatus,
+                                                              ),
+                                                            ),
+                                                            color: draw
+                                                                .backgroundcolor)
+                                                        : const SizedBox())
                                                 : const SizedBox(),
                                             uiset.pagenumber == 0 ||
                                                     uiset.pagenumber == 3

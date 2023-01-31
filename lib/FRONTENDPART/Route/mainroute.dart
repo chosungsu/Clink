@@ -30,7 +30,7 @@ class _mainrouteState extends State<mainroute>
   List pages = [
     const MYPage(),
     const SearchPage(),
-    const NotiAlarm(),
+    //const NotiAlarm(),
     const ProfilePage(),
   ];
 

@@ -64,13 +64,9 @@ View(BuildContext context, List<Map> drawerItems) {
                       .containsValue(Ionicons.ios_search_outline)) {
                     draw.setclose();
                     uiset.setpageindex(1);
-                  } else if (element
-                      .containsValue(Ionicons.notifications_outline)) {
-                    draw.setclose();
-                    uiset.setpageindex(2);
                   } else if (element.containsValue(Ionicons.settings_outline)) {
                     draw.setclose();
-                    uiset.setpageindex(3);
+                    uiset.setpageindex(2);
                   }
                   Get.to(() => const mainroute(), transition: Transition.fade);
                 },

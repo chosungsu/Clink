@@ -403,56 +403,6 @@ AddTemplateStreamFamily(spaceindata, id) {
   });
 }
 
-NotiAlarmStreamFamily() {
-  return firestore
-      .collection('AppNoticeByUsers')
-      .orderBy('date', descending: true)
-      .snapshots();
-}
-
-NotiAlarmRes1(snapshot, listid, readlist) {
-  notilist.listad.clear();
-  listid.clear();
-  readlist.clear();
-  final valuespace = snapshot.data!.docs;
-  for (var sp in valuespace) {
-    final messageText = sp.get('title');
-    final messageDate = sp.get('date');
-    if (sp.get('sharename').toString().contains(name) ||
-        sp.get('username') == name) {
-      readlist.add(sp.get('read'));
-      listid.add(sp.id);
-      notilist.listad
-          .add(CompanyPageList(title: messageText, date: messageDate));
-    }
-  }
-}
-
-CompanyNoticeStreamFamily() {
-  return firestore.collection('CompanyNotice').snapshots();
-}
-
-CompanyNoticeChild1(snapshot, str) {
-  var url;
-  //final List<CompanyPageList> listcompanytousers = [];
-  listcompanytousers.clear();
-  final valuespace = snapshot.data!.docs;
-  for (var sp in valuespace) {
-    final messageText = sp.get('title');
-    final messageDate = sp.get('date');
-    final messageyes = sp.get('showthisinapp');
-    final messagewhere = sp.get('where');
-    if (messageyes == 'yes' && messagewhere == str) {
-      listcompanytousers.add(CompanyPageList(
-        title: messageText,
-        date: messageDate,
-      ));
-      url = Uri.parse(sp.get('url'));
-    }
-  }
-  return url;
-}
-
 SpacepageStreamParent() {
   return firestore.collection('Pinchannel').snapshots();
 }

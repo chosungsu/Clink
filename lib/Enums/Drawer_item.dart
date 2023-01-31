@@ -9,9 +9,6 @@ List<Map> drawerItems_view = [
     'icon': Ionicons.ios_search_outline,
   },
   {
-    'icon': Ionicons.notifications_outline,
-  },
-  {
     'icon': Ionicons.settings_outline,
   },
 ];

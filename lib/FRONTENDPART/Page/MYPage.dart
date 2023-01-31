@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names, camel_case_types
+import 'package:clickbyme/FRONTENDPART/Page/NotiAlarm.dart';
 import 'package:clickbyme/Tool/Getx/uisetting.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -75,7 +76,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                     child: DrawerScreen(),
                                   ),
                                 ),
-                          GroupBody(context),
+                          MainBody(context),
                           uiset.loading == true
                               ? const Loader(
                                   wherein: 'route',
@@ -83,19 +84,37 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                               : Container()
                         ],
                       )
-                    : Stack(
-                        children: [
-                          GroupBody(context),
-                          uiset.loading == true
-                              ? const Loader(
-                                  wherein: 'route',
-                                )
-                              : Container()
-                        ],
-                      ))));
+                    : (draw.drawnoticeopen == true
+                        ? Stack(
+                            children: [
+                              MainBody(context),
+                              Positioned(
+                                right: 0,
+                                child: SizedBox(
+                                  width: Get.width < 1000
+                                      ? Get.width * 0.8
+                                      : Get.width * 0.5,
+                                  height: Get.height > 1500
+                                      ? Get.height * 0.5
+                                      : Get.height,
+                                  child: const NotiAlarm(),
+                                ),
+                              ),
+                            ],
+                          )
+                        : Stack(
+                            children: [
+                              MainBody(context),
+                              uiset.loading == true
+                                  ? const Loader(
+                                      wherein: 'route',
+                                    )
+                                  : Container()
+                            ],
+                          )))));
   }
 
-  Widget GroupBody(BuildContext context) {
+  Widget MainBody(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     return OrientationBuilder(builder: ((context, orientation) {
       return GetBuilder<navibool>(
@@ -112,7 +131,14 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                             draw.setclose();
                             Hive.box('user_setting').put('page_opened', false);
                           })
-                        : null;
+                        : (draw.drawnoticeopen == true
+                            ? setState(() {
+                                draw.drawnoticeopen = false;
+                                draw.setclosenoti();
+                                Hive.box('user_setting')
+                                    .put('noticepage_opened', false);
+                              })
+                            : null);
                   },
                   child: SizedBox(
                     height: height,
@@ -126,7 +152,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                   title: 'LOBBY',
                                   lefticon: false,
                                   righticon: true,
-                                  doubleicon: false,
+                                  doubleicon: true,
                                   lefticonname: Ionicons.add_outline,
                                   righticonname: Ionicons.add_outline,
                                   textcontroller: textcontroller,

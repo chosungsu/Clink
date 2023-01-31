@@ -2,7 +2,6 @@
 
 import 'dart:async';
 import 'dart:io';
-import 'package:clickbyme/BACKENDPART/FIREBASE/PersonalVP.dart';
 import 'package:clickbyme/Enums/Variables.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
@@ -21,6 +20,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../BACKENDPART/FIREBASE/NoticeVP.dart';
 import '../Page/LoginSignPage.dart';
 import '../../Tool/AndroidIOS.dart';
 import '../../Tool/BGColor.dart';
@@ -232,79 +232,6 @@ func7() async {
     }
     uiset.setloading(false);
   });
-}
-
-CompanyNotice(
-  String str,
-) {
-  final draw = Get.put(navibool());
-  final uiset = Get.put(uisetting());
-
-  return StreamBuilder<QuerySnapshot>(
-    stream: CompanyNoticeStreamFamily(),
-    builder: (context, snapshot) {
-      if (snapshot.hasData) {
-        CompanyNoticeChild1(snapshot, 'home');
-        return listcompanytousers.isEmpty
-            ? const SizedBox()
-            : Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    GestureDetector(
-                      onTap: () async {
-                        draw.setclose();
-                        launchUrl(CompanyNoticeChild1(snapshot, 'home'));
-                      },
-                      child: ContainerDesign(
-                        color: draw.backgroundcolor,
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Icon(
-                                Icons.campaign,
-                                color: draw.color_textstatus,
-                                size: 30,
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Flexible(
-                                  fit: FlexFit.tight,
-                                  child: Text(
-                                    listcompanytousers[0].title,
-                                    maxLines: 3,
-                                    style: TextStyle(
-                                        color: draw.color_textstatus,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: contentTextsize()),
-                                    overflow: TextOverflow.ellipsis,
-                                  )),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                  ],
-                ));
-      }
-      return LinearProgressIndicator(
-        backgroundColor: BGColor(),
-        valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
-      );
-    },
-  );
 }
 
 ADSHOW() {
