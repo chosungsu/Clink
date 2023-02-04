@@ -350,6 +350,7 @@ clickbtn1(context, textcontroller, where, id, categorynumber) {
           uiset.setloading(false);
           linkspaceset.setspacelink(textcontroller.text);
           Get.back(result: true);
+          textcontroller.text = '';
         });
       });
     } else {
@@ -367,6 +368,7 @@ clickbtn1(context, textcontroller, where, id, categorynumber) {
         uiset.setloading(false);
         linkspaceset.setspacelink(textcontroller.text);
         Get.back(result: true);
+        textcontroller.text = '';
       });
     }
   }
@@ -394,6 +396,7 @@ clickbtn2(context, textcontroller, checkid) {
       uiset.setloading(false);
       linkspaceset.setspacelink(textcontroller.text);
       Get.back();
+      textcontroller.text = '';
     });
   }
 }

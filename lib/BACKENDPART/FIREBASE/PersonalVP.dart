@@ -4,6 +4,7 @@ import 'package:clickbyme/Enums/Radio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import '../../Enums/Linkpage.dart';
 import '../../Enums/PageList.dart';
 import '../../Enums/Variables.dart';
@@ -86,12 +87,34 @@ pageaddlogic(context, id, index) async {
           'uniquecode': linkspaceset.indexcnt[index].familycode,
           'type': linkspaceset.indexcnt[index].type,
           'spaceentercontent': linkspaceset.indexcnt[index].type == 1 ? '' : []
-        }).whenComplete(() {
+        }).whenComplete(() async {
           Snack.snackbars(
               context: context,
               title: '성공적으로 추가되었습니다',
               backgroundcolor: Colors.green,
               bordercolor: draw.backgroundcolor);
+          await firestore.collection('AppNoticeByUsers').add({
+            'title': '[페이지] ${linkspaceset.indexcnt[index].placestr}에 추가되었습니다.',
+            'date': DateFormat('yyyy-MM-dd hh:mm')
+                    .parse(DateTime.now().toString())
+                    .toString()
+                    .split(' ')[0] +
+                ' ' +
+                DateFormat('yyyy-MM-dd hh:mm')
+                    .parse(DateTime.now().toString())
+                    .toString()
+                    .split(' ')[1]
+                    .split(':')[0] +
+                ':' +
+                DateFormat('yyyy-MM-dd hh:mm')
+                    .parse(DateTime.now().toString())
+                    .toString()
+                    .split(' ')[1]
+                    .split(':')[1],
+            'username': name,
+            'sharename': [],
+            'read': 'no',
+          });
         });
         linkspaceset.setspacetreein(Linkspacetreepage(
             subindex: index,
@@ -113,12 +136,35 @@ pageaddlogic(context, id, index) async {
             'type': linkspaceset.indexcnt[index].type,
             'spaceentercontent':
                 linkspaceset.indexcnt[index].type == 1 ? '' : []
-          }).whenComplete(() {
+          }).whenComplete(() async {
             Snack.snackbars(
                 context: context,
                 title: '성공적으로 추가되었습니다',
                 backgroundcolor: Colors.green,
                 bordercolor: draw.backgroundcolor);
+            await firestore.collection('AppNoticeByUsers').add({
+              'title':
+                  '[페이지] ${linkspaceset.indexcnt[index].placestr}에 추가되었습니다.',
+              'date': DateFormat('yyyy-MM-dd hh:mm')
+                      .parse(DateTime.now().toString())
+                      .toString()
+                      .split(' ')[0] +
+                  ' ' +
+                  DateFormat('yyyy-MM-dd hh:mm')
+                      .parse(DateTime.now().toString())
+                      .toString()
+                      .split(' ')[1]
+                      .split(':')[0] +
+                  ':' +
+                  DateFormat('yyyy-MM-dd hh:mm')
+                      .parse(DateTime.now().toString())
+                      .toString()
+                      .split(' ')[1]
+                      .split(':')[1],
+              'username': name,
+              'sharename': [],
+              'read': 'no',
+            });
           });
           linkspaceset.setspacetreein(Linkspacetreepage(
               subindex: index,
@@ -1187,6 +1233,30 @@ SummitEditBox(
         uiset.setloading(false);
         linkspaceset.setspacelink(textEditingControllerAddSheet.text);
         Get.back();
+      }).whenComplete(() async {
+        await firestore.collection('AppNoticeByUsers').add({
+          'title':
+              '[LOBOX] $initialtext에서 ${textEditingControllerAddSheet.text}으로  변경되었습니다.',
+          'date': DateFormat('yyyy-MM-dd hh:mm')
+                  .parse(DateTime.now().toString())
+                  .toString()
+                  .split(' ')[0] +
+              ' ' +
+              DateFormat('yyyy-MM-dd hh:mm')
+                  .parse(DateTime.now().toString())
+                  .toString()
+                  .split(' ')[1]
+                  .split(':')[0] +
+              ':' +
+              DateFormat('yyyy-MM-dd hh:mm')
+                  .parse(DateTime.now().toString())
+                  .toString()
+                  .split(' ')[1]
+                  .split(':')[1],
+          'username': name,
+          'sharename': [],
+          'read': 'no',
+        });
       });
     } else {
       firestore.collection('Pinchannelin').get().then((value) {
@@ -1202,7 +1272,7 @@ SummitEditBox(
             }
           }
         } else {}
-      }).whenComplete(() {
+      }).whenComplete(() async {
         Snack.snackbars(
             context: context,
             title: '정상적으로 처리되었어요',
@@ -1211,6 +1281,29 @@ SummitEditBox(
         uiset.setloading(false);
         linkspaceset.setspacelink(textEditingControllerAddSheet.text);
         Get.back();
+        await firestore.collection('AppNoticeByUsers').add({
+          'title':
+              '[LOBOX] $initialtext에서 ${textEditingControllerAddSheet.text}으로  변경되었습니다.',
+          'date': DateFormat('yyyy-MM-dd hh:mm')
+                  .parse(DateTime.now().toString())
+                  .toString()
+                  .split(' ')[0] +
+              ' ' +
+              DateFormat('yyyy-MM-dd hh:mm')
+                  .parse(DateTime.now().toString())
+                  .toString()
+                  .split(' ')[1]
+                  .split(':')[0] +
+              ':' +
+              DateFormat('yyyy-MM-dd hh:mm')
+                  .parse(DateTime.now().toString())
+                  .toString()
+                  .split(' ')[1]
+                  .split(':')[1],
+          'username': name,
+          'sharename': [],
+          'read': 'no',
+        });
       });
     }
   }

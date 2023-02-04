@@ -137,6 +137,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                 draw.setclosenoti();
                                 Hive.box('user_setting')
                                     .put('noticepage_opened', false);
+                                uiset.pagenumber = 0;
                               })
                             : null);
                   },

@@ -55,8 +55,9 @@ class _mainrouteState extends State<mainroute>
         .setmypagelistindex(Hive.box('user_setting').get('currentmypage') ?? 0);
     if (draw.drawopen == true) {
       draw.setclose();
-    }
-    if (uiset.profileindex != 0) {
+    } else if (draw.drawnoticeopen == true) {
+      closenotiroom();
+    } else if (uiset.profileindex != 0) {
       uiset.checkprofilepageindex(0);
     } else if (uiset.searchpagemove != '') {
       uiset.searchpagemove = '';

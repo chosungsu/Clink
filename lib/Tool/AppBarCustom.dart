@@ -47,7 +47,7 @@ class AppBarCustom extends StatelessWidget {
   Widget build(BuildContext context) {
     var updateid = '';
     var updateusername = [];
-    List<int> navinumlist = [0, 1, 2, 3];
+    List<int> navinumlist = [0, 1, 2];
     List<PageList> pagenamelist = [];
     final notilist = Get.put(notishow());
     final linkspaceset = Get.put(linkspacesetting());
@@ -214,8 +214,6 @@ class AppBarCustom extends StatelessWidget {
                                                 builder: (_) => ContainerDesign(
                                                     child: GestureDetector(
                                                         onTap: () {
-                                                          textcontroller.text =
-                                                              '';
                                                           OnClickedRightIcons(
                                                               context,
                                                               righticonname);
@@ -313,6 +311,8 @@ class AppBarCustom extends StatelessWidget {
                         : SPIconclick(context, textcontroller, searchnode))
                     : (righticonname == Icons.download
                         ? downloadFileExample(mainid, context)
-                        : null))));
+                        : (righticonname == Ionicons.ios_close
+                            ? closenotiroom()
+                            : null)))));
   }
 }

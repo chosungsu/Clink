@@ -69,21 +69,21 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             translations: Languages(),
             locale: Get.deviceLocale,
-            fallbackLocale: Locale('en', 'US'),
+            fallbackLocale: Locale('ko', 'KR'),
             home: const SplashPage(),
           ),
           GetCupertinoApp(
             debugShowCheckedModeBanner: false,
             translations: Languages(),
             locale: Get.deviceLocale,
-            fallbackLocale: Locale('en', 'US'),
+            fallbackLocale: Locale('ko', 'KR'),
             home: const SplashPage(),
           ),
           GetMaterialApp(
             debugShowCheckedModeBanner: false,
             translations: Languages(),
             locale: Get.deviceLocale,
-            fallbackLocale: Locale('en', 'US'),
+            fallbackLocale: Locale('ko', 'KR'),
             home: const SplashPage(),
           ));
     }));

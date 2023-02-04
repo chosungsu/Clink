@@ -64,6 +64,17 @@ Future getAppInfo({tomail = false}) async {
   } else {}
 }
 
+closenotiroom() {
+  final draw = Get.put(navibool());
+  final uiset = Get.put(uisetting());
+
+  if (draw.drawnoticeopen) {
+    draw.setclosenoti();
+    Hive.box('user_setting').put('noticepage_opened', false);
+    uiset.setpageindex(0);
+  } else {}
+}
+
 func2(BuildContext context) async {
   var updateid = '';
   var updateusername = [];

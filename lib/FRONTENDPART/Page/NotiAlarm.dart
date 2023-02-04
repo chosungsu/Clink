@@ -3,14 +3,14 @@
 import 'package:clickbyme/FRONTENDPART/UI(Widget/NotiUI.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/adapters.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import '../../Tool/Getx/uisetting.dart';
-import '../../Tool/Loader.dart';
 import '../../Tool/AppBarCustom.dart';
 import '../../Tool/Getx/navibool.dart';
 import '../../Tool/NoBehavior.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'DrawerScreen.dart';
+
+import '../Route/subuiroute.dart';
 
 class NotiAlarm extends StatefulWidget {
   const NotiAlarm({
@@ -20,21 +20,18 @@ class NotiAlarm extends StatefulWidget {
   State<StatefulWidget> createState() => _NotiAlarmState();
 }
 
-class _NotiAlarmState extends State<NotiAlarm>
-    with WidgetsBindingObserver, TickerProviderStateMixin {
+class _NotiAlarmState extends State<NotiAlarm> {
   final draw = Get.put(navibool());
   final uiset = Get.put(uisetting());
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    uiset.pagenumber = 3;
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    //notilist.noticontroller.dispose();
     super.dispose();
   }
 
@@ -43,16 +40,56 @@ class _NotiAlarmState extends State<NotiAlarm>
     return GetBuilder<navibool>(
         builder: (_) => Scaffold(
             backgroundColor: draw.backgroundcolor,
-            body: SafeArea(child: NotiBody(context))));
+            body: SafeArea(
+              child: NotiBody(context),
+            )));
   }
 
   Widget NotiBody(BuildContext context) {
+    double height = MediaQuery.of(context).size.height - 60;
     return GetBuilder<navibool>(
         builder: (_) => LayoutBuilder(
               builder: ((context, constraint) {
-                return UI(
-                  constraint.maxWidth,
-                  constraint.maxHeight,
+                return SizedBox(
+                  height: height,
+                  child: GetBuilder<uisetting>(
+                    builder: (controller) {
+                      return Container(
+                          decoration: BoxDecoration(
+                              color: draw.backgroundcolor,
+                              border: Border(
+                                left: BorderSide(
+                                    color: draw.color_textstatus, width: 1),
+                              )),
+                          child: Column(
+                            children: [
+                              AppBarCustom(
+                                title: '',
+                                lefticon: false,
+                                righticon: true,
+                                doubleicon: false,
+                                lefticonname: Ionicons.add_outline,
+                                righticonname: Ionicons.ios_close,
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Flexible(
+                                  fit: FlexFit.tight,
+                                  child: ScrollConfiguration(
+                                      behavior: NoBehavior(),
+                                      child: LayoutBuilder(
+                                        builder: ((context, constraint) {
+                                          return UI(
+                                            constraint.maxWidth,
+                                            constraint.maxHeight,
+                                          );
+                                        }),
+                                      ))),
+                            ],
+                          ));
+                    },
+                  ),
                 );
               }),
             ));
