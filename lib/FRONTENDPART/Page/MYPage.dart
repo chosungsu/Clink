@@ -54,6 +54,9 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    double width = Get.width < 1000 ? Get.width * 0.7 : Get.width * 0.5;
+    double height = Get.height > 1500 ? Get.height * 0.5 : Get.height;
+
     return GetBuilder<navibool>(
         builder: (_) => Scaffold(
             backgroundColor: draw.backgroundcolor,
@@ -91,13 +94,12 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                               Positioned(
                                 right: 0,
                                 child: SizedBox(
-                                  width: Get.width < 1000
-                                      ? Get.width * 0.8
-                                      : Get.width * 0.5,
-                                  height: Get.height > 1500
-                                      ? Get.height * 0.5
-                                      : Get.height,
-                                  child: const NotiAlarm(),
+                                  width: width,
+                                  height: height,
+                                  child: NotiAlarm(
+                                    width: width,
+                                    height: height,
+                                  ),
                                 ),
                               ),
                             ],

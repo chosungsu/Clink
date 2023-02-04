@@ -6,6 +6,7 @@ import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import '../../../Enums/Variables.dart';
@@ -425,10 +426,9 @@ WhatInPageScreen(context, id, controller, searchNode, maxWidth, maxHeight) {
       SizedBox(
         width: maxWidth,
         child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Wrap(
-              alignment: WrapAlignment.start,
-              direction: Axis.horizontal,
+            scrollDirection: Axis.vertical,
+            child: StaggeredGrid.count(
+              crossAxisCount: 2,
               children: List.generate(linkspaceset.indexcnt.length, (index) {
                 return Container(
                   width: maxWidth > 1100
@@ -438,11 +438,10 @@ WhatInPageScreen(context, id, controller, searchNode, maxWidth, maxHeight) {
                   child: WhatInPageScreenUI(
                       context, id, index, controller, searchNode, 'ls'),
                 );
-              })),
-        ),
+              }),
+            )),
       ),
       ListView.builder(
-          //controller: scrollController,
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),

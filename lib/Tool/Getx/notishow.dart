@@ -1,18 +1,15 @@
 // ignore_for_file: camel_case_types
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/animation.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import '../../Enums/PageList.dart';
+import '../../Enums/Variables.dart';
 
 class notishow extends GetxController {
   List listad = [];
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
   bool isread = false;
   List updateid = [];
-  String name = Hive.box('user_info').get('id') ?? '';
-  int whatnoticepagenum = 0;
+  List<bool> checkboxnoti = List.empty(growable: true);
   late AnimationController noticontroller;
 
   void ringing(AnimationController noticontroller) {
@@ -33,10 +30,8 @@ class notishow extends GetxController {
     notifyChildrens();
   }
 
-  void noticepageset(int num) async {
-    whatnoticepagenum = num;
-    update();
-    notifyChildrens();
+  void setcheckboxnoti() async {
+    checkboxnoti = List.filled(updateid.length, false, growable: true);
   }
 
   void isreadnoti({init = true}) async {

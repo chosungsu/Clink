@@ -1,15 +1,16 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:get/get.dart';
-
 import '../../Enums/PageList.dart';
 import '../../Enums/Variables.dart';
 import '../../Tool/Getx/linkspacesetting.dart';
+import '../../Tool/Getx/notishow.dart';
 import '../../Tool/Getx/uisetting.dart';
 
 ///Getx 호출
 final linkspaceset = Get.put(linkspacesetting());
 final uiset = Get.put(uisetting());
+final notilist = Get.put(notishow());
 
 NotiAlarmStreamFamily() {
   return firestore
@@ -34,4 +35,5 @@ NotiAlarmRes1(snapshot, listid, readlist) {
           .add(CompanyPageList(title: messageText, date: messageDate));
     }
   }
+  notilist.setcheckboxnoti();
 }

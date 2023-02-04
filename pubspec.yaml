@@ -73,7 +73,7 @@ dependencies:
   path_provider: 
   device_info_plus: 
   #UI
-  
+  flutter_staggered_grid_view:
   outline_gradient_button:
   sign_button:
   fab_circular_menu:
@@ -117,8 +117,7 @@ dependencies:
   local_auth_android: 
   google_mobile_ads: 
   store_redirect: 
-  qr_flutter: ^4.0.0
-  shared_preferences_web: ^2.0.4
+  shared_preferences_web: 
   
   
   

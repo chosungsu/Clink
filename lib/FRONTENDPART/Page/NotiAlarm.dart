@@ -3,19 +3,21 @@
 import 'package:clickbyme/FRONTENDPART/UI(Widget/NotiUI.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import '../../Tool/Getx/uisetting.dart';
 import '../../Tool/AppBarCustom.dart';
 import '../../Tool/Getx/navibool.dart';
 import '../../Tool/NoBehavior.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
-import '../Route/subuiroute.dart';
-
 class NotiAlarm extends StatefulWidget {
   const NotiAlarm({
     Key? key,
+    required this.width,
+    required this.height,
   }) : super(key: key);
+  final double width;
+  final double height;
+
   @override
   State<StatefulWidget> createState() => _NotiAlarmState();
 }
@@ -64,14 +66,18 @@ class _NotiAlarmState extends State<NotiAlarm> {
                           child: Column(
                             children: [
                               AppBarCustom(
-                                title: '',
+                                title: 'Notice',
                                 lefticon: false,
                                 righticon: true,
                                 doubleicon: false,
                                 lefticonname: Ionicons.add_outline,
                                 righticonname: Ionicons.ios_close,
                               ),
-                              const SizedBox(
+                              Container(
+                                height: 20,
+                              ),
+                              SetBoxUI(),
+                              Container(
                                 height: 20,
                               ),
                               Flexible(
@@ -81,9 +87,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                       child: LayoutBuilder(
                                         builder: ((context, constraint) {
                                           return UI(
-                                            constraint.maxWidth,
-                                            constraint.maxHeight,
-                                          );
+                                              widget.width, widget.height);
                                         }),
                                       ))),
                             ],
