@@ -3,6 +3,7 @@
 import 'package:clickbyme/FRONTENDPART/UI(Widget/NotiUI.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
+import '../../Tool/Getx/notishow.dart';
 import '../../Tool/Getx/uisetting.dart';
 import '../../Tool/AppBarCustom.dart';
 import '../../Tool/Getx/navibool.dart';
@@ -25,10 +26,14 @@ class NotiAlarm extends StatefulWidget {
 class _NotiAlarmState extends State<NotiAlarm> {
   final draw = Get.put(navibool());
   final uiset = Get.put(uisetting());
+  final notilist = Get.put(notishow());
 
   @override
   void initState() {
     super.initState();
+    notilist.allcheck = false;
+    notilist.checkboxnoti =
+        List.filled(notilist.listad.length, false, growable: true);
     uiset.pagenumber = 3;
   }
 
@@ -76,7 +81,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                               Container(
                                 height: 20,
                               ),
-                              SetBoxUI(),
+                              SetBoxUI(widget.width),
                               Container(
                                 height: 20,
                               ),

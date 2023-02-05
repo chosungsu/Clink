@@ -4,14 +4,17 @@ import 'package:clickbyme/sheets/BottomSheet/AddContentWithBtn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
+import '../../BACKENDPART/FIREBASE/NoticeVP.dart';
 import '../../Enums/Variables.dart';
 import '../../Tool/BGColor.dart';
 import '../../Tool/ContainerDesign.dart';
 import '../../Tool/FlushbarStyle.dart';
+import '../../Tool/Getx/linkspacesetting.dart';
 import '../../Tool/Getx/uisetting.dart';
 import '../../Tool/TextSize.dart';
 
 final uiset = Get.put(uisetting());
+final linkspaceset = Get.put(linkspacesetting());
 
 Widgets_plusbtn(
     context, checkid, textcontroller, searchnode, where, id, categorypicknum) {
@@ -113,10 +116,7 @@ Widgets_plusbtncontent1(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-              where == 'editnametemplate' || where == 'editnametemplatein'
-                  ? '이름 변경'
-                  : '페이지 추가',
+          Text('페이지 추가',
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -127,9 +127,7 @@ Widgets_plusbtncontent1(
     children: [
       ContainerTextFieldDesign(
         searchNodeAddSection: searchnode,
-        string: where == 'editnametemplate' || where == 'editnametemplatein'
-            ? '변경할 스페이스 이름 입력'
-            : '추가할 페이지 제목 입력',
+        string: '추가할 페이지 제목 입력',
         textEditingControllerAddSheet: textcontroller,
       ),
     ],
@@ -284,93 +282,30 @@ clickbtn1(context, textcontroller, where, id, categorynumber) {
   final initialtext = textcontroller.text;
   var updateid;
   int indexcnt = linkspaceset.indexcnt.length;
+  /*SaveNoti('box', linkspaceset.indexcnt[index].placestr, '',
+                add: true);*/
 
   if (textcontroller.text.isEmpty) {
     uiset.checktf(false);
   } else {
     uiset.setloading(true);
-    if (where == 'editnametemplate') {
-      firestore.collection('PageView').get().then((value) {
-        for (int i = 0; i < value.docs.length; i++) {
-          if (value.docs[i].get('id') == id &&
-              value.docs[i].get('type') == categorynumber &&
-              value.docs[i].get('spacename') == initialtext) {
-            updateid = value.docs[i].id;
-          }
-        }
-        firestore
-            .collection('PageView')
-            .doc(updateid)
-            .update({'spacename': textcontroller.text}).whenComplete(() {
-          Snack.snackbars(
-              context: context,
-              title: '정상적으로 처리되었어요',
-              backgroundcolor: Colors.green,
-              bordercolor: draw.backgroundcolor);
-          uiset.setloading(false);
-          linkspaceset.setspacelink(textcontroller.text);
-          Get.back(result: true);
-        });
-      });
-    } else if (where == 'editnametemplatein') {
-      var parentid;
-      firestore.collection('Pinchannelin').get().then((value) {
-        if (value.docs.isNotEmpty) {
-          for (int j = 0; j < value.docs.length; j++) {
-            final messageuniquecode = value.docs[j]['uniquecode'];
-            final messageindex = value.docs[j]['index'];
-            if (messageindex == categorynumber && messageuniquecode == id) {
-              parentid = value.docs[j].id;
-              firestore
-                  .collection('Pinchannelin')
-                  .doc(value.docs[j].id)
-                  .update({'addname': textcontroller.text});
-            }
-          }
-        } else {}
-      }).whenComplete(() {
-        firestore.collection('Calendar').get().then((value) {
-          if (value.docs.isNotEmpty) {
-            for (int j = 0; j < value.docs.length; j++) {
-              final messageuniquecode = value.docs[j]['parentid'];
-              if (messageuniquecode == parentid) {
-                firestore
-                    .collection('Calendar')
-                    .doc(value.docs[j].id)
-                    .update({'calname': textcontroller.text});
-              }
-            }
-          } else {}
-        }).whenComplete(() {
-          Snack.snackbars(
-              context: context,
-              title: '정상적으로 처리되었어요',
-              backgroundcolor: Colors.green,
-              bordercolor: draw.backgroundcolor);
-          uiset.setloading(false);
-          linkspaceset.setspacelink(textcontroller.text);
-          Get.back(result: true);
-          textcontroller.text = '';
-        });
-      });
-    } else {
-      firestore.collection('Pinchannel').add({
-        'username': usercode,
-        'linkname': textcontroller.text,
-        'setting': 'block',
-        'email': useremail
-      }).whenComplete(() {
-        Snack.snackbars(
-            context: context,
-            title: '정상적으로 처리되었어요',
-            backgroundcolor: Colors.green,
-            bordercolor: draw.backgroundcolor);
-        uiset.setloading(false);
-        linkspaceset.setspacelink(textcontroller.text);
-        Get.back(result: true);
-        textcontroller.text = '';
-      });
-    }
+    firestore.collection('Pinchannel').add({
+      'username': usercode,
+      'linkname': textcontroller.text,
+      'setting': 'block',
+      'email': useremail
+    }).whenComplete(() {
+      Snack.snackbars(
+          context: context,
+          title: '정상적으로 처리되었어요',
+          backgroundcolor: Colors.green,
+          bordercolor: draw.backgroundcolor);
+      uiset.setloading(false);
+      linkspaceset.setspacelink(textcontroller.text);
+      Get.back(result: true);
+      SaveNoti('page', textcontroller.text, '', add: true);
+      textcontroller.text = '';
+    });
   }
 }
 
@@ -396,6 +331,9 @@ clickbtn2(context, textcontroller, checkid) {
       uiset.setloading(false);
       linkspaceset.setspacelink(textcontroller.text);
       Get.back();
+      SaveNoti('box', uiset.pagelist[uiset.mypagelistindex].title,
+          textcontroller.text,
+          add: true);
       textcontroller.text = '';
     });
   }

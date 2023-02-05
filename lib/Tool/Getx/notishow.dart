@@ -1,25 +1,18 @@
 // ignore_for_file: camel_case_types
 
-import 'package:flutter/animation.dart';
 import 'package:get/get.dart';
 import '../../Enums/PageList.dart';
 import '../../Enums/Variables.dart';
 
 class notishow extends GetxController {
+  bool allcheck = false;
   List listad = [];
   bool isread = false;
   List updateid = [];
   List<bool> checkboxnoti = List.empty(growable: true);
-  late AnimationController noticontroller;
-
-  void ringing(AnimationController noticontroller) {
-    noticontroller.forward();
-    update();
-    notifyChildrens();
-  }
 
   void setnoti(String a, String b) async {
-    listad.add(CompanyPageList(title: a, date: b));
+    listad.add(NotiList(title: a, date: b));
     update();
     notifyChildrens();
   }
@@ -30,8 +23,18 @@ class notishow extends GetxController {
     notifyChildrens();
   }
 
-  void setcheckboxnoti() async {
+  void setcheckboxnoti({init = false}) async {
+    allcheck = true;
+    checkboxnoti = List.filled(updateid.length, init, growable: true);
+    update();
+    notifyChildrens();
+  }
+
+  void resetcheckboxnoti() async {
+    allcheck = false;
     checkboxnoti = List.filled(updateid.length, false, growable: true);
+    update();
+    notifyChildrens();
   }
 
   void isreadnoti({init = true}) async {

@@ -2,6 +2,7 @@
 
 import 'dart:ui';
 
+import 'package:clickbyme/FRONTENDPART/Route/subuiroute.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
@@ -23,30 +24,73 @@ final draw = Get.put(navibool());
 final uiset = Get.put(uisetting());
 final notilist = Get.put(notishow());
 
-SetBoxUI() {
+SetBoxUI(maxWidth) {
   bool _ischecked = false;
   return StatefulBuilder(
     builder: (context, setState) {
-      return SizedBox(
+      return Container(
           height: 30,
+          width: maxWidth,
+          decoration: BoxDecoration(
+              color: draw.backgroundcolor,
+              border: Border(
+                top: BorderSide(color: draw.color_textstatus, width: 1),
+                bottom: BorderSide(color: draw.color_textstatus, width: 1),
+              )),
           child: Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: 30,
-                  child: Checkbox(
-                      value: _ischecked,
-                      onChanged: (value) {
-                        setState(() {
-                          _ischecked = value!;
-                        });
-                      }),
-                )
-              ],
-            ),
-          ));
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                physics: const ScrollPhysics(),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 30,
+                            child: Checkbox(
+                                value: notilist.allcheck,
+                                onChanged: (value) {
+                                  setState(() {
+                                    notilist.allcheck = value!;
+                                    if (notilist.allcheck) {
+                                      notilist.setcheckboxnoti(
+                                          init: _ischecked);
+                                    } else {
+                                      notilist.resetcheckboxnoti();
+                                    }
+                                  });
+                                }),
+                          ),
+                          Text(
+                            '전체 선택',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: contentsmallTextsize(),
+                                color: draw.color_textstatus),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    SizedBox(
+                        child: GestureDetector(
+                      onTap: () => deletenoti(context),
+                      child: Text(
+                        '삭제',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: contentsmallTextsize(),
+                            color: draw.color_textstatus),
+                      ),
+                    ))
+                  ],
+                ),
+              )));
     },
   );
 }
@@ -152,7 +196,7 @@ Page0(
         width: maxWidth,
         height: maxHeight,
         child: ListView.builder(
-            physics: const BouncingScrollPhysics(),
+            physics: const ScrollPhysics(),
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             itemCount: notilist.listad.length,
@@ -241,9 +285,13 @@ Page0(
                           )
                         ],
                       ),
-                      const SizedBox(
-                        height: 10,
-                      )
+                      index == notilist.listad.length - 1
+                          ? const SizedBox(
+                              height: 70,
+                            )
+                          : const SizedBox(
+                              height: 10,
+                            )
                     ],
                   ));
             }),
@@ -349,60 +397,18 @@ Page1(
                         )
                       ],
                     ),
-                    const SizedBox(
-                      height: 10,
-                    )
+                    index == notilist.listad.length - 1
+                        ? const SizedBox(
+                            height: 70,
+                          )
+                        : const SizedBox(
+                            height: 10,
+                          )
                   ],
                 ),
               );
             }),
       );
     },
-  );
-}
-
-allread() {
-  return Padding(
-    padding: const EdgeInsets.only(left: 20, right: 20),
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(
-          height: 5,
-        ),
-        allreadBox()
-      ],
-    ),
-  );
-}
-
-allreadBox() {
-  return SizedBox(
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        GestureDetector(
-          onTap: () {
-            /*setState(() {
-              for (int i = 0; i < listid.length; i++) {
-                notilist.updatenoti(listid[i]);
-                readlist[i] = 'yes';
-              }
-            });*/
-          },
-          child: Text(
-            'notipageread'.tr,
-            style: TextStyle(
-                color: Colors.blue,
-                fontWeight: FontWeight.bold,
-                fontSize: contentTextsize(),
-                decoration: TextDecoration.underline),
-            overflow: TextOverflow.ellipsis,
-          ),
-        )
-      ],
-    ),
   );
 }

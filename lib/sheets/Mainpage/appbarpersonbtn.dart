@@ -3,6 +3,7 @@
 import 'package:clickbyme/Enums/Variables.dart';
 import 'package:clickbyme/sheets/BottomSheet/AddContentWithBtn.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import '../../BACKENDPART/Auth/GoogleSignInController.dart';
 import '../../FRONTENDPART/Route/subuiroute.dart';
@@ -24,70 +25,46 @@ Widgets_settingpageiconclick(
   final uiset = Get.put(uisetting());
   final peopleadd = Get.put(PeopleAdd());
 
-  title = SizedBox(
-      height: 50,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text('MY 정보',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25))
-        ],
-      ));
+  title = const SizedBox();
   content = StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
       children: [
-        GestureDetector(
+        ListTile(
           onTap: () {},
-          child: Row(
-            children: [
-              Flexible(
-                fit: FlexFit.tight,
-                child: Text('현재 닉네임',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: contentTextsize())),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Text(peopleadd.secondname,
-                  maxLines: 2,
-                  style: TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTextsize(),
-                      overflow: TextOverflow.ellipsis)),
-            ],
+          subtitle: Text(peopleadd.secondname,
+              maxLines: 2,
+              style: TextStyle(
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentsmallTextsize(),
+                  overflow: TextOverflow.ellipsis)),
+          title: Text(
+            '닉네임',
+            softWrap: true,
+            textAlign: TextAlign.start,
+            style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: contentTextsize()),
+            overflow: TextOverflow.ellipsis,
           ),
         ),
-        const SizedBox(
-          height: 30,
-        ),
-        GestureDetector(
+        ListTile(
           onTap: () {},
-          child: Row(
-            children: [
-              Flexible(
-                fit: FlexFit.tight,
-                child: Text('고유 코드',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: contentTextsize())),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              SelectableText(usercode,
-                  style: TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTextsize())),
-            ],
+          subtitle: SelectableText(usercode,
+              style: TextStyle(
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentsmallTextsize())),
+          title: Text(
+            '고유 코드',
+            softWrap: true,
+            textAlign: TextAlign.start,
+            style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: contentTextsize()),
+            overflow: TextOverflow.ellipsis,
           ),
         ),
         const Divider(
@@ -97,7 +74,7 @@ Widgets_settingpageiconclick(
           indent: 0,
           endIndent: 0,
         ),
-        GestureDetector(
+        ListTile(
           onTap: () {
             Get.back();
             uiset.checktf(true);
@@ -109,78 +86,38 @@ Widgets_settingpageiconclick(
                 context, textcontroller, searchnode)[2];
             AddContentWithBtn(context, title2, content2, btn2, searchnode);
           },
-          child: Row(
-            children: [
-              Flexible(
-                  fit: FlexFit.tight,
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.badge,
-                        size: 30,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('닉네임 변경',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTextsize())),
-                        ],
-                      ),
-                    ],
-                  )),
-              Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade400)
-            ],
+          trailing: Icon(Ionicons.chevron_forward, color: Colors.grey.shade400),
+          title: Text(
+            '닉네임 변경',
+            softWrap: true,
+            textAlign: TextAlign.start,
+            style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: contentTextsize()),
+            overflow: TextOverflow.ellipsis,
           ),
         ),
-        const SizedBox(
-          height: 30,
-        ),
-        GestureDetector(
-          onTap: () async {
+        ListTile(
+          onTap: () {
             Get.back();
             GoogleSignInController().logout(context, name);
             GoToLogin('isnotfirst');
           },
-          child: Row(
-            children: [
-              Flexible(
-                  fit: FlexFit.tight,
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.manage_accounts,
-                        size: 30,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('다른 아이디 로그인',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTextsize())),
-                        ],
-                      ),
-                    ],
-                  )),
-              Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade400)
-            ],
+          trailing: Icon(Ionicons.chevron_forward, color: Colors.grey.shade400),
+          title: Text(
+            '다른 아이디 로그인',
+            softWrap: true,
+            textAlign: TextAlign.start,
+            style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: contentTextsize()),
+            overflow: TextOverflow.ellipsis,
           ),
         ),
-        const SizedBox(
-          height: 30,
-        ),
-        GestureDetector(
-          onTap: () async {
+        ListTile(
+          onTap: () {
             Get.back();
             title3 = Widgets_settingpagedeleteuser(
                 context, textcontroller, searchnode)[0];
@@ -190,36 +127,18 @@ Widgets_settingpageiconclick(
                 context, textcontroller, searchnode)[2];
             AddContentWithBtn(context, title3, content3, btn3, searchnode);
           },
-          child: Row(
-            children: [
-              Flexible(
-                  fit: FlexFit.tight,
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.account_circle,
-                        size: 30,
-                        color: Colors.red,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('회원탈퇴',
-                              style: TextStyle(
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTextsize())),
-                        ],
-                      ),
-                    ],
-                  )),
-              Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade400)
-            ],
+          trailing: Icon(Ionicons.chevron_forward, color: Colors.grey.shade400),
+          title: Text(
+            '회원탈퇴',
+            softWrap: true,
+            textAlign: TextAlign.start,
+            style: TextStyle(
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+                fontSize: contentTextsize()),
+            overflow: TextOverflow.ellipsis,
           ),
-        )
+        ),
       ],
     );
   });

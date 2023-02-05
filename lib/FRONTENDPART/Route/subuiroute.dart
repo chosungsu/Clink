@@ -75,10 +75,12 @@ closenotiroom() {
   } else {}
 }
 
-func2(BuildContext context) async {
-  var updateid = '';
+deletenoti(context) async {
+  var deleteid = '';
   var updateusername = [];
   final notilist = Get.put(notishow());
+  List deletenotiindexlist = [notilist.checkboxnoti.indexOf(true)];
+  List deletelist = [];
   final reloadpage = await Get.dialog(OSDialog(
           context,
           '경고',
@@ -90,32 +92,70 @@ func2(BuildContext context) async {
           pressed2)) ??
       false;
   if (reloadpage) {
-    firestore.collection('AppNoticeByUsers').get().then((value) {
-      for (var element in value.docs) {
-        if (element.get('sharename').toString().contains(name) == true) {
-          updateid = element.id;
-          updateusername =
-              element.get('sharename').toString().split(',').toList();
-          if (updateusername.length == 1) {
-            firestore.collection('AppNoticeByUsers').doc(updateid).delete();
+    for (int i = 0; i < deletenotiindexlist.length; i++) {
+      deletelist.insert(i, notilist.listad[deletenotiindexlist[i]].title);
+    }
+    if (deletelist.length == notilist.listad.length) {
+      //전체 삭제인 경우
+      firestore.collection('AppNoticeByUsers').get().then((value) {
+        for (var element in value.docs) {
+          if (element.get('sharename').toString().contains(name) == true) {
+            deleteid = element.id;
+            updateusername =
+                element.get('sharename').toString().split(',').toList();
+            if (updateusername.length == 1) {
+              firestore.collection('AppNoticeByUsers').doc(deleteid).delete();
+            } else {
+              updateusername
+                  .removeWhere((element) => element.toString().contains(name));
+              firestore
+                  .collection('AppNoticeByUsers')
+                  .doc(deleteid)
+                  .update({'sharename': updateusername});
+            }
           } else {
-            updateusername
-                .removeWhere((element) => element.toString().contains(name));
-            firestore
-                .collection('AppNoticeByUsers')
-                .doc(updateid)
-                .update({'sharename': updateusername});
+            if (element.get('username').toString() == name) {
+              deleteid = element.id;
+              firestore.collection('AppNoticeByUsers').doc(deleteid).delete();
+            } else {}
           }
-        } else {
-          if (element.get('username').toString() == name) {
-            updateid = element.id;
-            firestore.collection('AppNoticeByUsers').doc(updateid).delete();
-          } else {}
         }
-      }
-    }).whenComplete(() {
-      notilist.isreadnoti();
-    });
+      }).whenComplete(() {
+        notilist.allcheck = false;
+        notilist.isreadnoti();
+      });
+    } else {
+      //개별 삭제인 경우
+      firestore.collection('AppNoticeByUsers').get().then((value) {
+        for (var element in value.docs) {
+          if (deletelist.contains(element.get('title'))) {
+            if (element.get('sharename').toString().contains(name) == true) {
+              deleteid = element.id;
+              updateusername =
+                  element.get('sharename').toString().split(',').toList();
+              if (updateusername.length == 1) {
+                firestore.collection('AppNoticeByUsers').doc(deleteid).delete();
+              } else {
+                updateusername.removeWhere(
+                    (element) => element.toString().contains(name));
+                firestore
+                    .collection('AppNoticeByUsers')
+                    .doc(deleteid)
+                    .update({'sharename': updateusername});
+              }
+            } else {
+              if (element.get('username').toString() == name) {
+                deleteid = element.id;
+                firestore.collection('AppNoticeByUsers').doc(deleteid).delete();
+              } else {}
+            }
+          }
+        }
+      }).whenComplete(() {
+        notilist.allcheck = false;
+        notilist.isreadnoti();
+      });
+    }
   }
 }
 
@@ -185,6 +225,7 @@ func4(context, textcontroller, searchnode, where, id, categorypicknum) async {
     });
   }
   if (checkid != '') {
+    textcontroller.text = '';
     uiset.checktf(true);
     title = Widgets_plusbtn(context, checkid, textcontroller, searchnode, where,
         id, categorypicknum)[0];

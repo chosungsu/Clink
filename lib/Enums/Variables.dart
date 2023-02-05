@@ -39,7 +39,7 @@ var spacefamilytype;
 var spacefamilyindex;
 //Here are MYPage Variables
 final List<Linkpage> listpinlink = [];
-final List<CompanyPageList> listcompanytousers = [];
+final List<NotiList> listcompanytousers = [];
 //Here are SearchPage Variables
 bool isbought = false;
 var textchangelistener = '';

@@ -302,7 +302,7 @@ class AppBarCustom extends StatelessWidget {
             99,
           )
         : (righticonname == AntDesign.delete
-            ? func2(context)
+            ? deletenoti(context)
             : (righticonname == Icons.star_border || righticonname == Icons.star
                 ? func7()
                 : (righticonname == Icons.person_outline

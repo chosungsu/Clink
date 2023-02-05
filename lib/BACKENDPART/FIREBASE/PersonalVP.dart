@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, prefer_typing_uninitialized_variables, unused_local_variable
 
+import 'package:clickbyme/BACKENDPART/FIREBASE/NoticeVP.dart';
 import 'package:clickbyme/Enums/Radio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -93,28 +94,7 @@ pageaddlogic(context, id, index) async {
               title: '성공적으로 추가되었습니다',
               backgroundcolor: Colors.green,
               bordercolor: draw.backgroundcolor);
-          await firestore.collection('AppNoticeByUsers').add({
-            'title': '[페이지] ${linkspaceset.indexcnt[index].placestr}에 추가되었습니다.',
-            'date': DateFormat('yyyy-MM-dd hh:mm')
-                    .parse(DateTime.now().toString())
-                    .toString()
-                    .split(' ')[0] +
-                ' ' +
-                DateFormat('yyyy-MM-dd hh:mm')
-                    .parse(DateTime.now().toString())
-                    .toString()
-                    .split(' ')[1]
-                    .split(':')[0] +
-                ':' +
-                DateFormat('yyyy-MM-dd hh:mm')
-                    .parse(DateTime.now().toString())
-                    .toString()
-                    .split(' ')[1]
-                    .split(':')[1],
-            'username': name,
-            'sharename': [],
-            'read': 'no',
-          });
+          SaveNoti('box', linkspaceset.indexcnt[index].placestr, '', add: true);
         });
         linkspaceset.setspacetreein(Linkspacetreepage(
             subindex: index,
@@ -137,34 +117,13 @@ pageaddlogic(context, id, index) async {
             'spaceentercontent':
                 linkspaceset.indexcnt[index].type == 1 ? '' : []
           }).whenComplete(() async {
+            SaveNoti('box', linkspaceset.indexcnt[index].placestr, '',
+                add: true);
             Snack.snackbars(
                 context: context,
                 title: '성공적으로 추가되었습니다',
                 backgroundcolor: Colors.green,
                 bordercolor: draw.backgroundcolor);
-            await firestore.collection('AppNoticeByUsers').add({
-              'title':
-                  '[페이지] ${linkspaceset.indexcnt[index].placestr}에 추가되었습니다.',
-              'date': DateFormat('yyyy-MM-dd hh:mm')
-                      .parse(DateTime.now().toString())
-                      .toString()
-                      .split(' ')[0] +
-                  ' ' +
-                  DateFormat('yyyy-MM-dd hh:mm')
-                      .parse(DateTime.now().toString())
-                      .toString()
-                      .split(' ')[1]
-                      .split(':')[0] +
-                  ':' +
-                  DateFormat('yyyy-MM-dd hh:mm')
-                      .parse(DateTime.now().toString())
-                      .toString()
-                      .split(' ')[1]
-                      .split(':')[1],
-              'username': name,
-              'sharename': [],
-              'read': 'no',
-            });
           });
           linkspaceset.setspacetreein(Linkspacetreepage(
               subindex: index,
@@ -577,6 +536,8 @@ Widgets_editpageconsole(
                   }
                 }).whenComplete(() {
                   uiset.setloading(false);
+                  SaveNoti('page', uiset.pagelist[index].title, '',
+                      delete: true);
                   Get.back();
                 });
               });
@@ -710,6 +671,7 @@ Widgets_horizontalbtn(
   var updateid = [];
   var updateindex = [];
   var radiogroups = [0, 1, 2];
+  String prevtitle = placestr;
   String changeset = canshow == '나 혼자만'
       ? radiogroup1[0]
       : (canshow == '팔로워만 공개' ? radiogroup1[1] : radiogroup1[2]);
@@ -748,8 +710,15 @@ Widgets_horizontalbtn(
                     backgroundColor: ButtonColor(),
                   ),
                   onPressed: () async {
-                    SummitEditBox(context, controller, searchNode,
-                        'editnametemplate', uniquecode, type, parentid);
+                    SummitEditBox(
+                        context,
+                        controller,
+                        searchNode,
+                        'editnametemplate',
+                        uniquecode,
+                        type,
+                        parentid,
+                        prevtitle);
                   },
                   child: Center(
                     child: Row(
@@ -948,6 +917,7 @@ Widgets_horizontalbtn(
                       }
                     }
                   }).whenComplete(() {
+                    SaveNoti('box', placestr, '', delete: true);
                     uiset.setloading(false);
                   });
                 });
@@ -993,6 +963,7 @@ Widgets_horizontalbtnsecond(
   var id;
   var updateid = [];
   var updateindex = [];
+  String prevtitle = placestr;
 
   title = const SizedBox();
   content = StatefulBuilder(builder: (_, StateSetter setState) {
@@ -1028,8 +999,15 @@ Widgets_horizontalbtnsecond(
                     backgroundColor: ButtonColor(),
                   ),
                   onPressed: () async {
-                    SummitEditBox(context, controller, searchNode,
-                        'editnametemplatein', uniquecode, index, parentid);
+                    SummitEditBox(
+                        context,
+                        controller,
+                        searchNode,
+                        'editnametemplatein',
+                        uniquecode,
+                        index,
+                        parentid,
+                        prevtitle);
                   },
                   child: Center(
                     child: Row(
@@ -1125,6 +1103,7 @@ Widgets_horizontalbtnsecond(
                       bordercolor: draw.backgroundcolor);
                   uiset.setloading(false);
                   Get.back();
+                  SaveNoti('box', placestr, '', delete: true);
                 });
               });
             }
@@ -1185,7 +1164,7 @@ SummitEditpage(context, controller, updatelist, prevtitle) async {
             }
           }
         }
-      }).whenComplete(() {
+      }).whenComplete(() async {
         Snack.snackbars(
             context: context,
             title: '정상적으로 처리되었어요',
@@ -1193,6 +1172,7 @@ SummitEditpage(context, controller, updatelist, prevtitle) async {
             bordercolor: draw.backgroundcolor);
         uiset.setloading(false);
         Get.back();
+        SaveNoti('page', prevtitle, controller.text);
         uiset.setuserspace(init: false);
       });
     });
@@ -1207,9 +1187,9 @@ SummitEditBox(
   id,
   type,
   parentid,
+  prevtitle,
 ) {
   final updatelist = [];
-  final initialtext = textEditingControllerAddSheet.text;
   var updateid;
   int indexcnt = linkspaceset.indexcnt.length;
   if (textEditingControllerAddSheet.text.isEmpty) {
@@ -1234,29 +1214,7 @@ SummitEditBox(
         linkspaceset.setspacelink(textEditingControllerAddSheet.text);
         Get.back();
       }).whenComplete(() async {
-        await firestore.collection('AppNoticeByUsers').add({
-          'title':
-              '[LOBOX] $initialtext에서 ${textEditingControllerAddSheet.text}으로  변경되었습니다.',
-          'date': DateFormat('yyyy-MM-dd hh:mm')
-                  .parse(DateTime.now().toString())
-                  .toString()
-                  .split(' ')[0] +
-              ' ' +
-              DateFormat('yyyy-MM-dd hh:mm')
-                  .parse(DateTime.now().toString())
-                  .toString()
-                  .split(' ')[1]
-                  .split(':')[0] +
-              ':' +
-              DateFormat('yyyy-MM-dd hh:mm')
-                  .parse(DateTime.now().toString())
-                  .toString()
-                  .split(' ')[1]
-                  .split(':')[1],
-          'username': name,
-          'sharename': [],
-          'read': 'no',
-        });
+        SaveNoti('box', prevtitle, textEditingControllerAddSheet.text);
       });
     } else {
       firestore.collection('Pinchannelin').get().then((value) {
@@ -1281,29 +1239,7 @@ SummitEditBox(
         uiset.setloading(false);
         linkspaceset.setspacelink(textEditingControllerAddSheet.text);
         Get.back();
-        await firestore.collection('AppNoticeByUsers').add({
-          'title':
-              '[LOBOX] $initialtext에서 ${textEditingControllerAddSheet.text}으로  변경되었습니다.',
-          'date': DateFormat('yyyy-MM-dd hh:mm')
-                  .parse(DateTime.now().toString())
-                  .toString()
-                  .split(' ')[0] +
-              ' ' +
-              DateFormat('yyyy-MM-dd hh:mm')
-                  .parse(DateTime.now().toString())
-                  .toString()
-                  .split(' ')[1]
-                  .split(':')[0] +
-              ':' +
-              DateFormat('yyyy-MM-dd hh:mm')
-                  .parse(DateTime.now().toString())
-                  .toString()
-                  .split(' ')[1]
-                  .split(':')[1],
-          'username': name,
-          'sharename': [],
-          'read': 'no',
-        });
+        SaveNoti('box', prevtitle, textEditingControllerAddSheet.text);
       });
     }
   }

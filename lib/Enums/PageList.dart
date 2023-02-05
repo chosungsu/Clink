@@ -1,8 +1,8 @@
-class CompanyPageList {
+class NotiList {
   final String title;
   final String date;
 
-  CompanyPageList({
+  NotiList({
     required this.title,
     required this.date,
   });

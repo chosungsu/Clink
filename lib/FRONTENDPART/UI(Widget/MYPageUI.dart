@@ -177,158 +177,156 @@ UserRoomScreen(maxHeight, maxWidth, controller, searchnode, position) {
                     ? const EdgeInsets.only(left: 5, right: 5)
                     : const EdgeInsets.only(top: 5, bottom: 5),
                 child: position == 'pr'
-                    ? Container(
-                        height: 90,
-                        width: 70,
-                        alignment: Alignment.center,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              height: 50,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  border: Border.all(
-                                      color: index == uiset.mypagelistindex
-                                          ? Colors.pink.shade300
-                                          : draw.color_textstatus,
-                                      width: 1)),
-                              child: GestureDetector(
-                                  onTap: () {
-                                    uiset.setmypagelistindex(index);
-                                  },
-                                  onLongPress: () {
-                                    title = Widgets_editpageconsole(context,
-                                        controller, searchnode, index)[0];
-                                    content = Widgets_editpageconsole(context,
-                                        controller, searchnode, index)[1];
-                                    AddContent(
-                                        context, title, content, searchnode);
-                                  },
-                                  child: Container(
-                                    height: 40,
-                                    width: 40,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        color: draw.backgroundcolor),
-                                    child: const Icon(
-                                      Ionicons.ios_folder_open_outline,
-                                      size: 30,
-                                      color: Colors.blue,
-                                    ),
-                                  )),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            SizedBox(
-                                width: 70,
-                                height: 30,
-                                child: ScrollConfiguration(
-                                  behavior: ScrollConfiguration.of(context)
-                                      .copyWith(dragDevices: {
-                                    PointerDeviceKind.touch,
-                                    PointerDeviceKind.mouse,
-                                  }, scrollbars: false),
-                                  child: SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    physics: const ScrollPhysics(),
-                                    child: Text(
-                                      uiset.pagelist[index].title,
-                                      softWrap: true,
-                                      maxLines: 1,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          height: 1,
-                                          color: draw.color_textstatus,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: contentTextsize()),
-                                    ),
+                    ? GestureDetector(
+                        onTap: () {
+                          uiset.setmypagelistindex(index);
+                        },
+                        onLongPress: () {
+                          title = Widgets_editpageconsole(
+                              context, controller, searchnode, index)[0];
+                          content = Widgets_editpageconsole(
+                              context, controller, searchnode, index)[1];
+                          AddContent(context, title, content, searchnode);
+                        },
+                        child: Container(
+                          height: 90,
+                          width: 70,
+                          alignment: Alignment.center,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(
+                                        color: index == uiset.mypagelistindex
+                                            ? Colors.pink.shade300
+                                            : draw.color_textstatus,
+                                        width: 1)),
+                                child: Container(
+                                  height: 40,
+                                  width: 40,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(100),
+                                      color: draw.backgroundcolor),
+                                  child: const Icon(
+                                    Ionicons.ios_folder_open_outline,
+                                    size: 30,
+                                    color: Colors.blue,
                                   ),
-                                ))
-                          ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              SizedBox(
+                                  width: 70,
+                                  height: 30,
+                                  child: ScrollConfiguration(
+                                    behavior: ScrollConfiguration.of(context)
+                                        .copyWith(dragDevices: {
+                                      PointerDeviceKind.touch,
+                                      PointerDeviceKind.mouse,
+                                    }, scrollbars: false),
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      physics: const ScrollPhysics(),
+                                      child: Text(
+                                        uiset.pagelist[index].title,
+                                        softWrap: true,
+                                        maxLines: 1,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            height: 1,
+                                            color: draw.color_textstatus,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: contentTextsize()),
+                                      ),
+                                    ),
+                                  ))
+                            ],
+                          ),
                         ),
                       )
-                    : Container(
-                        height: 50,
-                        width: 220,
-                        alignment: Alignment.center,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 50,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  border: Border.all(
-                                      color: index == uiset.mypagelistindex
-                                          ? Colors.pink.shade300
-                                          : draw.color_textstatus,
-                                      width: 1)),
-                              child: GestureDetector(
-                                  onTap: () {
-                                    uiset.setmypagelistindex(index);
-                                  },
-                                  onLongPress: () {
-                                    title = Widgets_editpageconsole(context,
-                                        controller, searchnode, index)[0];
-                                    content = Widgets_editpageconsole(context,
-                                        controller, searchnode, index)[1];
-                                    AddContent(
-                                        context, title, content, searchnode);
-                                  },
-                                  child: Container(
-                                    height: 40,
-                                    width: 40,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        color: draw.backgroundcolor),
-                                    child: const Icon(
-                                      Ionicons.ios_folder_open_outline,
-                                      size: 30,
-                                      color: Colors.blue,
-                                    ),
-                                  )),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Container(
-                                width: 90,
+                    : GestureDetector(
+                        onTap: () {
+                          uiset.setmypagelistindex(index);
+                        },
+                        onLongPress: () {
+                          title = Widgets_editpageconsole(
+                              context, controller, searchnode, index)[0];
+                          content = Widgets_editpageconsole(
+                              context, controller, searchnode, index)[1];
+                          AddContent(context, title, content, searchnode);
+                        },
+                        child: Container(
+                          height: 50,
+                          width: 220,
+                          alignment: Alignment.center,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
                                 height: 50,
-                                alignment: Alignment.center,
-                                child: ScrollConfiguration(
-                                  behavior: ScrollConfiguration.of(context)
-                                      .copyWith(dragDevices: {
-                                    PointerDeviceKind.touch,
-                                    PointerDeviceKind.mouse,
-                                  }, scrollbars: false),
-                                  child: SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    physics: const ScrollPhysics(),
-                                    child: Text(
-                                      uiset.pagelist[index].title,
-                                      softWrap: true,
-                                      maxLines: 1,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          height: 1,
-                                          color: draw.color_textstatus,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: contentTextsize()),
-                                    ),
+                                width: 50,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(
+                                        color: index == uiset.mypagelistindex
+                                            ? Colors.pink.shade300
+                                            : draw.color_textstatus,
+                                        width: 1)),
+                                child: Container(
+                                  height: 40,
+                                  width: 40,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(100),
+                                      color: draw.backgroundcolor),
+                                  child: const Icon(
+                                    Ionicons.ios_folder_open_outline,
+                                    size: 30,
+                                    color: Colors.blue,
                                   ),
-                                ))
-                          ],
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Container(
+                                  width: 90,
+                                  height: 50,
+                                  alignment: Alignment.center,
+                                  child: ScrollConfiguration(
+                                    behavior: ScrollConfiguration.of(context)
+                                        .copyWith(dragDevices: {
+                                      PointerDeviceKind.touch,
+                                      PointerDeviceKind.mouse,
+                                    }, scrollbars: false),
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      physics: const ScrollPhysics(),
+                                      child: Text(
+                                        uiset.pagelist[index].title,
+                                        softWrap: true,
+                                        maxLines: 1,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            height: 1,
+                                            color: draw.color_textstatus,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: contentTextsize()),
+                                      ),
+                                    ),
+                                  ))
+                            ],
+                          ),
                         ),
                       ));
           }),
