@@ -92,43 +92,21 @@ deletenoti(context) async {
           pressed2)) ??
       false;
   if (reloadpage) {
-    for (int i = 0; i < deletenotiindexlist.length; i++) {
-      deletelist.insert(i, notilist.listad[deletenotiindexlist[i]].title);
-    }
-    if (deletelist.length == notilist.listad.length) {
-      //전체 삭제인 경우
-      firestore.collection('AppNoticeByUsers').get().then((value) {
-        for (var element in value.docs) {
-          if (element.get('sharename').toString().contains(name) == true) {
-            deleteid = element.id;
-            updateusername =
-                element.get('sharename').toString().split(',').toList();
-            if (updateusername.length == 1) {
-              firestore.collection('AppNoticeByUsers').doc(deleteid).delete();
-            } else {
-              updateusername
-                  .removeWhere((element) => element.toString().contains(name));
-              firestore
-                  .collection('AppNoticeByUsers')
-                  .doc(deleteid)
-                  .update({'sharename': updateusername});
-            }
-          } else {
-            if (element.get('username').toString() == name) {
-              deleteid = element.id;
-              firestore.collection('AppNoticeByUsers').doc(deleteid).delete();
-            } else {}
-          }
-        }
-      }).whenComplete(() {
-        notilist.allcheck = false;
-        notilist.isreadnoti();
-      });
+    if (deletenotiindexlist[0] == -1) {
+      //선택 안한 경우
+      Snack.snackbars(
+          context: context,
+          title: '삭제할 알림을 선택해주세요',
+          backgroundcolor: Colors.black,
+          bordercolor: draw.backgroundcolor);
     } else {
-      //개별 삭제인 경우
-      firestore.collection('AppNoticeByUsers').get().then((value) {
-        for (var element in value.docs) {
-          if (deletelist.contains(element.get('title'))) {
+      for (int i = 0; i < deletenotiindexlist.length; i++) {
+        deletelist.insert(i, notilist.listad[deletenotiindexlist[i]].title);
+      }
+      if (deletelist.length == notilist.listad.length) {
+        //전체 삭제인 경우
+        firestore.collection('AppNoticeByUsers').get().then((value) {
+          for (var element in value.docs) {
             if (element.get('sharename').toString().contains(name) == true) {
               deleteid = element.id;
               updateusername =
@@ -150,11 +128,48 @@ deletenoti(context) async {
               } else {}
             }
           }
-        }
-      }).whenComplete(() {
-        notilist.allcheck = false;
-        notilist.isreadnoti();
-      });
+        }).whenComplete(() {
+          notilist.allcheck = false;
+          notilist.isreadnoti();
+        });
+      } else {
+        //개별 삭제인 경우
+        firestore.collection('AppNoticeByUsers').get().then((value) {
+          for (var element in value.docs) {
+            if (deletelist.contains(element.get('title'))) {
+              if (element.get('sharename').toString().contains(name) == true) {
+                deleteid = element.id;
+                updateusername =
+                    element.get('sharename').toString().split(',').toList();
+                if (updateusername.length == 1) {
+                  firestore
+                      .collection('AppNoticeByUsers')
+                      .doc(deleteid)
+                      .delete();
+                } else {
+                  updateusername.removeWhere(
+                      (element) => element.toString().contains(name));
+                  firestore
+                      .collection('AppNoticeByUsers')
+                      .doc(deleteid)
+                      .update({'sharename': updateusername});
+                }
+              } else {
+                if (element.get('username').toString() == name) {
+                  deleteid = element.id;
+                  firestore
+                      .collection('AppNoticeByUsers')
+                      .doc(deleteid)
+                      .delete();
+                } else {}
+              }
+            }
+          }
+        }).whenComplete(() {
+          notilist.allcheck = false;
+          notilist.isreadnoti();
+        });
+      }
     }
   }
 }

@@ -7,7 +7,6 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../Page/MYPage.dart';
-import '../Page/NotiAlarm.dart';
 import 'subuiroute.dart';
 import '../Page/SearchPage.dart';
 import '../Page/ProfilePage.dart';
@@ -30,7 +29,6 @@ class _mainrouteState extends State<mainroute>
   List pages = [
     const MYPage(),
     const SearchPage(),
-    //const NotiAlarm(),
     const ProfilePage(),
   ];
 

@@ -40,9 +40,6 @@ PageViewRes1_1(id, snapshot) {
   linkspaceset.indexcnt.clear();
   final valuespace = snapshot.data!.docs;
   for (var sp in valuespace) {
-    pagename = sp.get('pagename');
-    spacename = sp.get('spacename');
-    type = sp.get('type');
     if (sp.get('id') == id) {
       linkspaceset.indextreetmp.add(List.empty(growable: true));
       linkspaceset.indexcnt.add(Linkspacepage(
@@ -337,8 +334,7 @@ PageViewStreamChild5(context, id) {
       } else {
         final valuespace = value.docs;
         for (var sp in valuespace) {
-          spacename = sp.get('parentid');
-          if (spacename == id) {
+          if (sp.get('parentid') == id) {
             controll_cals.share = sp.get('share');
             controll_cals.events = {};
             controll_cals.calname = sp.get('calname');
@@ -869,7 +865,7 @@ Widgets_horizontalbtn(
                 false;
             if (reloadpage) {
               uiset.setloading(true);
-              Get.back();
+
               var boxparentid;
               await firestore
                   .collection('PageView')
@@ -919,6 +915,7 @@ Widgets_horizontalbtn(
                   }).whenComplete(() {
                     SaveNoti('box', placestr, '', delete: true);
                     uiset.setloading(false);
+                    Get.back();
                   });
                 });
               });
@@ -933,7 +930,7 @@ Widgets_horizontalbtn(
             softWrap: true,
             textAlign: TextAlign.start,
             style: TextStyle(
-                color: Colors.black,
+                color: Colors.red,
                 fontWeight: FontWeight.bold,
                 fontSize: contentTextsize()),
             overflow: TextOverflow.ellipsis,
@@ -1117,7 +1114,7 @@ Widgets_horizontalbtnsecond(
             softWrap: true,
             textAlign: TextAlign.start,
             style: TextStyle(
-                color: Colors.black,
+                color: Colors.red,
                 fontWeight: FontWeight.bold,
                 fontSize: contentTextsize()),
             overflow: TextOverflow.ellipsis,

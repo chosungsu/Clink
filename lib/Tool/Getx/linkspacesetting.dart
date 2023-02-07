@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,6 +13,7 @@ class linkspacesetting extends GetxController {
   List indextreecnt = [];
   List<List> indextreetmp = [];
   List<Linkspacepageenter> inindextreetmp = [];
+  List<LinkofPapers> inpapertreetmp = [];
   List changeurllist = [];
   List setloadingfile = [];
   bool iscompleted = false;

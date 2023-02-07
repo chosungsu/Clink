@@ -1,9 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:ui';
-
 import 'package:clickbyme/FRONTENDPART/Route/subuiroute.dart';
-import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -18,7 +16,6 @@ import '../../Tool/Getx/navibool.dart';
 import '../../UI/Home/firstContentNet/ChooseCalendar.dart';
 import '../UI(Widget/DayNoteHome.dart';
 
-final readlist = [];
 final listid = [];
 final draw = Get.put(navibool());
 final uiset = Get.put(uisetting());
@@ -28,66 +25,59 @@ SetBoxUI(maxWidth) {
   bool _ischecked = false;
   return StatefulBuilder(
     builder: (context, setState) {
-      return Container(
+      return SizedBox(
           height: 30,
           width: maxWidth,
-          decoration: BoxDecoration(
-              color: draw.backgroundcolor,
-              border: Border(
-                top: BorderSide(color: draw.color_textstatus, width: 1),
-                bottom: BorderSide(color: draw.color_textstatus, width: 1),
-              )),
           child: Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                physics: const ScrollPhysics(),
+              child: SizedBox(
+                width: maxWidth - 40,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     SizedBox(
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 30,
-                            child: Checkbox(
-                                value: notilist.allcheck,
-                                onChanged: (value) {
-                                  setState(() {
-                                    notilist.allcheck = value!;
-                                    if (notilist.allcheck) {
-                                      notilist.setcheckboxnoti(
-                                          init: _ischecked);
-                                    } else {
-                                      notilist.resetcheckboxnoti();
-                                    }
-                                  });
-                                }),
-                          ),
-                          Text(
-                            '전체 선택',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: contentsmallTextsize(),
-                                color: draw.color_textstatus),
-                          ),
-                        ],
+                      width: 30,
+                      child: Theme(
+                        child: Checkbox(
+                            value: notilist.allcheck,
+                            onChanged: (value) {
+                              setState(() {
+                                notilist.allcheck = value!;
+                                if (notilist.allcheck) {
+                                  notilist.setcheckboxnoti(init: _ischecked);
+                                } else {
+                                  notilist.resetcheckboxnoti();
+                                }
+                              });
+                            }),
+                        data: ThemeData(
+                          primarySwatch: Colors.blue,
+                          unselectedWidgetColor:
+                              draw.color_textstatus, // Your color
+                        ),
                       ),
                     ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    SizedBox(
-                        child: GestureDetector(
-                      onTap: () => deletenoti(context),
-                      child: Text(
-                        '삭제',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: contentsmallTextsize(),
-                            color: draw.color_textstatus),
-                      ),
-                    ))
+                    Flexible(
+                        fit: FlexFit.tight,
+                        child: SizedBox(
+                            child: SingleChildScrollView(
+                          physics: const ScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          reverse: true,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              GestureDetector(
+                                onTap: () => deletenoti(context),
+                                child: const Icon(
+                                  AntDesign.delete,
+                                  size: 20,
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )))
                   ],
                 ),
               )));
@@ -105,7 +95,7 @@ UI(
         stream: NotiAlarmStreamFamily(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            NotiAlarmRes1(snapshot, listid, readlist);
+            NotiAlarmRes1(snapshot, listid);
             return notilist.listad.isEmpty
                 ? NotInPageScreen(
                     maxWidth,
@@ -227,20 +217,27 @@ Page0(
                         children: [
                           SizedBox(
                             width: 30,
-                            child: Checkbox(
-                                value: notilist.checkboxnoti[index],
-                                onChanged: (value) {
-                                  setState(() {
-                                    notilist.checkboxnoti[index] = value!;
-                                  });
-                                }),
+                            child: Theme(
+                              child: Checkbox(
+                                  value: notilist.checkboxnoti[index],
+                                  onChanged: (value) {
+                                    setState(() {
+                                      notilist.checkboxnoti[index] = value!;
+                                    });
+                                  }),
+                              data: ThemeData(
+                                primarySwatch: Colors.blue,
+                                unselectedWidgetColor:
+                                    draw.color_textstatus, // Your color
+                              ),
+                            ),
                           ),
                           Flexible(
                             fit: FlexFit.tight,
                             child: ContainerDesign(
-                              color: readlist[index] == 'no'
+                              color: notilist.checkread[index] == 'no'
                                   ? draw.backgroundcolor
-                                  : draw.color_textstatus,
+                                  : Colors.blue.shade300,
                               child: SizedBox(
                                   height: 100,
                                   child: Column(
@@ -262,9 +259,7 @@ Page0(
                                               maxLines: 1,
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
-                                                  color: readlist[index] == 'no'
-                                                      ? draw.color_textstatus
-                                                      : draw.backgroundcolor,
+                                                  color: draw.color_textstatus,
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: contentTextsize()),
                                             )),
@@ -272,9 +267,7 @@ Page0(
                                       Text(
                                         notilist.listad[index].date.toString(),
                                         style: TextStyle(
-                                            color: readlist[index] == 'no'
-                                                ? draw.color_textstatus
-                                                : draw.backgroundcolor,
+                                            color: draw.color_textstatus,
                                             fontWeight: FontWeight.bold,
                                             fontSize: contentsmallTextsize()),
                                         overflow: TextOverflow.visible,
@@ -340,20 +333,27 @@ Page1(
                       children: [
                         SizedBox(
                           width: 30,
-                          child: Checkbox(
-                              value: notilist.checkboxnoti[index],
-                              onChanged: (value) {
-                                setState(() {
-                                  notilist.checkboxnoti[index] = value!;
-                                });
-                              }),
+                          child: Theme(
+                            child: Checkbox(
+                                value: notilist.checkboxnoti[index],
+                                onChanged: (value) {
+                                  setState(() {
+                                    notilist.checkboxnoti[index] = value!;
+                                  });
+                                }),
+                            data: ThemeData(
+                              primarySwatch: Colors.blue,
+                              unselectedWidgetColor:
+                                  draw.color_textstatus, // Your color
+                            ),
+                          ),
                         ),
                         Flexible(
                           fit: FlexFit.tight,
                           child: ContainerDesign(
-                            color: readlist[index] == 'no'
+                            color: notilist.checkread[index] == 'no'
                                 ? draw.backgroundcolor
-                                : draw.color_textstatus,
+                                : Colors.blue.shade300,
                             child: SizedBox(
                                 height: 100,
                                 child: Column(
@@ -374,9 +374,7 @@ Page1(
                                             maxLines: 1,
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
-                                                color: readlist[index] == 'no'
-                                                    ? draw.color_textstatus
-                                                    : draw.backgroundcolor,
+                                                color: draw.color_textstatus,
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: contentTextsize()),
                                           )),
@@ -384,9 +382,7 @@ Page1(
                                     Text(
                                       notilist.listad[index].date.toString(),
                                       style: TextStyle(
-                                          color: readlist[index] == 'no'
-                                              ? draw.color_textstatus
-                                              : draw.backgroundcolor,
+                                          color: draw.color_textstatus,
                                           fontWeight: FontWeight.bold,
                                           fontSize: contentsmallTextsize()),
                                       overflow: TextOverflow.visible,

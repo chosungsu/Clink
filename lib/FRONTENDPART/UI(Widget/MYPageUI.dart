@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names
 
 import 'dart:ui';
+import 'package:clickbyme/FRONTENDPART/Page/WallPaperPage.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,6 +16,7 @@ import '../../../Tool/TextSize.dart';
 import '../../BACKENDPART/FIREBASE/PersonalVP.dart';
 import '../../Tool/AndroidIOS.dart';
 import '../../Tool/Getx/uisetting.dart';
+import '../Page/Spacein.dart';
 
 final uiset = Get.put(uisetting());
 final linkspaceset = Get.put(linkspacesetting());
@@ -62,9 +64,8 @@ PageUI0(context, id, controller, searchnode, maxHeight, maxWidth) {
             padding: const EdgeInsets.only(left: 20, right: 20),
             child: Room(maxHeight, 220, controller, searchnode, 'ls'),
           ),
-          VerticalDivider(
+          SizedBox(
             width: maxWidth * 0.1,
-            color: draw.backgroundcolor,
           ),
           SizedBox(
               width: maxWidth - 220 - maxWidth * 0.1,
@@ -220,12 +221,10 @@ UserRoomScreen(maxHeight, maxWidth, controller, searchnode, position) {
                                   ),
                                 ),
                               ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              SizedBox(
+                              Container(
                                   width: 70,
-                                  height: 30,
+                                  height: 40,
+                                  alignment: Alignment.center,
                                   child: ScrollConfiguration(
                                     behavior: ScrollConfiguration.of(context)
                                         .copyWith(dragDevices: {
@@ -241,7 +240,6 @@ UserRoomScreen(maxHeight, maxWidth, controller, searchnode, position) {
                                         maxLines: 1,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
-                                            height: 1,
                                             color: draw.color_textstatus,
                                             fontWeight: FontWeight.bold,
                                             fontSize: contentTextsize()),
@@ -349,9 +347,8 @@ NotInPageScreen(maxHeight, maxWidth, controller, searchnode) {
                   padding: const EdgeInsets.only(left: 20, right: 20),
                   child: UserRoomScreen(
                       maxHeight, 220, controller, searchnode, 'ls')),
-              VerticalDivider(
+              SizedBox(
                 width: maxWidth * 0.1,
-                color: draw.backgroundcolor,
               ),
               SizedBox(
                 width: maxWidth - 220 - maxWidth * 0.1,
@@ -420,95 +417,96 @@ NotInPageScreen(maxHeight, maxWidth, controller, searchnode) {
 }
 
 WhatInPageScreen(context, id, controller, searchNode, maxWidth, maxHeight) {
-  return Responsivelayout(
-      SizedBox(
-        width: maxWidth,
-        child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: StaggeredGrid.count(
-              crossAxisCount: 2,
-              children: List.generate(linkspaceset.indexcnt.length, (index) {
-                return Container(
-                  width: maxWidth > 1100
-                      ? (maxWidth - 220 - maxWidth * 0.1 - 40) * 0.5
-                      : maxWidth - 220 - maxWidth * 0.1,
-                  margin: const EdgeInsets.only(right: 20),
-                  child: WhatInPageScreenUI(
-                      context, id, index, controller, searchNode, 'ls'),
-                );
-              }),
-            )),
-      ),
-      ListView.builder(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-          physics: const ScrollPhysics(),
-          itemCount: linkspaceset.indexcnt.length,
-          itemBuilder: ((context, index) {
-            return WhatInPageScreenUI(
-                context, id, index, controller, searchNode, 'pr');
-          })));
+  return Container(
+    width: maxWidth,
+    padding: const EdgeInsets.only(left: 20, right: 20),
+    child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: StaggeredGrid.count(
+          crossAxisCount: 2,
+          mainAxisSpacing: 20,
+          crossAxisSpacing: 20,
+          children: List.generate(linkspaceset.indexcnt.length, (index) {
+            return SizedBox(
+              width: maxWidth > 1100
+                  ? (maxWidth - 220 - maxWidth * 0.1 - 40) * 0.5
+                  : maxWidth - 220 - maxWidth * 0.1,
+              child: WhatInPageScreenUI(context, id, index, maxHeight, maxWidth,
+                  controller, searchNode),
+            );
+          }),
+        )),
+  );
 }
 
-WhatInPageScreenUI(context, id, index, controller, searchNode, s) {
+WhatInPageScreenUI(
+    context, id, index, maxHeight, maxWidth, controller, searchNode) {
   return Column(
     children: [
-      s == 'ls'
-          ? const SizedBox()
-          : const SizedBox(
-              height: 10,
-            ),
-      ContainerDesign(
-          color: draw.backgroundcolor,
-          child: SizedBox(
+      SizedBox(
+        width: (maxWidth - 40) * 0.5,
+        height: 200,
+        child: GestureDetector(
+          onTap: () {
+            Get.to(() => WallPaperPage(index: index + 1),
+                transition: Transition.downToUp);
+          },
+          child: ContainerDesign(
+              color: draw.backgroundcolor,
               child: Column(
-            children: [
-              Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Flexible(
-                        fit: FlexFit.tight,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          physics: const ScrollPhysics(),
-                          child: Text(
-                            linkspaceset.indexcnt[index].placestr,
-                            style: TextStyle(
-                                color: draw.color_textstatus,
-                                fontWeight: FontWeight.bold,
-                                fontSize: contentTextsize()),
+                children: [
+                  SizedBox(
+                    height: 50,
+                    child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Flexible(
+                              fit: FlexFit.tight,
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                physics: const ScrollPhysics(),
+                                child: Text(
+                                  linkspaceset.indexcnt[index].placestr,
+                                  style: TextStyle(
+                                      color: draw.color_textstatus,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentTextsize()),
+                                ),
+                              )),
+                          const SizedBox(
+                            width: 10,
                           ),
-                        )),
-                    InkWell(
-                      onTap: () async {
-                        pageaddlogic(context, id, index);
-                      },
-                      child: Icon(
-                        Icons.add_circle_outline,
-                        color: draw.color_textstatus,
-                      ),
+                          InkWell(
+                            onTap: () async {
+                              pageeditlogic(
+                                  context, id, index, controller, searchNode);
+                            },
+                            child: Icon(
+                              Icons.more_horiz,
+                              color: draw.color_textstatus,
+                            ),
+                          )
+                        ]),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  SizedBox(
+                    height: 100,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(
+                          FontAwesome.sticky_note,
+                          color: Colors.blue,
+                          size: 30,
+                        ),
+                      ],
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    InkWell(
-                      onTap: () async {
-                        pageeditlogic(
-                            context, id, index, controller, searchNode);
-                      },
-                      child: Icon(
-                        Icons.more_horiz,
-                        color: draw.color_textstatus,
-                      ),
-                    )
-                  ]),
-              const SizedBox(
-                height: 10,
-              ),
-              StreamBuilder<QuerySnapshot>(
+                  ),
+                  /*StreamBuilder<QuerySnapshot>(
                   stream: PageViewStreamParent2(),
                   builder: ((context, snapshot) {
                     if (snapshot.hasData) {
@@ -600,31 +598,26 @@ WhatInPageScreenUI(context, id, index, controller, searchNode, s) {
                                   );
                                 })));
                       } else {
-                        return SizedBox(
-                          height: 150,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Center(
-                                child: Text(
-                                  linkspaceset.indexcnt[index].type == 0
-                                      ? '이 공간은 이미지, 파일을 보여주는 공간입니다.'
-                                      : (linkspaceset.indexcnt[index].type == 1
-                                          ? '이 공간은 캘린더 일정을 보여주는 공간입니다.'
-                                          : (linkspaceset
-                                                      .indexcnt[index].type ==
-                                                  2
-                                              ? '이 공간은 투두리스트를 보여주는 공간입니다.'
-                                              : '이 공간은 메모를 보여주는 공간입니다.')),
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Colors.black45,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTextsize()),
-                                ),
-                              )
-                            ],
+                        return GestureDetector(
+                          onTap: () {},
+                          child: SizedBox(
+                            height: 150,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Center(
+                                  child: Text(
+                                    '이 공간은 비어있어요~',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.black45,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentTextsize()),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         );
                       }
@@ -652,47 +645,39 @@ WhatInPageScreenUI(context, id, index, controller, searchNode, s) {
                         ),
                       );
                     } else {
-                      return SizedBox(
-                        height: 150,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Center(
-                              child: Text(
-                                linkspaceset.indexcnt[index].type == 0
-                                    ? '이 공간은 이미지, 파일, URL링크를 클립보드 형식으로 보여주는 공간입니다.'
-                                    : (linkspaceset.indexcnt[index].type == 1
-                                        ? '이 공간은 캘린더 바로가기를 보여주는 공간입니다.'
-                                        : (linkspaceset.indexcnt[index].type ==
-                                                2
-                                            ? '이 공간은 투두리스트를 보여주는 공간입니다.'
-                                            : '이 공간은 메모를 보여주는 공간입니다.')),
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.black45,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: contentTextsize()),
-                              ),
-                            )
-                          ],
+                      return GestureDetector(
+                        onTap: () {},
+                        child: SizedBox(
+                          height: 150,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(
+                                child: Text(
+                                  '이 공간은 비어있어요~',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.black45,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentTextsize()),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       );
                     }
-                  }))
-            ],
-          ))),
-      s == 'ls'
+                  }))*/
+                ],
+              )),
+        ),
+      ),
+      index == linkspaceset.indexcnt.length - 1
           ? const SizedBox(
-              height: 20,
+              height: 50,
             )
-          : (index == linkspaceset.indexcnt.length - 1
-              ? const SizedBox(
-                  height: 50,
-                )
-              : const SizedBox(
-                  height: 10,
-                )),
+          : const SizedBox(),
     ],
   );
 }

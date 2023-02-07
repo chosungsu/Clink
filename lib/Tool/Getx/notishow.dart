@@ -9,6 +9,7 @@ class notishow extends GetxController {
   List listad = [];
   bool isread = false;
   List updateid = [];
+  List checkread = [];
   List<bool> checkboxnoti = List.empty(growable: true);
 
   void setnoti(String a, String b) async {
@@ -52,6 +53,12 @@ class notishow extends GetxController {
         isread = true;
       }
     });
+    update();
+    notifyChildrens();
+  }
+
+  void checknoti(List a) async {
+    checkread = a;
     update();
     notifyChildrens();
   }

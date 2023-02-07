@@ -1,9 +1,3 @@
-class Linkpage {
-  final String link;
-
-  Linkpage({required this.link});
-}
-
 class Linkspacepageenter {
   ///Linkspacepageenter
   ///
@@ -55,5 +49,20 @@ class Linkspacetreepage {
     this.subindex,
     this.mainid,
     this.date,
+  });
+}
+
+class LinkofPapers {
+  ///LinkofPapers
+  ///
+  ///이 부분은 메인에서 박스내부 박스를 생성할 때 호출되는 부분
+  final String placestr;
+  final String uniqueid;
+  final String? mainid;
+
+  LinkofPapers({
+    required this.placestr,
+    required this.uniqueid,
+    this.mainid,
   });
 }

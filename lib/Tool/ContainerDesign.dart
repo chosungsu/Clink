@@ -20,13 +20,14 @@ class ContainerDesign extends StatelessWidget {
               child: child,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
+                  color: color,
                   border: Border.all(color: draw.color_textstatus, width: 1)),
             ));
   }
 }
 
 class ContainerTextFieldDesign extends StatelessWidget {
-  ContainerTextFieldDesign({
+  const ContainerTextFieldDesign({
     Key? key,
     required this.searchNodeAddSection,
     required this.string,

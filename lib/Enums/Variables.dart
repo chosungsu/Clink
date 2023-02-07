@@ -14,9 +14,7 @@ import '../Tool/Getx/notishow.dart';
 import '../Tool/Getx/selectcollection.dart';
 import '../Tool/Getx/uisetting.dart';
 import 'Expandable.dart';
-import 'Linkpage.dart';
 import 'MemoList.dart';
-import 'PageList.dart';
 
 //Here are general Variables
 var usercode = Hive.box('user_setting').get('usercode') ?? '';
@@ -30,16 +28,14 @@ final peopleadd = Get.put(PeopleAdd());
 final scollection = Get.put(selectcollection());
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 //Here are PageUI Variables
-var pagename;
-var spacename;
-var type;
 //Here are SpaceinUI Variables
 var spacefamilyid;
 var spacefamilytype;
 var spacefamilyindex;
-//Here are MYPage Variables
-final List<Linkpage> listpinlink = [];
-final List<NotiList> listcompanytousers = [];
+//Here are Paper Variables
+var spacestr;
+var unique;
+var familyid;
 //Here are SearchPage Variables
 bool isbought = false;
 var textchangelistener = '';

@@ -1,7 +1,4 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names
-
-import 'dart:ui';
-
 import 'package:clickbyme/BACKENDPART/FIREBASE/PersonalVP.dart';
 import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
 import 'package:clickbyme/Tool/Getx/uisetting.dart';
@@ -14,7 +11,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:status_bar_control/status_bar_control.dart';
-import '../../Enums/Linkpage.dart';
 import '../../Enums/Variables.dart';
 import '../../Tool/ContainerDesign.dart';
 import '../../Tool/Getx/calendarsetting.dart';

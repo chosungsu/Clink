@@ -13,11 +13,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 class NotiAlarm extends StatefulWidget {
   const NotiAlarm({
     Key? key,
-    required this.width,
-    required this.height,
   }) : super(key: key);
-  final double width;
-  final double height;
 
   @override
   State<StatefulWidget> createState() => _NotiAlarmState();
@@ -27,6 +23,8 @@ class _NotiAlarmState extends State<NotiAlarm> {
   final draw = Get.put(navibool());
   final uiset = Get.put(uisetting());
   final notilist = Get.put(notishow());
+  double width = Get.width < 1000 ? Get.width * 0.7 : Get.width * 0.5;
+  double height = Get.height > 1500 ? Get.height * 0.5 : Get.height;
 
   @override
   void initState() {
@@ -81,9 +79,13 @@ class _NotiAlarmState extends State<NotiAlarm> {
                               Container(
                                 height: 20,
                               ),
-                              SetBoxUI(widget.width),
-                              Container(
+                              SetBoxUI(width),
+                              Divider(
                                 height: 20,
+                                color: draw.color_textstatus,
+                                thickness: 0.5,
+                                indent: 20.0,
+                                endIndent: 20.0,
                               ),
                               Flexible(
                                   fit: FlexFit.tight,
@@ -91,8 +93,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                       behavior: NoBehavior(),
                                       child: LayoutBuilder(
                                         builder: ((context, constraint) {
-                                          return UI(
-                                              widget.width, widget.height);
+                                          return UI(width, height);
                                         }),
                                       ))),
                             ],

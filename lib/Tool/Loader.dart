@@ -217,3 +217,18 @@ class Loader_sheets extends StatelessWidget {
     );
   }
 }
+
+class Barrier extends StatelessWidget {
+  const Barrier({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: const <Widget>[
+        ModalBarrier(
+          color: Colors.black45,
+          dismissible: true,
+        ),
+      ],
+    );
+  }
+}

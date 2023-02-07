@@ -5,7 +5,6 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import '../../Enums/Variables.dart';
 import '../../Tool/AppBarCustom.dart';
 import '../../Tool/Getx/navibool.dart';
 import '../../Tool/Loader.dart';
@@ -37,7 +36,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
   void initState() {
     textcontroller = TextEditingController();
     super.initState();
-    listpinlink.clear();
+    uiset.pagenumber = 0;
     uiset.showtopbutton = false;
     uiset.searchpagemove = '';
     uiset.mypagelistindex = Hive.box('user_setting').get('currentmypage') ?? 0;
@@ -54,9 +53,6 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    double width = Get.width < 1000 ? Get.width * 0.7 : Get.width * 0.5;
-    double height = Get.height > 1500 ? Get.height * 0.5 : Get.height;
-
     return GetBuilder<navibool>(
         builder: (_) => Scaffold(
             backgroundColor: draw.backgroundcolor,
@@ -91,16 +87,10 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                         ? Stack(
                             children: [
                               MainBody(context),
-                              Positioned(
+                              const Barrier(),
+                              const Positioned(
                                 right: 0,
-                                child: SizedBox(
-                                  width: width,
-                                  height: height,
-                                  child: NotiAlarm(
-                                    width: width,
-                                    height: height,
-                                  ),
-                                ),
+                                child: NotiAlarm(),
                               ),
                             ],
                           )
@@ -146,7 +136,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                   child: SizedBox(
                     height: height,
                     child: GetBuilder<uisetting>(
-                      builder: (controller) {
+                      builder: (_) {
                         return Container(
                             color: draw.backgroundcolor,
                             child: Column(
