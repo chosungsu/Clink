@@ -3,10 +3,8 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:clickbyme/Enums/Variables.dart';
-import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
 import 'package:clickbyme/sheets/Mainpage/appbarplusbtn.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -19,11 +17,8 @@ import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:status_bar_control/status_bar_control.dart';
-import 'package:url_launcher/url_launcher.dart';
-import '../../BACKENDPART/FIREBASE/NoticeVP.dart';
 import '../Page/LoginSignPage.dart';
 import '../../Tool/AndroidIOS.dart';
-import '../../Tool/BGColor.dart';
 import '../../Tool/FlushbarStyle.dart';
 import '../../Tool/Getx/linkspacesetting.dart';
 import '../../Tool/Getx/navibool.dart';
@@ -31,6 +26,7 @@ import '../../Tool/Getx/notishow.dart';
 import '../../Tool/Getx/uisetting.dart';
 import '../../Tool/TextSize.dart';
 import 'mainroute.dart';
+import 'package:collection/collection.dart';
 
 void pressed1() {
   Hive.box('user_info').get('autologin') == false
@@ -67,9 +63,10 @@ Future getAppInfo({tomail = false}) async {
 closenotiroom() {
   final draw = Get.put(navibool());
   final uiset = Get.put(uisetting());
-
+  final notilist = Get.put(notishow());
   if (draw.drawnoticeopen) {
     draw.setclosenoti();
+    notilist.isreadnoti(init: true);
     Hive.box('user_setting').put('noticepage_opened', false);
     uiset.setpageindex(0);
   } else {}
@@ -79,7 +76,12 @@ deletenoti(context) async {
   var deleteid = '';
   var updateusername = [];
   final notilist = Get.put(notishow());
-  List deletenotiindexlist = [notilist.checkboxnoti.indexOf(true)];
+  List deletenotiindexlist = [];
+  for (int i = 0; i < notilist.checkboxnoti.length; i++) {
+    if (notilist.checkboxnoti[i] == true) {
+      deletenotiindexlist.add(i);
+    }
+  }
   List deletelist = [];
   final reloadpage = await Get.dialog(OSDialog(
           context,
@@ -92,7 +94,7 @@ deletenoti(context) async {
           pressed2)) ??
       false;
   if (reloadpage) {
-    if (deletenotiindexlist[0] == -1) {
+    if (deletenotiindexlist.isEmpty) {
       //선택 안한 경우
       Snack.snackbars(
           context: context,
@@ -129,8 +131,8 @@ deletenoti(context) async {
             }
           }
         }).whenComplete(() {
-          notilist.allcheck = false;
           notilist.isreadnoti();
+          notilist.resetcheckboxnoti();
         });
       } else {
         //개별 삭제인 경우
@@ -166,10 +168,13 @@ deletenoti(context) async {
             }
           }
         }).whenComplete(() {
-          notilist.allcheck = false;
           notilist.isreadnoti();
+          notilist.resetcheckboxnoti();
         });
       }
+      if (notilist.allcheck) {
+        notilist.allcheck = false;
+      } else {}
     }
   }
 }

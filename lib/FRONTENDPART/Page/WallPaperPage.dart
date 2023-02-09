@@ -78,10 +78,10 @@ class _WallPaperPageState extends State<WallPaperPage> {
                   AppBarCustom(
                     title: linkspaceset.indexcnt[widget.index].placestr,
                     lefticon: false,
-                    righticon: false,
+                    righticon: true,
                     doubleicon: false,
-                    lefticonname: Ionicons.add_outline,
-                    righticonname: Ionicons.add_outline,
+                    lefticonname: SimpleLineIcons.grid,
+                    righticonname: SimpleLineIcons.grid,
                   ),
                   const SizedBox(
                     height: 20,

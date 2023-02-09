@@ -22,67 +22,70 @@ final uiset = Get.put(uisetting());
 final notilist = Get.put(notishow());
 
 SetBoxUI(maxWidth) {
-  bool _ischecked = false;
-  return StatefulBuilder(
-    builder: (context, setState) {
-      return SizedBox(
-          height: 30,
-          width: maxWidth,
-          child: Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: SizedBox(
-                width: maxWidth - 40,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: 30,
-                      child: Theme(
-                        child: Checkbox(
-                            value: notilist.allcheck,
-                            onChanged: (value) {
-                              setState(() {
-                                notilist.allcheck = value!;
-                                if (notilist.allcheck) {
-                                  notilist.setcheckboxnoti(init: _ischecked);
-                                } else {
-                                  notilist.resetcheckboxnoti();
-                                }
-                              });
-                            }),
-                        data: ThemeData(
-                          primarySwatch: Colors.blue,
-                          unselectedWidgetColor:
-                              draw.color_textstatus, // Your color
+  return GetBuilder<notishow>(builder: (_) {
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return SizedBox(
+            height: 30,
+            width: maxWidth,
+            child: Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                child: SizedBox(
+                  width: maxWidth - 40,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 30,
+                        child: Theme(
+                          child: Checkbox(
+                              value: notilist.allcheck,
+                              onChanged: (value) {
+                                setState(() {
+                                  notilist.allcheck = value!;
+                                  if (notilist.allcheck) {
+                                    notilist.setcheckboxnoti();
+                                  } else {
+                                    notilist.resetcheckboxnoti();
+                                  }
+                                });
+                              }),
+                          data: ThemeData(
+                            primarySwatch: Colors.blue,
+                            unselectedWidgetColor:
+                                draw.color_textstatus, // Your color
+                          ),
                         ),
                       ),
-                    ),
-                    Flexible(
-                        fit: FlexFit.tight,
-                        child: SizedBox(
-                            child: SingleChildScrollView(
-                          physics: const ScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          reverse: true,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              GestureDetector(
-                                onTap: () => deletenoti(context),
-                                child: const Icon(
-                                  AntDesign.delete,
-                                  size: 20,
-                                  color: Colors.red,
+                      Flexible(
+                          fit: FlexFit.tight,
+                          child: SizedBox(
+                              child: SingleChildScrollView(
+                            physics: const ScrollPhysics(),
+                            scrollDirection: Axis.horizontal,
+                            reverse: true,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                GestureDetector(
+                                  onTap: () async {
+                                    await deletenoti(context);
+                                  },
+                                  child: const Icon(
+                                    AntDesign.delete,
+                                    size: 20,
+                                    color: Colors.red,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        )))
-                  ],
-                ),
-              )));
-    },
-  );
+                              ],
+                            ),
+                          )))
+                    ],
+                  ),
+                )));
+      },
+    );
+  });
 }
 
 UI(

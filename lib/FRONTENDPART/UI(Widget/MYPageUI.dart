@@ -448,7 +448,7 @@ WhatInPageScreenUI(
         height: 200,
         child: GestureDetector(
           onTap: () {
-            Get.to(() => WallPaperPage(index: index + 1),
+            Get.to(() => WallPaperPage(index: index),
                 transition: Transition.downToUp);
           },
           child: ContainerDesign(

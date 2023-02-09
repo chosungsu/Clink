@@ -7,7 +7,7 @@ import '../../Enums/Variables.dart';
 class notishow extends GetxController {
   bool allcheck = false;
   List listad = [];
-  bool isread = false;
+  bool isread = true;
   List updateid = [];
   List checkread = [];
   List<bool> checkboxnoti = List.empty(growable: true);
@@ -24,16 +24,18 @@ class notishow extends GetxController {
     notifyChildrens();
   }
 
-  void setcheckboxnoti({init = false}) async {
+  void setcheckboxnoti() async {
     allcheck = true;
-    checkboxnoti = List.filled(updateid.length, init, growable: true);
+    checkboxnoti.clear();
+    checkboxnoti = List.filled(listad.length, true, growable: true);
     update();
     notifyChildrens();
   }
 
   void resetcheckboxnoti() async {
     allcheck = false;
-    checkboxnoti = List.filled(updateid.length, false, growable: true);
+    checkboxnoti.clear();
+    checkboxnoti = List.filled(listad.length, false, growable: true);
     update();
     notifyChildrens();
   }
@@ -53,8 +55,10 @@ class notishow extends GetxController {
         isread = true;
       }
     });
-    update();
-    notifyChildrens();
+    if (init) {
+      update();
+      notifyChildrens();
+    } else {}
   }
 
   void checknoti(List a) async {

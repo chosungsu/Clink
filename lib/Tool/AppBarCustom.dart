@@ -74,39 +74,35 @@ class AppBarCustom extends StatelessWidget {
                                         Hive.box('user_setting')
                                                 .get('page_opened') ==
                                             true
-                                    ? ContainerDesign(
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              draw.setclose();
-                                              Hive.box('user_setting')
-                                                  .put('page_opened', false);
-                                            });
-                                          },
-                                          child: Icon(
-                                            Feather.chevron_left,
-                                            size: 30,
-                                            color: draw.color_textstatus,
-                                          ),
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            draw.setclose();
+                                            Hive.box('user_setting')
+                                                .put('page_opened', false);
+                                          });
+                                        },
+                                        child: Icon(
+                                          Feather.chevron_left,
+                                          size: 30,
+                                          color: draw.color_textstatus,
                                         ),
-                                        color: draw.backgroundcolor)
-                                    : ContainerDesign(
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              draw.navi = 0;
-                                              draw.setopen();
-                                              Hive.box('user_setting')
-                                                  .put('page_opened', true);
-                                            });
-                                          },
-                                          child: Icon(
-                                            Ionicons.menu,
-                                            size: 30,
-                                            color: draw.color_textstatus,
-                                          ),
+                                      )
+                                    : GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            draw.navi = 0;
+                                            draw.setopen();
+                                            Hive.box('user_setting')
+                                                .put('page_opened', true);
+                                          });
+                                        },
+                                        child: Icon(
+                                          Ionicons.menu,
+                                          size: 30,
+                                          color: draw.color_textstatus,
                                         ),
-                                        color: draw.backgroundcolor)
+                                      )
                                 : const SizedBox(),
                             navinumlist.contains(uiset.pagenumber) &&
                                     draw.navi == 0
@@ -118,19 +114,16 @@ class AppBarCustom extends StatelessWidget {
                                 ? Row(
                                     children: [
                                       GetBuilder<uisetting>(
-                                          builder: (_) => ContainerDesign(
-                                              child: GestureDetector(
-                                                  onTap: () {},
-                                                  child: Container(
-                                                    padding: EdgeInsets.zero,
-                                                    child: Icon(
-                                                      lefticonname,
-                                                      size: 30,
-                                                      color:
-                                                          draw.color_textstatus,
-                                                    ),
-                                                  )),
-                                              color: draw.backgroundcolor))
+                                          builder: (_) => GestureDetector(
+                                              onTap: () {},
+                                              child: Container(
+                                                padding: EdgeInsets.zero,
+                                                child: Icon(
+                                                  lefticonname,
+                                                  size: 30,
+                                                  color: draw.color_textstatus,
+                                                ),
+                                              )))
                                     ],
                                   )
                                 : const SizedBox(),
@@ -161,43 +154,97 @@ class AppBarCustom extends StatelessWidget {
                                             doubleicon == true
                                                 ? uiset.pagenumber == 11 ||
                                                         uiset.pagenumber == 12
-                                                    ? ContainerDesign(
-                                                        child: GestureDetector(
-                                                          onTap: () => func4(
-                                                            context,
-                                                            textcontroller,
-                                                            searchnode,
-                                                            'addpage',
-                                                            '',
-                                                            99,
-                                                          ),
-                                                          child: Icon(
-                                                            Ionicons
-                                                                .add_outline,
-                                                            size: 30,
-                                                            color: draw
-                                                                .color_textstatus,
-                                                          ),
+                                                    ? GestureDetector(
+                                                        onTap: () => func4(
+                                                          context,
+                                                          textcontroller,
+                                                          searchnode,
+                                                          'addpage',
+                                                          '',
+                                                          99,
                                                         ),
-                                                        color: draw
-                                                            .backgroundcolor)
+                                                        child: Icon(
+                                                          Ionicons.add_outline,
+                                                          size: 30,
+                                                          color: draw
+                                                              .color_textstatus,
+                                                        ),
+                                                      )
                                                     : (uiset.pagenumber == 0
-                                                        ? ContainerDesign(
-                                                            child:
-                                                                GestureDetector(
-                                                              onTap: () {
-                                                                draw.setopennoti();
-                                                              },
-                                                              child: Icon(
-                                                                Ionicons
-                                                                    .notifications_outline,
-                                                                size: 30,
-                                                                color: draw
-                                                                    .color_textstatus,
-                                                              ),
-                                                            ),
-                                                            color: draw
-                                                                .backgroundcolor)
+                                                        ? GestureDetector(
+                                                            onTap: () {
+                                                              draw.setopennoti();
+                                                            },
+                                                            child: notilist
+                                                                        .isread ==
+                                                                    true
+                                                                ? (Get.width <
+                                                                        600
+                                                                    ? Icon(
+                                                                        Ionicons
+                                                                            .notifications_outline,
+                                                                        size:
+                                                                            30,
+                                                                        color: draw
+                                                                            .color_textstatus,
+                                                                      )
+                                                                    : ContainerDesign(
+                                                                        child:
+                                                                            Row(
+                                                                          children: [
+                                                                            Icon(
+                                                                              Ionicons.notifications_outline,
+                                                                              size: 30,
+                                                                              color: draw.color_textstatus,
+                                                                            ),
+                                                                            const SizedBox(
+                                                                              width: 20,
+                                                                            ),
+                                                                            Text(
+                                                                              '노티',
+                                                                              maxLines: 1,
+                                                                              textAlign: TextAlign.start,
+                                                                              style: TextStyle(fontFamily: 'DancingScript', fontWeight: FontWeight.w700, fontSize: contentTextsize(), color: draw.color_textstatus),
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                        color: draw
+                                                                            .backgroundcolor))
+                                                                : (Get.width <
+                                                                        600
+                                                                    ? const Icon(
+                                                                        MaterialCommunityIcons
+                                                                            .bell_badge_outline,
+                                                                        size:
+                                                                            30,
+                                                                        color: Colors
+                                                                            .red,
+                                                                      )
+                                                                    : ContainerDesign(
+                                                                        child:
+                                                                            Row(
+                                                                          children: [
+                                                                            const Icon(
+                                                                              MaterialCommunityIcons.bell_badge_outline,
+                                                                              size: 30,
+                                                                              color: Colors.red,
+                                                                            ),
+                                                                            const SizedBox(
+                                                                              width: 20,
+                                                                            ),
+                                                                            Text(
+                                                                              '노티',
+                                                                              maxLines: 1,
+                                                                              textAlign: TextAlign.start,
+                                                                              style: TextStyle(fontFamily: 'DancingScript', fontWeight: FontWeight.w700, fontSize: contentTextsize(), color: Colors.red),
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                        color: draw
+                                                                            .backgroundcolor)),
+                                                          )
                                                         : const SizedBox())
                                                 : const SizedBox(),
                                             uiset.pagenumber == 0 ||
@@ -210,29 +257,22 @@ class AppBarCustom extends StatelessWidget {
                                                         width: 10,
                                                       )
                                                     : const SizedBox()),
-                                            GetBuilder<uisetting>(
-                                                builder: (_) => ContainerDesign(
-                                                    child: GestureDetector(
-                                                        onTap: () {
-                                                          OnClickedRightIcons(
-                                                              context,
-                                                              righticonname);
-                                                        },
-                                                        child: Container(
-                                                          padding:
-                                                              EdgeInsets.zero,
-                                                          child: Icon(
-                                                            righticonname,
-                                                            size: 30,
-                                                            color: righticonname ==
-                                                                    Icons.star
-                                                                ? Colors.yellow
-                                                                : draw
-                                                                    .color_textstatus,
-                                                          ),
-                                                        )),
-                                                    color:
-                                                        draw.backgroundcolor))
+                                            GestureDetector(
+                                                onTap: () {
+                                                  OnClickedRightIcons(
+                                                      context, righticonname);
+                                                },
+                                                child: Container(
+                                                  padding: EdgeInsets.zero,
+                                                  child: Icon(
+                                                    righticonname,
+                                                    size: 30,
+                                                    color: righticonname ==
+                                                            Icons.star
+                                                        ? Colors.yellow
+                                                        : draw.color_textstatus,
+                                                  ),
+                                                ))
                                           ],
                                         )
                                       : const SizedBox()
@@ -251,39 +291,35 @@ class AppBarCustom extends StatelessWidget {
                                         Hive.box('user_setting')
                                                 .get('page_opened') ==
                                             true
-                                    ? ContainerDesign(
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              draw.setclose();
-                                              Hive.box('user_setting')
-                                                  .put('page_opened', false);
-                                            });
-                                          },
-                                          child: Icon(
-                                            Feather.chevron_right,
-                                            size: 30,
-                                            color: draw.color_textstatus,
-                                          ),
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            draw.setclose();
+                                            Hive.box('user_setting')
+                                                .put('page_opened', false);
+                                          });
+                                        },
+                                        child: Icon(
+                                          Feather.chevron_right,
+                                          size: 30,
+                                          color: draw.color_textstatus,
                                         ),
-                                        color: draw.backgroundcolor)
-                                    : ContainerDesign(
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              draw.navi = 1;
-                                              draw.setopen();
-                                              Hive.box('user_setting')
-                                                  .put('page_opened', true);
-                                            });
-                                          },
-                                          child: Icon(
-                                            Ionicons.menu,
-                                            size: 30,
-                                            color: draw.color_textstatus,
-                                          ),
+                                      )
+                                    : GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            draw.navi = 1;
+                                            draw.setopen();
+                                            Hive.box('user_setting')
+                                                .put('page_opened', true);
+                                          });
+                                        },
+                                        child: Icon(
+                                          Ionicons.menu,
+                                          size: 30,
+                                          color: draw.color_textstatus,
                                         ),
-                                        color: draw.backgroundcolor)
+                                      )
                                 : const SizedBox(),
                           ],
                         ),
@@ -301,8 +337,8 @@ class AppBarCustom extends StatelessWidget {
             '',
             99,
           )
-        : (righticonname == AntDesign.delete
-            ? deletenoti(context)
+        : (righticonname == SimpleLineIcons.grid
+            ? null
             : (righticonname == Icons.star_border || righticonname == Icons.star
                 ? func7()
                 : (righticonname == Icons.person_outline

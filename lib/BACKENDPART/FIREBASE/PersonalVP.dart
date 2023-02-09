@@ -128,6 +128,7 @@ pageaddlogic(context, id, index) async {
               uniqueid: linkspaceset.indexcnt[index].familycode));
         }
       }
+      Get.back();
     },
   );
 }
@@ -1099,8 +1100,8 @@ Widgets_horizontalbtnsecond(
                       backgroundcolor: Colors.red,
                       bordercolor: draw.backgroundcolor);
                   uiset.setloading(false);
-                  Get.back();
                   SaveNoti('box', placestr, '', delete: true);
+                  Get.back();
                 });
               });
             }
@@ -1168,8 +1169,8 @@ SummitEditpage(context, controller, updatelist, prevtitle) async {
             backgroundcolor: Colors.green,
             bordercolor: draw.backgroundcolor);
         uiset.setloading(false);
-        Get.back();
         SaveNoti('page', prevtitle, controller.text);
+        Get.back();
         uiset.setuserspace(init: false);
       });
     });
@@ -1209,9 +1210,9 @@ SummitEditBox(
             bordercolor: draw.backgroundcolor);
         uiset.setloading(false);
         linkspaceset.setspacelink(textEditingControllerAddSheet.text);
-        Get.back();
       }).whenComplete(() async {
         SaveNoti('box', prevtitle, textEditingControllerAddSheet.text);
+        Get.back();
       });
     } else {
       firestore.collection('Pinchannelin').get().then((value) {
@@ -1235,8 +1236,8 @@ SummitEditBox(
             bordercolor: draw.backgroundcolor);
         uiset.setloading(false);
         linkspaceset.setspacelink(textEditingControllerAddSheet.text);
-        Get.back();
         SaveNoti('box', prevtitle, textEditingControllerAddSheet.text);
+        Get.back();
       });
     }
   }

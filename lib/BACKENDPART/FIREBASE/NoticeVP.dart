@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:clickbyme/FRONTENDPART/Route/subuiroute.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../Enums/PageList.dart';
@@ -33,19 +34,13 @@ NotiAlarmRes1(snapshot, listid) {
       notilist.checkread.add(sp.get('read'));
       listid.add(sp.id);
       notilist.listad.add(NotiList(title: messageText, date: messageDate));
+      notilist.checkboxnoti.add(false);
     }
-  }
-  if (notilist.allcheck) {
-    notilist.checkboxnoti =
-        List.filled(notilist.listad.length, true, growable: true);
-  } else {
-    notilist.checkboxnoti =
-        List.filled(notilist.listad.length, false, growable: true);
   }
 }
 
-SaveNoti(where, initialtext, changetext, {delete = false, add = false}) {
-  firestore.collection('AppNoticeByUsers').add({
+SaveNoti(where, initialtext, changetext, {delete = false, add = false}) async {
+  await firestore.collection('AppNoticeByUsers').add({
     'title': delete == true
         ? where == 'page'
             ? '[PAGE]' '$initialtext(이)가 삭제되었습니다.'
@@ -76,5 +71,7 @@ SaveNoti(where, initialtext, changetext, {delete = false, add = false}) {
     'username': name,
     'sharename': [],
     'read': 'no',
+  }).whenComplete(() {
+    notilist.isreadnoti();
   });
 }

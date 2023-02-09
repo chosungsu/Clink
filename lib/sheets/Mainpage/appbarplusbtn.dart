@@ -282,8 +282,6 @@ clickbtn1(context, textcontroller, where, id, categorynumber) {
   final initialtext = textcontroller.text;
   var updateid;
   int indexcnt = linkspaceset.indexcnt.length;
-  /*SaveNoti('box', linkspaceset.indexcnt[index].placestr, '',
-                add: true);*/
 
   if (textcontroller.text.isEmpty) {
     uiset.checktf(false);
@@ -302,8 +300,8 @@ clickbtn1(context, textcontroller, where, id, categorynumber) {
           bordercolor: draw.backgroundcolor);
       uiset.setloading(false);
       linkspaceset.setspacelink(textcontroller.text);
-      Get.back(result: true);
       SaveNoti('page', textcontroller.text, '', add: true);
+      Get.back();
       textcontroller.text = '';
     });
   }
@@ -330,10 +328,10 @@ clickbtn2(context, textcontroller, checkid) {
           bordercolor: draw.backgroundcolor);
       uiset.setloading(false);
       linkspaceset.setspacelink(textcontroller.text);
-      Get.back();
       SaveNoti('box', uiset.pagelist[uiset.mypagelistindex].title,
           textcontroller.text,
           add: true);
+      Get.back();
       textcontroller.text = '';
     });
   }
