@@ -163,7 +163,6 @@ class uisetting extends GetxController {
         await firestore.collection('Pinchannel').add({
           'username': usercode,
           'linkname': '빈 스페이스',
-          'email': useremail,
           'setting': 'block'
         }).then((value1) {
           pagelist

@@ -3,8 +3,9 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:clickbyme/Enums/Variables.dart';
+import 'package:clickbyme/main.dart';
 import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
-import 'package:clickbyme/sheets/Mainpage/appbarplusbtn.dart';
+import 'package:clickbyme/sheets/BSContents/appbarplusbtn.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,6 @@ import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:status_bar_control/status_bar_control.dart';
-import '../Page/LoginSignPage.dart';
 import '../../Tool/AndroidIOS.dart';
 import '../../Tool/FlushbarStyle.dart';
 import '../../Tool/Getx/linkspacesetting.dart';
@@ -26,7 +26,6 @@ import '../../Tool/Getx/notishow.dart';
 import '../../Tool/Getx/uisetting.dart';
 import '../../Tool/TextSize.dart';
 import 'mainroute.dart';
-import 'package:collection/collection.dart';
 
 void pressed1() {
   Hive.box('user_info').get('autologin') == false
@@ -41,15 +40,11 @@ void pressed2() {
 
 GoToMain() {
   Hive.box('user_setting').put('currentmypage', 0);
-  Get.to(() => const mainroute(), transition: Transition.fade);
+  Get.offAll(() => const mainroute(), transition: Transition.fade);
 }
 
-GoToLogin(String s) {
-  Timer? _time = Timer(const Duration(seconds: 0), () {
-    Get.to(() => LoginSignPage(first: s));
-  });
-
-  return _time;
+GoToStartApp() {
+  Get.offAll(() => const SplashPage(), transition: Transition.fade);
 }
 
 Future getAppInfo({tomail = false}) async {
@@ -109,7 +104,8 @@ deletenoti(context) async {
         //전체 삭제인 경우
         firestore.collection('AppNoticeByUsers').get().then((value) {
           for (var element in value.docs) {
-            if (element.get('sharename').toString().contains(name) == true) {
+            if (element.get('sharename').toString().contains(appnickname) ==
+                true) {
               deleteid = element.id;
               updateusername =
                   element.get('sharename').toString().split(',').toList();
@@ -117,14 +113,14 @@ deletenoti(context) async {
                 firestore.collection('AppNoticeByUsers').doc(deleteid).delete();
               } else {
                 updateusername.removeWhere(
-                    (element) => element.toString().contains(name));
+                    (element) => element.toString().contains(appnickname));
                 firestore
                     .collection('AppNoticeByUsers')
                     .doc(deleteid)
                     .update({'sharename': updateusername});
               }
             } else {
-              if (element.get('username').toString() == name) {
+              if (element.get('username').toString() == appnickname) {
                 deleteid = element.id;
                 firestore.collection('AppNoticeByUsers').doc(deleteid).delete();
               } else {}
@@ -139,7 +135,8 @@ deletenoti(context) async {
         firestore.collection('AppNoticeByUsers').get().then((value) {
           for (var element in value.docs) {
             if (deletelist.contains(element.get('title'))) {
-              if (element.get('sharename').toString().contains(name) == true) {
+              if (element.get('sharename').toString().contains(appnickname) ==
+                  true) {
                 deleteid = element.id;
                 updateusername =
                     element.get('sharename').toString().split(',').toList();
@@ -150,14 +147,14 @@ deletenoti(context) async {
                       .delete();
                 } else {
                   updateusername.removeWhere(
-                      (element) => element.toString().contains(name));
+                      (element) => element.toString().contains(appnickname));
                   firestore
                       .collection('AppNoticeByUsers')
                       .doc(deleteid)
                       .update({'sharename': updateusername});
                 }
               } else {
-                if (element.get('username').toString() == name) {
+                if (element.get('username').toString() == appnickname) {
                   deleteid = element.id;
                   firestore
                       .collection('AppNoticeByUsers')

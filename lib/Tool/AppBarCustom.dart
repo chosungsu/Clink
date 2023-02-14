@@ -262,17 +262,67 @@ class AppBarCustom extends StatelessWidget {
                                                   OnClickedRightIcons(
                                                       context, righticonname);
                                                 },
-                                                child: Container(
-                                                  padding: EdgeInsets.zero,
-                                                  child: Icon(
-                                                    righticonname,
-                                                    size: 30,
-                                                    color: righticonname ==
-                                                            Icons.star
-                                                        ? Colors.yellow
-                                                        : draw.color_textstatus,
-                                                  ),
-                                                ))
+                                                child: Get.width < 600
+                                                    ? Container(
+                                                        padding:
+                                                            EdgeInsets.zero,
+                                                        child: Icon(
+                                                          righticonname,
+                                                          size: 30,
+                                                          color: righticonname ==
+                                                                  Icons.star
+                                                              ? Colors.yellow
+                                                              : draw
+                                                                  .color_textstatus,
+                                                        ),
+                                                      )
+                                                    : ContainerDesign(
+                                                        child: Row(
+                                                          children: [
+                                                            Container(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .zero,
+                                                              child: Icon(
+                                                                righticonname,
+                                                                size: 30,
+                                                                color: righticonname ==
+                                                                        Icons
+                                                                            .star
+                                                                    ? Colors
+                                                                        .yellow
+                                                                    : draw
+                                                                        .color_textstatus,
+                                                              ),
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 20,
+                                                            ),
+                                                            Text(
+                                                              RightIconText(
+                                                                  righticonname),
+                                                              maxLines: 1,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              style: TextStyle(
+                                                                  fontFamily:
+                                                                      'DancingScript',
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  fontSize:
+                                                                      contentTextsize(),
+                                                                  color: draw
+                                                                      .color_textstatus),
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        color: draw
+                                                            .backgroundcolor))
                                           ],
                                         )
                                       : const SizedBox()
@@ -342,13 +392,25 @@ class AppBarCustom extends StatelessWidget {
             : (righticonname == Icons.star_border || righticonname == Icons.star
                 ? func7()
                 : (righticonname == Icons.person_outline
-                    ? (Hive.box('user_info').get('id') == null
-                        ? GoToLogin('isnotfirst')
-                        : SPIconclick(context, textcontroller, searchnode))
+                    ? SPIconclick(context, textcontroller, searchnode)
                     : (righticonname == Icons.download
                         ? downloadFileExample(mainid, context)
                         : (righticonname == Ionicons.ios_close
                             ? closenotiroom()
                             : null)))));
+  }
+
+  RightIconText(righticonname) {
+    return righticonname == Ionicons.add_outline
+        ? '추가'
+        : (righticonname == SimpleLineIcons.grid
+            ? '옵션'
+            : (righticonname == Icons.star_border || righticonname == Icons.star
+                ? '즐겨찾기'
+                : (righticonname == Icons.person_outline
+                    ? '계정'
+                    : (righticonname == Icons.download
+                        ? ''
+                        : (righticonname == Ionicons.ios_close ? '닫기' : '')))));
   }
 }

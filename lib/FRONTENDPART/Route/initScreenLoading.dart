@@ -12,23 +12,22 @@ Future initScreen() async {
   final notilist = Get.put(notishow());
   final uiset = Get.put(uisetting());
 
-  if (name == '') {
-  } else {
+  if (usercode == '') {
     /**
-     * secondnameload : user의 db에서 subname, usercode를 로드함.
+     * usercodeset : user의 name, usercode를 생성함.
      */
-    peopleadd.secondnameload(init: true);
-    /**
-     * isreadnoti : appnoticebyusers의 db에서 read를 로드함.
-     */
-    notilist.isreadnoti(init: true);
-    /**
-     * setuserspace : pinchannel db에서 page contents를 로드함(존재하지 않는 경우 : default값).
-     */
-    uiset.setuserspace(init: true);
-    /**
-     * setuserspace : pinchannel db에서 page contents를 로드함(존재하지 않는 경우 : default값).
-     */
-    uiset.setprofilespace(init: true);
-  }
+    peopleadd.usercodeset();
+  } else {}
+  /**
+  * isreadnoti : appnoticebyusers의 db에서 read를 로드함.
+  */
+  notilist.isreadnoti(init: true);
+  /**
+  * setuserspace : pinchannel db에서 page contents를 로드함(존재하지 않는 경우 : default값).
+  */
+  uiset.setuserspace(init: true);
+  /**
+  * setprofilespace : profile 공간을 생성함.
+  */
+  uiset.setprofilespace(init: true);
 }

@@ -44,8 +44,8 @@ class notishow extends GetxController {
     await firestore.collection('AppNoticeByUsers').get().then((value) {
       updateid.clear();
       for (var element in value.docs) {
-        if (element.data()['username'] == name ||
-            element.data()['sharename'].toString().contains(name)) {
+        if (element.data()['username'] == appnickname ||
+            element.data()['sharename'].toString().contains(appnickname)) {
           updateid.add(element.data()['read']);
         }
       }

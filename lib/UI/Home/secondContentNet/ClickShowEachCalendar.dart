@@ -169,7 +169,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                 .toString()
                 .split(' ')[1]
                 .split(':')[1],
-        'username': name,
+        'username': appnickname,
         'sharename': widget.share,
         'read': 'no',
       }).whenComplete(() {
@@ -369,7 +369,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
               .toString()
               .split(' ')[1]
               .split(':')[1],
-      'username': name,
+      'username': appnickname,
       'sharename': widget.share,
       'read': 'no',
     }).whenComplete(() {

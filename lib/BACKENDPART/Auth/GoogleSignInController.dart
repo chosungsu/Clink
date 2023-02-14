@@ -58,7 +58,7 @@ class GoogleSignInController extends GetxController {
               if (value.exists) {
                 await Hive.box('user_setting')
                     .put('usercode', value.data()!['code']);
-                name = nick;
+                appnickname = nick;
                 email = email;
                 usercode = value.data()!['code'];
                 initScreen();
@@ -79,7 +79,7 @@ class GoogleSignInController extends GetxController {
             await Hive.box('user_info').put('count', count);
             await Hive.box('user_info').put('autologin', ischecked);
             await Hive.box('user_setting').put('usercode', code);
-            name = nick;
+            appnickname = nick;
             email = email;
             usercode = code;
             initScreen();

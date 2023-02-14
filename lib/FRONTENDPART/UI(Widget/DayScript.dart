@@ -767,7 +767,7 @@ class _DayScriptState extends State<DayScript> {
                               }
                               addhashtagcollector(
                                   context,
-                                  name,
+                                  appnickname,
                                   texteditingcontrollerlist[5],
                                   focusnodelist[4],
                                   'inside',

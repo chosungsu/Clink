@@ -13,7 +13,7 @@ import '../../Tool/FlushbarStyle.dart';
 import '../../Tool/Getx/PeopleAdd.dart';
 import '../../Tool/Getx/uisetting.dart';
 import '../../Tool/TextSize.dart';
-import '../../sheets/Mainpage/appbarpersonbtn.dart';
+import '../../sheets/BSContents/appbarpersonbtn.dart';
 
 final peopleadd = Get.put(PeopleAdd());
 final uiset = Get.put(uisetting());
@@ -155,7 +155,7 @@ Search(
                                               .remove(searchlist_user[index]);
                                           firestore
                                               .collection('PeopleList')
-                                              .doc(name)
+                                              .doc(appnickname)
                                               .delete();
                                           Get.back();
                                           Snack.snackbars(
@@ -167,7 +167,7 @@ Search(
                                         }
                                         firestore
                                             .collection('PeopleList')
-                                            .doc(name)
+                                            .doc(appnickname)
                                             .set({'friends': list_sp},
                                                 SetOptions(merge: true));
                                       },
@@ -247,7 +247,7 @@ usersearch(
   String addwhat = '';
   List<String> searchlist_user = [];
   List<String> list_sp = [];
-  firestore.collection('PeopleList').doc(name).get().then((value) {
+  firestore.collection('PeopleList').doc(appnickname).get().then((value) {
     for (int i = 0; i < value.get('friends').length; i++) {
       list_sp.add(value.get('friends')[i]);
     }

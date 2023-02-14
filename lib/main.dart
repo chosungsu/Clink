@@ -193,7 +193,7 @@ class _SplashPageState extends State<SplashPage> {
                             height: 50,
                             child: GestureDetector(
                               onTap: () {
-                                GoToLogin('first');
+                                GoToMain();
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -272,7 +272,7 @@ class _SplashPageState extends State<SplashPage> {
                             height: 50,
                             child: GestureDetector(
                               onTap: () {
-                                GoToLogin('first');
+                                GoToMain();
                               },
                               child: Container(
                                 decoration: BoxDecoration(

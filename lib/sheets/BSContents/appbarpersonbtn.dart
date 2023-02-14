@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:clickbyme/Enums/Variables.dart';
+import 'package:clickbyme/main.dart';
 import 'package:clickbyme/sheets/BottomSheet/AddContentWithBtn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -14,6 +15,9 @@ import '../../Tool/Getx/PeopleAdd.dart';
 import '../../Tool/Getx/uisetting.dart';
 import '../../Tool/TextSize.dart';
 
+final uiset = Get.put(uisetting());
+final peopleadd = Get.put(PeopleAdd());
+
 Widgets_settingpageiconclick(
   context,
   textcontroller,
@@ -22,22 +26,24 @@ Widgets_settingpageiconclick(
   Widget title, title2, title3;
   Widget content, content2, content3;
   Widget btn2, btn3;
-  final uiset = Get.put(uisetting());
-  final peopleadd = Get.put(PeopleAdd());
 
   title = const SizedBox();
   content = StatefulBuilder(builder: (_, StateSetter setState) {
     return Column(
       children: [
         ListTile(
-          onTap: () {},
-          subtitle: Text(peopleadd.secondname,
-              maxLines: 2,
-              style: TextStyle(
-                  color: Colors.blue,
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentsmallTextsize(),
-                  overflow: TextOverflow.ellipsis)),
+          onTap: () {
+            Get.back();
+            uiset.checktf(true);
+            title2 = Widgets_settingpagenickchange(
+                context, textcontroller, searchnode)[0];
+            content2 = Widgets_settingpagenickchange(
+                context, textcontroller, searchnode)[1];
+            btn2 = Widgets_settingpagenickchange(
+                context, textcontroller, searchnode)[2];
+            AddContentWithBtn(context, title2, content2, btn2, searchnode);
+          },
+          trailing: Icon(AntDesign.swap, color: Colors.grey.shade400),
           title: Text(
             '닉네임',
             softWrap: true,
@@ -77,48 +83,6 @@ Widgets_settingpageiconclick(
         ListTile(
           onTap: () {
             Get.back();
-            uiset.checktf(true);
-            title2 = Widgets_settingpagenickchange(
-                context, textcontroller, searchnode)[0];
-            content2 = Widgets_settingpagenickchange(
-                context, textcontroller, searchnode)[1];
-            btn2 = Widgets_settingpagenickchange(
-                context, textcontroller, searchnode)[2];
-            AddContentWithBtn(context, title2, content2, btn2, searchnode);
-          },
-          trailing: Icon(Ionicons.chevron_forward, color: Colors.grey.shade400),
-          title: Text(
-            '닉네임 변경',
-            softWrap: true,
-            textAlign: TextAlign.start,
-            style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: contentTextsize()),
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        ListTile(
-          onTap: () {
-            Get.back();
-            GoogleSignInController().logout(context, name);
-            GoToLogin('isnotfirst');
-          },
-          trailing: Icon(Ionicons.chevron_forward, color: Colors.grey.shade400),
-          title: Text(
-            '다른 아이디 로그인',
-            softWrap: true,
-            textAlign: TextAlign.start,
-            style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: contentTextsize()),
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        ListTile(
-          onTap: () {
-            Get.back();
             title3 = Widgets_settingpagedeleteuser(
                 context, textcontroller, searchnode)[0];
             content3 = Widgets_settingpagedeleteuser(
@@ -154,8 +118,6 @@ Widgets_settingpagenickchange(
   Widget content;
   Widget btn;
   bool _ischecked = false;
-  final uiset = Get.put(uisetting());
-  final peopleadd = Get.put(PeopleAdd());
 
   title = SizedBox(
       width: MediaQuery.of(context).size.width * 0.8,
@@ -166,7 +128,7 @@ Widgets_settingpagenickchange(
               maxLines: 2,
               text: TextSpan(children: [
                 TextSpan(
-                    text: name,
+                    text: usercode,
                     style: TextStyle(
                         color: Colors.blue.shade400,
                         fontWeight: FontWeight.bold,
@@ -247,10 +209,10 @@ Widgets_settingpagenickchange(
                       uiset.checktf(true);
                       await firestore
                           .collection('User')
-                          .doc(name)
+                          .doc(usercode)
                           .get()
                           .then((value) {
-                        peopleadd.secondnameset(name, value.get('code'));
+                        peopleadd.secondnameset(usercode);
                       });
                       uiset.setloading(false);
                       Get.back();
@@ -263,20 +225,19 @@ Widgets_settingpagenickchange(
                       uiset.checktf(true);
                       await firestore
                           .collection('User')
-                          .doc(name)
+                          .doc(usercode)
                           .get()
                           .then((value) {
-                        peopleadd.secondnameset(name, value.get('code'));
+                        peopleadd.secondnameset(usercode);
                       });
                     } else {
                       uiset.checktf(true);
                       await firestore
                           .collection('User')
-                          .doc(name)
+                          .doc(appnickname)
                           .get()
                           .then((value) {
-                        peopleadd.secondnameset(
-                            textcontroller.text, value.get('code'));
+                        peopleadd.secondnameset(textcontroller.text);
                       });
                     }
                     uiset.setloading(false);
@@ -355,8 +316,6 @@ Widgets_settingpagedeleteuser(
   Widget btn;
   String updateid = '';
   List changepeople = [];
-  final uiset = Get.put(uisetting());
-  final peopleadd = Get.put(PeopleAdd());
 
   title = SizedBox(
       height: 50,
@@ -395,7 +354,7 @@ Widgets_settingpagedeleteuser(
         onPressed: () async {
           uiset.setloading(true);
           await NotificationApi.cancelAll();
-          GoogleSignInController().Deletelogout(context, name);
+          GoogleSignInController().Deletelogout(context, appnickname);
           await firestore.collection('Calendar').get().then((value) {
             for (int i = 0; i < value.docs.length; i++) {
               for (int j = 0; j < value.docs[i].get('share').length; j++) {
@@ -443,9 +402,7 @@ Widgets_settingpagedeleteuser(
           });
           await firestore.collection('MemoAllAlarm').doc(usercode).delete();
           uiset.setloading(false);
-          GoToLogin(
-            'first',
-          );
+          GoToStartApp();
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.red,

@@ -12,7 +12,6 @@ import '../../Tool/Getx/PeopleAdd.dart';
 import '../../Tool/Getx/calendarsetting.dart';
 import '../../Tool/Getx/memosetting.dart';
 
-
 void savecalendarsandmemo(context, texteditingcontrollerlist, position, id) {
   final controllCal = Get.put(calendarsetting());
   final calSharePerson = Get.put(PeopleAdd());
@@ -87,7 +86,7 @@ void savecalendarsandmemo(context, texteditingcontrollerlist, position, id) {
                 .toString()
                 .split(' ')[1]
                 .split(':')[1],
-        'username': name,
+        'username': appnickname,
         'sharename': controllCal.share,
         'read': 'no',
       }).whenComplete(() async {
@@ -607,7 +606,7 @@ void savecalendarsandmemo(context, texteditingcontrollerlist, position, id) {
                 .toString()
                 .split(' ')[1]
                 .split(':')[1],
-        'username': name,
+        'username': appnickname,
         'sharename': controllCal.share,
         'read': 'no',
       }).whenComplete(() {

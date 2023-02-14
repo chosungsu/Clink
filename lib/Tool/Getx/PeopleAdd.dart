@@ -113,36 +113,33 @@ class PeopleAdd extends GetxController {
     notifyChildrens();
   }
 
-  void secondnameset(String username, String usercode) {
-    firestore.collection('User').doc(name).update({'subname': username});
-    code = usercode;
+  void usercodeset() async {
+    var _chars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    Random _rnd = Random();
+    String code = '';
 
-    secondname = name;
+    //내부 저장으로 로그인 정보 저장
+    code = 'User#' +
+        String.fromCharCodes(Iterable.generate(
+            5, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+    if (usercode == '') {
+      await firestore.collection('User').doc(code).set(
+          {'nick': code, 'email': '', 'code': code},
+          SetOptions(merge: true)).whenComplete(() async {
+        await Hive.box('user_info').put('id', code);
+        await Hive.box('user_info').put('email', '');
+        await Hive.box('user_setting').put('usercode', code);
+      });
+    } else {}
+
     update();
     notifyChildrens();
   }
 
-  void secondnameload({init = true}) async {
-    await firestore
-        .collection('User')
-        .where('name', isEqualTo: name)
-        .get()
-        .then(
-      (value) {
-        if (value.docs.isEmpty) {
-          firestore.collection('User').doc(name).update({'subname': name});
-          code = usercode;
-          secondname = name;
-        } else {
-          firestore
-              .collection('User')
-              .doc(name)
-              .update({'subname': value.docs[0].get('subname')});
-          code = value.docs[0].get('code');
-          secondname = value.docs[0].get('subname');
-        }
-      },
-    );
+  void secondnameset(String code) {
+    firestore.collection('User').doc(usercode).update({'nick': code});
+    appnickname = code;
     update();
     notifyChildrens();
   }

@@ -16,7 +16,7 @@ import '../../Enums/Expandable.dart';
 import '../../Tool/AndroidIOS.dart';
 import '../../Tool/Getx/PeopleAdd.dart';
 import '../../Tool/Getx/uisetting.dart';
-import '../../sheets/settingpagesheets.dart';
+import '../../sheets/BSContents/toCompany.dart';
 
 final uiset = Get.put(uisetting());
 final linkspaceset = Get.put(linkspacesetting());
@@ -209,7 +209,7 @@ Opt_body(index, searchnode, controller) {
                               'https://linkaiteam.github.io/LINKAITEAM/전체');
                           launchUrl(url);
                         } else {
-                          showreadycontent(context);
+                          toCompany(context);
                         }
                       } else if (index == 2) {
                         uiset.checkprofilepageindex(1);

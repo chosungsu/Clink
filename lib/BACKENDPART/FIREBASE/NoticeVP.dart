@@ -29,8 +29,8 @@ NotiAlarmRes1(snapshot, listid) {
   for (var sp in valuespace) {
     final messageText = sp.get('title');
     final messageDate = sp.get('date');
-    if (sp.get('sharename').toString().contains(name) ||
-        sp.get('username') == name) {
+    if (sp.get('sharename').toString().contains(appnickname) ||
+        sp.get('username') == appnickname) {
       notilist.checkread.add(sp.get('read'));
       listid.add(sp.id);
       notilist.listad.add(NotiList(title: messageText, date: messageDate));
@@ -68,7 +68,7 @@ SaveNoti(where, initialtext, changetext, {delete = false, add = false}) async {
             .toString()
             .split(' ')[1]
             .split(':')[1],
-    'username': name,
+    'username': appnickname,
     'sharename': [],
     'read': 'no',
   }).whenComplete(() {
