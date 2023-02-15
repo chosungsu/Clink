@@ -37,8 +37,13 @@ class _WallPaperPageState extends State<WallPaperPage> {
   }
 
   Future<bool> onWillPop() async {
-    uiset.setpageindex(0);
-    Get.to(() => const mainroute(), transition: Transition.fade);
+    if (uiset.searchpagemove == '') {
+      uiset.setpageindex(0);
+      Get.to(() => const mainroute(), transition: Transition.fade);
+    } else {
+      uiset.setpageindex(1);
+      Get.back();
+    }
     return false;
   }
 

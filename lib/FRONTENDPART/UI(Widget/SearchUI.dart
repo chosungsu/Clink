@@ -7,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import '../../../Enums/Variables.dart';
+import '../../BACKENDPART/Enums/Variables.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../../Tool/NoBehavior.dart';

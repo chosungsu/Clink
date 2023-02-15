@@ -1,4 +1,4 @@
-import 'package:clickbyme/Enums/Variables.dart';
+import 'package:clickbyme/BACKENDPART/Enums/Variables.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/BACKENDPART/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/IconBtn.dart';

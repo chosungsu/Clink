@@ -20,7 +20,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:local_auth/local_auth.dart';
 import '../../BACKENDPART/Auth/SecureAuth.dart';
-import '../../Enums/Variables.dart';
+import '../../BACKENDPART/Enums/Variables.dart';
 import '../../Tool/AppBarCustom.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
 import '../Route/subuiroute.dart';

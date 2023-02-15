@@ -16,7 +16,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../../../Enums/MemoList.dart';
+import '../../../BACKENDPART/Enums/MemoList.dart';
 import '../../../FRONTENDPART/Route/subuiroute.dart';
 import '../../../Tool/AndroidIOS.dart';
 import '../../../BACKENDPART/Getx/memosetting.dart';

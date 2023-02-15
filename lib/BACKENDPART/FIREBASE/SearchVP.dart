@@ -2,8 +2,8 @@
 
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import '../../Enums/PageList.dart';
-import '../../Enums/Variables.dart';
+import '../Enums/PageList.dart';
+import '../Enums/Variables.dart';
 import '../Getx/uisetting.dart';
 
 SearchpageStreamParent() {

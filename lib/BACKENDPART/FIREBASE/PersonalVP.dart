@@ -1,14 +1,14 @@
 // ignore_for_file: non_constant_identifier_names, prefer_typing_uninitialized_variables, unused_local_variable
 
 import 'package:clickbyme/BACKENDPART/FIREBASE/NoticeVP.dart';
-import 'package:clickbyme/Enums/Radio.dart';
+import 'package:clickbyme/BACKENDPART/Enums/Radio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import '../../Enums/Linkpage.dart';
-import '../../Enums/PageList.dart';
-import '../../Enums/Variables.dart';
+import '../Enums/Linkpage.dart';
+import '../Enums/PageList.dart';
+import '../Enums/Variables.dart';
 import '../../FRONTENDPART/Page/Spacein.dart';
 import '../../FRONTENDPART/Route/subuiroute.dart';
 import '../../Tool/AndroidIOS.dart';

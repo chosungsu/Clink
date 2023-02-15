@@ -2,8 +2,8 @@
 
 import 'package:get/get.dart';
 
-import '../../Enums/Linkpage.dart';
-import '../../Enums/Variables.dart';
+import '../Enums/Linkpage.dart';
+import '../Enums/Variables.dart';
 import '../Getx/calendarsetting.dart';
 import '../Getx/linkspacesetting.dart';
 import '../Getx/uisetting.dart';

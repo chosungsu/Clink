@@ -9,7 +9,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
-import '../../../Enums/Variables.dart';
+import '../../BACKENDPART/Enums/Variables.dart';
 import '../../BACKENDPART/Getx/linkspacesetting.dart';
 import '../../../Tool/TextSize.dart';
 import '../../BACKENDPART/FIREBASE/PersonalVP.dart';

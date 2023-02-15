@@ -1,18 +1,18 @@
 // ignore_for_file: file_names, prefer_typing_uninitialized_variables, non_constant_identifier_names
 import 'dart:math';
-import 'package:clickbyme/Enums/Event.dart';
+import 'package:clickbyme/BACKENDPART/Enums/Event.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:package_info/package_info.dart';
-import '../BACKENDPART/Getx/PeopleAdd.dart';
-import '../BACKENDPART/Getx/linkspacesetting.dart';
-import '../BACKENDPART/Getx/navibool.dart';
-import '../BACKENDPART/Getx/notishow.dart';
-import '../BACKENDPART/Getx/selectcollection.dart';
-import '../BACKENDPART/Getx/uisetting.dart';
+import '../Getx/PeopleAdd.dart';
+import '../Getx/linkspacesetting.dart';
+import '../Getx/navibool.dart';
+import '../Getx/notishow.dart';
+import '../Getx/selectcollection.dart';
+import '../Getx/uisetting.dart';
 import 'Expandable.dart';
 import 'MemoList.dart';
 

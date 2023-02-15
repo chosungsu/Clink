@@ -6,8 +6,8 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:status_bar_control/status_bar_control.dart';
-import '../Enums/PageList.dart';
-import '../Enums/Variables.dart';
+import '../BACKENDPART/Enums/PageList.dart';
+import '../BACKENDPART/Enums/Variables.dart';
 import '../FRONTENDPART/Route/subuiroute.dart';
 import '../BACKENDPART/Getx/linkspacesetting.dart';
 import '../BACKENDPART/Getx/navibool.dart';
@@ -141,7 +141,6 @@ class AppBarCustom extends StatelessWidget {
                                           maxLines: 1,
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
-                                              fontFamily: 'DancingScript',
                                               fontWeight: FontWeight.w700,
                                               fontSize: mainTitleTextsize(),
                                               color: draw.color_textstatus),

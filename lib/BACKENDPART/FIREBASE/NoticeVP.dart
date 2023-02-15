@@ -3,8 +3,8 @@
 import 'package:clickbyme/FRONTENDPART/Route/subuiroute.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import '../../Enums/PageList.dart';
-import '../../Enums/Variables.dart';
+import '../Enums/PageList.dart';
+import '../Enums/Variables.dart';
 import '../Getx/linkspacesetting.dart';
 import '../Getx/notishow.dart';
 import '../Getx/uisetting.dart';
@@ -48,7 +48,7 @@ SaveNoti(where, initialtext, changetext, {delete = false, add = false}) async {
         : (add == true
             ? where == 'page'
                 ? '[PAGE]' '$initialtext 페이지가 추가되었습니다.'
-                : '[BOX]' '$initialtext 페이지에서 새 BOX$changetext(이)가 추가되었습니다.'
+                : '[BOX]' '$initialtext 페이지에서 새 BOX $changetext(이)가 추가되었습니다.'
             : where == 'page'
                 ? '[PAGE]' '$initialtext에서 $changetext(으)로  변경되었습니다.'
                 : '[BOX]' '$initialtext에서 $changetext(으)로  변경되었습니다.'),

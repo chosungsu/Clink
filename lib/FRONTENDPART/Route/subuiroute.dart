@@ -2,7 +2,7 @@
 
 import 'dart:async';
 import 'dart:io';
-import 'package:clickbyme/Enums/Variables.dart';
+import 'package:clickbyme/BACKENDPART/Enums/Variables.dart';
 import 'package:clickbyme/main.dart';
 import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
 import 'package:clickbyme/sheets/BSContents/appbarplusbtn.dart';

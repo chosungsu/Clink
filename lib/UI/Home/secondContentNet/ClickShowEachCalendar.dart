@@ -13,7 +13,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import '../../../Enums/Variables.dart';
+import '../../../BACKENDPART/Enums/Variables.dart';
 import '../../../FRONTENDPART/Route/subuiroute.dart';
 import '../../../FRONTENDPART/UI(Widget/DayScript.dart';
 import '../../../BACKENDPART/LocalNotiPlatform/NotificationApi.dart';

@@ -1,8 +1,8 @@
 // ignore_for_file: camel_case_types
 
 import 'package:get/get.dart';
-import '../../Enums/PageList.dart';
-import '../../Enums/Variables.dart';
+import '../Enums/PageList.dart';
+import '../Enums/Variables.dart';
 
 class notishow extends GetxController {
   bool allcheck = false;

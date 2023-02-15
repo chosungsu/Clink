@@ -8,7 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
-import '../../Enums/Variables.dart';
+import '../../BACKENDPART/Enums/Variables.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
 import '../UI(Widget/SearchUI.dart';
 import 'DrawerScreen.dart';

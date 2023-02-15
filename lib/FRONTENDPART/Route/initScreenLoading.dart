@@ -2,7 +2,7 @@
 
 import 'dart:async';
 import 'package:get/get.dart';
-import '../../Enums/Variables.dart';
+import '../../BACKENDPART/Enums/Variables.dart';
 import '../../BACKENDPART/Getx/PeopleAdd.dart';
 import '../../BACKENDPART/Getx/notishow.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';

@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 
-import '../../Enums/MemoList.dart';
-import '../../Enums/Variables.dart';
+import '../Enums/MemoList.dart';
+import '../Enums/Variables.dart';
 import '../LocalNotiPlatform/NotificationApi.dart';
 import '../../Tool/FlushbarStyle.dart';
 import '../Getx/PeopleAdd.dart';

@@ -4,7 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import '../../Enums/Linkpage.dart';
+import '../Enums/Linkpage.dart';
 import '../../Tool/BGColor.dart';
 
 class linkspacesetting extends GetxController {

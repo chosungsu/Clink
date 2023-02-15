@@ -1,12 +1,12 @@
 // ignore_for_file: camel_case_types, non_constant_identifier_names
 
-import 'package:clickbyme/Enums/Profile_item.dart';
+import 'package:clickbyme/BACKENDPART/Enums/Profile_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import '../../Enums/PageList.dart';
-import '../../Enums/Variables.dart';
+import '../Enums/PageList.dart';
+import '../Enums/Variables.dart';
 import '../../FRONTENDPART/Route/subuiroute.dart';
 
 class uisetting extends GetxController {

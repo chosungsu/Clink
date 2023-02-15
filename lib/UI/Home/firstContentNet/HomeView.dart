@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:status_bar_control/status_bar_control.dart';
-import '../../../Enums/Linkpage.dart';
+import '../../../BACKENDPART/Enums/Linkpage.dart';
 import '../../../FRONTENDPART/Route/subuiroute.dart';
 import '../../../Tool/AppBarCustom.dart';
 import '../../../Tool/BGColor.dart';

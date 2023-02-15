@@ -8,7 +8,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:store_redirect/store_redirect.dart';
-import '../../Enums/Variables.dart';
+import '../../BACKENDPART/Enums/Variables.dart';
 import '../../Tool/ContainerDesign.dart';
 import '../../Tool/FlushbarStyle.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
