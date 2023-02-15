@@ -6,11 +6,11 @@ import 'package:intl/intl.dart';
 
 import '../../Enums/MemoList.dart';
 import '../../Enums/Variables.dart';
-import '../../LocalNotiPlatform/NotificationApi.dart';
+import '../LocalNotiPlatform/NotificationApi.dart';
 import '../../Tool/FlushbarStyle.dart';
-import '../../Tool/Getx/PeopleAdd.dart';
-import '../../Tool/Getx/calendarsetting.dart';
-import '../../Tool/Getx/memosetting.dart';
+import '../Getx/PeopleAdd.dart';
+import '../Getx/calendarsetting.dart';
+import '../Getx/memosetting.dart';
 
 void savecalendarsandmemo(context, texteditingcontrollerlist, position, id) {
   final controllCal = Get.put(calendarsetting());
@@ -173,7 +173,7 @@ void savecalendarsandmemo(context, texteditingcontrollerlist, position, id) {
                   .collection('CalendarDataBase')
                   .doc(value.id)
                   .collection('AlarmTable')
-                  .doc(calSharePerson.secondname)
+                  .doc(appnickname)
                   .set({
                 'alarmtype': alarmtypes,
                 'alarmhour': controllCal.hour1,
@@ -182,7 +182,7 @@ void savecalendarsandmemo(context, texteditingcontrollerlist, position, id) {
                 'calcode': value.id
               });
               for (int k = 0; k < controllCal.share.length; k++) {
-                if (controllCal.share[k] != calSharePerson.secondname) {
+                if (controllCal.share[k] != appnickname) {
                   firestore
                       .collection('CalendarDataBase')
                       .doc(value.id)
@@ -222,8 +222,7 @@ void savecalendarsandmemo(context, texteditingcontrollerlist, position, id) {
                                   .toString()
                                   .split('-')[1]) +
                           int.parse(value.id.hashCode.toString()) +
-                          int.parse(
-                              calSharePerson.secondname.hashCode.toString()),
+                          int.parse(appnickname.hashCode.toString()),
                       title: texteditingcontrollerlist[0].text + '일정이 다가옵니다',
                       body: texteditingcontrollerlist[1]
                                   .text
@@ -278,8 +277,7 @@ void savecalendarsandmemo(context, texteditingcontrollerlist, position, id) {
                                   .toString()
                                   .split('-')[1]) +
                           int.parse(value.id.hashCode.toString()) +
-                          int.parse(
-                              calSharePerson.secondname.hashCode.toString()),
+                          int.parse(appnickname.hashCode.toString()),
                       title: texteditingcontrollerlist[0].text + '일정이 다가옵니다',
                       body: texteditingcontrollerlist[1]
                                   .text
@@ -386,7 +384,7 @@ void savecalendarsandmemo(context, texteditingcontrollerlist, position, id) {
                   .collection('CalendarDataBase')
                   .doc(valueid[i])
                   .collection('AlarmTable')
-                  .doc(calSharePerson.secondname)
+                  .doc(appnickname)
                   .set({
                 'alarmtype': alarmtypes,
                 'alarmhour': controllCal.hour1,
@@ -398,7 +396,7 @@ void savecalendarsandmemo(context, texteditingcontrollerlist, position, id) {
 
             for (int j = 0; j < valueid.length; j++) {
               for (int k = 0; k < controllCal.share.length; k++) {
-                if (controllCal.share[k] != calSharePerson.secondname) {
+                if (controllCal.share[k] != appnickname) {
                   firestore
                       .collection('CalendarDataBase')
                       .doc(valueid[j])
@@ -458,8 +456,7 @@ void savecalendarsandmemo(context, texteditingcontrollerlist, position, id) {
                               .split(' ')[0]
                               .split('-')[1]) +
                           int.parse(valueid[j].hashCode.toString()) +
-                          int.parse(
-                              calSharePerson.secondname.hashCode.toString()),
+                          int.parse(appnickname.hashCode.toString()),
                       title: texteditingcontrollerlist[0].text + '일정이 다가옵니다',
                       body: texteditingcontrollerlist[1]
                                   .text
@@ -536,8 +533,7 @@ void savecalendarsandmemo(context, texteditingcontrollerlist, position, id) {
                               .split(' ')[0]
                               .split('-')[1]) +
                           int.parse(valueid[j].hashCode.toString()) +
-                          int.parse(
-                              calSharePerson.secondname.hashCode.toString()),
+                          int.parse(appnickname.hashCode.toString()),
                       title: texteditingcontrollerlist[0].text + '일정이 다가옵니다',
                       body: texteditingcontrollerlist[1]
                                   .text

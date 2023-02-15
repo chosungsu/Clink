@@ -15,10 +15,10 @@ import '../../Tool/AndroidIOS.dart';
 import '../../Tool/BGColor.dart';
 import '../../Tool/ContainerDesign.dart';
 import '../../Tool/FlushbarStyle.dart';
-import '../../Tool/Getx/calendarsetting.dart';
-import '../../Tool/Getx/category.dart';
-import '../../Tool/Getx/linkspacesetting.dart';
-import '../../Tool/Getx/uisetting.dart';
+import '../Getx/calendarsetting.dart';
+import '../Getx/category.dart';
+import '../Getx/linkspacesetting.dart';
+import '../Getx/uisetting.dart';
 import '../../FRONTENDPART/UI(Widget/DayNoteHome.dart';
 import '../../Tool/TextSize.dart';
 import '../../sheets/BottomSheet/AddContent.dart';
@@ -413,7 +413,7 @@ SpacepageChild1(snapshot) {
   uiset.pagelist.clear();
   final valuespace = snapshot.data!.docs;
   for (var sp in valuespace) {
-    final messageuser = sp.get('username');
+    final messageuser = sp.get('nick');
     final messagetitle = sp.get('linkname');
     if (messageuser == usercode) {
       uiset.pagelist

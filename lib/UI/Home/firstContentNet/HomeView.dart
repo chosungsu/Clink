@@ -2,7 +2,7 @@
 
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/FlushbarStyle.dart';
-import 'package:clickbyme/Tool/Getx/PeopleAdd.dart';
+import 'package:clickbyme/BACKENDPART/Getx/PeopleAdd.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -13,7 +13,7 @@ import '../../../Enums/Linkpage.dart';
 import '../../../FRONTENDPART/Route/subuiroute.dart';
 import '../../../Tool/AppBarCustom.dart';
 import '../../../Tool/BGColor.dart';
-import '../../../Tool/Getx/linkspacesetting.dart';
+import '../../../BACKENDPART/Getx/linkspacesetting.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
 
@@ -335,7 +335,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                             peopleadd.defaulthomeviewlist,
                                       },
                                     );
-                                    peopleadd.setcategory();
+                                    //peopleadd.setcategory();
                                   },
                                   proxyDecorator: (Widget child, int index,
                                       Animation<double> animation) {

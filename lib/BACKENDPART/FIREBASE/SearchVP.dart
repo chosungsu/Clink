@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../Enums/PageList.dart';
 import '../../Enums/Variables.dart';
-import '../../Tool/Getx/uisetting.dart';
+import '../Getx/uisetting.dart';
 
 SearchpageStreamParent() {
   return firestore.collection('Favorplace').snapshots();
@@ -34,9 +34,8 @@ SearchpageChild1(snapshot) {
   uiset.editpagelist.clear();
   final valuespace = snapshot.data!.docs;
   for (var sp in valuespace) {
-    final messageuser = sp.get('username');
+    final messageuser = sp.get('nick');
     final messagetitle = sp.get('linkname');
-    final messageemail = sp.get('email');
     final messagesetting = sp.get('setting');
     if (uiset.textrecognizer == '') {
     } else {
@@ -46,7 +45,6 @@ SearchpageChild1(snapshot) {
           uiset.searchpagelist.add(PageList(
               title: messagetitle,
               username: messageuser,
-              email: messageemail,
               id: sp.id,
               setting: messagesetting));
         }
@@ -64,13 +62,11 @@ SearchpageChild2(snapshot) {
     final messageuser = sp.get('originuser');
     final messagetitle = sp.get('title');
     final messageadduser = sp.get('favoradduser');
-    final messageemail = sp.get('email');
     final messageid = sp.get('id');
     final messagesetting = sp.get('setting');
     if (messageadduser == usercode) {
       uiset.favorpagelist.add(PageList(
           title: messagetitle,
-          email: messageemail,
           username: messageuser,
           id: messageid,
           setting: messagesetting));

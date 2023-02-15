@@ -9,7 +9,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:get/get.dart';
 import 'package:another_flushbar/flushbar.dart';
 
-import '../Tool/Getx/PeopleAdd.dart';
+import '../BACKENDPART/Getx/PeopleAdd.dart';
 import '../Tool/NoBehavior.dart';
 
 addgroupmember(

@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names
 import 'package:clickbyme/BACKENDPART/FIREBASE/PersonalVP.dart';
-import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
-import 'package:clickbyme/Tool/Getx/uisetting.dart';
+import 'package:clickbyme/BACKENDPART/Getx/linkspacesetting.dart';
+import 'package:clickbyme/BACKENDPART/Getx/uisetting.dart';
 import 'package:clickbyme/sheets/linksettingsheet.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -13,11 +13,11 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import '../../Enums/Variables.dart';
 import '../../Tool/ContainerDesign.dart';
-import '../../Tool/Getx/calendarsetting.dart';
+import '../../BACKENDPART/Getx/calendarsetting.dart';
 import '../../Tool/TextSize.dart';
 import '../Route/subuiroute.dart';
 import '../../Tool/BGColor.dart';
-import '../../Tool/Getx/navibool.dart';
+import '../../BACKENDPART/Getx/navibool.dart';
 import '../../Tool/Loader.dart';
 import '../../Tool/NoBehavior.dart';
 import '../../Tool/AppBarCustom.dart';

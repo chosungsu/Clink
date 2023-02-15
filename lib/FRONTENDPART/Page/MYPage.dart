@@ -1,13 +1,13 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names, camel_case_types
 import 'package:clickbyme/FRONTENDPART/Page/NotiAlarm.dart';
-import 'package:clickbyme/Tool/Getx/notishow.dart';
-import 'package:clickbyme/Tool/Getx/uisetting.dart';
+import 'package:clickbyme/BACKENDPART/Getx/notishow.dart';
+import 'package:clickbyme/BACKENDPART/Getx/uisetting.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../Tool/AppBarCustom.dart';
-import '../../Tool/Getx/navibool.dart';
+import '../../BACKENDPART/Getx/navibool.dart';
 import '../../Tool/Loader.dart';
 import '../../Tool/NoBehavior.dart';
 import '../UI(Widget/MYPageUI.dart';
@@ -36,13 +36,13 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    textcontroller = TextEditingController();
     super.initState();
     uiset.pagenumber = 0;
     uiset.searchpagemove = '';
     uiset.mypagelistindex = Hive.box('user_setting').get('currentmypage') ?? 0;
-    scrollController = ScrollController();
     draw.navi = Hive.box('user_setting').get('which_menu_pick') ?? 0;
+    textcontroller = TextEditingController();
+    scrollController = ScrollController();
   }
 
   @override

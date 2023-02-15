@@ -8,14 +8,14 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import '../../../Enums/Variables.dart';
 import '../../../Tool/BGColor.dart';
-import '../../../Tool/Getx/linkspacesetting.dart';
+import '../../BACKENDPART/Getx/linkspacesetting.dart';
 import '../../../Tool/TextSize.dart';
 import '../../Enums/Linkpage.dart';
 import '../../Tool/FlushbarStyle.dart';
-import '../../Tool/Getx/PeopleAdd.dart';
-import '../../Tool/Getx/calendarsetting.dart';
-import '../../Tool/Getx/navibool.dart';
-import '../../Tool/Getx/uisetting.dart';
+import '../../BACKENDPART/Getx/PeopleAdd.dart';
+import '../../BACKENDPART/Getx/calendarsetting.dart';
+import '../../BACKENDPART/Getx/navibool.dart';
+import '../../BACKENDPART/Getx/uisetting.dart';
 import 'DayContentHome.dart';
 
 SpaceinUI(
@@ -120,7 +120,7 @@ DefaultUI(id, type) {
                                     'calname':
                                         linkspaceset.inindextreetmp[0].addname,
                                     'date': DateTime.now(),
-                                    'madeUser': peopleadd.secondname,
+                                    'madeUser': appnickname,
                                     'themesetting': 0,
                                     'viewsetting': 0,
                                     'share': []

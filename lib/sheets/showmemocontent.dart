@@ -1,4 +1,4 @@
-import 'package:clickbyme/Tool/Getx/selectcollection.dart';
+import 'package:clickbyme/BACKENDPART/Getx/selectcollection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';

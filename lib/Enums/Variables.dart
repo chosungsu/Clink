@@ -7,12 +7,12 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:package_info/package_info.dart';
-import '../Tool/Getx/PeopleAdd.dart';
-import '../Tool/Getx/linkspacesetting.dart';
-import '../Tool/Getx/navibool.dart';
-import '../Tool/Getx/notishow.dart';
-import '../Tool/Getx/selectcollection.dart';
-import '../Tool/Getx/uisetting.dart';
+import '../BACKENDPART/Getx/PeopleAdd.dart';
+import '../BACKENDPART/Getx/linkspacesetting.dart';
+import '../BACKENDPART/Getx/navibool.dart';
+import '../BACKENDPART/Getx/notishow.dart';
+import '../BACKENDPART/Getx/selectcollection.dart';
+import '../BACKENDPART/Getx/uisetting.dart';
 import 'Expandable.dart';
 import 'MemoList.dart';
 

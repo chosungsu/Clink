@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:clickbyme/Tool/Getx/selectcollection.dart';
+import 'package:clickbyme/BACKENDPART/Getx/selectcollection.dart';
 import 'package:clickbyme/UI/Home/Widgets/CreateCalandmemo.dart';
 import 'package:clickbyme/UI/Home/secondContentNet/Memodrawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,8 +19,8 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../../Enums/MemoList.dart';
 import '../../../FRONTENDPART/Route/subuiroute.dart';
 import '../../../Tool/AndroidIOS.dart';
-import '../../../Tool/Getx/memosetting.dart';
-import '../../../Tool/Getx/uisetting.dart';
+import '../../../BACKENDPART/Getx/memosetting.dart';
+import '../../../BACKENDPART/Getx/uisetting.dart';
 import '../../../Tool/IconBtn.dart';
 import '../../../Tool/TextSize.dart';
 import '../../../sheets/showmemocontent.dart';

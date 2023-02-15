@@ -9,8 +9,8 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import '../../../Enums/Event.dart';
 import '../../../Enums/Variables.dart';
-import '../../../Tool/Getx/PeopleAdd.dart';
-import '../../../Tool/Getx/calendarsetting.dart';
+import '../../BACKENDPART/Getx/PeopleAdd.dart';
+import '../../BACKENDPART/Getx/calendarsetting.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../Tool/AndroidIOS.dart';
 import '../../UI/Home/secondContentNet/ClickShowEachCalendar.dart';
@@ -432,8 +432,7 @@ TimeLineView(id) {
                                                           i < value.docs.length;
                                                           i++) {
                                                         if (value.docs[i].id ==
-                                                            cal_share_person
-                                                                .secondname) {
+                                                            appnickname) {
                                                           if (value.docs[i]
                                                                       .data()[
                                                                   'calcode'] ==

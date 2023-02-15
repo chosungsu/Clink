@@ -4,9 +4,9 @@ import 'package:get/get.dart';
 
 import '../../Enums/Linkpage.dart';
 import '../../Enums/Variables.dart';
-import '../../Tool/Getx/calendarsetting.dart';
-import '../../Tool/Getx/linkspacesetting.dart';
-import '../../Tool/Getx/uisetting.dart';
+import '../Getx/calendarsetting.dart';
+import '../Getx/linkspacesetting.dart';
+import '../Getx/uisetting.dart';
 
 ///Getx 호출
 final linkspaceset = Get.put(linkspacesetting());

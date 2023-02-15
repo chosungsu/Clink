@@ -1,7 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
-import 'package:clickbyme/Tool/Getx/uisetting.dart';
+import 'package:clickbyme/BACKENDPART/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/sheets/pushalarmsettingmemo.dart';
@@ -22,11 +22,11 @@ import 'package:local_auth/local_auth.dart';
 import '../../BACKENDPART/Auth/SecureAuth.dart';
 import '../../Enums/Variables.dart';
 import '../../Tool/AppBarCustom.dart';
-import '../../Tool/Getx/navibool.dart';
+import '../../BACKENDPART/Getx/navibool.dart';
 import '../Route/subuiroute.dart';
 import 'DayScript.dart';
-import '../../Tool/Getx/memosetting.dart';
-import '../../Tool/Getx/selectcollection.dart';
+import '../../BACKENDPART/Getx/memosetting.dart';
+import '../../BACKENDPART/Getx/selectcollection.dart';
 import '../../Tool/NoBehavior.dart';
 import '../../sheets/infoshow.dart';
 import '../../UI/Home/Widgets/SortMenuHolder.dart';

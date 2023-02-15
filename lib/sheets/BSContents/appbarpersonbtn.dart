@@ -1,18 +1,16 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:clickbyme/Enums/Variables.dart';
-import 'package:clickbyme/main.dart';
 import 'package:clickbyme/sheets/BottomSheet/AddContentWithBtn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
-import '../../BACKENDPART/Auth/GoogleSignInController.dart';
 import '../../FRONTENDPART/Route/subuiroute.dart';
-import '../../LocalNotiPlatform/NotificationApi.dart';
+import '../../BACKENDPART/LocalNotiPlatform/NotificationApi.dart';
 import '../../Tool/BGColor.dart';
 import '../../Tool/ContainerDesign.dart';
-import '../../Tool/Getx/PeopleAdd.dart';
-import '../../Tool/Getx/uisetting.dart';
+import '../../BACKENDPART/Getx/PeopleAdd.dart';
+import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../Tool/TextSize.dart';
 
 final uiset = Get.put(uisetting());
@@ -354,15 +352,13 @@ Widgets_settingpagedeleteuser(
         onPressed: () async {
           uiset.setloading(true);
           await NotificationApi.cancelAll();
-          GoogleSignInController().Deletelogout(context, appnickname);
           await firestore.collection('Calendar').get().then((value) {
             for (int i = 0; i < value.docs.length; i++) {
               for (int j = 0; j < value.docs[i].get('share').length; j++) {
                 changepeople.add(value.docs[i].get('share')[j]);
               }
-              if (changepeople.contains(peopleadd.secondname)) {
-                changepeople
-                    .removeWhere((element) => element == peopleadd.secondname);
+              if (changepeople.contains(appnickname)) {
+                changepeople.removeWhere((element) => element == appnickname);
                 firestore
                     .collection('Calendar')
                     .doc(value.docs[i].id)
@@ -376,9 +372,8 @@ Widgets_settingpagedeleteuser(
               for (int j = 0; j < value.docs[i].get('friends').length; j++) {
                 changepeople.add(value.docs[i].get('friends')[j]);
               }
-              if (changepeople.contains(peopleadd.secondname)) {
-                changepeople
-                    .removeWhere((element) => element == peopleadd.secondname);
+              if (changepeople.contains(appnickname)) {
+                changepeople.removeWhere((element) => element == appnickname);
                 firestore
                     .collection('PeopleList')
                     .doc(value.docs[i].id)

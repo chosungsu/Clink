@@ -10,13 +10,12 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../Enums/Variables.dart';
 import '../../../Tool/BGColor.dart';
-import '../../../Tool/Getx/linkspacesetting.dart';
+import '../../BACKENDPART/Getx/linkspacesetting.dart';
 import '../../../Tool/TextSize.dart';
 import '../../Enums/Expandable.dart';
 import '../../Tool/AndroidIOS.dart';
-import '../../Tool/Getx/PeopleAdd.dart';
-import '../../Tool/Getx/uisetting.dart';
-import '../../sheets/BSContents/toCompany.dart';
+import '../../BACKENDPART/Getx/PeopleAdd.dart';
+import '../../BACKENDPART/Getx/uisetting.dart';
 
 final uiset = Get.put(uisetting());
 final linkspaceset = Get.put(linkspacesetting());
@@ -185,8 +184,8 @@ proptview(maxWidth, searchnode, controller) {
 ///
 ///uiset.profilescreen으로 옵션들을 기입받았고 이를 인덱스별로 보여줌.
 Opt_body(index, searchnode, controller) {
-  Widget title;
-  Widget content;
+  Widget title, title2;
+  Widget content, content2;
 
   return StatefulBuilder(
     builder: (context, setState) {
@@ -209,17 +208,22 @@ Opt_body(index, searchnode, controller) {
                               'https://linkaiteam.github.io/LINKAITEAM/전체');
                           launchUrl(url);
                         } else {
-                          toCompany(context);
+                          controller.clear();
+                          title = Widgets_tocompany(
+                              context, controller, searchnode)[0];
+                          content = Widgets_tocompany(
+                              context, controller, searchnode)[1];
+                          AddContent(context, title, content, searchnode);
                         }
                       } else if (index == 2) {
                         uiset.checkprofilepageindex(1);
                       } else if (index == 3) {
                         controller.clear();
-                        title = Widgets_addpeople(
+                        title2 = Widgets_addpeople(
                             context, controller, searchnode)[0];
-                        content = Widgets_addpeople(
+                        content2 = Widgets_addpeople(
                             context, controller, searchnode)[1];
-                        AddContent(context, title, content, searchnode);
+                        AddContent(context, title2, content2, searchnode);
                       } else {
                         if (index2 == 0) {
                           var url = Uri.parse(

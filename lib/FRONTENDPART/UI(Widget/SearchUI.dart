@@ -6,14 +6,12 @@ import 'package:clickbyme/FRONTENDPART/UI(Widget/MYPageUI.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../Enums/Variables.dart';
 import '../../../Tool/ContainerDesign.dart';
-import '../../../Tool/Getx/uisetting.dart';
+import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
-import '../../UI/Home/secondContentNet/ShowTips.dart';
 
 final uiset = Get.put(uisetting());
 
@@ -48,10 +46,6 @@ SearchUI(context, scrollController, TextEditingController controller,
                                 ),
                                 Se_Container11(height, controller, searchNode),
                                 SizedBox(
-                                  height: 20,
-                                ),
-                                Se_Container3(height),
-                                SizedBox(
                                   height: 50,
                                 ),
                               ],
@@ -67,7 +61,6 @@ SearchUI(context, scrollController, TextEditingController controller,
                 child: Se_Container2(
                     context,
                     uiset.editpagelist[0].id.toString(),
-                    uiset.editpagelist[0].setting.toString(),
                     controller3,
                     searchNode)),
           ));
@@ -125,7 +118,6 @@ Se_Container0(double height, controller, searchNode) {
 }
 
 Se_Container01(double height, controller, searchNode) {
-  final uiset = Get.put(uisetting());
   return GetBuilder<uisetting>(
       builder: (_) => Padding(
             padding: EdgeInsets.only(left: 20, right: 20),
@@ -184,7 +176,6 @@ Se_Container01(double height, controller, searchNode) {
                                                 onTap: () {
                                                   searchNode.unfocus();
                                                   controller.clear();
-                                                  uiset.setpageindex(11);
                                                   uiset.setsearchpageindex(
                                                       index);
                                                   uiset.seteditpage(
@@ -194,10 +185,6 @@ Se_Container01(double height, controller, searchNode) {
                                                       uiset
                                                           .searchpagelist[index]
                                                           .username
-                                                          .toString(),
-                                                      uiset
-                                                          .searchpagelist[index]
-                                                          .email
                                                           .toString(),
                                                       uiset
                                                           .searchpagelist[index]
@@ -246,7 +233,7 @@ Se_Container01(double height, controller, searchNode) {
                                                                 uiset
                                                                     .searchpagelist[
                                                                         index]
-                                                                    .email
+                                                                    .username
                                                                     .toString(),
                                                                 softWrap: true,
                                                                 maxLines: 2,
@@ -314,7 +301,6 @@ Se_Container01(double height, controller, searchNode) {
 Se_Container1(
   double height,
 ) {
-  final uiset = Get.put(uisetting());
   return Padding(
     padding: const EdgeInsets.only(left: 20, right: 20),
     child: SizedBox(
@@ -343,7 +329,6 @@ Se_Container1(
 }
 
 Se_Container11(double height, TextEditingController controller, searchNode) {
-  final uiset = Get.put(uisetting());
   return GetBuilder<uisetting>(
       builder: (_) => Padding(
             padding: EdgeInsets.only(left: 20, right: 20),
@@ -390,14 +375,11 @@ Se_Container11(double height, TextEditingController controller, searchNode) {
                                       onTap: () {
                                         searchNode.unfocus();
                                         controller.clear();
-                                        uiset.setpageindex(12);
                                         uiset.setfavorpageindex(index);
                                         uiset.removeeditpage();
                                         uiset.seteditpage(
                                             uiset.favorpagelist[index].title,
                                             uiset.favorpagelist[index].username
-                                                .toString(),
-                                            uiset.favorpagelist[index].email
                                                 .toString(),
                                             uiset.favorpagelist[index].id
                                                 .toString(),
@@ -436,7 +418,7 @@ Se_Container11(double height, TextEditingController controller, searchNode) {
                                                     ),
                                                     Text(
                                                       uiset.favorpagelist[index]
-                                                          .email
+                                                          .username
                                                           .toString(),
                                                       softWrap: true,
                                                       maxLines: 2,
@@ -496,8 +478,7 @@ Se_Container11(double height, TextEditingController controller, searchNode) {
           ));
 }
 
-Se_Container2(context, String id, String setting,
-    TextEditingController controller, searchNode) {
+Se_Container2(context, id, controller, searchNode) {
   return LayoutBuilder(
     builder: ((context, constraint) {
       return SingleChildScrollView(
@@ -505,43 +486,5 @@ Se_Container2(context, String id, String setting,
           child: UI(id, controller, searchNode, constraint.maxWidth,
               constraint.maxHeight));
     }),
-  );
-  //PageUI1(context, id, controller);
-}
-
-Se_Container3(
-  double height,
-) {
-  return Padding(
-    padding: const EdgeInsets.only(left: 20, right: 20),
-    child: SizedBox(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Flexible(
-                fit: FlexFit.tight,
-                child: Text(
-                  'pagetip'.tr,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTitleTextsize(),
-                      color: draw.color_textstatus),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          ShowTips(
-            height: height,
-            pageindex: 0,
-          ),
-        ],
-      ),
-    ),
   );
 }

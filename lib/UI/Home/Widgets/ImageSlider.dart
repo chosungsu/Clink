@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../../FRONTENDPART/Route/subuiroute.dart';
 import '../../../Tool/AndroidIOS.dart';
-import '../../../Tool/Getx/memosetting.dart';
+import '../../../BACKENDPART/Getx/memosetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';

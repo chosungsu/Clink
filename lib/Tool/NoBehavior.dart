@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'Getx/uisetting.dart';
+import '../BACKENDPART/Getx/uisetting.dart';
 
 /*
   NoBehavior는 스크롤 뷰에서 상하부 모션을 삭제하는 클래스

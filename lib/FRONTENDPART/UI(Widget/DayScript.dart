@@ -14,12 +14,12 @@ import '../../../FRONTENDPART/Route/subuiroute.dart';
 import '../../../Tool/AndroidIOS.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/ContainerDesign.dart';
-import '../../../Tool/Getx/PeopleAdd.dart';
-import '../../../Tool/Getx/calendarsetting.dart';
-import '../../../Tool/Getx/memosetting.dart';
-import '../../../Tool/Getx/navibool.dart';
-import '../../../Tool/Getx/selectcollection.dart';
-import '../../../Tool/Getx/uisetting.dart';
+import '../../BACKENDPART/Getx/PeopleAdd.dart';
+import '../../BACKENDPART/Getx/calendarsetting.dart';
+import '../../BACKENDPART/Getx/memosetting.dart';
+import '../../BACKENDPART/Getx/navibool.dart';
+import '../../BACKENDPART/Getx/selectcollection.dart';
+import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../../Tool/IconBtn.dart';
 import '../../../Tool/Loader.dart';
 import '../../../Tool/NoBehavior.dart';
@@ -80,10 +80,8 @@ class _DayScriptState extends State<DayScript> {
     }));
     selectedDay = controll_cal.selectedDay;
     controll_memo.imagelist.clear();
-    Hive.box('user_setting')
-        .put('alarm_cal_hour_${cal_share_person.secondname}', '99');
-    Hive.box('user_setting')
-        .put('alarm_cal_minute_${cal_share_person.secondname}', '99');
+    Hive.box('user_setting').put('alarm_cal_hour_$appnickname', '99');
+    Hive.box('user_setting').put('alarm_cal_minute_$appnickname', '99');
     Hive.box('user_setting').put('typecolorcalendar', null);
     color = controll_memo.color;
     colorfont = controll_memo.colorfont;

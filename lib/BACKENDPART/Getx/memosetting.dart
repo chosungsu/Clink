@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import '../../LocalNotiPlatform/NotificationApi.dart';
-import '../BGColor.dart';
+import '../LocalNotiPlatform/NotificationApi.dart';
+import '../../Tool/BGColor.dart';
 
 class memosetting extends GetxController {
   Color color = Hive.box('user_setting').get('coloreachmemo') != null

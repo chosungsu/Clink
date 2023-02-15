@@ -1,14 +1,14 @@
 import 'package:clickbyme/Tool/ContainerDesign.dart';
-import 'package:clickbyme/Tool/Getx/calendarsetting.dart';
-import 'package:clickbyme/Tool/Getx/memosetting.dart';
+import 'package:clickbyme/BACKENDPART/Getx/calendarsetting.dart';
+import 'package:clickbyme/BACKENDPART/Getx/memosetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 
 import '../Tool/BGColor.dart';
 import '../Tool/FlushbarStyle.dart';
-import '../Tool/Getx/PeopleAdd.dart';
-import '../Tool/Getx/navibool.dart';
+import '../BACKENDPART/Getx/PeopleAdd.dart';
+import '../BACKENDPART/Getx/navibool.dart';
 import '../Tool/IconBtn.dart';
 import '../Tool/NoBehavior.dart';
 

@@ -1,8 +1,8 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:clickbyme/Tool/ContainerDesign.dart';
-import 'package:clickbyme/Tool/Getx/PeopleAdd.dart';
-import 'package:clickbyme/Tool/Getx/calendarsetting.dart';
+import 'package:clickbyme/BACKENDPART/Getx/PeopleAdd.dart';
+import 'package:clickbyme/BACKENDPART/Getx/calendarsetting.dart';
 import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/sheets/pushalarmsettingcal.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,10 +16,10 @@ import 'package:intl/intl.dart';
 import '../../../Enums/Variables.dart';
 import '../../../FRONTENDPART/Route/subuiroute.dart';
 import '../../../FRONTENDPART/UI(Widget/DayScript.dart';
-import '../../../LocalNotiPlatform/NotificationApi.dart';
+import '../../../BACKENDPART/LocalNotiPlatform/NotificationApi.dart';
 import '../../../Tool/AndroidIOS.dart';
 import '../../../Tool/FlushbarStyle.dart';
-import '../../../Tool/Getx/navibool.dart';
+import '../../../BACKENDPART/Getx/navibool.dart';
 import '../../../Tool/Loader.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
@@ -232,8 +232,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                   id: int.parse(widget.date.toString().split('-')[0]) +
                       int.parse(widget.date.toString().split('-')[1]) +
                       int.parse(widget.id.hashCode.toString()) +
-                      int.parse(
-                          cal_share_person.secondname.hashCode.toString()));
+                      int.parse(appnickname.hashCode.toString()));
             });
           } else {
             if (differ_list.length == 1) {
@@ -255,8 +254,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                     id: int.parse(widget.date.toString().split('-')[0]) +
                         int.parse(widget.date.toString().split('-')[1]) +
                         int.parse(widget.id.hashCode.toString()) +
-                        int.parse(
-                            cal_share_person.secondname.hashCode.toString()));
+                        int.parse(appnickname.hashCode.toString()));
               });
             } else {
               final reloadpage =
@@ -300,8 +298,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                         id: int.parse(differ_list[i].toString().split('-')[0]) +
                             int.parse(differ_list[i].toString().split('-')[1]) +
                             int.parse(widget.id.hashCode.toString()) +
-                            int.parse(cal_share_person.secondname.hashCode
-                                .toString()));
+                            int.parse(appnickname.hashCode.toString()));
                   }
                 });
               } else {
@@ -323,8 +320,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                       id: int.parse(widget.date.toString().split('-')[0]) +
                           int.parse(widget.date.toString().split('-')[1]) +
                           int.parse(widget.id.hashCode.toString()) +
-                          int.parse(
-                              cal_share_person.secondname.hashCode.toString()));
+                          int.parse(appnickname.hashCode.toString()));
                 });
               }
             }
@@ -426,7 +422,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
             .collection('CalendarDataBase')
             .doc(widget.id)
             .collection('AlarmTable')
-            .doc(cal_share_person.secondname)
+            .doc(appnickname)
             .get()
             .then((value) {
           if (value.exists) {
@@ -434,7 +430,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                 .collection('CalendarDataBase')
                 .doc(widget.id)
                 .collection('AlarmTable')
-                .doc(cal_share_person.secondname)
+                .doc(appnickname)
                 .update({
               'alarmhour': controll_cal.hour1,
               'alarmminute': controll_cal.minute1,
@@ -446,7 +442,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                 .collection('CalendarDataBase')
                 .doc(widget.id)
                 .collection('AlarmTable')
-                .doc(cal_share_person.secondname)
+                .doc(appnickname)
                 .set({
               'alarmhour': controll_cal.hour1,
               'alarmminute': controll_cal.minute1,
@@ -487,12 +483,12 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                 id: int.parse(widget.date.toString().split('-')[0]) +
                     int.parse(widget.date.toString().split('-')[1]) +
                     int.parse(widget.id.hashCode.toString()) +
-                    int.parse(cal_share_person.secondname.hashCode.toString()));
+                    int.parse(appnickname.hashCode.toString()));
             NotificationApi.showScheduledNotification(
                 id: int.parse(widget.date.toString().split('-')[0]) +
                     int.parse(widget.date.toString().split('-')[1]) +
                     int.parse(widget.id.hashCode.toString()) +
-                    int.parse(cal_share_person.secondname.hashCode.toString()),
+                    int.parse(appnickname.hashCode.toString()),
                 title: textEditingController1.text + '일정이 다가옵니다',
                 body: textEditingController2.text.split(':')[0].length == 1
                     ? (textEditingController3.text.split(':')[0].length == 1
@@ -529,12 +525,12 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                 id: int.parse(widget.date.toString().split('-')[0]) +
                     int.parse(widget.date.toString().split('-')[1]) +
                     int.parse(widget.id.hashCode.toString()) +
-                    int.parse(cal_share_person.secondname.hashCode.toString()));
+                    int.parse(appnickname.hashCode.toString()));
             NotificationApi.showScheduledNotification(
                 id: int.parse(widget.date.toString().split('-')[0]) +
                     int.parse(widget.date.toString().split('-')[1]) +
                     int.parse(widget.id.hashCode.toString()) +
-                    int.parse(cal_share_person.secondname.hashCode.toString()),
+                    int.parse(appnickname.hashCode.toString()),
                 title: textEditingController1.text + '일정이 다가옵니다',
                 body: textEditingController2.text.split(':')[0].length == 1
                     ? (textEditingController3.text.split(':')[0].length == 1
@@ -561,7 +557,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
               id: int.parse(widget.date.toString().split('-')[0]) +
                   int.parse(widget.date.toString().split('-')[1]) +
                   int.parse(widget.id.hashCode.toString()) +
-                  int.parse(cal_share_person.secondname.hashCode.toString()));
+                  int.parse(appnickname.hashCode.toString()));
         }
       });
     });
@@ -974,8 +970,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                         id: int.parse(widget.date.toString().split('-')[0]) +
                             int.parse(widget.date.toString().split('-')[1]) +
                             int.parse(widget.id.hashCode.toString()) +
-                            int.parse(cal_share_person.secondname.hashCode
-                                .toString()));
+                            int.parse(appnickname.hashCode.toString()));
                   }
                 });
               }),

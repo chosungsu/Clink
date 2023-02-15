@@ -10,9 +10,9 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import '../../BACKENDPART/FIREBASE/NoticeVP.dart';
 import '../../Tool/AndroidIOS.dart';
-import '../../Tool/Getx/notishow.dart';
-import '../../Tool/Getx/uisetting.dart';
-import '../../Tool/Getx/navibool.dart';
+import '../../BACKENDPART/Getx/notishow.dart';
+import '../../BACKENDPART/Getx/uisetting.dart';
+import '../../BACKENDPART/Getx/navibool.dart';
 import '../../UI/Home/firstContentNet/ChooseCalendar.dart';
 import '../UI(Widget/DayNoteHome.dart';
 

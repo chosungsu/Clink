@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 
-import '../MyTheme.dart';
+import '../../Tool/MyTheme.dart';
 
 class navibool extends GetxController {
   bool drawopen = Hive.box('user_setting').get('page_opened') ?? false;

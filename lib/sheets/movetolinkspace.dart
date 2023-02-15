@@ -1,6 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, unused_local_variable
 
-import 'package:clickbyme/Tool/Getx/linkspacesetting.dart';
+import 'package:clickbyme/BACKENDPART/Getx/linkspacesetting.dart';
 import 'package:clickbyme/Tool/NoBehavior.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -13,8 +13,8 @@ import '../Tool/FlushbarStyle.dart';
 import '../Tool/TextSize.dart';
 import '../FRONTENDPART/Route/subuiroute.dart';
 import '../Tool/AndroidIOS.dart';
-import '../Tool/Getx/memosetting.dart';
-import '../Tool/Getx/uisetting.dart';
+import '../BACKENDPART/Getx/memosetting.dart';
+import '../BACKENDPART/Getx/uisetting.dart';
 
 settingseparatedlinkspace(
     BuildContext context,

@@ -1,6 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, camel_case_types
 
-import 'package:clickbyme/Tool/Getx/uisetting.dart';
+import 'package:clickbyme/BACKENDPART/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -11,8 +11,8 @@ import 'subuiroute.dart';
 import '../Page/SearchPage.dart';
 import '../Page/ProfilePage.dart';
 import '../../Tool/AndroidIOS.dart';
-import '../../Tool/Getx/PeopleAdd.dart';
-import '../../Tool/Getx/navibool.dart';
+import '../../BACKENDPART/Getx/PeopleAdd.dart';
+import '../../BACKENDPART/Getx/navibool.dart';
 
 class mainroute extends StatefulWidget {
   const mainroute({Key? key}) : super(key: key);

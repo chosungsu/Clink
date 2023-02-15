@@ -2,14 +2,14 @@
 
 import 'package:clickbyme/BACKENDPART/FIREBASE/SearchVP.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
-import 'package:clickbyme/Tool/Getx/uisetting.dart';
+import 'package:clickbyme/BACKENDPART/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/AppBarCustom.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import '../../Enums/Variables.dart';
-import '../../Tool/Getx/navibool.dart';
+import '../../BACKENDPART/Getx/navibool.dart';
 import '../UI(Widget/SearchUI.dart';
 import 'DrawerScreen.dart';
 
@@ -31,6 +31,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    uiset.searchpagemove = '';
     controller = TextEditingController();
     controller2 = TextEditingController();
     controller3 = TextEditingController();

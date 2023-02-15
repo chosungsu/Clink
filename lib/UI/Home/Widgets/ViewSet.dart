@@ -4,11 +4,12 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../../BACKENDPART/Auth/SecureAuth.dart';
 import '../../../Enums/SpaceContent.dart';
+import '../../../Enums/Variables.dart';
 import '../../../FRONTENDPART/UI(Widget/DayContentHome.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/ContainerDesign.dart';
-import '../../../Tool/Getx/PeopleAdd.dart';
-import '../../../Tool/Getx/calendarsetting.dart';
+import '../../../BACKENDPART/Getx/PeopleAdd.dart';
+import '../../../BACKENDPART/Getx/calendarsetting.dart';
 import '../../../Tool/TextSize.dart';
 import '../secondContentNet/ClickShowEachNote.dart';
 
@@ -20,7 +21,6 @@ ViewSet(List defaulthomeviewlist, List userviewlist, String usercode) {
   List contentshare = [];
   List memosavelist = [];
   List memotodaylist = [];
-  String secondname = peopleadd.secondname;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   firestore
       .collection('CalendarDataBase')
@@ -118,7 +118,7 @@ ViewSet(List defaulthomeviewlist, List userviewlist, String usercode) {
           }
         });
         for (int i = 0; i < nameList.length; i++) {
-          if (nameList[i].contains(secondname)) {
+          if (nameList[i].contains(appnickname)) {
             contentshare.add(SpaceContent(
                 title: todo,
                 date:
@@ -265,7 +265,7 @@ ViewSet(List defaulthomeviewlist, List userviewlist, String usercode) {
                     const SizedBox(
                       height: 20,
                     ),
-                    stream1(peopleadd.secondname, contentmy, usercode),
+                    stream1(appnickname, contentmy, usercode),
                     const SizedBox(
                       height: 20,
                     ),
@@ -287,7 +287,7 @@ ViewSet(List defaulthomeviewlist, List userviewlist, String usercode) {
                         const SizedBox(
                           height: 20,
                         ),
-                        stream2(peopleadd.secondname, contentshare, usercode),
+                        stream2(appnickname, contentshare, usercode),
                         const SizedBox(
                           height: 20,
                         ),
@@ -309,8 +309,7 @@ ViewSet(List defaulthomeviewlist, List userviewlist, String usercode) {
                             const SizedBox(
                               height: 20,
                             ),
-                            stream3(
-                                peopleadd.secondname, memosavelist, usercode),
+                            stream3(appnickname, memosavelist, usercode),
                             const SizedBox(
                               height: 20,
                             ),
@@ -331,8 +330,7 @@ ViewSet(List defaulthomeviewlist, List userviewlist, String usercode) {
                             const SizedBox(
                               height: 20,
                             ),
-                            stream4(
-                                peopleadd.secondname, memotodaylist, usercode),
+                            stream4(appnickname, memotodaylist, usercode),
                             const SizedBox(
                               height: 20,
                             ),
@@ -405,21 +403,21 @@ stream1(
                                       value.docs[i].data()['alarmtype'][j]);
                                 }
                                 Hive.box('user_setting').put(
-                                    'alarm_cal_hour_${contentmy[index].id}_${peopleadd.secondname}',
+                                    'alarm_cal_hour_${contentmy[index].id}_$appnickname',
                                     value.docs[i]
                                         .data()['alarmhour']
                                         .toString());
                                 Hive.box('user_setting').put(
-                                    'alarm_cal_minute_${contentmy[index].id}_${peopleadd.secondname}',
+                                    'alarm_cal_minute_${contentmy[index].id}_$appnickname',
                                     value.docs[i]
                                         .data()['alarmminute']
                                         .toString());
                                 calendarsetting().hour1 =
                                     Hive.box('user_setting').get(
-                                        'alarm_cal_hour_${contentmy[index].id}_${peopleadd.secondname}');
+                                        'alarm_cal_hour_${contentmy[index].id}_$appnickname');
                                 calendarsetting().minute1 =
                                     Hive.box('user_setting').get(
-                                        'alarm_cal_minute_${contentmy[index].id}_${peopleadd.secondname}');
+                                        'alarm_cal_minute_${contentmy[index].id}_$appnickname');
                                 isChecked_pushalarm =
                                     value.docs[i].data()['alarmmake'];
                                 calendarsetting().settimeminute(
@@ -629,19 +627,19 @@ stream2(
                                     .add(value.docs[i].data()['alarmtype'][j]);
                               }
                               Hive.box('user_setting').put(
-                                  'alarm_cal_hour_${snapshot.data!.docs[index].id}_${peopleadd.secondname}',
+                                  'alarm_cal_hour_${snapshot.data!.docs[index].id}_$appnickname',
                                   value.docs[i].data()['alarmhour'].toString());
                               Hive.box('user_setting').put(
-                                  'alarm_cal_minute_${snapshot.data!.docs[index].id}_${peopleadd.secondname}',
+                                  'alarm_cal_minute_${snapshot.data!.docs[index].id}_$appnickname',
                                   value.docs[i]
                                       .data()['alarmminute']
                                       .toString());
                               calendarsetting().hour1 = Hive.box('user_setting')
                                   .get(
-                                      'alarm_cal_hour_${snapshot.data!.docs[index].id}_${peopleadd.secondname}');
+                                      'alarm_cal_hour_${snapshot.data!.docs[index].id}_$appnickname');
                               calendarsetting().minute1 =
                                   Hive.box('user_setting').get(
-                                      'alarm_cal_minute_${snapshot.data!.docs[index].id}_${peopleadd.secondname}');
+                                      'alarm_cal_minute_${snapshot.data!.docs[index].id}_$appnickname');
                               isChecked_pushalarm =
                                   value.docs[i].data()['alarmmake'];
                             }

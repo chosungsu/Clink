@@ -12,8 +12,8 @@ import 'package:get/get.dart';
 import 'package:another_flushbar/flushbar.dart';
 
 import '../Tool/FlushbarStyle.dart';
-import '../Tool/Getx/PeopleAdd.dart';
-import '../Tool/Getx/selectcollection.dart';
+import '../BACKENDPART/Getx/PeopleAdd.dart';
+import '../BACKENDPART/Getx/selectcollection.dart';
 
 SheetPagememoCollection(
   BuildContext context,

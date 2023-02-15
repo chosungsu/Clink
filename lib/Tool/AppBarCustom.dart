@@ -9,10 +9,10 @@ import 'package:status_bar_control/status_bar_control.dart';
 import '../Enums/PageList.dart';
 import '../Enums/Variables.dart';
 import '../FRONTENDPART/Route/subuiroute.dart';
-import 'Getx/linkspacesetting.dart';
-import 'Getx/navibool.dart';
-import 'Getx/notishow.dart';
-import 'Getx/uisetting.dart';
+import '../BACKENDPART/Getx/linkspacesetting.dart';
+import '../BACKENDPART/Getx/navibool.dart';
+import '../BACKENDPART/Getx/notishow.dart';
+import '../BACKENDPART/Getx/uisetting.dart';
 import 'TextSize.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 

@@ -9,8 +9,8 @@ import '../../Enums/Variables.dart';
 import '../../Tool/BGColor.dart';
 import '../../Tool/ContainerDesign.dart';
 import '../../Tool/FlushbarStyle.dart';
-import '../../Tool/Getx/linkspacesetting.dart';
-import '../../Tool/Getx/uisetting.dart';
+import '../../BACKENDPART/Getx/linkspacesetting.dart';
+import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../Tool/TextSize.dart';
 
 final uiset = Get.put(uisetting());

@@ -9,7 +9,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/FlushbarStyle.dart';
-import '../../../Tool/Getx/PeopleAdd.dart';
+import '../../../BACKENDPART/Getx/PeopleAdd.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
 import '../../../sheets/addgroupmember.dart';

@@ -6,8 +6,8 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../../Tool/BGColor.dart';
-import '../../../Tool/Getx/calendarsetting.dart';
-import '../../../Tool/Getx/memosetting.dart';
+import '../../../BACKENDPART/Getx/calendarsetting.dart';
+import '../../../BACKENDPART/Getx/memosetting.dart';
 import '../../../Tool/IconBtn.dart';
 import '../../../Tool/TextSize.dart';
 

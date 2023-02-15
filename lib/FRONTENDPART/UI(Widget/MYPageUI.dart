@@ -6,17 +6,15 @@ import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import '../../../Enums/Variables.dart';
-import '../../../Tool/Getx/linkspacesetting.dart';
+import '../../BACKENDPART/Getx/linkspacesetting.dart';
 import '../../../Tool/TextSize.dart';
 import '../../BACKENDPART/FIREBASE/PersonalVP.dart';
 import '../../Tool/AndroidIOS.dart';
-import '../../Tool/Getx/uisetting.dart';
-import '../Page/Spacein.dart';
+import '../../BACKENDPART/Getx/uisetting.dart';
 
 final uiset = Get.put(uisetting());
 final linkspaceset = Get.put(linkspacesetting());
@@ -31,15 +29,21 @@ UI(id, controller, searchnode, maxWidth, maxHeight) {
             PageViewRes1_1(id, snapshot);
             return linkspaceset.indexcnt.isEmpty
                 ? NotInPageScreen(maxHeight, maxWidth, controller, searchnode)
-                : SizedBox(
-                    height: maxHeight,
-                    width: maxWidth,
-                    child: Responsivelayout(
-                        PageUI0(context, id, controller, searchnode, maxHeight,
-                            maxWidth),
-                        PageUI1(context, id, controller, searchnode, maxHeight,
-                            maxWidth)),
-                  );
+                : (uiset.pagenumber != 1
+                    ? SizedBox(
+                        height: maxHeight,
+                        width: maxWidth,
+                        child: Responsivelayout(
+                            PageUI0(context, id, controller, searchnode,
+                                maxHeight, maxWidth),
+                            PageUI1(context, id, controller, searchnode,
+                                maxHeight, maxWidth)),
+                      )
+                    : SizedBox(
+                        width: maxWidth,
+                        height: maxHeight,
+                        child: WhatInPageScreen(context, id, controller,
+                            searchnode, maxWidth, maxHeight)));
           } else if (!snapshot.hasData) {
             return NotInPageScreen(maxHeight, maxWidth, controller, searchnode);
           }
@@ -54,7 +58,6 @@ UI(id, controller, searchnode, maxWidth, maxHeight) {
 }
 
 PageUI0(context, id, controller, searchnode, maxHeight, maxWidth) {
-  final searchNode = FocusNode();
   return GetBuilder<linkspacesetting>(
     builder: (_) {
       return Row(
@@ -71,7 +74,7 @@ PageUI0(context, id, controller, searchnode, maxHeight, maxWidth) {
               width: maxWidth - 220 - maxWidth * 0.1,
               height: maxHeight,
               child: WhatInPageScreen(
-                  context, id, controller, searchNode, maxWidth, maxHeight))
+                  context, id, controller, searchnode, maxWidth, maxHeight))
         ],
       );
     },
@@ -79,7 +82,6 @@ PageUI0(context, id, controller, searchnode, maxHeight, maxWidth) {
 }
 
 PageUI1(context, id, controller, searchnode, maxHeight, maxWidth) {
-  final searchNode = FocusNode();
   return SingleChildScrollView(
       physics: const ScrollPhysics(),
       child: GetBuilder<linkspacesetting>(
@@ -95,7 +97,7 @@ PageUI1(context, id, controller, searchnode, maxHeight, maxWidth) {
                 height: 20,
               ),
               WhatInPageScreen(
-                  context, id, controller, searchNode, maxWidth, maxHeight)
+                  context, id, controller, searchnode, maxWidth, maxHeight)
             ],
           );
         },
@@ -340,78 +342,124 @@ NotInPageScreen(maxHeight, maxWidth, controller, searchnode) {
         SizedBox(
           height: maxHeight,
           width: maxWidth,
-          child: Row(
-            children: [
-              Container(
-                  width: 220,
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: UserRoomScreen(
-                      maxHeight, 220, controller, searchnode, 'ls')),
-              SizedBox(
-                width: maxWidth * 0.1,
-              ),
-              SizedBox(
-                width: maxWidth - 220 - maxWidth * 0.1,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+          child: uiset.pagenumber != 1
+              ? Row(
                   children: [
-                    const Icon(
-                      AntDesign.frowno,
-                      color: Colors.orange,
-                      size: 30,
+                    Container(
+                        width: 220,
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: UserRoomScreen(
+                            maxHeight, 220, controller, searchnode, 'ls')),
+                    SizedBox(
+                      width: maxWidth * 0.1,
                     ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Text(
-                      '해당 페이지는 비어있습니다.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: contentTextsize(),
-                          color: draw.color_textstatus),
-                    ),
+                    SizedBox(
+                      width: maxWidth - 220 - maxWidth * 0.1,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            AntDesign.frowno,
+                            color: Colors.orange,
+                            size: 30,
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Text(
+                            '해당 페이지는 비어있습니다.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: contentTextsize(),
+                                color: draw.color_textstatus),
+                          ),
+                        ],
+                      ),
+                    )
                   ],
+                )
+              : SizedBox(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        AntDesign.frowno,
+                        color: Colors.orange,
+                        size: 30,
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        '해당 페이지는 비어있습니다.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: contentTextsize(),
+                            color: draw.color_textstatus),
+                      ),
+                    ],
+                  ),
                 ),
-              )
-            ],
-          ),
         ),
         SizedBox(
           height: maxHeight,
           width: maxWidth,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                  height: 120,
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: UserRoomScreen(
-                      120, maxWidth, controller, searchnode, 'pr')),
-              SizedBox(
-                height: maxHeight - 120,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+          child: uiset.pagenumber != 1
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Icon(
-                      AntDesign.frowno,
-                      color: Colors.orange,
-                      size: 30,
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Text(
-                      '해당 페이지는 비어있습니다.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: contentTextsize(),
-                          color: draw.color_textstatus),
-                    ),
+                    Container(
+                        height: 120,
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: UserRoomScreen(
+                            120, maxWidth, controller, searchnode, 'pr')),
+                    SizedBox(
+                      height: maxHeight - 120,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            AntDesign.frowno,
+                            color: Colors.orange,
+                            size: 30,
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Text(
+                            '해당 페이지는 비어있습니다.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: contentTextsize(),
+                                color: draw.color_textstatus),
+                          ),
+                        ],
+                      ),
+                    )
                   ],
+                )
+              : SizedBox(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        AntDesign.frowno,
+                        color: Colors.orange,
+                        size: 30,
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        '해당 페이지는 비어있습니다.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: contentTextsize(),
+                            color: draw.color_textstatus),
+                      ),
+                    ],
+                  ),
                 ),
-              )
-            ],
-          ),
         )),
   );
 }
@@ -506,169 +554,6 @@ WhatInPageScreenUI(
                       ],
                     ),
                   ),
-                  /*StreamBuilder<QuerySnapshot>(
-                  stream: PageViewStreamParent2(),
-                  builder: ((context, snapshot) {
-                    if (snapshot.hasData) {
-                      PageViewRes2(snapshot, index);
-                      if (linkspaceset.indextreetmp[index].isNotEmpty) {
-                        return SizedBox(
-                            height:
-                                (linkspaceset.indextreetmp[index].length) * 150,
-                            child: ListView.builder(
-                                padding: const EdgeInsets.only(
-                                  left: 10,
-                                  right: 10,
-                                ),
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: false,
-                                physics: const ScrollPhysics(),
-                                itemCount:
-                                    linkspaceset.indextreetmp[index].length,
-                                itemBuilder: ((context, index2) {
-                                  return Column(
-                                    children: [
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () async {
-                                          PageViewStreamChild3(
-                                              context, id, index, index2);
-                                        },
-                                        child: ContainerDesign(
-                                            color: draw.backgroundcolor,
-                                            child: SizedBox(
-                                              height: 100,
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      Flexible(
-                                                        fit: FlexFit.tight,
-                                                        child: Text(
-                                                          linkspaceset
-                                                              .indextreetmp[
-                                                                  index][index2]
-                                                              .placestr,
-                                                          textAlign:
-                                                              TextAlign.start,
-                                                          style: TextStyle(
-                                                              color: draw
-                                                                  .color_textstatus,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize:
-                                                                  contentTextsize()),
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      InkWell(
-                                                        onTap: () async {
-                                                          PageViewStreamChild4(
-                                                              context,
-                                                              id,
-                                                              index,
-                                                              index2,
-                                                              controller,
-                                                              searchNode);
-                                                        },
-                                                        child: Icon(
-                                                          Icons.more_horiz,
-                                                          color: draw
-                                                              .color_textstatus,
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            )),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                    ],
-                                  );
-                                })));
-                      } else {
-                        return GestureDetector(
-                          onTap: () {},
-                          child: SizedBox(
-                            height: 150,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(
-                                  child: Text(
-                                    '이 공간은 비어있어요~',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.black45,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: contentTextsize()),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        );
-                      }
-                    } else if (snapshot.connectionState ==
-                        ConnectionState.waiting) {
-                      return SizedBox(
-                        height: 150,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Center(
-                              child: SpinKitThreeBounce(
-                                size: 25,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return DecoratedBox(
-                                    decoration: BoxDecoration(
-                                        color: Colors.blue.shade200,
-                                        shape: BoxShape.circle),
-                                  );
-                                },
-                              ),
-                            )
-                          ],
-                        ),
-                      );
-                    } else {
-                      return GestureDetector(
-                        onTap: () {},
-                        child: SizedBox(
-                          height: 150,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Center(
-                                child: Text(
-                                  '이 공간은 비어있어요~',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Colors.black45,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTextsize()),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      );
-                    }
-                  }))*/
                 ],
               )),
         ),

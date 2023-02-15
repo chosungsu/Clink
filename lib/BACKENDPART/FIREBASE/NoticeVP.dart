@@ -5,9 +5,9 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../Enums/PageList.dart';
 import '../../Enums/Variables.dart';
-import '../../Tool/Getx/linkspacesetting.dart';
-import '../../Tool/Getx/notishow.dart';
-import '../../Tool/Getx/uisetting.dart';
+import '../Getx/linkspacesetting.dart';
+import '../Getx/notishow.dart';
+import '../Getx/uisetting.dart';
 
 ///Getx 호출
 final linkspaceset = Get.put(linkspacesetting());

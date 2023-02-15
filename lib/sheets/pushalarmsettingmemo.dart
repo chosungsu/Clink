@@ -1,7 +1,7 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
-import 'package:clickbyme/Tool/Getx/memosetting.dart';
-import 'package:clickbyme/Tool/Getx/uisetting.dart';
+import 'package:clickbyme/BACKENDPART/Getx/memosetting.dart';
+import 'package:clickbyme/BACKENDPART/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

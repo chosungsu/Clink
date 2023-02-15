@@ -9,9 +9,9 @@ import 'package:get/get.dart';
 import '../../BACKENDPART/FIREBASE/PaperVP.dart';
 import '../../Tool/AndroidIOS.dart';
 import '../../Tool/BGColor.dart';
-import '../../Tool/Getx/linkspacesetting.dart';
-import '../../Tool/Getx/navibool.dart';
-import '../../Tool/Getx/uisetting.dart';
+import '../../BACKENDPART/Getx/linkspacesetting.dart';
+import '../../BACKENDPART/Getx/navibool.dart';
+import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../Tool/TextSize.dart';
 
 final uiset = Get.put(uisetting());

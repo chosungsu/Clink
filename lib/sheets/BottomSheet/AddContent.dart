@@ -9,7 +9,6 @@ AddContent(context, title, content, searchnode) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
       constraints: BoxConstraints(
-        maxHeight: Get.height > 600 ? Get.height * 0.5 : 300,
         maxWidth: MediaQuery.of(context).orientation == Orientation.portrait
             ? Get.width
             : (Get.width > 1500 ? Get.width / 3 : Get.width / 2),

@@ -1,5 +1,6 @@
+import 'package:clickbyme/Enums/Variables.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
-import 'package:clickbyme/Tool/Getx/uisetting.dart';
+import 'package:clickbyme/BACKENDPART/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:clickbyme/UI/Home/Widgets/SortMenuHolder.dart';
@@ -16,9 +17,9 @@ import '../../../FRONTENDPART/Route/subuiroute.dart';
 import '../../../FRONTENDPART/UI(Widget/DayContentHome.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/FlushbarStyle.dart';
-import '../../../Tool/Getx/PeopleAdd.dart';
-import '../../../Tool/Getx/calendarsetting.dart';
-import '../../../Tool/Getx/memosetting.dart';
+import '../../../BACKENDPART/Getx/PeopleAdd.dart';
+import '../../../BACKENDPART/Getx/calendarsetting.dart';
+import '../../../BACKENDPART/Getx/memosetting.dart';
 import '../../../Tool/NoBehavior.dart';
 import 'package:focused_menu/focused_menu.dart';
 import '../../../sheets/infoshow.dart';
@@ -632,8 +633,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                         snapshot.data!
                                                                 .docs[index]
                                                             ['share'],
-                                                        cal_share_person
-                                                            .secondname,
+                                                        appnickname,
                                                         fToast);
                                                   })
                                             ],
@@ -839,8 +839,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
           builder: (_) => StreamBuilder<QuerySnapshot>(
                 stream: firestore
                     .collection('ShareHome_update')
-                    .where('showingUser',
-                        isEqualTo: cal_share_person.secondname)
+                    .where('showingUser', isEqualTo: appnickname)
                     .orderBy('date',
                         descending: cal_sort.sort == 0 ? true : false)
                     .snapshots(),
@@ -1091,8 +1090,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
                                                           snapshot.data!
                                                                   .docs[index]
                                                               ['share'],
-                                                          cal_share_person
-                                                              .secondname,
+                                                          appnickname,
                                                           fToast);
                                                     } else {
                                                       Snack.show(

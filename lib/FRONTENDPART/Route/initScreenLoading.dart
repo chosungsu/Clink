@@ -3,9 +3,9 @@
 import 'dart:async';
 import 'package:get/get.dart';
 import '../../Enums/Variables.dart';
-import '../../Tool/Getx/PeopleAdd.dart';
-import '../../Tool/Getx/notishow.dart';
-import '../../Tool/Getx/uisetting.dart';
+import '../../BACKENDPART/Getx/PeopleAdd.dart';
+import '../../BACKENDPART/Getx/notishow.dart';
+import '../../BACKENDPART/Getx/uisetting.dart';
 
 Future initScreen() async {
   final peopleadd = Get.put(PeopleAdd());
@@ -18,6 +18,10 @@ Future initScreen() async {
      */
     peopleadd.usercodeset();
   } else {}
+  /**
+  * friendset : user의 friendlist를 생성함.
+  */
+  peopleadd.friendset();
   /**
   * isreadnoti : appnoticebyusers의 db에서 read를 로드함.
   */

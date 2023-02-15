@@ -1,5 +1,5 @@
 import 'package:clickbyme/Enums/Variables.dart';
-import 'package:clickbyme/Tool/Getx/navibool.dart';
+import 'package:clickbyme/BACKENDPART/Getx/navibool.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'TextSize.dart';

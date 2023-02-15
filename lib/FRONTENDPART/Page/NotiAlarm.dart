@@ -3,10 +3,10 @@
 import 'package:clickbyme/FRONTENDPART/UI(Widget/NotiUI.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import '../../Tool/Getx/notishow.dart';
-import '../../Tool/Getx/uisetting.dart';
+import '../../BACKENDPART/Getx/notishow.dart';
+import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../Tool/AppBarCustom.dart';
-import '../../Tool/Getx/navibool.dart';
+import '../../BACKENDPART/Getx/navibool.dart';
 import '../../Tool/NoBehavior.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 

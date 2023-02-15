@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import '../../Enums/Variables.dart';
-import '../../Tool/Getx/navibool.dart';
-import '../../Tool/Getx/uisetting.dart';
+import '../../BACKENDPART/Getx/navibool.dart';
+import '../../BACKENDPART/Getx/uisetting.dart';
 import '../Route/mainroute.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 

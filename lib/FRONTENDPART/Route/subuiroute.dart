@@ -6,6 +6,7 @@ import 'package:clickbyme/Enums/Variables.dart';
 import 'package:clickbyme/main.dart';
 import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
 import 'package:clickbyme/sheets/BSContents/appbarplusbtn.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -20,10 +21,10 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import '../../Tool/AndroidIOS.dart';
 import '../../Tool/FlushbarStyle.dart';
-import '../../Tool/Getx/linkspacesetting.dart';
-import '../../Tool/Getx/navibool.dart';
-import '../../Tool/Getx/notishow.dart';
-import '../../Tool/Getx/uisetting.dart';
+import '../../BACKENDPART/Getx/linkspacesetting.dart';
+import '../../BACKENDPART/Getx/navibool.dart';
+import '../../BACKENDPART/Getx/notishow.dart';
+import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../Tool/TextSize.dart';
 import 'mainroute.dart';
 
@@ -45,6 +46,77 @@ GoToMain() {
 
 GoToStartApp() {
   Get.offAll(() => const SplashPage(), transition: Transition.fade);
+}
+
+Future<String> getEmailBody() async {
+  Map<String, dynamic> userInfo = getUserInfo();
+  Map<String, dynamic> appInfo = await getAppInfo(tomail: true);
+  Map<String, dynamic> deviceInfo = await getDeviceInfo();
+
+  String body = "";
+
+  body += "==============\n";
+  body += "아래는 문의하시는 사용자 정보로, 참고용입니다.\n\n";
+
+  userInfo.forEach((key, value) {
+    body += "$key: $value\n";
+  });
+
+  appInfo.forEach((key, value) {
+    body += "$key: $value\n";
+  });
+
+  deviceInfo.forEach((key, value) {
+    body += "$key: $value\n\n";
+  });
+
+  body += "==============\n\n";
+  body += "아래에 오류 및 건의사항을 적어주시면 됩니다.문의하신 내용은 업데이트에 최대한 반영해보도록 하겠습니다.감사합니다!\n\n";
+  body += "==============\n\n";
+  return body;
+}
+
+Map<String, dynamic> getUserInfo() {
+  String name = Hive.box('user_info').get('id');
+  String email = Hive.box('user_info').get('email');
+  return {"사용자 이름": name, "사용자 이메일": email};
+}
+
+Future<Map<String, dynamic>> getDeviceInfo() async {
+  DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+  Map<String, dynamic> deviceData = <String, dynamic>{};
+
+  try {
+    if (GetPlatform.isAndroid == true) {
+      deviceData = readAndroidDeviceInfo(await deviceInfoPlugin.androidInfo);
+    } else if (GetPlatform.isIOS == true) {
+      deviceData = readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
+    }
+  } catch (error) {
+    deviceData = {"Error": "Failed to get platform version."};
+  }
+
+  return deviceData;
+}
+
+Map<String, dynamic> readAndroidDeviceInfo(AndroidDeviceInfo info) {
+  var release = info.version.release;
+  var sdkInt = info.version.sdkInt;
+  var manufacturer = info.manufacturer;
+  var model = info.model;
+
+  return {
+    "OS 버전": "Android $release (SDK $sdkInt)",
+    "기기": "$manufacturer $model"
+  };
+}
+
+Map<String, dynamic> readIosDeviceInfo(IosDeviceInfo info) {
+  var systemName = info.systemName;
+  var version = info.systemVersion;
+  var machine = info.utsname.machine;
+
+  return {"OS 버전": "$systemName $version", "기기": "$machine"};
 }
 
 Future getAppInfo({tomail = false}) async {
@@ -262,7 +334,7 @@ func7() async {
   final uiset = Get.put(uisetting());
   var deleteid = '';
   var title = uiset.editpagelist[0].title;
-  var email = uiset.editpagelist[0].email!;
+  var setting = uiset.editpagelist[0].setting;
   var origin = uiset.editpagelist[0].username!;
   var id = uiset.editpagelist[0].id!;
 
@@ -270,7 +342,6 @@ func7() async {
     if (value.docs.isEmpty) {
       firestore.collection('Favorplace').add({
         'title': title,
-        'email': email,
         'originuser': origin,
         'favoradduser': usercode,
         'id': id,
@@ -288,7 +359,6 @@ func7() async {
       if (deleteid == '') {
         firestore.collection('Favorplace').add({
           'title': title,
-          'email': email,
           'originuser': origin,
           'favoradduser': usercode,
           'id': id,

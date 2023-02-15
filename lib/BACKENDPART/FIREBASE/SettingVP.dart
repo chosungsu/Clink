@@ -4,14 +4,16 @@ import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import '../../Enums/Expandable.dart';
 import '../../Enums/Variables.dart';
+import '../../FRONTENDPART/Route/subuiroute.dart';
 import '../../Tool/ContainerDesign.dart';
 import '../../Tool/FlushbarStyle.dart';
-import '../../Tool/Getx/PeopleAdd.dart';
-import '../../Tool/Getx/uisetting.dart';
+import '../Getx/PeopleAdd.dart';
+import '../Getx/uisetting.dart';
 import '../../Tool/TextSize.dart';
 import '../../sheets/BSContents/appbarpersonbtn.dart';
 
@@ -32,6 +34,107 @@ Settinglicensepage() {
               isExpanded: false));
     }
   });
+}
+
+Widgets_tocompany(context, controller, searchnode) {
+  Widget title;
+  Widget content;
+  final uiset = Get.put(uisetting());
+  final peopleadd = Get.put(PeopleAdd());
+
+  title = SizedBox(
+      height: 50,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: const [
+          Text('도움&문의',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25))
+        ],
+      ));
+  content = Column(
+    children: [
+      Row(
+        children: [
+          Image.asset(
+            'assets/images/instagram.png',
+            width: 30,
+            height: 30,
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('광고 및 개발문의',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTitleTextsize())),
+              Text('DM : @dev_habittracker_official',
+                  style: TextStyle(color: Colors.grey.shade400, fontSize: 15)),
+            ],
+          )
+        ],
+      ),
+      const SizedBox(
+        height: 30,
+      ),
+      GestureDetector(
+        onTap: () async {
+          Get.back();
+          String body = await getEmailBody();
+          final Email email = Email(
+            body: body,
+            subject: '[오류 및 건의사항]',
+            recipients: ['lenbizco@gmail.com'],
+            cc: [],
+            bcc: [],
+            attachmentPaths: [],
+            isHTML: false,
+          );
+
+          await FlutterEmailSender.send(email);
+        },
+        child: Row(
+          children: [
+            Flexible(
+                fit: FlexFit.tight,
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.forward_to_inbox,
+                      size: 30,
+                      color: Colors.blue.shade400,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('오류 및 건의사항',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentTitleTextsize())),
+                        Text('개발자에게 이메일보내기',
+                            style: TextStyle(
+                                color: Colors.grey.shade400, fontSize: 15)),
+                      ],
+                    ),
+                  ],
+                )),
+            Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade400)
+          ],
+        ),
+      )
+    ],
+  );
+  return [title, content];
 }
 
 SPIconclick(
@@ -95,7 +198,7 @@ Search(
     children: [
       ContainerTextFieldDesign(
         searchNodeAddSection: searchnode,
-        string: '검색방법 : 친구의 고유 Code',
+        string: 'User#ooooo => ooooo으로 검색',
         textEditingControllerAddSheet: controller,
       ),
       const SizedBox(
@@ -155,7 +258,7 @@ Search(
                                               .remove(searchlist_user[index]);
                                           firestore
                                               .collection('PeopleList')
-                                              .doc(appnickname)
+                                              .doc(usercode)
                                               .delete();
                                           Get.back();
                                           Snack.snackbars(
@@ -167,7 +270,7 @@ Search(
                                         }
                                         firestore
                                             .collection('PeopleList')
-                                            .doc(appnickname)
+                                            .doc(usercode)
                                             .set({'friends': list_sp},
                                                 SetOptions(merge: true));
                                       },
@@ -247,7 +350,7 @@ usersearch(
   String addwhat = '';
   List<String> searchlist_user = [];
   List<String> list_sp = [];
-  firestore.collection('PeopleList').doc(appnickname).get().then((value) {
+  firestore.collection('PeopleList').doc(usercode).get().then((value) {
     for (int i = 0; i < value.get('friends').length; i++) {
       list_sp.add(value.get('friends')[i]);
     }
@@ -257,14 +360,15 @@ usersearch(
         future: firestore
             .collection("User")
             .where('code',
-                isEqualTo: controller.text.isEmpty ? '' : controller.text)
+                isEqualTo:
+                    controller.text.isEmpty ? '' : 'User#' + controller.text)
             .get()
             .then(((QuerySnapshot querySnapshot) => {
                   setState(() {
                     searchlist_user.clear();
                     for (var doc in querySnapshot.docs) {
-                      doc.get('subname') != null
-                          ? searchlist_user.add(doc.get('subname'))
+                      doc.get('nick') != null
+                          ? searchlist_user.add(doc.get('nick'))
                           : searchlist_user.clear();
                     }
                     /*controller.text.isEmpty

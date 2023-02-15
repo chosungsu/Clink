@@ -18,18 +18,15 @@ class uisetting extends GetxController {
   List<String> licenses_content = List.empty(growable: true);
   int pagenumber = 0;
   bool showtopbutton = false;
-  String eventtitle = '';
-  String eventurl = '';
   List updateid = [];
   List<PageList> pagelist = [];
   List<PageList> searchpagelist = [];
   List<PageList> favorpagelist = [];
   List<PageList> editpagelist = [];
   List<PageviewList> pageviewlist = [];
-  int searchindex = 0;
-  int favorindex = 0;
+  int searchindex = -1;
+  int favorindex = -1;
   int mypagelistindex = Hive.box('user_setting').get('currentmypage') ?? 0;
-  int currentstepper = 0;
   String searchpagemove = '';
   String textrecognizer = '';
 
@@ -84,29 +81,11 @@ class uisetting extends GetxController {
     notifyChildrens();
   }
 
-  void seteditpage(
-      String what, String username, String email, String id, String setting) {
+  void seteditpage(String what, String username, String id, String setting) {
     searchpagemove = what;
-    editpagelist.add(PageList(
-        title: what,
-        email: email,
-        username: username,
-        id: id,
-        setting: setting));
+    editpagelist.add(
+        PageList(title: what, username: username, id: id, setting: setting));
     Hive.box('user_setting').put('currenteditpage', what);
-    update();
-    notifyChildrens();
-  }
-
-  void setsearchpage(String what, String username, String email) {
-    searchpagemove = what;
-    searchpagelist.add(PageList(title: what, email: email, username: username));
-    update();
-    notifyChildrens();
-  }
-
-  void resetsearchpage() {
-    searchpagelist.clear();
     update();
     notifyChildrens();
   }
@@ -114,12 +93,6 @@ class uisetting extends GetxController {
   void setmypagelistindex(int what) {
     Hive.box('user_setting').put('currentmypage', what);
     mypagelistindex = what;
-    update();
-    notifyChildrens();
-  }
-
-  void setstepperindex(int what) {
-    currentstepper = what;
     update();
     notifyChildrens();
   }
@@ -132,13 +105,6 @@ class uisetting extends GetxController {
 
   void settopbutton(bool what) {
     showtopbutton = what;
-    update();
-    notifyChildrens();
-  }
-
-  void seteventspace(String title, String url) {
-    eventtitle = title;
-    eventurl = url;
     update();
     notifyChildrens();
   }
@@ -162,6 +128,7 @@ class uisetting extends GetxController {
       if (updateid.isEmpty) {
         await firestore.collection('Pinchannel').add({
           'username': usercode,
+          'nick': appnickname,
           'linkname': '빈 스페이스',
           'setting': 'block'
         }).then((value1) {
@@ -226,19 +193,6 @@ class uisetting extends GetxController {
   void setlicense(String title, String content) async {
     licenses_title.insert(0, title);
     licenses_content.insert(0, content);
-    update();
-    notifyChildrens();
-  }
-
-  void setfavorspace(String title, String user, String email) {
-    searchpagemove = title;
-    favorpagelist.add(PageList(title: title, username: user, email: email));
-    update();
-    notifyChildrens();
-  }
-
-  void resetfavorpage() {
-    favorpagelist.clear();
     update();
     notifyChildrens();
   }
