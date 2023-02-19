@@ -2,7 +2,7 @@
 
 import 'dart:async';
 import 'package:get/get.dart';
-import '../../BACKENDPART/Enums/Variables.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import '../../BACKENDPART/Getx/PeopleAdd.dart';
 import '../../BACKENDPART/Getx/notishow.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
@@ -12,7 +12,7 @@ Future initScreen() async {
   final notilist = Get.put(notishow());
   final uiset = Get.put(uisetting());
 
-  if (usercode == '') {
+  if (Hive.box('user_setting').get('usercode') == '') {
     /**
      * usercodeset : user의 name, usercode를 생성함.
      */

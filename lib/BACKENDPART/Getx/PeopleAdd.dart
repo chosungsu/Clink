@@ -39,7 +39,7 @@ class PeopleAdd extends GetxController {
     code = 'User#' +
         String.fromCharCodes(Iterable.generate(
             5, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
-    if (usercode == '') {
+    if (Hive.box('user_setting').get('usercode') == '') {
       await firestore.collection('User').doc(code).set(
           {'nick': code, 'email': '', 'code': code},
           SetOptions(merge: true)).whenComplete(() async {
@@ -56,7 +56,7 @@ class PeopleAdd extends GetxController {
   void friendset() async {
     firestore
         .collection('PeopleList')
-        .doc(usercode)
+        .doc(Hive.box('user_setting').get('usercode'))
         .set({'friends': []}, SetOptions(merge: true));
 
     update();
