@@ -58,12 +58,12 @@ class navibool extends GetxController {
       } else {
         xoffset = -120;
       }
+      yoffset = 0;
+      scalefactor = 1;
+      drawopen = true;
+      Hive.box('user_setting').put('page_opened', drawopen);
     }
 
-    yoffset = 0;
-    scalefactor = 1;
-    drawopen = true;
-    Hive.box('user_setting').put('page_opened', drawopen);
     update();
     notifyChildrens();
   }

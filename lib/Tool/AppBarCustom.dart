@@ -71,7 +71,8 @@ class AppBarCustom extends StatelessWidget {
                           children: [
                             navinumlist.contains(uiset.pagenumber) &&
                                     draw.navi == 0 &&
-                                    draw.navishow == false
+                                    draw.navishow == false &&
+                                    draw.drawnoticeopen == false
                                 ? draw.drawopen == true ||
                                         Hive.box('user_setting')
                                                 .get('page_opened') ==
@@ -110,7 +111,8 @@ class AppBarCustom extends StatelessWidget {
                                 : const SizedBox(),
                             navinumlist.contains(uiset.pagenumber) &&
                                     draw.navi == 0 &&
-                                    draw.navishow == false
+                                    draw.navishow == false &&
+                                    draw.drawnoticeopen == false
                                 ? const SizedBox(
                                     width: 10,
                                   )
@@ -177,90 +179,7 @@ class AppBarCustom extends StatelessWidget {
                                                             ),
                                                             color: draw
                                                                 .backgroundcolor))
-                                                    : (uiset.pagenumber == 0
-                                                        ? GestureDetector(
-                                                            onTap: () {
-                                                              draw.setopennoti();
-                                                            },
-                                                            child: notilist
-                                                                        .isread ==
-                                                                    true
-                                                                ? (Get.width <
-                                                                        600
-                                                                    ? ContainerDesign(
-                                                                        child:
-                                                                            Icon(
-                                                                          Ionicons
-                                                                              .notifications_outline,
-                                                                          size:
-                                                                              30,
-                                                                          color:
-                                                                              draw.color_textstatus,
-                                                                        ),
-                                                                        color: draw
-                                                                            .backgroundcolor)
-                                                                    : ContainerDesign(
-                                                                        child:
-                                                                            Row(
-                                                                          children: [
-                                                                            Icon(
-                                                                              Ionicons.notifications_outline,
-                                                                              size: 30,
-                                                                              color: draw.color_textstatus,
-                                                                            ),
-                                                                            const SizedBox(
-                                                                              width: 20,
-                                                                            ),
-                                                                            Text(
-                                                                              '노티',
-                                                                              maxLines: 1,
-                                                                              textAlign: TextAlign.start,
-                                                                              style: TextStyle(fontFamily: 'DancingScript', fontWeight: FontWeight.w700, fontSize: contentTextsize(), color: draw.color_textstatus),
-                                                                              overflow: TextOverflow.ellipsis,
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                        color: draw
-                                                                            .backgroundcolor))
-                                                                : (Get.width <
-                                                                        600
-                                                                    ? ContainerDesign(
-                                                                        child:
-                                                                            Icon(
-                                                                          MaterialCommunityIcons
-                                                                              .bell_badge_outline,
-                                                                          size:
-                                                                              30,
-                                                                          color:
-                                                                              draw.color_textstatus,
-                                                                        ),
-                                                                        color: draw
-                                                                            .backgroundcolor)
-                                                                    : ContainerDesign(
-                                                                        child:
-                                                                            Row(
-                                                                          children: [
-                                                                            const Icon(
-                                                                              MaterialCommunityIcons.bell_badge_outline,
-                                                                              size: 30,
-                                                                              color: Colors.red,
-                                                                            ),
-                                                                            const SizedBox(
-                                                                              width: 20,
-                                                                            ),
-                                                                            Text(
-                                                                              '노티',
-                                                                              maxLines: 1,
-                                                                              textAlign: TextAlign.start,
-                                                                              style: TextStyle(fontFamily: 'DancingScript', fontWeight: FontWeight.w700, fontSize: contentTextsize(), color: Colors.red),
-                                                                              overflow: TextOverflow.ellipsis,
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                        color: draw
-                                                                            .backgroundcolor)),
-                                                          )
-                                                        : const SizedBox())
+                                                    : const SizedBox()
                                                 : const SizedBox(),
                                             uiset.pagenumber == 0 ||
                                                     uiset.pagenumber == 3
@@ -346,14 +265,16 @@ class AppBarCustom extends StatelessWidget {
                             )),
                             navinumlist.contains(uiset.pagenumber) &&
                                     draw.navi == 1 &&
-                                    draw.navishow == false
+                                    draw.navishow == false &&
+                                    draw.drawnoticeopen == false
                                 ? const SizedBox(
                                     width: 10,
                                   )
                                 : const SizedBox(),
                             navinumlist.contains(uiset.pagenumber) &&
                                     draw.navi == 1 &&
-                                    draw.navishow == false
+                                    draw.navishow == false &&
+                                    draw.drawnoticeopen == false
                                 ? draw.drawopen == true ||
                                         Hive.box('user_setting')
                                                 .get('page_opened') ==

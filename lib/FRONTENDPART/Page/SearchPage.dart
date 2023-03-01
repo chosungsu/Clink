@@ -10,8 +10,10 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import '../../BACKENDPART/Enums/Variables.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
+import '../../Tool/Loader.dart';
 import '../UI(Widget/SearchUI.dart';
 import 'DrawerScreen.dart';
+import 'NotiAlarm.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -49,12 +51,14 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    double width = Get.width < 1000 ? Get.width * 0.7 : Get.width * 0.5;
+    double height = Get.height > 1500 ? Get.height * 0.5 : Get.height;
     return SafeArea(
         child: Scaffold(
       backgroundColor: BGColor(),
       body: GetBuilder<navibool>(
           init: navibool(),
-          builder: (_) => draw.drawopen == true || draw.navishow == true
+          builder: (_) => draw.drawopen == true
               ? Stack(
                   children: [
                     draw.navi == 0
@@ -75,11 +79,26 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                     HomeUi(),
                   ],
                 )
-              : Stack(
-                  children: [
-                    HomeUi(),
-                  ],
-                )),
+              : (draw.drawnoticeopen == true
+                  ? Stack(
+                      children: [
+                        HomeUi(),
+                        const Barrier(),
+                        Positioned(
+                          right: 0,
+                          child: SizedBox(
+                            width: width,
+                            height: height,
+                            child: const NotiAlarm(),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Stack(
+                      children: [
+                        HomeUi(),
+                      ],
+                    ))),
     ));
   }
 
@@ -97,6 +116,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                       ? setState(() {
                           draw.drawopen = false;
                           draw.setclose();
+                          draw.setclosenoti();
                           Hive.box('user_setting').put('page_opened', false);
                         })
                       : null;

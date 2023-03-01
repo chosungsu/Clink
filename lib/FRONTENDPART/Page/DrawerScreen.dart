@@ -84,6 +84,14 @@ View(BuildContext context, List<Map> drawerItems) {
                                   .containsValue(Ionicons.settings_outline)) {
                                 draw.setclose();
                                 uiset.setpageindex(2);
+                              } else if (element.containsValue(
+                                notilist.isread == true
+                                    ? Ionicons.notifications_outline
+                                    : MaterialCommunityIcons.bell_badge_outline,
+                              )) {
+                                draw.setclose();
+                                draw.setopennoti();
+                                print('herer');
                               }
                               //Get.to(() => const mainroute(), transition: Transition.fade);
                             },
@@ -102,9 +110,13 @@ View(BuildContext context, List<Map> drawerItems) {
                 }).toList(),
               )),
             ),
-            Icon(
-              Ionicons.menu,
-              color: draw.color_textstatus,
-            ),
+            InkWell(
+              onTap: () {},
+              child: Icon(
+                Ionicons.menu,
+                color: draw.color_textstatus,
+              ),
+            )
           ]));
 }
+//SPIconclick(context, textcontroller, searchnode)

@@ -302,8 +302,9 @@ Widgets_settingpagedeleteuser(
       child: ElevatedButton(
         onPressed: () async {
           uiset.setloading(true);
+          await LoginApiProvider().deleteTasks();
           await NotificationApi.cancelAll();
-          await firestore.collection('Calendar').get().then((value) {
+          /*await firestore.collection('Calendar').get().then((value) {
             for (int i = 0; i < value.docs.length; i++) {
               for (int j = 0; j < value.docs[i].get('share').length; j++) {
                 changepeople.add(value.docs[i].get('share')[j]);
@@ -346,7 +347,7 @@ Widgets_settingpagedeleteuser(
                   .update({'alarmok': false, 'alarmtime': '99:99'});
             }
           });
-          await firestore.collection('MemoAllAlarm').doc(usercode).delete();
+          await firestore.collection('MemoAllAlarm').doc(usercode).delete();*/
           uiset.setloading(false);
           GoToStartApp();
         },

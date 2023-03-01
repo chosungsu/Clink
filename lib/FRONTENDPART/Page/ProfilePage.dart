@@ -13,10 +13,12 @@ import '../../Tool/ContainerDesign.dart';
 import '../../Tool/FlushbarStyle.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
+import '../../Tool/Loader.dart';
 import '../../Tool/NoBehavior.dart';
 import '../../Tool/AppBarCustom.dart';
 import '../UI(Widget/ProfileUI.dart';
 import 'DrawerScreen.dart';
+import 'NotiAlarm.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -51,6 +53,8 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
+    double width = Get.width < 1000 ? Get.width * 0.7 : Get.width * 0.5;
+    double height = Get.height > 1500 ? Get.height * 0.5 : Get.height;
     return SafeArea(
       child: Scaffold(
           backgroundColor: BGColor(),
@@ -76,11 +80,26 @@ class _ProfilePageState extends State<ProfilePage>
                         ProfileBody(context),
                       ],
                     )
-                  : Stack(
-                      children: [
-                        ProfileBody(context),
-                      ],
-                    ))),
+                  : (draw.drawnoticeopen == true
+                      ? Stack(
+                          children: [
+                            ProfileBody(context),
+                            const Barrier(),
+                            Positioned(
+                              right: 0,
+                              child: SizedBox(
+                                width: width,
+                                height: height,
+                                child: const NotiAlarm(),
+                              ),
+                            ),
+                          ],
+                        )
+                      : Stack(
+                          children: [
+                            ProfileBody(context),
+                          ],
+                        )))),
     );
   }
 
@@ -98,6 +117,7 @@ class _ProfilePageState extends State<ProfilePage>
                       ? setState(() {
                           draw.drawopen = false;
                           draw.setclose();
+                          draw.setclosenoti();
                           Hive.box('user_setting').put('page_opened', false);
                         })
                       : null;

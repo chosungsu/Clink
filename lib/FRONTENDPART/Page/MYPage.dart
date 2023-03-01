@@ -60,7 +60,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
         builder: (_) => Scaffold(
             backgroundColor: draw.backgroundcolor,
             body: SafeArea(
-                child: draw.drawopen == true || draw.navishow == true
+                child: draw.drawopen == true
                     ? Stack(
                         children: [
                           draw.navi == 0
@@ -127,6 +127,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                         ? setState(() {
                             draw.drawopen = false;
                             draw.setclose();
+                            draw.setclosenoti();
                             Hive.box('user_setting').put('page_opened', false);
                           })
                         : (draw.drawnoticeopen == true
