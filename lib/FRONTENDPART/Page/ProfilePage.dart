@@ -62,14 +62,14 @@ class _ProfilePageState extends State<ProfilePage>
                             ? const Positioned(
                                 left: 0,
                                 child: SizedBox(
-                                  width: 80,
+                                  width: 120,
                                   child: DrawerScreen(),
                                 ),
                               )
                             : const Positioned(
                                 right: 0,
                                 child: SizedBox(
-                                  width: 80,
+                                  width: 120,
                                   child: DrawerScreen(),
                                 ),
                               ),
@@ -85,7 +85,6 @@ class _ProfilePageState extends State<ProfilePage>
   }
 
   Widget ProfileBody(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
     return GetBuilder<navibool>(
         builder: (_) => AnimatedContainer(
               transform:
@@ -95,7 +94,7 @@ class _ProfilePageState extends State<ProfilePage>
               child: GestureDetector(
                 onTap: () {
                   searchNode.unfocus();
-                  draw.drawopen == true
+                  draw.drawopen == true && draw.navishow == false
                       ? setState(() {
                           draw.drawopen = false;
                           draw.setclose();
@@ -104,40 +103,63 @@ class _ProfilePageState extends State<ProfilePage>
                       : null;
                 },
                 child: SizedBox(
-                  height: height,
+                  height: Get.height,
+                  width: Get.width,
                   child: Container(
-                      color: BGColor(),
-                      child: Column(
+                      color: draw.backgroundcolor,
+                      child: Row(
                         children: [
-                          GetBuilder<uisetting>(builder: (_) {
-                            return AppBarCustom(
-                              title: '',
-                              lefticon: false,
-                              lefticonname: Icons.add,
-                              righticon: uiset.profileindex == 0 ? true : false,
-                              doubleicon: false,
-                              righticonname: Icons.person_outline,
-                              textcontroller: _controller,
-                              searchnode: searchNode,
-                            );
-                          }),
-                          Flexible(
-                            fit: FlexFit.tight,
-                            child: SizedBox(
-                              child: ScrollConfiguration(
-                                  behavior: NoBehavior(),
-                                  child: LayoutBuilder(
-                                    builder: ((context, constraint) {
-                                      return UI(
-                                          _controller,
-                                          searchNode,
-                                          scrollController,
-                                          constraint.maxWidth,
-                                          constraint.maxHeight);
-                                    }),
-                                  )),
-                            ),
+                          draw.navi == 0 && draw.navishow == true
+                              ? const SizedBox(
+                                  width: 120,
+                                  child: DrawerScreen(),
+                                )
+                              : const SizedBox(),
+                          Column(
+                            children: [
+                              GetBuilder<uisetting>(builder: (_) {
+                                return AppBarCustom(
+                                  title: '',
+                                  lefticon: false,
+                                  lefticonname: Icons.add,
+                                  righticon:
+                                      uiset.profileindex == 0 ? true : false,
+                                  doubleicon: false,
+                                  righticonname: Icons.person_outline,
+                                  textcontroller: _controller,
+                                  searchnode: searchNode,
+                                );
+                              }),
+                              Flexible(
+                                fit: FlexFit.tight,
+                                child: SizedBox(
+                                  width: draw.navishow == true
+                                      ? Get.width - 120
+                                      : Get.width,
+                                  child: ScrollConfiguration(
+                                      behavior: NoBehavior(),
+                                      child: LayoutBuilder(
+                                        builder: ((context, constraint) {
+                                          return UI(
+                                              _controller,
+                                              searchNode,
+                                              scrollController,
+                                              draw.navishow == true
+                                                  ? constraint.maxWidth - 120
+                                                  : constraint.maxWidth,
+                                              constraint.maxHeight);
+                                        }),
+                                      )),
+                                ),
+                              ),
+                            ],
                           ),
+                          draw.navi == 1 && draw.navishow == true
+                              ? const SizedBox(
+                                  width: 120,
+                                  child: DrawerScreen(),
+                                )
+                              : const SizedBox(),
                         ],
                       )),
                 ),

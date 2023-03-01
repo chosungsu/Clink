@@ -4,7 +4,6 @@ import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/FRONTENDPART/Route/initScreenLoading.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
@@ -12,8 +11,10 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:status_bar_control/status_bar_control.dart';
+import 'BACKENDPART/Getx/PeopleAdd.dart';
+import 'BACKENDPART/Getx/navibool.dart';
+import 'BACKENDPART/Getx/uisetting.dart';
 import 'BACKENDPART/Locale/Locale.dart';
-import 'BACKENDPART/Enums/PushNotification.dart';
 import 'BACKENDPART/Enums/Variables.dart';
 import 'FRONTENDPART/Route/subuiroute.dart';
 import 'BACKENDPART/LocalNotiPlatform/NotificationApi.dart';
@@ -101,12 +102,17 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  String name = Hive.box('user_info').get('id') ?? '';
+  final uiset = Get.put(uisetting());
+  final peopleadd = Get.put(PeopleAdd());
+  final draw = Get.put(navibool());
 
   @override
   void initState() {
     super.initState();
     checkForInitialMessage();
+    uiset.setloading(true);
+    uiset.searchpagemove = '';
+    uiset.textrecognizer = '';
     initScreen();
   }
 
@@ -117,30 +123,34 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
     StatusBarControl.setColor(draw.backgroundcolor, animated: true);
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: BGColor(),
-        body: SafeArea(
-            child: SizedBox(
-                height: height,
-                child: LayoutBuilder(
-                  builder: ((context, constraint) {
-                    return ListView(
-                      shrinkWrap: true,
-                      physics: ScrollPhysics(),
-                      children: [
-                        Column(
-                          children: [
-                            Responsivelayout(SameView(constraint.maxHeight),
-                                SameView(constraint.maxHeight))
-                          ],
-                        )
-                      ],
-                    );
-                  }),
-                ))));
+    return GetBuilder<uisetting>(
+      builder: (_) {
+        return Scaffold(
+            resizeToAvoidBottomInset: false,
+            backgroundColor: draw.backgroundcolor,
+            bottomNavigationBar: uiset.loading ? SizedBox() : ADSHOW(),
+            body: SafeArea(
+                child: GetBuilder<navibool>(
+                    builder: (_) => LayoutBuilder(
+                          builder: ((context, constraint) {
+                            return WillPopScope(
+                                onWillPop: () => onWillPop(context),
+                                child: uiset.loading
+                                    ? Stack(
+                                        children: [
+                                          ModalBarrier(
+                                            color: BGColor(),
+                                            dismissible: false,
+                                          ),
+                                          SameView(constraint.maxHeight),
+                                        ],
+                                      )
+                                    : pages[uiset.pagenumber]);
+                          }),
+                        ))));
+      },
+    );
   }
 
   ///SameView
@@ -171,7 +181,7 @@ class _SplashPageState extends State<SplashPage> {
                         width: 10,
                       ),
                       NeumorphicText(
-                        'LOBBY',
+                        'iTPLE',
                         style: const NeumorphicStyle(
                           shape: NeumorphicShape.flat,
                           depth: 3,
@@ -187,13 +197,13 @@ class _SplashPageState extends State<SplashPage> {
                 ),
                 SizedBox(
                     width: 40.w,
-                    child: name == ''
+                    child: appnickname == ''
                         ? SizedBox(
                             width: 30.w,
                             height: 50,
                             child: GestureDetector(
                               onTap: () {
-                                GoToMain();
+                                initScreen();
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -247,7 +257,7 @@ class _SplashPageState extends State<SplashPage> {
                         width: 10,
                       ),
                       NeumorphicText(
-                        'LOBBY',
+                        'iTPLE',
                         style: const NeumorphicStyle(
                           shape: NeumorphicShape.flat,
                           depth: 3,
@@ -266,13 +276,13 @@ class _SplashPageState extends State<SplashPage> {
                     child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    name == ''
+                    appnickname == ''
                         ? SizedBox(
                             width: 50.w,
                             height: 50,
                             child: GestureDetector(
                               onTap: () {
-                                GoToMain();
+                                initScreen();
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -313,26 +323,6 @@ class _SplashPageState extends State<SplashPage> {
                 )
               ],
             ),
-    );
-  }
-}
-
-///checkForInitialMessage
-///
-///알람을 받은 현황이 있는지 체크합니다.
-void checkForInitialMessage() async {
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    PushNotification notifications = PushNotification(
-      title: message.notification?.title,
-      body: message.notification?.body,
-    );
-  });
-  RemoteMessage? initialMessage =
-      await FirebaseMessaging.instance.getInitialMessage();
-  if (initialMessage != null) {
-    PushNotification notifications = PushNotification(
-      title: initialMessage.notification?.title,
-      body: initialMessage.notification?.body,
     );
   }
 }

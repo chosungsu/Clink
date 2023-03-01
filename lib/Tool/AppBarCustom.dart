@@ -60,6 +60,7 @@ class AppBarCustom extends StatelessWidget {
           builder: (_) => SafeArea(
               child: SizedBox(
                   height: 60,
+                  width: draw.navishow == true ? Get.width - 120 : Get.width,
                   child: Padding(
                       padding: const EdgeInsets.only(
                           left: 20, right: 20, top: 5, bottom: 5),
@@ -69,7 +70,8 @@ class AppBarCustom extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             navinumlist.contains(uiset.pagenumber) &&
-                                    draw.navi == 0
+                                    draw.navi == 0 &&
+                                    draw.navishow == false
                                 ? draw.drawopen == true ||
                                         Hive.box('user_setting')
                                                 .get('page_opened') ==
@@ -82,12 +84,13 @@ class AppBarCustom extends StatelessWidget {
                                                 .put('page_opened', false);
                                           });
                                         },
-                                        child: Icon(
-                                          Feather.chevron_left,
-                                          size: 30,
-                                          color: draw.color_textstatus,
-                                        ),
-                                      )
+                                        child: ContainerDesign(
+                                            child: Icon(
+                                              Feather.chevron_left,
+                                              size: 30,
+                                              color: draw.color_textstatus,
+                                            ),
+                                            color: draw.backgroundcolor))
                                     : GestureDetector(
                                         onTap: () {
                                           setState(() {
@@ -97,15 +100,17 @@ class AppBarCustom extends StatelessWidget {
                                                 .put('page_opened', true);
                                           });
                                         },
-                                        child: Icon(
-                                          Ionicons.menu,
-                                          size: 30,
-                                          color: draw.color_textstatus,
-                                        ),
-                                      )
+                                        child: ContainerDesign(
+                                            child: Icon(
+                                              Ionicons.menu,
+                                              size: 30,
+                                              color: draw.color_textstatus,
+                                            ),
+                                            color: draw.backgroundcolor))
                                 : const SizedBox(),
                             navinumlist.contains(uiset.pagenumber) &&
-                                    draw.navi == 0
+                                    draw.navi == 0 &&
+                                    draw.navishow == false
                                 ? const SizedBox(
                                     width: 10,
                                   )
@@ -155,20 +160,23 @@ class AppBarCustom extends StatelessWidget {
                                                         uiset.pagenumber == 12
                                                     ? GestureDetector(
                                                         onTap: () => func4(
-                                                          context,
-                                                          textcontroller,
-                                                          searchnode,
-                                                          'addpage',
-                                                          '',
-                                                          99,
-                                                        ),
-                                                        child: Icon(
-                                                          Ionicons.add_outline,
-                                                          size: 30,
-                                                          color: draw
-                                                              .color_textstatus,
-                                                        ),
-                                                      )
+                                                              context,
+                                                              textcontroller,
+                                                              searchnode,
+                                                              'addpage',
+                                                              '',
+                                                              99,
+                                                            ),
+                                                        child: ContainerDesign(
+                                                            child: Icon(
+                                                              Ionicons
+                                                                  .add_outline,
+                                                              size: 30,
+                                                              color: draw
+                                                                  .color_textstatus,
+                                                            ),
+                                                            color: draw
+                                                                .backgroundcolor))
                                                     : (uiset.pagenumber == 0
                                                         ? GestureDetector(
                                                             onTap: () {
@@ -179,14 +187,18 @@ class AppBarCustom extends StatelessWidget {
                                                                     true
                                                                 ? (Get.width <
                                                                         600
-                                                                    ? Icon(
-                                                                        Ionicons
-                                                                            .notifications_outline,
-                                                                        size:
-                                                                            30,
+                                                                    ? ContainerDesign(
+                                                                        child:
+                                                                            Icon(
+                                                                          Ionicons
+                                                                              .notifications_outline,
+                                                                          size:
+                                                                              30,
+                                                                          color:
+                                                                              draw.color_textstatus,
+                                                                        ),
                                                                         color: draw
-                                                                            .color_textstatus,
-                                                                      )
+                                                                            .backgroundcolor)
                                                                     : ContainerDesign(
                                                                         child:
                                                                             Row(
@@ -212,14 +224,18 @@ class AppBarCustom extends StatelessWidget {
                                                                             .backgroundcolor))
                                                                 : (Get.width <
                                                                         600
-                                                                    ? const Icon(
-                                                                        MaterialCommunityIcons
-                                                                            .bell_badge_outline,
-                                                                        size:
-                                                                            30,
-                                                                        color: Colors
-                                                                            .red,
-                                                                      )
+                                                                    ? ContainerDesign(
+                                                                        child:
+                                                                            Icon(
+                                                                          MaterialCommunityIcons
+                                                                              .bell_badge_outline,
+                                                                          size:
+                                                                              30,
+                                                                          color:
+                                                                              draw.color_textstatus,
+                                                                        ),
+                                                                        color: draw
+                                                                            .backgroundcolor)
                                                                     : ContainerDesign(
                                                                         child:
                                                                             Row(
@@ -329,13 +345,15 @@ class AppBarCustom extends StatelessWidget {
                               ),
                             )),
                             navinumlist.contains(uiset.pagenumber) &&
-                                    draw.navi == 1
+                                    draw.navi == 1 &&
+                                    draw.navishow == false
                                 ? const SizedBox(
                                     width: 10,
                                   )
                                 : const SizedBox(),
                             navinumlist.contains(uiset.pagenumber) &&
-                                    draw.navi == 1
+                                    draw.navi == 1 &&
+                                    draw.navishow == false
                                 ? draw.drawopen == true ||
                                         Hive.box('user_setting')
                                                 .get('page_opened') ==
@@ -348,12 +366,13 @@ class AppBarCustom extends StatelessWidget {
                                                 .put('page_opened', false);
                                           });
                                         },
-                                        child: Icon(
-                                          Feather.chevron_right,
-                                          size: 30,
-                                          color: draw.color_textstatus,
-                                        ),
-                                      )
+                                        child: ContainerDesign(
+                                            child: Icon(
+                                              Feather.chevron_right,
+                                              size: 30,
+                                              color: draw.color_textstatus,
+                                            ),
+                                            color: draw.backgroundcolor))
                                     : GestureDetector(
                                         onTap: () {
                                           setState(() {
@@ -363,12 +382,13 @@ class AppBarCustom extends StatelessWidget {
                                                 .put('page_opened', true);
                                           });
                                         },
-                                        child: Icon(
-                                          Ionicons.menu,
-                                          size: 30,
-                                          color: draw.color_textstatus,
-                                        ),
-                                      )
+                                        child: ContainerDesign(
+                                            child: Icon(
+                                              Ionicons.menu,
+                                              size: 30,
+                                              color: draw.color_textstatus,
+                                            ),
+                                            color: draw.backgroundcolor))
                                 : const SizedBox(),
                           ],
                         ),

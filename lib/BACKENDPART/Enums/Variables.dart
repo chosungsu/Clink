@@ -7,6 +7,9 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:package_info/package_info.dart';
+import '../../FRONTENDPART/Page/MYPage.dart';
+import '../../FRONTENDPART/Page/ProfilePage.dart';
+import '../../FRONTENDPART/Page/SearchPage.dart';
 import '../Getx/PeopleAdd.dart';
 import '../Getx/linkspacesetting.dart';
 import '../Getx/navibool.dart';
@@ -17,6 +20,7 @@ import 'Expandable.dart';
 import 'MemoList.dart';
 
 //Here are general Variables
+var baseurl = 'http://54.65.249.132:8000';
 var usercode = Hive.box('user_setting').get('usercode') ?? '';
 var appnickname = Hive.box('user_info').get('id') ?? '';
 var useremail = Hive.box('user_info').get('email') ?? '';
@@ -27,6 +31,11 @@ final notilist = Get.put(notishow());
 final peopleadd = Get.put(PeopleAdd());
 final scollection = Get.put(selectcollection());
 FirebaseFirestore firestore = FirebaseFirestore.instance;
+List pages = [
+  const MYPage(),
+  const SearchPage(),
+  const ProfilePage(),
+];
 //Here are PageUI Variables
 //Here are SpaceinUI Variables
 var spacefamilyid;
@@ -51,7 +60,6 @@ List<Expandable> licensedata = [];
 DateTime selectedDay = DateTime.now();
 var chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
 Random rnd = Random();
-String code = '';
 bool isresponsible = false;
 final imagePicker = ImagePicker();
 late Map<DateTime, List<Event>> events;

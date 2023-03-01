@@ -144,6 +144,7 @@ SPIconclick(
 ) {
   Widget title;
   Widget content;
+  textcontroller.clear();
   title = Widgets_settingpageiconclick(context, textcontroller, searchnode)[0];
   content =
       Widgets_settingpageiconclick(context, textcontroller, searchnode)[1];
@@ -198,7 +199,7 @@ Search(
     children: [
       ContainerTextFieldDesign(
         searchNodeAddSection: searchnode,
-        string: 'User#ooooo => ooooo으로 검색',
+        string: '친구의 고유코드로 검색',
         textEditingControllerAddSheet: controller,
       ),
       const SizedBox(
@@ -320,14 +321,6 @@ Search(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
-                    AntDesign.frowno,
-                    color: Colors.orange,
-                    size: 30,
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
                   Text(
                     '검색 결과가 없습니다.',
                     textAlign: TextAlign.center,
@@ -343,6 +336,53 @@ Search(
 }
 
 usersearch(
+  context,
+  controller,
+  searchnode,
+) {
+  String addwhat = '';
+  List<String> searchlist_user = [];
+  List<String> list_sp = [];
+  firestore.collection('PeopleList').doc(usercode).get().then((value) {
+    for (int i = 0; i < value.get('friends').length; i++) {
+      list_sp.add(value.get('friends')[i]);
+    }
+  });
+  return StatefulBuilder(builder: (_, StateSetter setState) {
+    return FutureBuilder(
+        future: firestore
+            .collection("User")
+            .where('code',
+                isEqualTo:
+                    controller.text.isEmpty ? '' : 'User#' + controller.text)
+            .get()
+            .then(((QuerySnapshot querySnapshot) => {
+                  setState(() {
+                    searchlist_user.clear();
+                    for (var doc in querySnapshot.docs) {
+                      doc.get('nick') != null
+                          ? searchlist_user.add(doc.get('nick'))
+                          : searchlist_user.clear();
+                    }
+                    /*controller.text.isEmpty
+                        ? addwhat = 'nothing'
+                        : addwhat = controller.text.toString();
+                    Hive.box('user_setting').put('user_people', addwhat);*/
+                  })
+                })),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Search(
+                context, searchnode, controller, searchlist_user, list_sp);
+          } else {
+            return Search(
+                context, searchnode, controller, searchlist_user, list_sp);
+          }
+        });
+  });
+}
+
+getsearchuser(
   context,
   controller,
   searchnode,

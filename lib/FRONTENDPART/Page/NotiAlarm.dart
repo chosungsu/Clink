@@ -32,7 +32,6 @@ class _NotiAlarmState extends State<NotiAlarm> {
     notilist.allcheck = false;
     notilist.checkboxnoti =
         List.filled(notilist.listad.length, false, growable: true);
-    uiset.pagenumber = 3;
   }
 
   @override

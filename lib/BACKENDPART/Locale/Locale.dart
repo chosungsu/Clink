@@ -25,6 +25,7 @@ class Languages extends Translations {
           'profilepagetitleonebyone': '배경색',
           'profilepagetitleonebytwo': '글자크기',
           'profilepagetitleonebythird': '메뉴바위치',
+          'profilepagetitleonebyforth': '메뉴바상태',
           'profilepagetitletwobyone': '공지사항',
           'profilepagetitletwobytwo': '문의하기',
           'profilepagetitlethirdbyone': '넥스트 버전',

@@ -32,6 +32,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     uiset.searchpagemove = '';
+    uiset.textrecognizer = '';
     controller = TextEditingController();
     controller2 = TextEditingController();
     controller3 = TextEditingController();
@@ -53,21 +54,21 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
       backgroundColor: BGColor(),
       body: GetBuilder<navibool>(
           init: navibool(),
-          builder: (_) => draw.drawopen == true
+          builder: (_) => draw.drawopen == true || draw.navishow == true
               ? Stack(
                   children: [
                     draw.navi == 0
                         ? Positioned(
                             left: 0,
                             child: SizedBox(
-                              width: 80,
+                              width: 120,
                               child: DrawerScreen(),
                             ),
                           )
                         : Positioned(
                             right: 0,
                             child: SizedBox(
-                              width: 80,
+                              width: 120,
                               child: DrawerScreen(),
                             ),
                           ),
@@ -83,8 +84,6 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
   }
 
   HomeUi() {
-    double height = MediaQuery.of(context).size.height;
-
     return GetBuilder<navibool>(
         builder: (_) => AnimatedContainer(
               transform:
@@ -94,7 +93,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
               child: GestureDetector(
                 onTap: () {
                   searchNode.unfocus();
-                  draw.drawopen == true
+                  draw.drawopen == true && draw.navishow == false
                       ? setState(() {
                           draw.drawopen = false;
                           draw.setclose();
@@ -103,12 +102,116 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                       : null;
                 },
                 child: SizedBox(
-                  height: height,
+                  height: Get.height,
+                  width: Get.width,
                   child: Container(
                       color: draw.backgroundcolor,
                       //decoration: BoxDecoration(color: colorselection),
-                      child: GetBuilder<uisetting>(
-                        builder: (_) => Column(
+                      child: GetBuilder<uisetting>(builder: (_) {
+                        return Row(
+                          children: [
+                            draw.navi == 0 && draw.navishow == true
+                                ? const SizedBox(
+                                    width: 120,
+                                    child: DrawerScreen(),
+                                  )
+                                : const SizedBox(),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                uiset.searchpagemove == ''
+                                    ? AppBarCustom(
+                                        title: '',
+                                        lefticon: false,
+                                        lefticonname: Icons.add,
+                                        righticon: false,
+                                        doubleicon: false,
+                                        righticonname: Icons.notifications_none,
+                                      )
+                                    : GetBuilder<uisetting>(
+                                        builder: (_) => StreamBuilder<
+                                                QuerySnapshot>(
+                                            stream: SearchpageStreamParent(),
+                                            builder: ((context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                SearchpageChild0(snapshot);
+                                                if (checkid != '') {
+                                                  return Column(
+                                                    children: [
+                                                      AppBarCustom(
+                                                        title: uiset
+                                                            .searchpagemove,
+                                                        lefticon: false,
+                                                        lefticonname: Icons.add,
+                                                        righticon: true,
+                                                        doubleicon: true,
+                                                        righticonname:
+                                                            Icons.star,
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                    ],
+                                                  );
+                                                } else {
+                                                  return Column(
+                                                    children: [
+                                                      AppBarCustom(
+                                                        title: uiset
+                                                            .searchpagemove,
+                                                        righticon: true,
+                                                        lefticon: false,
+                                                        lefticonname: Icons.add,
+                                                        doubleicon: true,
+                                                        righticonname:
+                                                            Icons.star_border,
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                    ],
+                                                  );
+                                                }
+                                              } else {
+                                                return AppBarCustom(
+                                                  title: '',
+                                                  righticon: false,
+                                                  lefticon: false,
+                                                  lefticonname: Icons.add,
+                                                  doubleicon: false,
+                                                  righticonname:
+                                                      Icons.notifications_none,
+                                                );
+                                              }
+                                            }))),
+                                SearchUI(
+                                    context,
+                                    scrollController,
+                                    controller,
+                                    draw.navishow == true
+                                        ? Get.width - 120
+                                        : Get.width,
+                                    controller2,
+                                    searchNode,
+                                    controller3)
+                              ],
+                            ),
+                            draw.navi == 1 && draw.navishow == true
+                                ? const SizedBox(
+                                    width: 120,
+                                    child: DrawerScreen(),
+                                  )
+                                : const SizedBox(),
+                          ],
+                        );
+                      })),
+                ),
+              ),
+            ));
+  }
+}
+/**
+ * Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             uiset.searchpagemove == ''
@@ -177,9 +280,4 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                 height, controller2, searchNode, controller3)
                           ],
                         ),
-                      )),
-                ),
-              ),
-            ));
-  }
-}
+ */

@@ -16,11 +16,12 @@ import '../../../Tool/TextSize.dart';
 final uiset = Get.put(uisetting());
 
 SearchUI(context, scrollController, TextEditingController controller,
-    double height, TextEditingController controller2, searchNode, controller3) {
+    double width, TextEditingController controller2, searchNode, controller3) {
   return uiset.searchpagemove == ''
       ? Flexible(
           fit: FlexFit.tight,
           child: SizedBox(
+            width: draw.navishow == true ? Get.width - 120 : Get.width,
             child: ScrollConfiguration(
               behavior: NoBehavior(),
               child: SingleChildScrollView(
@@ -32,19 +33,19 @@ SearchUI(context, scrollController, TextEditingController controller,
                                 SizedBox(
                                   height: 20,
                                 ),
-                                Se_Container0(height, controller, searchNode),
+                                Se_Container0(width, controller, searchNode),
                                 SizedBox(
                                   height: 20,
                                 ),
-                                Se_Container01(height, controller, searchNode),
+                                Se_Container01(width, controller, searchNode),
                                 SizedBox(
                                   height: 20,
                                 ),
-                                Se_Container1(height),
+                                Se_Container1(width),
                                 SizedBox(
                                   height: 20,
                                 ),
-                                Se_Container11(height, controller, searchNode),
+                                Se_Container11(width, controller, searchNode),
                                 SizedBox(
                                   height: 50,
                                 ),
@@ -56,6 +57,7 @@ SearchUI(context, scrollController, TextEditingController controller,
       : Flexible(
           fit: FlexFit.tight,
           child: SizedBox(
+            width: draw.navishow == true ? Get.width - 120 : Get.width,
             child: ScrollConfiguration(
                 behavior: NoBehavior(),
                 child: Se_Container2(

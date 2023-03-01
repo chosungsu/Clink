@@ -15,6 +15,7 @@ class navibool extends GetxController {
   double xoffset = 0;
   double yoffset = 0;
   double scalefactor = 1;
+  bool navishow = Hive.box('user_setting').get('menushowing') ?? true;
   int navi = Hive.box('user_setting').get('which_menu_pick') ?? 0;
   Color backgroundcolor =
       Hive.box('user_setting').get('which_color_background') == null
@@ -44,17 +45,21 @@ class navibool extends GetxController {
 
   void setclosenoti() {
     drawnoticeopen = false;
-    Hive.box('user_setting').put('drawnoticeopen', drawnoticeopen);
+    Hive.box('user_setting').put('noticepage_opened', drawnoticeopen);
     update();
     notifyChildrens();
   }
 
   void setopen() {
-    if (navi == 0) {
-      xoffset = 80;
+    if (navishow) {
     } else {
-      xoffset = -80;
+      if (navi == 0) {
+        xoffset = 120;
+      } else {
+        xoffset = -120;
+      }
     }
+
     yoffset = 0;
     scalefactor = 1;
     drawopen = true;
@@ -64,19 +69,28 @@ class navibool extends GetxController {
   }
 
   void setclose() {
-    xoffset = 0;
-    yoffset = 0;
-    scalefactor = 1;
-    drawopen = false;
-    Hive.box('user_setting').put('page_opened', drawopen);
+    if (navishow) {
+    } else {
+      xoffset = 0;
+      yoffset = 0;
+      scalefactor = 1;
+      drawopen = false;
+      Hive.box('user_setting').put('page_opened', drawopen);
+    }
+
     update();
     notifyChildrens();
   }
 
-  void setnavi() {
-    Hive.box('user_setting').get('which_menu_pick') == null
-        ? navi = 1
-        : navi = Hive.box('user_setting').get('which_menu_pick');
+  void setnavi(int what) {
+    navi = what;
+    Hive.box('user_setting').put('which_menu_pick', what);
+    if (navishow) {
+      setopen();
+    } else {
+      setclose();
+    }
+
     update();
     notifyChildrens();
   }
@@ -106,6 +120,21 @@ class navibool extends GetxController {
     ///
     ///글자 크기를 결정
     Hive.box('user_setting').put('which_text_size', what);
+    update();
+    notifyChildrens();
+  }
+
+  void setmenushowing(bool what) {
+    ///setmenushowing
+    ///
+    ///메뉴 보이기를 결정
+    Hive.box('user_setting').put('menushowing', what);
+    navishow = what;
+    if (what) {
+      setopen();
+    } else {
+      setclose();
+    }
     update();
     notifyChildrens();
   }

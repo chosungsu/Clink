@@ -251,7 +251,7 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
         isDialOpen.value = false;
       } else {
         StatusBarControl.setColor(draw.backgroundcolor, animated: true);
-        draw.setnavi();
+        draw.setnavi(Hive.box('user_setting').get('which_menu_pick') ?? 0);
         Hive.box('user_setting').put('widgetid', null);
         setState(() {
           isinit = false;

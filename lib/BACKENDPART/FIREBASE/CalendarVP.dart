@@ -16,6 +16,7 @@ void savecalendarsandmemo(context, texteditingcontrollerlist, position, id) {
   final controllCal = Get.put(calendarsetting());
   final calSharePerson = Get.put(PeopleAdd());
   final controllMemo = Get.put(memosetting());
+  String code = '';
 
   uiset.setloading(true);
   var firsttxt = '0' +

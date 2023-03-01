@@ -8,6 +8,7 @@ import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
 import 'package:clickbyme/sheets/BSContents/appbarplusbtn.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,6 +20,7 @@ import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:status_bar_control/status_bar_control.dart';
+import '../../BACKENDPART/Enums/PushNotification.dart';
 import '../../Tool/AndroidIOS.dart';
 import '../../Tool/FlushbarStyle.dart';
 import '../../BACKENDPART/Getx/linkspacesetting.dart';
@@ -26,7 +28,59 @@ import '../../BACKENDPART/Getx/navibool.dart';
 import '../../BACKENDPART/Getx/notishow.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../Tool/TextSize.dart';
-import 'mainroute.dart';
+
+///checkForInitialMessage
+///
+///알람을 받은 현황이 있는지 체크합니다.
+void checkForInitialMessage() async {
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    PushNotification notifications = PushNotification(
+      title: message.notification?.title,
+      body: message.notification?.body,
+    );
+  });
+  RemoteMessage? initialMessage =
+      await FirebaseMessaging.instance.getInitialMessage();
+  if (initialMessage != null) {
+    PushNotification notifications = PushNotification(
+      title: initialMessage.notification?.title,
+      body: initialMessage.notification?.body,
+    );
+  }
+}
+
+Future<bool> onWillPop(context) async {
+  final uiset = Get.put(uisetting());
+  final searchNode = FocusNode();
+  uiset.setmypagelistindex(Hive.box('user_setting').get('currentmypage') ?? 0);
+  if (draw.drawopen == true) {
+    draw.setclose();
+  } else if (draw.drawnoticeopen == true) {
+    closenotiroom();
+  } else if (uiset.profileindex != 0) {
+    uiset.checkprofilepageindex(0);
+  } else if (uiset.searchpagemove != '') {
+    uiset.searchpagemove = '';
+    uiset.textrecognizer = '';
+    searchNode.unfocus();
+    uiset.pagenumber = 1;
+  } else if (uiset.pagenumber != 0) {
+    uiset.setpageindex(0);
+    //Get.to(() => const mainroute(), transition: Transition.fade);
+  } else {
+    return await Get.dialog(OSDialog(
+            context,
+            '종료',
+            Text('앱을 종료하시겠습니까?',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTextsize())),
+            pressed1)) ??
+        false;
+  }
+  return false;
+}
 
 void pressed1() {
   Hive.box('user_info').get('autologin') == false
@@ -41,7 +95,7 @@ void pressed2() {
 
 GoToMain() {
   Hive.box('user_setting').put('currentmypage', 0);
-  Get.offAll(() => const mainroute(), transition: Transition.fade);
+  //Get.offAll(() => const mainroute(), transition: Transition.fade);
 }
 
 GoToStartApp() {
@@ -134,8 +188,6 @@ closenotiroom() {
   if (draw.drawnoticeopen) {
     draw.setclosenoti();
     notilist.isreadnoti(init: true);
-    Hive.box('user_setting').put('noticepage_opened', false);
-    uiset.setpageindex(0);
   } else {}
 }
 
@@ -248,23 +300,6 @@ deletenoti(context) async {
   }
 }
 
-func3(BuildContext context) => Future.delayed(const Duration(seconds: 0), () {
-      final linkspaceset = Get.put(linkspacesetting());
-      final uiset = Get.put(uisetting());
-      if (linkspaceset.color == draw.backgroundcolor) {
-        StatusBarControl.setColor(draw.backgroundcolor, animated: true);
-      } else {
-        StatusBarControl.setColor(linkspaceset.color, animated: true);
-      }
-      if (uiset.pagenumber == 3 ||
-          uiset.pagenumber == 4 ||
-          uiset.pagenumber == 5) {
-        uiset.setpageindex(0);
-        Get.to(() => const mainroute(), transition: Transition.downToUp);
-      } else {
-        Get.back();
-      }
-    });
 func4(context, textcontroller, searchnode, where, id, categorypicknum) async {
   final uiset = Get.put(uisetting());
   var checkid = '';
@@ -389,25 +424,28 @@ ADSHOW() {
     height: 50,
     child: AdWidget(ad: banner),
   );*/
-  return SizedBox(
-    height: 60,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Center(
-          child: Text(
-            '광고공간입니다',
-            style: TextStyle(
-                color: Colors.grey.shade300,
-                fontWeight: FontWeight.bold,
-                fontSize: contentTextsize()),
-            overflow: TextOverflow.ellipsis,
-          ),
-        )
-      ],
-    ),
-  );
+  return GetBuilder<navibool>(builder: (_) {
+    return Container(
+      height: 60,
+      color: draw.backgroundcolor,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+            child: Text(
+              '광고공간입니다',
+              style: TextStyle(
+                  color: Colors.grey.shade300,
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTextsize()),
+              overflow: TextOverflow.ellipsis,
+            ),
+          )
+        ],
+      ),
+    );
+  });
 }
 
 searchfiles(

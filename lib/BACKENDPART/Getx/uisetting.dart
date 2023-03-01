@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import '../Api/LoginApi.dart';
 import '../Enums/PageList.dart';
 import '../Enums/Variables.dart';
-import '../../FRONTENDPART/Route/subuiroute.dart';
 
 class uisetting extends GetxController {
   bool loading = false;
@@ -117,7 +117,8 @@ class uisetting extends GetxController {
       updateid.clear();
       pagelist.clear();
       for (var element in value.docs) {
-        if (element.data()['username'] == usercode) {
+        if (element.data()['username'] ==
+            Hive.box('user_setting').get('usercode')) {
           updateid.add(element.data()['linkname']);
           pagelist.add(PageList(
               title: element.data()['linkname'],
@@ -127,7 +128,7 @@ class uisetting extends GetxController {
       }
       if (updateid.isEmpty) {
         await firestore.collection('Pinchannel').add({
-          'username': usercode,
+          'username': Hive.box('user_setting').get('usercode'),
           'nick': appnickname,
           'linkname': '빈 스페이스',
           'setting': 'block'
@@ -138,7 +139,7 @@ class uisetting extends GetxController {
       }
     }).whenComplete(() {
       if (init) {
-        GoToMain();
+        loading = false;
       }
     });
 
@@ -169,6 +170,7 @@ class uisetting extends GetxController {
         'profilepagetitleonebyone',
         'profilepagetitleonebytwo',
         'profilepagetitleonebythird',
+        'profilepagetitleonebyforth',
       ],
       [
         'profilepagetitletwobyone',
@@ -182,6 +184,7 @@ class uisetting extends GetxController {
       ],
       ['profilepagetitlefifthbyone', 'profilepagetitlefifthbytwo']
     ];
+    profilescreen.clear();
     for (int i = 0; i < 5; i++) {
       profilescreen.add(Profile_item(
           icondata: listopt[i], title: title[i], subtitles: subtitles[i]));

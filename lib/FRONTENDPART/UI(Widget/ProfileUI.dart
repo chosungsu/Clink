@@ -13,6 +13,7 @@ import '../../../Tool/BGColor.dart';
 import '../../BACKENDPART/Getx/linkspacesetting.dart';
 import '../../../Tool/TextSize.dart';
 import '../../BACKENDPART/Enums/Expandable.dart';
+import '../../BACKENDPART/Getx/navibool.dart';
 import '../../Tool/AndroidIOS.dart';
 import '../../BACKENDPART/Getx/PeopleAdd.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
@@ -20,6 +21,7 @@ import '../../BACKENDPART/Getx/uisetting.dart';
 final uiset = Get.put(uisetting());
 final linkspaceset = Get.put(linkspacesetting());
 final peopleadd = Get.put(PeopleAdd());
+final draw = Get.put(navibool());
 
 ///UI
 ///
@@ -43,7 +45,7 @@ UI(controller, searchnode, scrollcontroller, maxWidth, maxHeight) {
                           maxWidth, maxHeight, searchnode, controller)
                       : (uiset.profileindex == 1
                           ? TestScreen(maxWidth, maxHeight)
-                          : LicenseHome(maxWidth, maxHeight)),
+                          : LicenseScreen(maxWidth, maxHeight)),
                 ],
               ));
         }));
@@ -274,12 +276,11 @@ Opt_body(index, searchnode, controller) {
                                                         draw.setnavicolor();
                                                       } else if (index2 == 1) {
                                                         draw.setts(0);
+                                                      } else if (index2 == 2) {
+                                                        draw.setnavi(0);
                                                       } else {
-                                                        Hive.box('user_setting')
-                                                            .put(
-                                                                'which_menu_pick',
-                                                                0);
-                                                        draw.setnavi();
+                                                        draw.setmenushowing(
+                                                            true);
                                                       }
                                                     },
                                                   );
@@ -366,42 +367,77 @@ Opt_body(index, searchnode, controller) {
                                                               ),
                                                             ),
                                                           )
-                                                        : CircleAvatar(
-                                                            backgroundColor:
-                                                                BGColor_shadowcolor(),
-                                                            child: Container(
-                                                              decoration: BoxDecoration(
-                                                                  shape: BoxShape
-                                                                      .circle,
-                                                                  border: Border.all(
-                                                                      width: 2,
-                                                                      color: draw.navi ==
-                                                                              0
-                                                                          ? Colors
-                                                                              .blue
-                                                                              .shade400
-                                                                          : BGColor_shadowcolor())),
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                              child:
-                                                                  NeumorphicIcon(
-                                                                Icons
-                                                                    .align_horizontal_left,
-                                                                size: 25,
-                                                                style: NeumorphicStyle(
-                                                                    shape: NeumorphicShape
-                                                                        .convex,
-                                                                    depth: 2,
-                                                                    color: Colors
-                                                                        .blue
-                                                                        .shade300,
-                                                                    lightSource:
-                                                                        LightSource
-                                                                            .topLeft),
-                                                              ),
-                                                            ),
-                                                          )),
+                                                        : (index2 == 2
+                                                            ? CircleAvatar(
+                                                                backgroundColor:
+                                                                    BGColor_shadowcolor(),
+                                                                child:
+                                                                    Container(
+                                                                  decoration: BoxDecoration(
+                                                                      shape: BoxShape
+                                                                          .circle,
+                                                                      border: Border.all(
+                                                                          width:
+                                                                              2,
+                                                                          color: draw.navi == 0
+                                                                              ? Colors.blue.shade400
+                                                                              : BGColor_shadowcolor())),
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  child:
+                                                                      NeumorphicIcon(
+                                                                    Icons
+                                                                        .align_horizontal_left,
+                                                                    size: 25,
+                                                                    style: NeumorphicStyle(
+                                                                        shape: NeumorphicShape
+                                                                            .convex,
+                                                                        depth:
+                                                                            2,
+                                                                        color: Colors
+                                                                            .blue
+                                                                            .shade300,
+                                                                        lightSource:
+                                                                            LightSource.topLeft),
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            : CircleAvatar(
+                                                                backgroundColor:
+                                                                    BGColor_shadowcolor(),
+                                                                child:
+                                                                    Container(
+                                                                  decoration: BoxDecoration(
+                                                                      shape: BoxShape
+                                                                          .circle,
+                                                                      border: Border.all(
+                                                                          width:
+                                                                              2,
+                                                                          color: Hive.box('user_setting').get('menushowing') == true || Hive.box('user_setting').get('menushowing') == null
+                                                                              ? Colors.blue.shade400
+                                                                              : BGColor_shadowcolor())),
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  child:
+                                                                      NeumorphicIcon(
+                                                                    Ionicons
+                                                                        .eye,
+                                                                    size: 25,
+                                                                    style: NeumorphicStyle(
+                                                                        shape: NeumorphicShape
+                                                                            .convex,
+                                                                        depth:
+                                                                            2,
+                                                                        color: Colors
+                                                                            .blue
+                                                                            .shade300,
+                                                                        lightSource:
+                                                                            LightSource.topLeft),
+                                                                  ),
+                                                                ),
+                                                              ))),
                                               ))),
                                       const SizedBox(
                                         width: 3,
@@ -422,12 +458,11 @@ Opt_body(index, searchnode, controller) {
                                                         draw.setnavicolor();
                                                       } else if (index2 == 1) {
                                                         draw.setts(1);
+                                                      } else if (index2 == 2) {
+                                                        draw.setnavi(1);
                                                       } else {
-                                                        Hive.box('user_setting')
-                                                            .put(
-                                                                'which_menu_pick',
-                                                                1);
-                                                        draw.setnavi();
+                                                        draw.setmenushowing(
+                                                            false);
                                                       }
                                                     },
                                                   );
@@ -509,42 +544,77 @@ Opt_body(index, searchnode, controller) {
                                                               ),
                                                             ),
                                                           )
-                                                        : CircleAvatar(
-                                                            backgroundColor:
-                                                                BGColor_shadowcolor(),
-                                                            child: Container(
-                                                              decoration: BoxDecoration(
-                                                                  shape: BoxShape
-                                                                      .circle,
-                                                                  border: Border.all(
-                                                                      width: 2,
-                                                                      color: draw.navi ==
-                                                                              1
-                                                                          ? Colors
-                                                                              .blue
-                                                                              .shade400
-                                                                          : BGColor_shadowcolor())),
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                              child:
-                                                                  NeumorphicIcon(
-                                                                Icons
-                                                                    .align_horizontal_right,
-                                                                size: 25,
-                                                                style: NeumorphicStyle(
-                                                                    shape: NeumorphicShape
-                                                                        .convex,
-                                                                    depth: 2,
-                                                                    color: Colors
-                                                                        .blue
-                                                                        .shade300,
-                                                                    lightSource:
-                                                                        LightSource
-                                                                            .topLeft),
-                                                              ),
-                                                            ),
-                                                          )),
+                                                        : (index2 == 2
+                                                            ? CircleAvatar(
+                                                                backgroundColor:
+                                                                    BGColor_shadowcolor(),
+                                                                child:
+                                                                    Container(
+                                                                  decoration: BoxDecoration(
+                                                                      shape: BoxShape
+                                                                          .circle,
+                                                                      border: Border.all(
+                                                                          width:
+                                                                              2,
+                                                                          color: draw.navi == 1
+                                                                              ? Colors.blue.shade400
+                                                                              : BGColor_shadowcolor())),
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  child:
+                                                                      NeumorphicIcon(
+                                                                    Icons
+                                                                        .align_horizontal_right,
+                                                                    size: 25,
+                                                                    style: NeumorphicStyle(
+                                                                        shape: NeumorphicShape
+                                                                            .convex,
+                                                                        depth:
+                                                                            2,
+                                                                        color: Colors
+                                                                            .blue
+                                                                            .shade300,
+                                                                        lightSource:
+                                                                            LightSource.topLeft),
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            : CircleAvatar(
+                                                                backgroundColor:
+                                                                    BGColor_shadowcolor(),
+                                                                child:
+                                                                    Container(
+                                                                  decoration: BoxDecoration(
+                                                                      shape: BoxShape
+                                                                          .circle,
+                                                                      border: Border.all(
+                                                                          width:
+                                                                              2,
+                                                                          color: Hive.box('user_setting').get('menushowing') == false
+                                                                              ? Colors.blue.shade400
+                                                                              : BGColor_shadowcolor())),
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  child:
+                                                                      NeumorphicIcon(
+                                                                    Ionicons
+                                                                        .eye_off,
+                                                                    size: 25,
+                                                                    style: NeumorphicStyle(
+                                                                        shape: NeumorphicShape
+                                                                            .convex,
+                                                                        depth:
+                                                                            2,
+                                                                        color: Colors
+                                                                            .blue
+                                                                            .shade300,
+                                                                        lightSource:
+                                                                            LightSource.topLeft),
+                                                                  ),
+                                                                ),
+                                                              ))),
                                               ))),
                                     ],
                                   ),
@@ -641,7 +711,7 @@ prtestview(maxWidth, maxHeight) {
 ///LicenseHome
 ///
 ///앱이 사용한 라이선스 리스트를 보여주는 공간으로 같은 페이지 UI변경.
-LicenseHome(maxWidth, maxHeight) {
+LicenseScreen(maxWidth, maxHeight) {
   return GetBuilder<uisetting>(builder: (_) {
     return GestureDetector(
       onTap: () {

@@ -5,12 +5,15 @@ import 'package:clickbyme/sheets/BottomSheet/AddContentWithBtn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import '../../BACKENDPART/Api/LoginApi.dart';
 import '../../FRONTENDPART/Route/subuiroute.dart';
 import '../../BACKENDPART/LocalNotiPlatform/NotificationApi.dart';
 import '../../Tool/BGColor.dart';
 import '../../Tool/ContainerDesign.dart';
 import '../../BACKENDPART/Getx/PeopleAdd.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
+import '../../Tool/FlushbarStyle.dart';
 import '../../Tool/TextSize.dart';
 
 final uiset = Get.put(uisetting());
@@ -126,7 +129,7 @@ Widgets_settingpagenickchange(
               maxLines: 2,
               text: TextSpan(children: [
                 TextSpan(
-                    text: usercode,
+                    text: Hive.box('user_info').get('id'),
                     style: TextStyle(
                         color: Colors.blue.shade400,
                         fontWeight: FontWeight.bold,
@@ -158,32 +161,8 @@ Widgets_settingpagenickchange(
         ),
         ContainerTextFieldDesign(
           searchNodeAddSection: searchnode,
-          string: '다른 사용자에게 보일 이름 작성',
+          string: '이곳에 작성',
           textEditingControllerAddSheet: textcontroller,
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Row(
-          children: [
-            Flexible(
-              fit: FlexFit.tight,
-              child: Text(
-                '초기 닉네임으로 변경',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: contentTextsize(),
-                    color: Colors.black),
-              ),
-            ),
-            Checkbox(
-                value: _ischecked,
-                onChanged: (value) {
-                  setState(() {
-                    _ischecked = value!;
-                  });
-                }),
-          ],
         ),
       ],
     ));
@@ -203,43 +182,15 @@ Widgets_settingpagenickchange(
                 onPressed: () async {
                   uiset.setloading(true);
                   if (textcontroller.text.isEmpty) {
-                    if (_ischecked) {
-                      uiset.checktf(true);
-                      await firestore
-                          .collection('User')
-                          .doc(usercode)
-                          .get()
-                          .then((value) {
-                        peopleadd.secondnameset(usercode);
-                      });
-                      uiset.setloading(false);
-                      Get.back();
-                    } else {
-                      uiset.setloading(false);
-                      uiset.checktf(false);
-                    }
-                  } else {
-                    if (_ischecked) {
-                      uiset.checktf(true);
-                      await firestore
-                          .collection('User')
-                          .doc(usercode)
-                          .get()
-                          .then((value) {
-                        peopleadd.secondnameset(usercode);
-                      });
-                    } else {
-                      uiset.checktf(true);
-                      await firestore
-                          .collection('User')
-                          .doc(appnickname)
-                          .get()
-                          .then((value) {
-                        peopleadd.secondnameset(textcontroller.text);
-                      });
-                    }
+                    uiset.checktf(false);
                     uiset.setloading(false);
+                  } else {
+                    uiset.checktf(true);
+                    Hive.box('user_info').put('id', textcontroller.text);
+                    uiset.setloading(false);
+                    LoginApiProvider().updateTasks();
                     Get.back();
+                    textcontroller.clear();
                   }
                 },
                 child: Center(

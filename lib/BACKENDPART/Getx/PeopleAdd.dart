@@ -1,14 +1,14 @@
 // ignore_for_file: unused_field
 
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
+import '../Api/LoginApi.dart';
 import '../Enums/Variables.dart';
 
 class PeopleAdd extends GetxController {
+  final loginapi = Get.put(LoginApiProvider());
   List people = [];
   String secondname = Hive.box('user_info').get('id') ?? '';
   String code = '';
@@ -29,30 +29,6 @@ class PeopleAdd extends GetxController {
     notifyChildrens();
   }
 
-  void usercodeset() async {
-    var _chars =
-        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-    Random _rnd = Random();
-    String code = '';
-
-    //내부 저장으로 로그인 정보 저장
-    code = 'User#' +
-        String.fromCharCodes(Iterable.generate(
-            5, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
-    if (Hive.box('user_setting').get('usercode') == '') {
-      await firestore.collection('User').doc(code).set(
-          {'nick': code, 'email': '', 'code': code},
-          SetOptions(merge: true)).whenComplete(() async {
-        await Hive.box('user_info').put('id', code);
-        await Hive.box('user_info').put('email', '');
-        await Hive.box('user_setting').put('usercode', code);
-      });
-    } else {}
-
-    update();
-    notifyChildrens();
-  }
-
   void friendset() async {
     firestore
         .collection('PeopleList')
@@ -64,7 +40,10 @@ class PeopleAdd extends GetxController {
   }
 
   void secondnameset(String code) {
-    firestore.collection('User').doc(usercode).update({'nick': code});
+    firestore
+        .collection('User')
+        .doc(Hive.box('user_setting').get('usercode'))
+        .update({'nick': code});
     appnickname = code;
     update();
     notifyChildrens();

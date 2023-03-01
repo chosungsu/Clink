@@ -22,9 +22,9 @@ class MYPage extends StatefulWidget {
 }
 
 class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
-  var scrollController;
+  ScrollController? scrollController;
   final searchNode = FocusNode();
-  var textcontroller = TextEditingController();
+  TextEditingController? textcontroller;
   final draw = Get.put(navibool());
   final uiset = Get.put(uisetting());
   final notilist = Get.put(notishow());
@@ -40,7 +40,6 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
     uiset.pagenumber = 0;
     uiset.searchpagemove = '';
     uiset.mypagelistindex = Hive.box('user_setting').get('currentmypage') ?? 0;
-    draw.navi = Hive.box('user_setting').get('which_menu_pick') ?? 0;
     textcontroller = TextEditingController();
     scrollController = ScrollController();
   }
@@ -48,8 +47,8 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
   @override
   void dispose() {
     super.dispose();
-    textcontroller.dispose();
-    scrollController.dispose();
+    textcontroller!.dispose();
+    scrollController!.dispose();
   }
 
   @override
@@ -61,21 +60,21 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
         builder: (_) => Scaffold(
             backgroundColor: draw.backgroundcolor,
             body: SafeArea(
-                child: draw.drawopen == true
+                child: draw.drawopen == true || draw.navishow == true
                     ? Stack(
                         children: [
                           draw.navi == 0
                               ? const Positioned(
                                   left: 0,
                                   child: SizedBox(
-                                    width: 80,
+                                    width: 120,
                                     child: DrawerScreen(),
                                   ),
                                 )
                               : const Positioned(
                                   right: 0,
                                   child: SizedBox(
-                                    width: 80,
+                                    width: 120,
                                     child: DrawerScreen(),
                                   ),
                                 ),
@@ -115,7 +114,6 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
   }
 
   Widget MainBody(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
     return OrientationBuilder(builder: ((context, orientation) {
       return GetBuilder<navibool>(
           builder: (_) => AnimatedContainer(
@@ -125,7 +123,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                 duration: const Duration(milliseconds: 250),
                 child: GestureDetector(
                   onTap: () {
-                    draw.drawopen == true
+                    draw.drawopen == true && draw.navishow == false
                         ? setState(() {
                             draw.drawopen = false;
                             draw.setclose();
@@ -133,55 +131,78 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                           })
                         : (draw.drawnoticeopen == true
                             ? setState(() {
-                                draw.drawnoticeopen = false;
                                 draw.setclosenoti();
                                 notilist.isreadnoti(init: false);
-                                Hive.box('user_setting')
-                                    .put('noticepage_opened', false);
-                                uiset.pagenumber = 0;
                               })
                             : null);
                   },
                   child: SizedBox(
-                    height: height,
+                    height: Get.height,
+                    width: Get.width,
                     child: GetBuilder<uisetting>(
                       builder: (_) {
                         return Container(
                             color: draw.backgroundcolor,
-                            child: Column(
+                            child: Row(
                               children: [
-                                GetBuilder<notishow>(builder: (_) {
-                                  return AppBarCustom(
-                                    title: 'LOBBY',
-                                    lefticon: false,
-                                    righticon: true,
-                                    doubleicon: true,
-                                    lefticonname: Ionicons.add_outline,
-                                    righticonname: Ionicons.add_outline,
-                                    textcontroller: textcontroller,
-                                    searchnode: searchNode,
-                                  );
-                                }),
-                                const SizedBox(
-                                  height: 20,
+                                draw.navi == 0 && draw.navishow == true
+                                    ? const SizedBox(
+                                        width: 120,
+                                        child: DrawerScreen(),
+                                      )
+                                    : const SizedBox(),
+                                Column(
+                                  children: [
+                                    GetBuilder<notishow>(builder: (_) {
+                                      return AppBarCustom(
+                                        title: 'iTPLE',
+                                        lefticon: false,
+                                        righticon: true,
+                                        doubleicon: true,
+                                        lefticonname: Ionicons.add_outline,
+                                        righticonname: Ionicons.add_outline,
+                                        textcontroller: textcontroller,
+                                        searchnode: searchNode,
+                                      );
+                                    }),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Flexible(
+                                        fit: FlexFit.tight,
+                                        child: SizedBox(
+                                          width: draw.navishow == true
+                                              ? Get.width - 120
+                                              : Get.width,
+                                          child: ScrollConfiguration(
+                                              behavior: NoBehavior(),
+                                              child: LayoutBuilder(
+                                                builder:
+                                                    ((context, constraint) {
+                                                  return UI(
+                                                      uiset
+                                                          .pagelist[uiset
+                                                              .mypagelistindex]
+                                                          .id,
+                                                      textcontroller,
+                                                      searchNode,
+                                                      draw.navishow == true
+                                                          ? constraint
+                                                                  .maxWidth -
+                                                              120
+                                                          : constraint.maxWidth,
+                                                      constraint.maxHeight);
+                                                }),
+                                              )),
+                                        )),
+                                  ],
                                 ),
-                                Flexible(
-                                    fit: FlexFit.tight,
-                                    child: ScrollConfiguration(
-                                        behavior: NoBehavior(),
-                                        child: LayoutBuilder(
-                                          builder: ((context, constraint) {
-                                            return UI(
-                                                uiset
-                                                    .pagelist[
-                                                        uiset.mypagelistindex]
-                                                    .id,
-                                                textcontroller,
-                                                searchNode,
-                                                constraint.maxWidth,
-                                                constraint.maxHeight);
-                                          }),
-                                        ))),
+                                draw.navi == 1 && draw.navishow == true
+                                    ? const SizedBox(
+                                        width: 120,
+                                        child: DrawerScreen(),
+                                      )
+                                    : const SizedBox(),
                               ],
                             ));
                       },
