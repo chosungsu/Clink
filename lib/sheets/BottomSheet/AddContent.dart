@@ -10,7 +10,7 @@ AddContent(context, title, content, searchnode) {
       backgroundColor: Colors.transparent,
       constraints: BoxConstraints(
         maxWidth: MediaQuery.of(context).orientation == Orientation.portrait
-            ? Get.width
+            ? Get.width / 2
             : (Get.width > 1500 ? Get.width / 3 : Get.width / 2),
       ),
       shape: const RoundedRectangleBorder(

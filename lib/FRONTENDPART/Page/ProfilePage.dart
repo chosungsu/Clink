@@ -13,12 +13,11 @@ import '../../Tool/ContainerDesign.dart';
 import '../../Tool/FlushbarStyle.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
-import '../../Tool/Loader.dart';
 import '../../Tool/NoBehavior.dart';
 import '../../Tool/AppBarCustom.dart';
-import '../UI(Widget/ProfileUI.dart';
+import '../UI/ProfileUI.dart';
+import '../Widget/buildTypeWidget.dart';
 import 'DrawerScreen.dart';
-import 'NotiAlarm.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -53,57 +52,19 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
-    double width = Get.width < 1000 ? Get.width * 0.7 : Get.width * 0.5;
-    double height = Get.height > 1500 ? Get.height * 0.5 : Get.height;
     return SafeArea(
       child: Scaffold(
           backgroundColor: BGColor(),
-          body: GetBuilder<navibool>(
-              builder: (_) => draw.drawopen == true
-                  ? Stack(
-                      children: [
-                        draw.navi == 0
-                            ? const Positioned(
-                                left: 0,
-                                child: SizedBox(
-                                  width: 120,
-                                  child: DrawerScreen(),
-                                ),
-                              )
-                            : const Positioned(
-                                right: 0,
-                                child: SizedBox(
-                                  width: 120,
-                                  child: DrawerScreen(),
-                                ),
-                              ),
-                        ProfileBody(context),
-                      ],
-                    )
-                  : (draw.drawnoticeopen == true
-                      ? Stack(
-                          children: [
-                            ProfileBody(context),
-                            const Barrier(),
-                            Positioned(
-                              right: 0,
-                              child: SizedBox(
-                                width: width,
-                                height: height,
-                                child: const NotiAlarm(),
-                              ),
-                            ),
-                          ],
-                        )
-                      : Stack(
-                          children: [
-                            ProfileBody(context),
-                          ],
-                        )))),
+          body: OrientationBuilder(
+            builder: (context, orientation) {
+              return GetBuilder<navibool>(
+                  builder: (_) => buildtypewidget(context, ProfileBody()));
+            },
+          )),
     );
   }
 
-  Widget ProfileBody(BuildContext context) {
+  Widget ProfileBody() {
     return GetBuilder<navibool>(
         builder: (_) => AnimatedContainer(
               transform:
@@ -130,10 +91,7 @@ class _ProfilePageState extends State<ProfilePage>
                       child: Row(
                         children: [
                           draw.navi == 0 && draw.navishow == true
-                              ? const SizedBox(
-                                  width: 120,
-                                  child: DrawerScreen(),
-                                )
+                              ? innertype()
                               : const SizedBox(),
                           Column(
                             children: [
@@ -154,7 +112,9 @@ class _ProfilePageState extends State<ProfilePage>
                                 fit: FlexFit.tight,
                                 child: SizedBox(
                                   width: draw.navishow == true
-                                      ? Get.width - 120
+                                      ? (Get.width < 800
+                                          ? Get.width - 60
+                                          : Get.width - 120)
                                       : Get.width,
                                   child: ScrollConfiguration(
                                       behavior: NoBehavior(),
@@ -165,7 +125,10 @@ class _ProfilePageState extends State<ProfilePage>
                                               searchNode,
                                               scrollController,
                                               draw.navishow == true
-                                                  ? constraint.maxWidth - 120
+                                                  ? (Get.width < 800
+                                                      ? constraint.maxWidth - 60
+                                                      : constraint.maxWidth -
+                                                          120)
                                                   : constraint.maxWidth,
                                               constraint.maxHeight);
                                         }),
@@ -175,10 +138,7 @@ class _ProfilePageState extends State<ProfilePage>
                             ],
                           ),
                           draw.navi == 1 && draw.navishow == true
-                              ? const SizedBox(
-                                  width: 120,
-                                  child: DrawerScreen(),
-                                )
+                              ? innertype()
                               : const SizedBox(),
                         ],
                       )),

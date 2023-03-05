@@ -5,7 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../../../BACKENDPART/Auth/SecureAuth.dart';
 import '../../../BACKENDPART/Enums/SpaceContent.dart';
 import '../../../BACKENDPART/Enums/Variables.dart';
-import '../../../FRONTENDPART/UI(Widget/DayContentHome.dart';
+import '../../../FRONTENDPART/UI/DayContentHome.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../BACKENDPART/Getx/PeopleAdd.dart';

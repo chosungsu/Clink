@@ -60,7 +60,9 @@ class AppBarCustom extends StatelessWidget {
           builder: (_) => SafeArea(
               child: SizedBox(
                   height: 60,
-                  width: draw.navishow == true ? Get.width - 120 : Get.width,
+                  width: draw.navishow == true
+                      ? (Get.width < 800 ? Get.width - 60 : Get.width - 120)
+                      : Get.width,
                   child: Padding(
                       padding: const EdgeInsets.only(
                           left: 20, right: 20, top: 5, bottom: 5),

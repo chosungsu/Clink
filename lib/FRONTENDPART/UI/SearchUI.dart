@@ -2,7 +2,7 @@
 
 import 'package:clickbyme/BACKENDPART/FIREBASE/PersonalVP.dart';
 import 'package:clickbyme/BACKENDPART/FIREBASE/SearchVP.dart';
-import 'package:clickbyme/FRONTENDPART/UI(Widget/MYPageUI.dart';
+import 'package:clickbyme/FRONTENDPART/UI/MYPageUI.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';

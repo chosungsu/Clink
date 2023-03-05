@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names
 
 import 'package:clickbyme/BACKENDPART/FIREBASE/SettingVP.dart';
+import 'package:clickbyme/FRONTENDPART/Widget/responsiveWidget.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -75,111 +76,107 @@ OptionChoice(maxWidth, maxHeight, searchnode, controller) {
 }
 
 lsoptview(maxWidth, searchnode, controller) {
-  return SizedBox(
-      width: maxWidth * 0.6,
-      child: Column(
-        children: List.generate(5, (index) {
-          return Column(
-            children: [
-              ContainerDesign(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+  return responsivewidget(Column(
+    children: List.generate(5, (index) {
+      return Column(
+        children: [
+          ContainerDesign(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                            alignment: Alignment.center,
-                            child: CircleAvatar(
-                              backgroundColor: draw.backgroundcolor,
-                              foregroundColor: draw.backgroundcolor,
-                              child: Icon(
-                                uiset.profilescreen[index].icondata,
-                                color: draw.color_textstatus,
-                              ),
-                            )),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          uiset.profilescreen[index].title.toString().tr,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTextsize(),
-                              color: draw.color_textstatus),
-                        ),
-                      ],
+                    Container(
+                        alignment: Alignment.center,
+                        child: CircleAvatar(
+                          backgroundColor: draw.backgroundcolor,
+                          foregroundColor: draw.backgroundcolor,
+                          child: Icon(
+                            uiset.profilescreen[index].icondata,
+                            color: draw.color_textstatus,
+                          ),
+                        )),
+                    const SizedBox(
+                      width: 10,
                     ),
-                    Divider(
-                      height: 10,
-                      thickness: 2,
-                      color: Colors.grey.shade400,
+                    Text(
+                      uiset.profilescreen[index].title.toString().tr,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTextsize(),
+                          color: draw.color_textstatus),
                     ),
-                    Opt_body(index, searchnode, controller)
                   ],
                 ),
-                color: draw.backgroundcolor,
-              ),
-              const SizedBox(
-                height: 20,
-              )
-            ],
-          );
-        }),
-      ));
+                Divider(
+                  height: 10,
+                  thickness: 2,
+                  color: Colors.grey.shade400,
+                ),
+                Opt_body(index, searchnode, controller)
+              ],
+            ),
+            color: draw.backgroundcolor,
+          ),
+          const SizedBox(
+            height: 20,
+          )
+        ],
+      );
+    }),
+  ));
 }
 
 proptview(maxWidth, searchnode, controller) {
-  return SizedBox(
-      width: maxWidth,
-      child: Column(
-        children: List.generate(5, (index) {
-          return Column(
-            children: [
-              ContainerDesign(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+  return responsivewidget(Column(
+    children: List.generate(5, (index) {
+      return Column(
+        children: [
+          ContainerDesign(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                            alignment: Alignment.center,
-                            child: CircleAvatar(
-                              backgroundColor: draw.backgroundcolor,
-                              foregroundColor: draw.backgroundcolor,
-                              child: Icon(
-                                uiset.profilescreen[index].icondata,
-                                color: draw.color_textstatus,
-                              ),
-                            )),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          uiset.profilescreen[index].title.toString().tr,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTextsize(),
-                              color: draw.color_textstatus),
-                        ),
-                      ],
+                    Container(
+                        alignment: Alignment.center,
+                        child: CircleAvatar(
+                          backgroundColor: draw.backgroundcolor,
+                          foregroundColor: draw.backgroundcolor,
+                          child: Icon(
+                            uiset.profilescreen[index].icondata,
+                            color: draw.color_textstatus,
+                          ),
+                        )),
+                    const SizedBox(
+                      width: 10,
                     ),
-                    Divider(
-                      height: 10,
-                      thickness: 2,
-                      color: Colors.grey.shade400,
+                    Text(
+                      uiset.profilescreen[index].title.toString().tr,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTextsize(),
+                          color: draw.color_textstatus),
                     ),
-                    Opt_body(index, searchnode, controller)
                   ],
                 ),
-                color: draw.backgroundcolor,
-              ),
-              const SizedBox(
-                height: 20,
-              )
-            ],
-          );
-        }),
-      ));
+                Divider(
+                  height: 10,
+                  thickness: 2,
+                  color: Colors.grey.shade400,
+                ),
+                Opt_body(index, searchnode, controller)
+              ],
+            ),
+            color: draw.backgroundcolor,
+          ),
+          const SizedBox(
+            height: 20,
+          )
+        ],
+      );
+    }),
+  ));
 }
 
 ///Opt_body
@@ -279,6 +276,7 @@ Opt_body(index, searchnode, controller) {
                                                       } else if (index2 == 2) {
                                                         draw.setnavi(0);
                                                       } else {
+                                                        draw.setclose();
                                                         draw.setmenushowing(
                                                             true);
                                                       }
@@ -658,54 +656,53 @@ TestScreen(maxWidth, maxHeight) {
 }
 
 lstestview(maxWidth, maxHeight) {
-  return SizedBox(
-    width: maxWidth * 0.6,
+  return responsivewidget(SizedBox(
     height: maxHeight,
     child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Icon(
-          AntDesign.frowno,
-          color: Colors.orange,
-          size: 30,
-        ),
-        const SizedBox(
-          height: 15,
-        ),
-        Text(
-          '새로운 LOB\'s Box들을 열심히 개발중이에요~~!\n근데 아무도 모르게 왔다가 사라질 수도 있는 건 안 비밀^^',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              fontSize: contentTextsize(), color: draw.color_textstatus),
-        ),
-      ],
-    ),
-  );
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Icon(
+            AntDesign.frowno,
+            color: Colors.orange,
+            size: 30,
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          Text(
+            '새로운 잇플\'s Box들을 열심히 개발중이에요~~!',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: contentTextsize(), color: draw.color_textstatus),
+          ),
+        ]),
+  ));
 }
 
 prtestview(maxWidth, maxHeight) {
-  return SizedBox(
+  return responsivewidget(SizedBox(
     height: maxHeight,
     child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Icon(
-          AntDesign.frowno,
-          color: Colors.orange,
-          size: 30,
-        ),
-        const SizedBox(
-          height: 15,
-        ),
-        Text(
-          '새로운 LOB\'s Box들을 열심히 개발중이에요~~!\n근데 아무도 모르게 왔다가 사라질 수도 있는 건 안 비밀^^',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              fontSize: contentTextsize(), color: draw.color_textstatus),
-        ),
-      ],
-    ),
-  );
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Icon(
+            AntDesign.frowno,
+            color: Colors.orange,
+            size: 30,
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          Text(
+            '새로운 잇플\'s Box들을 열심히 개발중이에요~~!',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: contentTextsize(), color: draw.color_textstatus),
+          ),
+        ]),
+  ));
 }
 
 ///LicenseHome

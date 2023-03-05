@@ -21,7 +21,7 @@ import '../../BACKENDPART/Getx/navibool.dart';
 import '../../Tool/Loader.dart';
 import '../../Tool/NoBehavior.dart';
 import '../../Tool/AppBarCustom.dart';
-import '../UI(Widget/SpaceinUI.dart';
+import '../UI/SpaceinUI.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 class Spacein extends StatefulWidget {

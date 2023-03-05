@@ -10,10 +10,9 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import '../../BACKENDPART/Enums/Variables.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
-import '../../Tool/Loader.dart';
-import '../UI(Widget/SearchUI.dart';
+import '../UI/SearchUI.dart';
+import '../Widget/buildTypeWidget.dart';
 import 'DrawerScreen.dart';
-import 'NotiAlarm.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -51,55 +50,15 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    double width = Get.width < 1000 ? Get.width * 0.7 : Get.width * 0.5;
-    double height = Get.height > 1500 ? Get.height * 0.5 : Get.height;
     return SafeArea(
         child: Scaffold(
-      backgroundColor: BGColor(),
-      body: GetBuilder<navibool>(
-          init: navibool(),
-          builder: (_) => draw.drawopen == true
-              ? Stack(
-                  children: [
-                    draw.navi == 0
-                        ? Positioned(
-                            left: 0,
-                            child: SizedBox(
-                              width: 120,
-                              child: DrawerScreen(),
-                            ),
-                          )
-                        : Positioned(
-                            right: 0,
-                            child: SizedBox(
-                              width: 120,
-                              child: DrawerScreen(),
-                            ),
-                          ),
-                    HomeUi(),
-                  ],
-                )
-              : (draw.drawnoticeopen == true
-                  ? Stack(
-                      children: [
-                        HomeUi(),
-                        const Barrier(),
-                        Positioned(
-                          right: 0,
-                          child: SizedBox(
-                            width: width,
-                            height: height,
-                            child: const NotiAlarm(),
-                          ),
-                        ),
-                      ],
-                    )
-                  : Stack(
-                      children: [
-                        HomeUi(),
-                      ],
-                    ))),
-    ));
+            backgroundColor: BGColor(),
+            body: OrientationBuilder(
+              builder: (context, orientation) {
+                return GetBuilder<navibool>(
+                    builder: (_) => buildtypewidget(context, HomeUi()));
+              },
+            )));
   }
 
   HomeUi() {
@@ -131,10 +90,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                         return Row(
                           children: [
                             draw.navi == 0 && draw.navishow == true
-                                ? const SizedBox(
-                                    width: 120,
-                                    child: DrawerScreen(),
-                                  )
+                                ? innertype()
                                 : const SizedBox(),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,7 +165,9 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                     scrollController,
                                     controller,
                                     draw.navishow == true
-                                        ? Get.width - 120
+                                        ? (Get.width < 800
+                                            ? Get.width - 60
+                                            : Get.width - 120)
                                         : Get.width,
                                     controller2,
                                     searchNode,
@@ -217,10 +175,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                               ],
                             ),
                             draw.navi == 1 && draw.navishow == true
-                                ? const SizedBox(
-                                    width: 120,
-                                    child: DrawerScreen(),
-                                  )
+                                ? innertype()
                                 : const SizedBox(),
                           ],
                         );

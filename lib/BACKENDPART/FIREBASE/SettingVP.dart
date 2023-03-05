@@ -4,12 +4,11 @@ import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import '../Enums/Expandable.dart';
 import '../Enums/Variables.dart';
-import '../../FRONTENDPART/Route/subuiroute.dart';
 import '../../Tool/ContainerDesign.dart';
 import '../../Tool/FlushbarStyle.dart';
 import '../Getx/PeopleAdd.dart';
@@ -56,29 +55,44 @@ Widgets_tocompany(context, controller, searchnode) {
       ));
   content = Column(
     children: [
-      Row(
-        children: [
-          Image.asset(
-            'assets/images/instagram.png',
-            width: 30,
-            height: 30,
-          ),
-          const SizedBox(
-            width: 10,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('광고 및 개발문의',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTitleTextsize())),
-              Text('DM : @dev_habittracker_official',
-                  style: TextStyle(color: Colors.grey.shade400, fontSize: 15)),
-            ],
-          )
-        ],
+      GestureDetector(
+        onTap: () async {
+          Get.back();
+          Clipboard.setData(
+              const ClipboardData(text: 'dev_habittracker_official'));
+        },
+        child: Row(
+          children: [
+            Flexible(
+                fit: FlexFit.tight,
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/instagram.png',
+                      width: 30,
+                      height: 30,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('광고 및 개발문의',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentTitleTextsize())),
+                        Text('DM : @dev_habittracker_official',
+                            style: TextStyle(
+                                color: Colors.grey.shade400, fontSize: 15)),
+                      ],
+                    )
+                  ],
+                )),
+            Icon(Ionicons.copy, color: Colors.grey.shade400)
+          ],
+        ),
       ),
       const SizedBox(
         height: 30,
@@ -86,18 +100,7 @@ Widgets_tocompany(context, controller, searchnode) {
       GestureDetector(
         onTap: () async {
           Get.back();
-          String body = await getEmailBody();
-          final Email email = Email(
-            body: body,
-            subject: '[오류 및 건의사항]',
-            recipients: ['lenbizco@gmail.com'],
-            cc: [],
-            bcc: [],
-            attachmentPaths: [],
-            isHTML: false,
-          );
-
-          await FlutterEmailSender.send(email);
+          Clipboard.setData(const ClipboardData(text: 'lenbizco@gmail.com'));
         },
         child: Row(
           children: [
@@ -121,14 +124,14 @@ Widgets_tocompany(context, controller, searchnode) {
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
                                 fontSize: contentTitleTextsize())),
-                        Text('개발자에게 이메일보내기',
+                        Text('lenbizco@gmail.com 주소 복사하기',
                             style: TextStyle(
                                 color: Colors.grey.shade400, fontSize: 15)),
                       ],
                     ),
                   ],
                 )),
-            Icon(Icons.keyboard_arrow_right, color: Colors.grey.shade400)
+            Icon(Ionicons.copy, color: Colors.grey.shade400)
           ],
         ),
       )

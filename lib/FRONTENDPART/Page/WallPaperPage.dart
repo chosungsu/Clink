@@ -10,7 +10,7 @@ import '../../Tool/NoBehavior.dart';
 import '../../Tool/AppBarCustom.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
-import '../UI(Widget/WallPaperUI.dart';
+import '../UI/WallPaperUI.dart';
 
 class WallPaperPage extends StatefulWidget {
   const WallPaperPage({Key? key, required this.index}) : super(key: key);

@@ -11,7 +11,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import '../../../BACKENDPART/Enums/MemoList.dart';
-import '../../../FRONTENDPART/UI(Widget/DayScript.dart';
+import '../../../FRONTENDPART/UI/DayScript.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../BACKENDPART/Getx/memosetting.dart';
 import '../../../BACKENDPART/Getx/selectcollection.dart';

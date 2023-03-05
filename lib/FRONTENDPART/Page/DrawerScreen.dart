@@ -1,7 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:clickbyme/BACKENDPART/Enums/Drawer_item.dart';
-import 'package:clickbyme/Tool/NoBehavior.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -32,6 +31,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
     return GetBuilder<navibool>(builder: (_) {
       return Container(
           alignment: Alignment.center,
+          height: Get.height - 60,
           decoration: BoxDecoration(
               border: Border(
                   left: BorderSide(
@@ -41,19 +41,13 @@ class _DrawerScreenState extends State<DrawerScreen> {
                       color: draw.color_textstatus,
                       width: draw.navi == 0 ? 1 : 0)),
               color: draw.backgroundcolor),
-          child: ScrollConfiguration(
-            behavior: NoBehavior(),
-            child: SingleChildScrollView(
-                physics: const ScrollPhysics(),
-                child: View(context, drawerItems_view)),
-          ));
+          child: View(context, drawerItems_view));
     });
   }
 }
 
 View(BuildContext context, List<Map> drawerItems) {
   return Container(
-      height: Get.height - 60,
       padding: const EdgeInsets.only(bottom: 40),
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -62,52 +56,56 @@ View(BuildContext context, List<Map> drawerItems) {
             Flexible(
               fit: FlexFit.tight,
               child: SizedBox(
-                  child: Column(
-                children: drawerItems.map((element) {
-                  return GetBuilder<navibool>(
-                      builder: (_) => Padding(
-                          padding: const EdgeInsets.only(top: 20, bottom: 20),
-                          child: InkWell(
-                            onTap: () {
-                              if (element.containsValue(SimpleLineIcons.home)) {
-                                draw.setclose();
-                                uiset.setmypagelistindex(
-                                    Hive.box('user_setting')
-                                            .get('currentmypage') ??
-                                        0);
-                                uiset.setpageindex(0);
-                              } else if (element
-                                  .containsValue(Ionicons.ios_search_outline)) {
-                                draw.setclose();
-                                uiset.setpageindex(1);
-                              } else if (element
-                                  .containsValue(Ionicons.settings_outline)) {
-                                draw.setclose();
-                                uiset.setpageindex(2);
-                              } else if (element.containsValue(
-                                notilist.isread == true
-                                    ? Ionicons.notifications_outline
-                                    : MaterialCommunityIcons.bell_badge_outline,
-                              )) {
-                                draw.setclose();
-                                draw.setopennoti();
-                                print('herer');
-                              }
-                              //Get.to(() => const mainroute(), transition: Transition.fade);
-                            },
-                            child: Column(
-                              children: [
-                                Icon(
-                                  element['icon'],
-                                  color: drawerItems.indexOf(element) ==
-                                          uiset.pagenumber
-                                      ? Colors.purple.shade300
-                                      : draw.color_textstatus,
-                                ),
-                              ],
-                            ),
-                          )));
-                }).toList(),
+                  child: SingleChildScrollView(
+                physics: const ScrollPhysics(),
+                child: Column(
+                  children: drawerItems.map((element) {
+                    return GetBuilder<navibool>(
+                        builder: (_) => Padding(
+                            padding: const EdgeInsets.only(top: 20, bottom: 20),
+                            child: InkWell(
+                              onTap: () {
+                                if (element
+                                    .containsValue(SimpleLineIcons.home)) {
+                                  draw.setclose();
+                                  uiset.setmypagelistindex(
+                                      Hive.box('user_setting')
+                                              .get('currentmypage') ??
+                                          0);
+                                  uiset.setpageindex(0);
+                                } else if (element.containsValue(
+                                    Ionicons.ios_search_outline)) {
+                                  draw.setclose();
+                                  uiset.setpageindex(1);
+                                } else if (element
+                                    .containsValue(Ionicons.settings_outline)) {
+                                  draw.setclose();
+                                  uiset.setpageindex(2);
+                                } else if (element.containsValue(
+                                  notilist.isread == true
+                                      ? Ionicons.notifications_outline
+                                      : MaterialCommunityIcons
+                                          .bell_badge_outline,
+                                )) {
+                                  draw.setclose();
+                                  draw.setopennoti();
+                                }
+                                //Get.to(() => const mainroute(), transition: Transition.fade);
+                              },
+                              child: Column(
+                                children: [
+                                  Icon(
+                                    element['icon'],
+                                    color: drawerItems.indexOf(element) ==
+                                            uiset.pagenumber
+                                        ? Colors.purple.shade300
+                                        : draw.color_textstatus,
+                                  ),
+                                ],
+                              ),
+                            )));
+                  }).toList(),
+                ),
               )),
             ),
             InkWell(

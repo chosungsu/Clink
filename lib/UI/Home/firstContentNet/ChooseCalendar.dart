@@ -14,7 +14,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import '../../../FRONTENDPART/Route/subuiroute.dart';
-import '../../../FRONTENDPART/UI(Widget/DayContentHome.dart';
+import '../../../FRONTENDPART/UI/DayContentHome.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/FlushbarStyle.dart';
 import '../../../BACKENDPART/Getx/PeopleAdd.dart';

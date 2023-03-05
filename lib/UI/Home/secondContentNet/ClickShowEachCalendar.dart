@@ -15,7 +15,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import '../../../BACKENDPART/Enums/Variables.dart';
 import '../../../FRONTENDPART/Route/subuiroute.dart';
-import '../../../FRONTENDPART/UI(Widget/DayScript.dart';
+import '../../../FRONTENDPART/UI/DayScript.dart';
 import '../../../BACKENDPART/LocalNotiPlatform/NotificationApi.dart';
 import '../../../Tool/AndroidIOS.dart';
 import '../../../Tool/FlushbarStyle.dart';

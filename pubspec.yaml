@@ -71,7 +71,6 @@ dependencies:
   flutter_file_downloader:
   #permission 허용여부 묻기
   permission_handler: 
-  flutter_email_sender: 
   path_provider: 
   device_info_plus: 
   #UI

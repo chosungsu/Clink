@@ -19,7 +19,7 @@ import '../Getx/calendarsetting.dart';
 import '../Getx/category.dart';
 import '../Getx/linkspacesetting.dart';
 import '../Getx/uisetting.dart';
-import '../../FRONTENDPART/UI(Widget/DayNoteHome.dart';
+import '../../FRONTENDPART/UI/DayNoteHome.dart';
 import '../../Tool/TextSize.dart';
 import '../../sheets/BottomSheet/AddContent.dart';
 import '../../sheets/BottomSheet/AddContentWithBtn.dart';

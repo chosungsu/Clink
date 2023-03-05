@@ -14,7 +14,7 @@ import '../../BACKENDPART/Getx/notishow.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
 import '../../UI/Home/firstContentNet/ChooseCalendar.dart';
-import '../UI(Widget/DayNoteHome.dart';
+import 'DayNoteHome.dart';
 
 final listid = [];
 final draw = Get.put(navibool());

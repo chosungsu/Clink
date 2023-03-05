@@ -6,8 +6,8 @@ import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 import '../../FRONTENDPART/Route/subuiroute.dart';
-import '../../FRONTENDPART/UI(Widget/DayContentHome.dart';
-import '../../FRONTENDPART/UI(Widget/DayNoteHome.dart';
+import '../../FRONTENDPART/UI/DayContentHome.dart';
+import '../../FRONTENDPART/UI/DayNoteHome.dart';
 
 class NotificationApi {
   NotificationApi();
@@ -133,15 +133,15 @@ class NotificationApi {
 
   static Future _notificationDetails() async {
     return const NotificationDetails(
-        android: AndroidNotificationDetails('channel id', '캘린더와 메모알림',
-            channelDescription: '캘린더와 메모 등의 푸쉬알림',
+        android: AndroidNotificationDetails(
+            'channel id', '캘린더와 메모알림', '캘린더와 메모 등의 푸쉬알림',
             setAsGroupSummary: true,
             fullScreenIntent: false,
             autoCancel: true,
             enableLights: true,
             sound: RawResourceAndroidNotificationSound('notification'),
             importance: Importance.max),
-        iOS: DarwinNotificationDetails(
+        iOS: IOSNotificationDetails(
             sound: 'notification.mp3',
             presentSound: true,
             presentAlert: true,
@@ -150,17 +150,19 @@ class NotificationApi {
 
   static Future init({bool initScheduled = false}) async {
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const iOS = DarwinInitializationSettings(
-        requestSoundPermission: true,
-        requestAlertPermission: true,
-        requestBadgePermission: true);
+    const iOS = IOSInitializationSettings(
+      requestSoundPermission: true,
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+    );
     const settings = InitializationSettings(android: android, iOS: iOS);
 
-    await _notifications.initialize(settings,
-        onDidReceiveNotificationResponse: onSelectNoti);
+    await _notifications.initialize(
+      settings,
+    );
   }
 
-  static void onSelectNoti(NotificationResponse? response) async {
+  /*static void onSelectNoti(NotificationResponse? response) async {
     if (response!.payload != null && response.payload!.isNotEmpty) {
       if (response.payload!.isNotEmpty) {
         if (response.payload! == 'memo') {
@@ -211,5 +213,5 @@ class NotificationApi {
     } catch (e) {
       GoToMain();
     }
-  }
+  }*/
 }
