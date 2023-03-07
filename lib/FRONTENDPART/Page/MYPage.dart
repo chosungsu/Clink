@@ -10,7 +10,6 @@ import '../../Tool/AppBarCustom.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
 import '../../Tool/NoBehavior.dart';
 import '../UI/MYPageUI.dart';
-import 'DrawerScreen.dart';
 
 class MYPage extends StatefulWidget {
   const MYPage({
@@ -77,15 +76,9 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                         ? setState(() {
                             draw.drawopen = false;
                             draw.setclose();
-                            draw.setclosenoti();
                             Hive.box('user_setting').put('page_opened', false);
                           })
-                        : (draw.drawnoticeopen == true
-                            ? setState(() {
-                                draw.setclosenoti();
-                                notilist.isreadnoti(init: false);
-                              })
-                            : null);
+                        : null;
                   },
                   child: SizedBox(
                     height: Get.height,
@@ -94,6 +87,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                       builder: (_) {
                         return Container(
                             color: draw.backgroundcolor,
+                            padding: const EdgeInsets.only(bottom: 20),
                             child: Row(
                               children: [
                                 draw.navi == 0 && draw.navishow == true

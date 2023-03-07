@@ -41,25 +41,21 @@ Widgets_tocompany(context, controller, searchnode) {
   final uiset = Get.put(uisetting());
   final peopleadd = Get.put(PeopleAdd());
 
-  title = SizedBox(
-      height: 50,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text('도움&문의',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25))
-        ],
-      ));
+  title = const SizedBox();
   content = Column(
     children: [
       GestureDetector(
         onTap: () async {
           Get.back();
           Clipboard.setData(
-              const ClipboardData(text: 'dev_habittracker_official'));
+                  const ClipboardData(text: 'dev_habittracker_official'))
+              .whenComplete(() {
+            Snack.snackbars(
+                context: context,
+                title: '클립보드에 복사되었습니다.',
+                backgroundcolor: Colors.green,
+                bordercolor: draw.backgroundcolor);
+          });
         },
         child: Row(
           children: [
@@ -78,19 +74,22 @@ Widgets_tocompany(context, controller, searchnode) {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('광고 및 개발문의',
+                        Text('광고문의',
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
                                 fontSize: contentTitleTextsize())),
-                        Text('DM : @dev_habittracker_official',
-                            style: TextStyle(
-                                color: Colors.grey.shade400, fontSize: 15)),
+                        Text(
+                          '@dev_habittracker_official',
+                          style: TextStyle(
+                              color: Colors.grey.shade400, fontSize: 15),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ],
                     )
                   ],
                 )),
-            Icon(Ionicons.copy, color: Colors.grey.shade400)
+            Icon(Ionicons.copy_outline, color: Colors.blue.shade400)
           ],
         ),
       ),
@@ -100,7 +99,14 @@ Widgets_tocompany(context, controller, searchnode) {
       GestureDetector(
         onTap: () async {
           Get.back();
-          Clipboard.setData(const ClipboardData(text: 'lenbizco@gmail.com'));
+          Clipboard.setData(const ClipboardData(text: 'lenbizco@gmail.com'))
+              .whenComplete(() {
+            Snack.snackbars(
+                context: context,
+                title: '클립보드에 복사되었습니다.',
+                backgroundcolor: Colors.green,
+                bordercolor: draw.backgroundcolor);
+          });
         },
         child: Row(
           children: [
@@ -119,19 +125,22 @@ Widgets_tocompany(context, controller, searchnode) {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('오류 및 건의사항',
+                        Text('오류신고',
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
                                 fontSize: contentTitleTextsize())),
-                        Text('lenbizco@gmail.com 주소 복사하기',
-                            style: TextStyle(
-                                color: Colors.grey.shade400, fontSize: 15)),
+                        Text(
+                          'lenbizco@gmail.com',
+                          style: TextStyle(
+                              color: Colors.grey.shade400, fontSize: 15),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ],
                     ),
                   ],
                 )),
-            Icon(Ionicons.copy, color: Colors.grey.shade400)
+            Icon(Ionicons.copy_outline, color: Colors.blue.shade400)
           ],
         ),
       )

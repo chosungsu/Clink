@@ -31,6 +31,7 @@ class MyTheme {
   static Color colorpastelorange = Colors.orange.shade200;
   static Color colorpastelblue = Colors.blue.shade200;
   static Color colorpastelgreen = Colors.green.shade200;
+  static Color colorpastelpurple = Colors.purple.shade200;
 
   static const TextStyle heading2 = TextStyle(
     color: Color(0xff686795),

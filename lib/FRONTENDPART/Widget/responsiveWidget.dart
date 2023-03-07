@@ -3,15 +3,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-responsivewidget(widget) {
+responsivewidget(widget, width) {
   double ratio = Get.height / Get.width;
   return ratio > 1
       ? SizedBox(
-          width: Get.width,
+          width: width,
           child: widget,
         )
       : SizedBox(
-          width: Get.width * 0.8,
+          width: width * 0.6,
           child: widget,
         );
 }

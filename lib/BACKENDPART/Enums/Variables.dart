@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, prefer_typing_uninitialized_variables, non_constant_identifier_names
 import 'dart:math';
 import 'package:clickbyme/BACKENDPART/Enums/Event.dart';
+import 'package:clickbyme/FRONTENDPART/Page/NotiAlarm.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -34,6 +35,7 @@ FirebaseFirestore firestore = FirebaseFirestore.instance;
 List pages = [
   const MYPage(),
   const SearchPage(),
+  const NotiAlarm(),
   const ProfilePage(),
 ];
 //Here are PageUI Variables

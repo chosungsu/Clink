@@ -9,8 +9,6 @@ import '../../Tool/MyTheme.dart';
 
 class navibool extends GetxController {
   bool drawopen = Hive.box('user_setting').get('page_opened') ?? false;
-  bool drawnoticeopen =
-      Hive.box('user_setting').get('noticepage_opened') ?? false;
   int currentpage = 1;
   double xoffset = 0;
   double yoffset = 0;
@@ -32,20 +30,6 @@ class navibool extends GetxController {
 
   void setpagecurrent(int what) {
     currentpage = what;
-    update();
-    notifyChildrens();
-  }
-
-  void setopennoti() {
-    drawnoticeopen = true;
-    Hive.box('user_setting').put('noticepage_opened', drawnoticeopen);
-    update();
-    notifyChildrens();
-  }
-
-  void setclosenoti() {
-    drawnoticeopen = false;
-    Hive.box('user_setting').put('noticepage_opened', drawnoticeopen);
     update();
     notifyChildrens();
   }

@@ -73,8 +73,7 @@ class AppBarCustom extends StatelessWidget {
                           children: [
                             navinumlist.contains(uiset.pagenumber) &&
                                     draw.navi == 0 &&
-                                    draw.navishow == false &&
-                                    draw.drawnoticeopen == false
+                                    draw.navishow == false
                                 ? draw.drawopen == true ||
                                         Hive.box('user_setting')
                                                 .get('page_opened') ==
@@ -113,8 +112,7 @@ class AppBarCustom extends StatelessWidget {
                                 : const SizedBox(),
                             navinumlist.contains(uiset.pagenumber) &&
                                     draw.navi == 0 &&
-                                    draw.navishow == false &&
-                                    draw.drawnoticeopen == false
+                                    draw.navishow == false
                                 ? const SizedBox(
                                     width: 10,
                                   )
@@ -125,8 +123,8 @@ class AppBarCustom extends StatelessWidget {
                                       GetBuilder<uisetting>(
                                           builder: (_) => GestureDetector(
                                               onTap: () {},
-                                              child: Container(
-                                                padding: EdgeInsets.zero,
+                                              child: ContainerDesign(
+                                                color: draw.backgroundcolor,
                                                 child: Icon(
                                                   lefticonname,
                                                   size: 30,
@@ -199,9 +197,9 @@ class AppBarCustom extends StatelessWidget {
                                                       context, righticonname);
                                                 },
                                                 child: Get.width < 600
-                                                    ? Container(
-                                                        padding:
-                                                            EdgeInsets.zero,
+                                                    ? ContainerDesign(
+                                                        color: draw
+                                                            .backgroundcolor,
                                                         child: Icon(
                                                           righticonname,
                                                           size: 30,
@@ -232,7 +230,7 @@ class AppBarCustom extends StatelessWidget {
                                                               ),
                                                             ),
                                                             const SizedBox(
-                                                              width: 20,
+                                                              width: 5,
                                                             ),
                                                             Text(
                                                               RightIconText(
@@ -267,16 +265,14 @@ class AppBarCustom extends StatelessWidget {
                             )),
                             navinumlist.contains(uiset.pagenumber) &&
                                     draw.navi == 1 &&
-                                    draw.navishow == false &&
-                                    draw.drawnoticeopen == false
+                                    draw.navishow == false
                                 ? const SizedBox(
                                     width: 10,
                                   )
                                 : const SizedBox(),
                             navinumlist.contains(uiset.pagenumber) &&
                                     draw.navi == 1 &&
-                                    draw.navishow == false &&
-                                    draw.drawnoticeopen == false
+                                    draw.navishow == false
                                 ? draw.drawopen == true ||
                                         Hive.box('user_setting')
                                                 .get('page_opened') ==
@@ -337,9 +333,7 @@ class AppBarCustom extends StatelessWidget {
                     ? SPIconclick(context, textcontroller, searchnode)
                     : (righticonname == Icons.download
                         ? downloadFileExample(mainid, context)
-                        : (righticonname == Ionicons.ios_close
-                            ? closenotiroom()
-                            : null)))));
+                        : null))));
   }
 
   RightIconText(righticonname) {

@@ -163,7 +163,6 @@ class uisetting extends GetxController {
       'profilepagetitletwo',
       'profilepagetitlethird',
       'profilepagetitleforth',
-      'profilepagetitlefifth'
     ];
     List subtitles = [
       [
@@ -174,18 +173,18 @@ class uisetting extends GetxController {
       ],
       [
         'profilepagetitletwobyone',
-        'profilepagetitletwobytwo',
       ],
       [
         'profilepagetitlethirdbyone',
       ],
       [
         'profilepagetitleforthbyone',
+        'profilepagetitleforthbytwo',
+        'profilepagetitleforthbythird',
       ],
-      ['profilepagetitlefifthbyone', 'profilepagetitlefifthbytwo']
     ];
     profilescreen.clear();
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 4; i++) {
       profilescreen.add(Profile_item(
           icondata: listopt[i], title: title[i], subtitles: subtitles[i]));
     }

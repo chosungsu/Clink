@@ -129,7 +129,7 @@ class _SplashPageState extends State<SplashPage> {
         return Scaffold(
             resizeToAvoidBottomInset: false,
             backgroundColor: draw.backgroundcolor,
-            bottomNavigationBar: uiset.loading ? SizedBox() : ADSHOW(),
+            //bottomNavigationBar: uiset.loading ? SizedBox() : ADSHOW(),
             body: SafeArea(
                 child: GetBuilder<navibool>(
                     builder: (_) => LayoutBuilder(
@@ -143,7 +143,7 @@ class _SplashPageState extends State<SplashPage> {
                                             color: BGColor(),
                                             dismissible: false,
                                           ),
-                                          SameView(constraint.maxHeight),
+                                          FirstView(constraint.maxHeight),
                                         ],
                                       )
                                     : pages[uiset.pagenumber]);
@@ -153,176 +153,65 @@ class _SplashPageState extends State<SplashPage> {
     );
   }
 
-  ///SameView
+  ///FirstView
   ///
-  ///Landscape와 Portrait뷰가 동일한 경우의 위젯입니다.
-  ///name이 공백일 경우 버튼, 공백이 아닌 경우 로딩을 띄운다.
-  Widget SameView(double maxHeight) {
+  ///로딩을 띄운다.
+  Widget FirstView(double maxHeight) {
     return SizedBox(
-      height: maxHeight <= 100 ? 300 : maxHeight,
-      child: maxHeight <= 300
-          ? Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+      height: maxHeight <= 300 ? 300 : maxHeight,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            height: maxHeight <= 300 ? 300 * 0.6 : 60.h,
+            child: Center(
+                child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                  width: 50.w,
-                  child: Center(
-                      child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Ionicons.crop,
-                        size: 30,
-                        color: Colors.blue,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      NeumorphicText(
-                        'iTPLE',
-                        style: const NeumorphicStyle(
-                          shape: NeumorphicShape.flat,
-                          depth: 3,
-                          color: Colors.lightBlue,
-                        ),
-                        textStyle: NeumorphicTextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30,
-                        ),
-                      ),
-                    ],
-                  )),
+                Icon(
+                  Ionicons.crop,
+                  size: 30,
+                  color: Colors.blue,
                 ),
                 SizedBox(
-                    width: 40.w,
-                    child: appnickname == ''
-                        ? SizedBox(
-                            width: 30.w,
-                            height: 50,
-                            child: GestureDetector(
-                              onTap: () {
-                                initScreen();
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.transparent,
-                                  borderRadius: BorderRadius.circular(15),
-                                  border: Border.all(
-                                    color: Colors.grey,
-                                    width: 2,
-                                  ),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text('Get Start',
-                                        style: TextStyle(
-                                            color: TextColor(),
-                                            fontSize: contentTextsize())),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          )
-                        : SpinKitThreeBounce(
-                            size: 30,
-                            itemBuilder: (BuildContext context, int index) {
-                              return DecoratedBox(
-                                decoration: BoxDecoration(
-                                    color: Colors.blue.shade200,
-                                    shape: BoxShape.circle),
-                              );
-                            },
-                          )),
-              ],
-            )
-          : Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                  height: 60.h,
-                  child: Center(
-                      child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Ionicons.crop,
-                        size: 30,
-                        color: Colors.blue,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      NeumorphicText(
-                        'iTPLE',
-                        style: const NeumorphicStyle(
-                          shape: NeumorphicShape.flat,
-                          depth: 3,
-                          color: Colors.lightBlue,
-                        ),
-                        textStyle: NeumorphicTextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30,
-                        ),
-                      ),
-                    ],
-                  )),
+                  width: 10,
                 ),
-                Spacer(),
-                SizedBox(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    appnickname == ''
-                        ? SizedBox(
-                            width: 50.w,
-                            height: 50,
-                            child: GestureDetector(
-                              onTap: () {
-                                initScreen();
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.transparent,
-                                  borderRadius: BorderRadius.circular(15),
-                                  border: Border.all(
-                                    color: Colors.grey,
-                                    width: 2,
-                                  ),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text('Get Start',
-                                        style: TextStyle(
-                                            color: TextColor(),
-                                            fontSize: contentTextsize())),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          )
-                        : SpinKitThreeBounce(
-                            size: 30,
-                            itemBuilder: (BuildContext context, int index) {
-                              return DecoratedBox(
-                                decoration: BoxDecoration(
-                                    color: Colors.blue.shade200,
-                                    shape: BoxShape.circle),
-                              );
-                            },
-                          )
-                  ],
-                )),
-                SizedBox(
-                  height: 30,
-                )
+                NeumorphicText(
+                  'iTPLE',
+                  style: const NeumorphicStyle(
+                    shape: NeumorphicShape.flat,
+                    depth: 3,
+                    color: Colors.lightBlue,
+                  ),
+                  textStyle: NeumorphicTextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30,
+                  ),
+                ),
               ],
-            ),
+            )),
+          ),
+          Spacer(),
+          SizedBox(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SpinKitThreeBounce(
+                size: 30,
+                itemBuilder: (BuildContext context, int index) {
+                  return DecoratedBox(
+                    decoration: BoxDecoration(
+                        color: Colors.blue.shade200, shape: BoxShape.circle),
+                  );
+                },
+              )
+            ],
+          )),
+          SizedBox(
+            height: 30,
+          )
+        ],
+      ),
     );
   }
 }

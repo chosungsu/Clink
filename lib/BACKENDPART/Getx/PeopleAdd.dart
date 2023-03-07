@@ -9,6 +9,7 @@ import '../Enums/Variables.dart';
 
 class PeopleAdd extends GetxController {
   final loginapi = Get.put(LoginApiProvider());
+  bool ispro = false;
   List people = [];
   String secondname = Hive.box('user_info').get('id') ?? '';
   String code = '';
@@ -45,6 +46,12 @@ class PeopleAdd extends GetxController {
         .doc(Hive.box('user_setting').get('usercode'))
         .update({'nick': code});
     appnickname = code;
+    update();
+    notifyChildrens();
+  }
+
+  void setpro() {
+    ispro = !ispro;
     update();
     notifyChildrens();
   }

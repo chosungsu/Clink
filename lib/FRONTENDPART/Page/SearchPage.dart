@@ -75,7 +75,6 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                       ? setState(() {
                           draw.drawopen = false;
                           draw.setclose();
-                          draw.setclosenoti();
                           Hive.box('user_setting').put('page_opened', false);
                         })
                       : null;

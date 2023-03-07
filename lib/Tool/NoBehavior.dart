@@ -1,6 +1,3 @@
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -9,11 +6,11 @@ import '../BACKENDPART/Getx/uisetting.dart';
 /*
   NoBehavior는 스크롤 뷰에서 상하부 모션을 삭제하는 클래스
  */
-class NoBehavior extends ScrollBehavior {
+class NoBehavior extends MaterialScrollBehavior {
   @override
   Widget buildOverscrollIndicator(
       BuildContext context, Widget child, ScrollableDetails details) {
-    return super.buildOverscrollIndicator(context, child, details);
+    return child;
   }
 }
 

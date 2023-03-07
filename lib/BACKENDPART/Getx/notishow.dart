@@ -5,21 +5,28 @@ import '../Enums/PageList.dart';
 import '../Enums/Variables.dart';
 
 class notishow extends GetxController {
+  int clicker = 0;
   bool allcheck = false;
-  List listad = [];
+  List listappnoti = [];
   bool isread = true;
   List updateid = [];
   List checkread = [];
   List<bool> checkboxnoti = List.empty(growable: true);
 
+  void setclicker(what) async {
+    clicker = what;
+    update();
+    notifyChildrens();
+  }
+
   void setnoti(String a, String b) async {
-    listad.add(NotiList(title: a, date: b));
+    listappnoti.add(Companynoti(title: a, content: b));
     update();
     notifyChildrens();
   }
 
   void resetnoti() async {
-    listad.clear();
+    listappnoti.clear();
     update();
     notifyChildrens();
   }
@@ -27,7 +34,7 @@ class notishow extends GetxController {
   void setcheckboxnoti() async {
     allcheck = true;
     checkboxnoti.clear();
-    checkboxnoti = List.filled(listad.length, true, growable: true);
+    checkboxnoti = List.filled(listappnoti.length, true, growable: true);
     update();
     notifyChildrens();
   }
@@ -35,7 +42,7 @@ class notishow extends GetxController {
   void resetcheckboxnoti() async {
     allcheck = false;
     checkboxnoti.clear();
-    checkboxnoti = List.filled(listad.length, false, growable: true);
+    checkboxnoti = List.filled(listappnoti.length, false, growable: true);
     update();
     notifyChildrens();
   }

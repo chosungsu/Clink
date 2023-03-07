@@ -512,7 +512,7 @@ stream1(
                                       color: TextColor(),
                                       fontWeight: FontWeight.bold,
                                       fontSize: contentTextsize())),
-                              title: Text(contentmy[index].date,
+                              title: Text(contentmy[index].content,
                                   style: TextStyle(
                                     color: TextColor(),
                                     fontWeight: FontWeight.bold,
@@ -713,7 +713,7 @@ stream2(
                                         color: TextColor(),
                                         fontWeight: FontWeight.bold,
                                         fontSize: contentTextsize())),
-                                title: Text(contentshare[index].date,
+                                title: Text(contentshare[index].content,
                                     style: TextStyle(
                                       color: TextColor(),
                                       fontWeight: FontWeight.bold,

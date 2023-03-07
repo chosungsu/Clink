@@ -6,22 +6,13 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../Enums/PageList.dart';
+import '../Getx/notishow.dart';
+import '../Getx/uisetting.dart';
 
-class LoginApiProvider extends GetxController {
-  fetchTasks() async {
-    var url = '$baseurl/users/${Hive.box('user_setting').get('usercode')}/';
-    var response = await http.get(Uri.parse(url));
-    if (response.statusCode == 200) {
-      var data = json.decode(response.body);
-      Hive.box('user_setting').put('usercode', data['code']);
-      Hive.box('user_info').put('id', data['nick']);
-    } else {
-      Hive.box('user_setting').put('usercode', '');
-      Hive.box('user_info').put('id', '');
-    }
-    update();
-    notifyChildrens();
-  }
+class NoticeApiProvider extends GetxController {
+  final uiset = Get.put(uisetting());
+  final notilist = Get.put(notishow());
 
   createTasks() async {
     var chars =
@@ -48,7 +39,6 @@ class LoginApiProvider extends GetxController {
         },
         body: jsonEncode(data),
       );
-      fetchTasks();
     } catch (e) {
       print(e);
     }
@@ -89,14 +79,21 @@ class LoginApiProvider extends GetxController {
     notifyChildrens();
   }
 
-  getTasks(String searchcode) async {
+  getTasks() async {
     try {
-      var url = '$baseurl/users/$searchcode/';
-      var response = await http.get(Uri.parse(url));
+      notilist.listappnoti.clear();
+      var url = '$baseurl/notice/companynoti';
+      var response = await http.get(
+        Uri.parse(url),
+      );
       if (response.statusCode == 200) {
-        var data = json.decode(response.body);
-        Hive.box('user_setting').put('usercode', data['code']);
-        Hive.box('user_info').put('id', data['nick']);
+        var data = json.decode(utf8.decode(response.bodyBytes));
+        for (int i = 0; i < data.length; i++) {
+          final title = data[i]['title'];
+          final content = data[i]['content'];
+          notilist.listappnoti.add(Companynoti(title: title, content: content));
+          notilist.checkboxnoti.add(false);
+        }
       } else {}
     } catch (e) {
       print(e);

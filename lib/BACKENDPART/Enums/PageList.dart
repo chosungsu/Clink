@@ -1,10 +1,10 @@
-class NotiList {
+class Companynoti {
   final String title;
-  final String date;
+  final String content;
 
-  NotiList({
+  Companynoti({
     required this.title,
-    required this.date,
+    required this.content,
   });
 }
 

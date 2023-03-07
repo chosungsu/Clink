@@ -1,6 +1,10 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:clickbyme/BACKENDPART/Enums/Drawer_item.dart';
+import 'package:clickbyme/BACKENDPART/Getx/PeopleAdd.dart';
+import 'package:clickbyme/Tool/ContainerDesign.dart';
+import 'package:clickbyme/Tool/MyTheme.dart';
+import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -20,6 +24,7 @@ class DrawerScreen extends StatefulWidget {
 class _DrawerScreenState extends State<DrawerScreen> {
   final draw = Get.put(navibool());
   final uiset = Get.put(uisetting());
+  final peopleadd = Get.put(PeopleAdd());
 
   @override
   void initState() {
@@ -31,7 +36,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
     return GetBuilder<navibool>(builder: (_) {
       return Container(
           alignment: Alignment.center,
-          height: Get.height - 60,
+          height: Get.height,
           decoration: BoxDecoration(
               border: Border(
                   left: BorderSide(
@@ -48,7 +53,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
 
 View(BuildContext context, List<Map> drawerItems) {
   return Container(
-      padding: const EdgeInsets.only(bottom: 40),
+      padding: const EdgeInsets.only(bottom: 20, left: 5, right: 5),
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -62,7 +67,7 @@ View(BuildContext context, List<Map> drawerItems) {
                   children: drawerItems.map((element) {
                     return GetBuilder<navibool>(
                         builder: (_) => Padding(
-                            padding: const EdgeInsets.only(top: 20, bottom: 20),
+                            padding: const EdgeInsets.only(top: 15, bottom: 15),
                             child: InkWell(
                               onTap: () {
                                 if (element
@@ -77,10 +82,6 @@ View(BuildContext context, List<Map> drawerItems) {
                                     Ionicons.ios_search_outline)) {
                                   draw.setclose();
                                   uiset.setpageindex(1);
-                                } else if (element
-                                    .containsValue(Ionicons.settings_outline)) {
-                                  draw.setclose();
-                                  uiset.setpageindex(2);
                                 } else if (element.containsValue(
                                   notilist.isread == true
                                       ? Ionicons.notifications_outline
@@ -88,7 +89,11 @@ View(BuildContext context, List<Map> drawerItems) {
                                           .bell_badge_outline,
                                 )) {
                                   draw.setclose();
-                                  draw.setopennoti();
+                                  uiset.setpageindex(2);
+                                } else if (element
+                                    .containsValue(Ionicons.settings_outline)) {
+                                  draw.setclose();
+                                  uiset.setpageindex(3);
                                 }
                                 //Get.to(() => const mainroute(), transition: Transition.fade);
                               },
@@ -98,7 +103,7 @@ View(BuildContext context, List<Map> drawerItems) {
                                     element['icon'],
                                     color: drawerItems.indexOf(element) ==
                                             uiset.pagenumber
-                                        ? Colors.purple.shade300
+                                        ? MyTheme.colorpastelpurple
                                         : draw.color_textstatus,
                                   ),
                                 ],
@@ -108,13 +113,26 @@ View(BuildContext context, List<Map> drawerItems) {
                 ),
               )),
             ),
-            InkWell(
-              onTap: () {},
-              child: Icon(
-                Ionicons.menu,
-                color: draw.color_textstatus,
-              ),
-            )
+            GetBuilder<PeopleAdd>(builder: (_) {
+              return InkWell(
+                  onTap: () {
+                    peopleadd.setpro();
+                  },
+                  child: SizedBox(
+                      width: 50,
+                      child: ContainerDesign(
+                          color: draw.backgroundcolor,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: const [
+                              Icon(
+                                Feather.shopping_cart,
+                                color: Colors.blue,
+                              ),
+                            ],
+                          ))));
+            })
           ]));
 }
 //SPIconclick(context, textcontroller, searchnode)

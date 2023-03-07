@@ -22,7 +22,7 @@ NotiAlarmStreamFamily() {
 }
 
 NotiAlarmRes1(snapshot, listid) {
-  notilist.listad.clear();
+  notilist.listappnoti.clear();
   notilist.checkread.clear();
   listid.clear();
   final valuespace = snapshot.data!.docs;
@@ -33,7 +33,8 @@ NotiAlarmRes1(snapshot, listid) {
         sp.get('username') == appnickname) {
       notilist.checkread.add(sp.get('read'));
       listid.add(sp.id);
-      notilist.listad.add(NotiList(title: messageText, date: messageDate));
+      notilist.listappnoti
+          .add(Companynoti(title: messageText, content: messageDate));
       notilist.checkboxnoti.add(false);
     }
   }

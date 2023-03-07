@@ -31,7 +31,7 @@ UI(controller, searchnode, scrollcontroller, maxWidth, maxHeight) {
   return GetBuilder<uisetting>(builder: (_) {
     return SingleChildScrollView(
         controller: scrollcontroller,
-        child: StatefulBuilder(builder: (_, StateSetter setState) {
+        child: StatefulBuilder(builder: (context, StateSetter setState) {
           return Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
               child: Column(
@@ -43,7 +43,7 @@ UI(controller, searchnode, scrollcontroller, maxWidth, maxHeight) {
                   ),
                   uiset.profileindex == 0
                       ? OptionChoice(
-                          maxWidth, maxHeight, searchnode, controller)
+                          context, maxWidth, maxHeight, searchnode, controller)
                       : (uiset.profileindex == 1
                           ? TestScreen(maxWidth, maxHeight)
                           : LicenseScreen(maxWidth, maxHeight)),
@@ -57,7 +57,7 @@ UI(controller, searchnode, scrollcontroller, maxWidth, maxHeight) {
 ///
 ///ProfilePage의 기본UI
 ///각종 옵션들을 Opt_body에서 보여줌.
-OptionChoice(maxWidth, maxHeight, searchnode, controller) {
+OptionChoice(context, maxWidth, maxHeight, searchnode, controller) {
   return GestureDetector(
     onTap: () {
       FocusManager.instance.primaryFocus?.unfocus();
@@ -67,124 +67,77 @@ OptionChoice(maxWidth, maxHeight, searchnode, controller) {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Responsivelayout(lsoptview(maxWidth, searchnode, controller),
-              proptview(maxWidth, searchnode, controller))
+          optview(context, maxWidth, searchnode, controller)
+          /*Responsivelayout(lsoptview(maxWidth, searchnode, controller),
+              proptview(maxWidth, searchnode, controller))*/
         ],
       ),
     ),
   );
 }
 
-lsoptview(maxWidth, searchnode, controller) {
-  return responsivewidget(Column(
-    children: List.generate(5, (index) {
-      return Column(
-        children: [
-          ContainerDesign(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
+optview(context, maxWidth, searchnode, controller) {
+  Widget title;
+  Widget content;
+  return responsivewidget(
+      Column(
+        children: List.generate(4, (index) {
+          return Column(
+            children: [
+              ContainerDesign(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
-                        alignment: Alignment.center,
-                        child: CircleAvatar(
-                          backgroundColor: draw.backgroundcolor,
-                          foregroundColor: draw.backgroundcolor,
-                          child: Icon(
-                            uiset.profilescreen[index].icondata,
-                            color: draw.color_textstatus,
-                          ),
-                        )),
-                    const SizedBox(
-                      width: 10,
+                    Row(
+                      children: [
+                        Container(
+                            alignment: Alignment.center,
+                            child: CircleAvatar(
+                              backgroundColor: draw.backgroundcolor,
+                              foregroundColor: draw.backgroundcolor,
+                              child: Icon(
+                                uiset.profilescreen[index].icondata,
+                                color: draw.color_textstatus,
+                              ),
+                            )),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          uiset.profilescreen[index].title.toString().tr,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: contentTextsize(),
+                              color: draw.color_textstatus),
+                        ),
+                      ],
                     ),
-                    Text(
-                      uiset.profilescreen[index].title.toString().tr,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: contentTextsize(),
-                          color: draw.color_textstatus),
+                    Divider(
+                      height: 10,
+                      thickness: 2,
+                      color: Colors.grey.shade400,
                     ),
+                    Opt_body(index, searchnode, controller)
                   ],
                 ),
-                Divider(
-                  height: 10,
-                  thickness: 2,
-                  color: Colors.grey.shade400,
-                ),
-                Opt_body(index, searchnode, controller)
-              ],
-            ),
-            color: draw.backgroundcolor,
-          ),
-          const SizedBox(
-            height: 20,
-          )
-        ],
-      );
-    }),
-  ));
-}
-
-proptview(maxWidth, searchnode, controller) {
-  return responsivewidget(Column(
-    children: List.generate(5, (index) {
-      return Column(
-        children: [
-          ContainerDesign(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                        alignment: Alignment.center,
-                        child: CircleAvatar(
-                          backgroundColor: draw.backgroundcolor,
-                          foregroundColor: draw.backgroundcolor,
-                          child: Icon(
-                            uiset.profilescreen[index].icondata,
-                            color: draw.color_textstatus,
-                          ),
-                        )),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      uiset.profilescreen[index].title.toString().tr,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: contentTextsize(),
-                          color: draw.color_textstatus),
-                    ),
-                  ],
-                ),
-                Divider(
-                  height: 10,
-                  thickness: 2,
-                  color: Colors.grey.shade400,
-                ),
-                Opt_body(index, searchnode, controller)
-              ],
-            ),
-            color: draw.backgroundcolor,
-          ),
-          const SizedBox(
-            height: 20,
-          )
-        ],
-      );
-    }),
-  ));
+                color: draw.backgroundcolor,
+              ),
+              const SizedBox(
+                height: 20,
+              )
+            ],
+          );
+        }),
+      ),
+      maxWidth);
 }
 
 ///Opt_body
 ///
 ///uiset.profilescreen으로 옵션들을 기입받았고 이를 인덱스별로 보여줌.
 Opt_body(index, searchnode, controller) {
-  Widget title, title2;
-  Widget content, content2;
+  Widget title;
+  Widget content;
 
   return StatefulBuilder(
     builder: (context, setState) {
@@ -202,10 +155,21 @@ Opt_body(index, searchnode, controller) {
                     onTap: () {
                       if (index == 0) {
                       } else if (index == 1) {
+                        uiset.checkprofilepageindex(1);
+                      } else if (index == 2) {
+                        controller.clear();
+                        title = Widgets_addpeople(
+                            context, controller, searchnode)[0];
+                        content = Widgets_addpeople(
+                            context, controller, searchnode)[1];
+                        AddContent(context, title, content, searchnode);
+                      } else {
                         if (index2 == 0) {
                           var url = Uri.parse(
-                              'https://linkaiteam.github.io/LINKAITEAM/전체');
+                              'https://linkaiteam.github.io/LINKAITEAM/개인정보처리방침');
                           launchUrl(url);
+                        } else if (index2 == 1) {
+                          uiset.checkprofilepageindex(3);
                         } else {
                           controller.clear();
                           title = Widgets_tocompany(
@@ -213,23 +177,6 @@ Opt_body(index, searchnode, controller) {
                           content = Widgets_tocompany(
                               context, controller, searchnode)[1];
                           AddContent(context, title, content, searchnode);
-                        }
-                      } else if (index == 2) {
-                        uiset.checkprofilepageindex(1);
-                      } else if (index == 3) {
-                        controller.clear();
-                        title2 = Widgets_addpeople(
-                            context, controller, searchnode)[0];
-                        content2 = Widgets_addpeople(
-                            context, controller, searchnode)[1];
-                        AddContent(context, title2, content2, searchnode);
-                      } else {
-                        if (index2 == 0) {
-                          var url = Uri.parse(
-                              'https://linkaiteam.github.io/LINKAITEAM/개인정보처리방침');
-                          launchUrl(url);
-                        } else {
-                          uiset.checkprofilepageindex(3);
                         }
                       }
                     },
@@ -656,53 +603,57 @@ TestScreen(maxWidth, maxHeight) {
 }
 
 lstestview(maxWidth, maxHeight) {
-  return responsivewidget(SizedBox(
-    height: maxHeight,
-    child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Icon(
-            AntDesign.frowno,
-            color: Colors.orange,
-            size: 30,
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          Text(
-            '새로운 잇플\'s Box들을 열심히 개발중이에요~~!',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: contentTextsize(), color: draw.color_textstatus),
-          ),
-        ]),
-  ));
+  return responsivewidget(
+      SizedBox(
+        height: maxHeight,
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Icon(
+                AntDesign.frowno,
+                color: Colors.orange,
+                size: 30,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Text(
+                '새로운 잇플\'s Box들을 열심히 개발중이에요~~!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: contentTextsize(), color: draw.color_textstatus),
+              ),
+            ]),
+      ),
+      maxWidth);
 }
 
 prtestview(maxWidth, maxHeight) {
-  return responsivewidget(SizedBox(
-    height: maxHeight,
-    child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Icon(
-            AntDesign.frowno,
-            color: Colors.orange,
-            size: 30,
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          Text(
-            '새로운 잇플\'s Box들을 열심히 개발중이에요~~!',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: contentTextsize(), color: draw.color_textstatus),
-          ),
-        ]),
-  ));
+  return responsivewidget(
+      SizedBox(
+        height: maxHeight,
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Icon(
+                AntDesign.frowno,
+                color: Colors.orange,
+                size: 30,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Text(
+                '새로운 잇플\'s Box들을 열심히 개발중이에요~~!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: contentTextsize(), color: draw.color_textstatus),
+              ),
+            ]),
+      ),
+      maxWidth);
 }
 
 ///LicenseHome
@@ -749,7 +700,7 @@ buildPanel() {
                 licensedata[panelIndex].isExpanded = !isExpanded;
               });
             }),
-            dividerColor: BGColor_shadowcolor(),
+            dividerColor: Colors.grey,
             children: licensedata.map<ExpansionPanel>((Expandable expandable) {
               return ExpansionPanel(
                   canTapOnHeader: true,
@@ -760,8 +711,8 @@ buildPanel() {
                         expandable.title,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: contentTitleTextsize(),
-                            color: Colors.black),
+                            fontSize: contentTextsize(),
+                            color: draw.color_textstatus),
                       ),
                     );
                   }),
@@ -770,8 +721,8 @@ buildPanel() {
                       expandable.sub,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: contentTextsize(),
-                          color: Colors.black),
+                          fontSize: contentsmallTextsize(),
+                          color: draw.color_textstatus),
                     ),
                   ),
                   isExpanded: expandable.isExpanded);

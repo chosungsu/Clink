@@ -12,7 +12,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -55,8 +54,6 @@ Future<bool> onWillPop(context) async {
   uiset.setmypagelistindex(Hive.box('user_setting').get('currentmypage') ?? 0);
   if (draw.drawopen == true) {
     draw.setclose();
-  } else if (draw.drawnoticeopen == true) {
-    closenotiroom();
   } else if (uiset.profileindex != 0) {
     uiset.checkprofilepageindex(0);
   } else if (uiset.searchpagemove != '') {
@@ -181,16 +178,6 @@ Future getAppInfo({tomail = false}) async {
   } else {}
 }
 
-closenotiroom() {
-  final draw = Get.put(navibool());
-  final uiset = Get.put(uisetting());
-  final notilist = Get.put(notishow());
-  if (draw.drawnoticeopen) {
-    draw.setclosenoti();
-    notilist.isreadnoti(init: true);
-  } else {}
-}
-
 deletenoti(context) async {
   var deleteid = '';
   var updateusername = [];
@@ -222,9 +209,10 @@ deletenoti(context) async {
           bordercolor: draw.backgroundcolor);
     } else {
       for (int i = 0; i < deletenotiindexlist.length; i++) {
-        deletelist.insert(i, notilist.listad[deletenotiindexlist[i]].title);
+        deletelist.insert(
+            i, notilist.listappnoti[deletenotiindexlist[i]].title);
       }
-      if (deletelist.length == notilist.listad.length) {
+      if (deletelist.length == notilist.listappnoti.length) {
         //전체 삭제인 경우
         firestore.collection('AppNoticeByUsers').get().then((value) {
           for (var element in value.docs) {
@@ -546,7 +534,7 @@ Future<void> downloadFileExample(String mainid, BuildContext context) async {
         //httpsReference = FirebaseStorage.instance.refFromURL(downloadfile[i]);
         pathseveral = File(appDocDir.path + '/' + downloadname);
 
-        FileDownloader.downloadFile(
+        /*FileDownloader.downloadFile(
             url: downloadurl,
             name: downloadname,
             onDownloadCompleted: (path) {
@@ -556,7 +544,7 @@ Future<void> downloadFileExample(String mainid, BuildContext context) async {
                   title: '다운로드 완료됨.',
                   backgroundcolor: Colors.green,
                   bordercolor: draw.backgroundcolor);
-            });
+            });*/
       }
     } else {
       Snack.snackbars(

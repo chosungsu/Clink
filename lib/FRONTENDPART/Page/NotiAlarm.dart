@@ -3,6 +3,8 @@
 import 'package:clickbyme/FRONTENDPART/UI/NotiUI.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import '../../BACKENDPART/Api/NoticeApi.dart';
 import '../../BACKENDPART/Getx/notishow.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../Tool/AppBarCustom.dart';
@@ -10,9 +12,10 @@ import '../../BACKENDPART/Getx/navibool.dart';
 import '../../Tool/NoBehavior.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
+import '../Widget/buildTypeWidget.dart';
+
 class NotiAlarm extends StatefulWidget {
-  const NotiAlarm({Key? key, required this.width}) : super(key: key);
-  final double width;
+  const NotiAlarm({Key? key}) : super(key: key);
   @override
   State<StatefulWidget> createState() => _NotiAlarmState();
 }
@@ -25,9 +28,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
   @override
   void initState() {
     super.initState();
-    notilist.allcheck = false;
-    notilist.checkboxnoti =
-        List.filled(notilist.listad.length, false, growable: true);
+    notilist.clicker = 0;
   }
 
   @override
@@ -38,65 +39,105 @@ class _NotiAlarmState extends State<NotiAlarm> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<navibool>(
-        builder: (_) => Scaffold(
-            backgroundColor: draw.backgroundcolor,
-            body: SafeArea(
-              child: NotiBody(context),
-            )));
+        builder: (_) => SafeArea(
+            child: Scaffold(
+                backgroundColor: draw.backgroundcolor,
+                body: OrientationBuilder(
+                  builder: (context, orientation) {
+                    return GetBuilder<navibool>(
+                        builder: (_) => buildtypewidget(context, NotiBody()));
+                  },
+                ))));
   }
 
-  Widget NotiBody(BuildContext context) {
-    double height = Get.width - 60;
-    return GetBuilder<navibool>(
-        builder: (_) => LayoutBuilder(
-              builder: ((context, constraint) {
-                return SizedBox(
-                  height: height,
-                  child: GetBuilder<uisetting>(
-                    builder: (controller) {
-                      return Container(
-                          decoration: BoxDecoration(
-                              color: draw.backgroundcolor,
-                              border: Border(
-                                left: BorderSide(
-                                    color: draw.color_textstatus, width: 1),
-                              )),
-                          child: Column(
-                            children: [
-                              AppBarCustom(
-                                title: 'Notice',
-                                lefticon: false,
-                                righticon: true,
-                                doubleicon: false,
-                                lefticonname: Ionicons.add_outline,
-                                righticonname: Ionicons.ios_close,
-                              ),
-                              Container(
-                                height: 20,
-                              ),
-                              SetBoxUI(widget.width),
-                              Divider(
-                                height: 20,
-                                color: draw.color_textstatus,
-                                thickness: 0.5,
-                                indent: 20.0,
-                                endIndent: 20.0,
-                              ),
-                              Flexible(
-                                  fit: FlexFit.tight,
-                                  child: ScrollConfiguration(
-                                      behavior: NoBehavior(),
-                                      child: LayoutBuilder(
-                                        builder: ((context, constraint) {
-                                          return UI(widget.width, height);
-                                        }),
-                                      ))),
-                            ],
-                          ));
-                    },
+  Widget NotiBody() {
+    return OrientationBuilder(builder: ((context, orientation) {
+      return GetBuilder<navibool>(
+          builder: (_) => AnimatedContainer(
+                transform:
+                    Matrix4.translationValues(draw.xoffset, draw.yoffset, 0)
+                      ..scale(draw.scalefactor),
+                duration: const Duration(milliseconds: 250),
+                child: GestureDetector(
+                  onTap: () {
+                    draw.drawopen == true && draw.navishow == false
+                        ? setState(() {
+                            draw.drawopen = false;
+                            draw.setclose();
+                            Hive.box('user_setting').put('page_opened', false);
+                          })
+                        : null;
+                  },
+                  child: SizedBox(
+                    height: Get.height,
+                    width: Get.width,
+                    child: GetBuilder<uisetting>(
+                      builder: (_) {
+                        return Container(
+                            color: draw.backgroundcolor,
+                            child: Row(
+                              children: [
+                                draw.navi == 0 && draw.navishow == true
+                                    ? innertype()
+                                    : const SizedBox(),
+                                Column(
+                                  children: [
+                                    AppBarCustom(
+                                      title: 'Notice',
+                                      lefticon: false,
+                                      righticon: false,
+                                      doubleicon: false,
+                                      lefticonname: Ionicons.add_outline,
+                                      righticonname: Ionicons.ios_close,
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    SetBoxUI(
+                                      draw.navishow == true
+                                          ? (Get.width < 800
+                                              ? Get.width - 60
+                                              : Get.width - 120)
+                                          : Get.width,
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Flexible(
+                                      fit: FlexFit.tight,
+                                      child: SizedBox(
+                                        width: draw.navishow == true
+                                            ? (Get.width < 800
+                                                ? Get.width - 60
+                                                : Get.width - 120)
+                                            : Get.width,
+                                        child: ScrollConfiguration(
+                                            behavior: NoBehavior(),
+                                            child: LayoutBuilder(
+                                              builder: ((context, constraint) {
+                                                return UI(
+                                                  draw.navishow == true
+                                                      ? (Get.width < 800
+                                                          ? Get.width - 60
+                                                          : Get.width - 120)
+                                                      : Get.width,
+                                                );
+                                              }),
+                                            )),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                draw.navi == 1 && draw.navishow == true
+                                    ? innertype()
+                                    : const SizedBox(),
+                              ],
+                            ));
+                      },
+                    ),
                   ),
-                );
-              }),
-            ));
+                ),
+              ));
+    }));
   }
 }
