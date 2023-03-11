@@ -10,6 +10,7 @@ import '../../Tool/AppBarCustom.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
 import '../../Tool/NoBehavior.dart';
 import '../UI/MYPageUI.dart';
+import '../Widget/BottomScreen.dart';
 
 class MYPage extends StatefulWidget {
   const MYPage({
@@ -51,15 +52,17 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
+    return SafeArea(child: OrientationBuilder(
+      builder: (context, orientation) {
+        return Scaffold(
             backgroundColor: draw.backgroundcolor,
-            body: OrientationBuilder(
-              builder: (context, orientation) {
-                return GetBuilder<navibool>(
-                    builder: (_) => buildtypewidget(context, MainBody()));
-              },
-            )));
+            bottomNavigationBar: uiset.loading
+                ? const SizedBox()
+                : (Get.width < 1000 ? const BottomScreen() : const SizedBox()),
+            body: GetBuilder<navibool>(
+                builder: (_) => buildtypewidget(context, MainBody())));
+      },
+    ));
   }
 
   Widget MainBody() {
@@ -90,7 +93,9 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                             padding: const EdgeInsets.only(bottom: 20),
                             child: Row(
                               children: [
-                                draw.navi == 0 && draw.navishow == true
+                                draw.navi == 0 &&
+                                        draw.navishow == true &&
+                                        Get.width > 1000
                                     ? innertype()
                                     : const SizedBox(),
                                 Column(
@@ -113,10 +118,9 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                     Flexible(
                                         fit: FlexFit.tight,
                                         child: SizedBox(
-                                          width: draw.navishow == true
-                                              ? (Get.width < 800
-                                                  ? Get.width - 60
-                                                  : Get.width - 120)
+                                          width: draw.navishow == true &&
+                                                  Get.width > 1000
+                                              ? Get.width - 120
                                               : Get.width,
                                           child: ScrollConfiguration(
                                               behavior: NoBehavior(),
@@ -130,14 +134,11 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                                           .id,
                                                       textcontroller,
                                                       searchNode,
-                                                      draw.navishow == true
-                                                          ? (Get.width < 800
-                                                              ? constraint
-                                                                      .maxWidth -
-                                                                  60
-                                                              : constraint
-                                                                      .maxWidth -
-                                                                  120)
+                                                      draw.navishow == true &&
+                                                              Get.width > 1000
+                                                          ? constraint
+                                                                  .maxWidth -
+                                                              120
                                                           : constraint.maxWidth,
                                                       constraint.maxHeight);
                                                 }),
@@ -145,7 +146,9 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                         )),
                                   ],
                                 ),
-                                draw.navi == 1 && draw.navishow == true
+                                draw.navi == 1 &&
+                                        draw.navishow == true &&
+                                        Get.width > 1000
                                     ? innertype()
                                     : const SizedBox(),
                               ],

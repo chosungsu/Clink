@@ -29,6 +29,7 @@ final draw = Get.put(navibool());
 ///ProfilePage의 UI
 UI(controller, searchnode, scrollcontroller, maxWidth, maxHeight) {
   return GetBuilder<uisetting>(builder: (_) {
+    uiset.setprofilespace();
     return SingleChildScrollView(
         controller: scrollcontroller,
         child: StatefulBuilder(builder: (context, StateSetter setState) {

@@ -4,7 +4,6 @@ import 'package:clickbyme/BACKENDPART/Enums/Drawer_item.dart';
 import 'package:clickbyme/BACKENDPART/Getx/PeopleAdd.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
-import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -135,4 +134,3 @@ View(BuildContext context, List<Map> drawerItems) {
             })
           ]));
 }
-//SPIconclick(context, textcontroller, searchnode)

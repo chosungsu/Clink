@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../Tool/Loader.dart';
-import '../Page/DrawerScreen.dart';
+import 'DrawerScreen.dart';
 
 buildtypewidget(context, widget) {
   final draw = Get.put(navibool());
@@ -34,7 +34,7 @@ buildtypewidget(context, widget) {
 
 responsive() {
   final draw = Get.put(navibool());
-  return Get.width < 800
+  return Get.width < 1000
       ? (draw.navi == 0
           ? Positioned(
               left: 0,
@@ -72,7 +72,7 @@ responsive() {
 }
 
 innertype() {
-  return Get.width < 800
+  return Get.width < 1000
       ? SizedBox(
           width: 60,
           height: Get.height,

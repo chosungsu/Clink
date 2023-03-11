@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors, unused_local_variable, non_constant_identifier_names
+import 'package:clickbyme/FRONTENDPART/Widget/BottomScreen.dart';
 import 'package:clickbyme/Tool/AndroidIOS.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/FRONTENDPART/Route/initScreenLoading.dart';
@@ -124,33 +125,32 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     StatusBarControl.setColor(draw.backgroundcolor, animated: true);
-    return GetBuilder<uisetting>(
-      builder: (_) {
-        return Scaffold(
-            resizeToAvoidBottomInset: false,
-            backgroundColor: draw.backgroundcolor,
-            //bottomNavigationBar: uiset.loading ? SizedBox() : ADSHOW(),
-            body: SafeArea(
-                child: GetBuilder<navibool>(
-                    builder: (_) => LayoutBuilder(
-                          builder: ((context, constraint) {
-                            return WillPopScope(
-                                onWillPop: () => onWillPop(context),
-                                child: uiset.loading
-                                    ? Stack(
-                                        children: [
-                                          ModalBarrier(
-                                            color: BGColor(),
-                                            dismissible: false,
-                                          ),
-                                          FirstView(constraint.maxHeight),
-                                        ],
-                                      )
-                                    : pages[uiset.pagenumber]);
-                          }),
-                        ))));
-      },
-    );
+    return GetBuilder<navibool>(builder: (_) {
+      return GetBuilder<uisetting>(
+        builder: (_) {
+          return Scaffold(
+              resizeToAvoidBottomInset: false,
+              backgroundColor: draw.backgroundcolor,
+              body: SafeArea(child: LayoutBuilder(
+                builder: ((context, constraint) {
+                  return WillPopScope(
+                      onWillPop: () => onWillPop(context),
+                      child: uiset.loading
+                          ? Stack(
+                              children: [
+                                ModalBarrier(
+                                  color: BGColor(),
+                                  dismissible: false,
+                                ),
+                                FirstView(constraint.maxHeight),
+                              ],
+                            )
+                          : pages[uiset.pagenumber]);
+                }),
+              )));
+        },
+      );
+    });
   }
 
   ///FirstView

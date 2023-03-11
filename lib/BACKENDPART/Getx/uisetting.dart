@@ -150,13 +150,12 @@ class uisetting extends GetxController {
   ///setprofilespace
   ///
   ///프로필페이지에서 컨테이너공간을 만드는데 사용된다.
-  void setprofilespace({init = true}) async {
+  void setprofilespace({init = false}) async {
     List listopt = [
       Icons.tune,
       AntDesign.notification,
       MaterialCommunityIcons.ab_testing,
       MaterialCommunityIcons.account_group,
-      Icons.portrait
     ];
     List title = [
       'profilepagetitleone',
@@ -165,12 +164,17 @@ class uisetting extends GetxController {
       'profilepagetitleforth',
     ];
     List subtitles = [
-      [
-        'profilepagetitleonebyone',
-        'profilepagetitleonebytwo',
-        'profilepagetitleonebythird',
-        'profilepagetitleonebyforth',
-      ],
+      Get.width > 1000
+          ? [
+              'profilepagetitleonebyone',
+              'profilepagetitleonebytwo',
+              'profilepagetitleonebythird',
+              'profilepagetitleonebyforth',
+            ]
+          : [
+              'profilepagetitleonebyone',
+              'profilepagetitleonebytwo',
+            ],
       [
         'profilepagetitletwobyone',
       ],
@@ -188,8 +192,10 @@ class uisetting extends GetxController {
       profilescreen.add(Profile_item(
           icondata: listopt[i], title: title[i], subtitles: subtitles[i]));
     }
-    update();
-    notifyChildrens();
+    if (init) {
+      update();
+      notifyChildrens();
+    } else {}
   }
 
   void setlicense(String title, String content) async {

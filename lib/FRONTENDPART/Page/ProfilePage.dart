@@ -9,6 +9,7 @@ import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../Tool/NoBehavior.dart';
 import '../../Tool/AppBarCustom.dart';
 import '../UI/ProfileUI.dart';
+import '../Widget/BottomScreen.dart';
 import '../Widget/buildTypeWidget.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -28,7 +29,6 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   void initState() {
     super.initState();
-
     uiset.searchpagemove = '';
     uiset.profileindex = 0;
     _controller = TextEditingController();
@@ -43,16 +43,17 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-          backgroundColor: BGColor(),
-          body: OrientationBuilder(
-            builder: (context, orientation) {
-              return GetBuilder<navibool>(
-                  builder: (_) => buildtypewidget(context, ProfileBody()));
-            },
-          )),
-    );
+    return SafeArea(child: OrientationBuilder(
+      builder: (context, orientation) {
+        return Scaffold(
+            backgroundColor: BGColor(),
+            bottomNavigationBar: uiset.loading
+                ? const SizedBox()
+                : (Get.width < 1000 ? const BottomScreen() : const SizedBox()),
+            body: GetBuilder<navibool>(
+                builder: (_) => buildtypewidget(context, ProfileBody())));
+      },
+    ));
   }
 
   Widget ProfileBody() {
@@ -80,7 +81,9 @@ class _ProfilePageState extends State<ProfilePage>
                       color: draw.backgroundcolor,
                       child: Row(
                         children: [
-                          draw.navi == 0 && draw.navishow == true
+                          draw.navi == 0 &&
+                                  draw.navishow == true &&
+                                  Get.width > 1000
                               ? innertype()
                               : const SizedBox(),
                           Column(
@@ -101,11 +104,10 @@ class _ProfilePageState extends State<ProfilePage>
                               Flexible(
                                 fit: FlexFit.tight,
                                 child: SizedBox(
-                                  width: draw.navishow == true
-                                      ? (Get.width < 800
-                                          ? Get.width - 60
-                                          : Get.width - 120)
-                                      : Get.width,
+                                  width:
+                                      draw.navishow == true && Get.width > 1000
+                                          ? Get.width - 120
+                                          : Get.width,
                                   child: ScrollConfiguration(
                                       behavior: NoBehavior(),
                                       child: LayoutBuilder(
@@ -114,11 +116,9 @@ class _ProfilePageState extends State<ProfilePage>
                                               _controller,
                                               searchNode,
                                               scrollController,
-                                              draw.navishow == true
-                                                  ? (Get.width < 800
-                                                      ? constraint.maxWidth - 60
-                                                      : constraint.maxWidth -
-                                                          120)
+                                              draw.navishow == true &&
+                                                      Get.width > 1000
+                                                  ? constraint.maxWidth - 120
                                                   : constraint.maxWidth,
                                               constraint.maxHeight);
                                         }),
@@ -127,7 +127,9 @@ class _ProfilePageState extends State<ProfilePage>
                               ),
                             ],
                           ),
-                          draw.navi == 1 && draw.navishow == true
+                          draw.navi == 1 &&
+                                  draw.navishow == true &&
+                                  Get.width > 1000
                               ? innertype()
                               : const SizedBox(),
                         ],

@@ -11,8 +11,9 @@ import 'package:hive_flutter/adapters.dart';
 import '../../BACKENDPART/Enums/Variables.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
 import '../UI/SearchUI.dart';
+import '../Widget/BottomScreen.dart';
 import '../Widget/buildTypeWidget.dart';
-import 'DrawerScreen.dart';
+import '../Widget/DrawerScreen.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -50,15 +51,17 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
+    return SafeArea(child: OrientationBuilder(
+      builder: (context, orientation) {
+        return Scaffold(
             backgroundColor: BGColor(),
-            body: OrientationBuilder(
-              builder: (context, orientation) {
-                return GetBuilder<navibool>(
-                    builder: (_) => buildtypewidget(context, HomeUi()));
-              },
-            )));
+            bottomNavigationBar: uiset.loading
+                ? const SizedBox()
+                : (Get.width < 1000 ? const BottomScreen() : const SizedBox()),
+            body: GetBuilder<navibool>(
+                builder: (_) => buildtypewidget(context, HomeUi())));
+      },
+    ));
   }
 
   HomeUi() {
@@ -88,7 +91,9 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                       child: GetBuilder<uisetting>(builder: (_) {
                         return Row(
                           children: [
-                            draw.navi == 0 && draw.navishow == true
+                            draw.navi == 0 &&
+                                    draw.navishow == true &&
+                                    Get.width > 1000
                                 ? innertype()
                                 : const SizedBox(),
                             Column(
@@ -163,17 +168,17 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                     context,
                                     scrollController,
                                     controller,
-                                    draw.navishow == true
-                                        ? (Get.width < 800
-                                            ? Get.width - 60
-                                            : Get.width - 120)
+                                    draw.navishow == true && Get.width > 1000
+                                        ? Get.width - 120
                                         : Get.width,
                                     controller2,
                                     searchNode,
                                     controller3)
                               ],
                             ),
-                            draw.navi == 1 && draw.navishow == true
+                            draw.navi == 1 &&
+                                    draw.navishow == true &&
+                                    Get.width > 1000
                                 ? innertype()
                                 : const SizedBox(),
                           ],
@@ -184,74 +189,3 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
             ));
   }
 }
-/**
- * Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            uiset.searchpagemove == ''
-                                ? AppBarCustom(
-                                    title: '',
-                                    lefticon: false,
-                                    lefticonname: Icons.add,
-                                    righticon: false,
-                                    doubleicon: false,
-                                    righticonname: Icons.notifications_none,
-                                  )
-                                : GetBuilder<uisetting>(
-                                    builder: (_) => StreamBuilder<
-                                            QuerySnapshot>(
-                                        stream: SearchpageStreamParent(),
-                                        builder: ((context, snapshot) {
-                                          if (snapshot.hasData) {
-                                            SearchpageChild0(snapshot);
-                                            if (checkid != '') {
-                                              return Column(
-                                                children: [
-                                                  AppBarCustom(
-                                                    title: uiset.searchpagemove,
-                                                    lefticon: false,
-                                                    lefticonname: Icons.add,
-                                                    righticon: true,
-                                                    doubleicon: true,
-                                                    righticonname: Icons.star,
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                ],
-                                              );
-                                            } else {
-                                              return Column(
-                                                children: [
-                                                  AppBarCustom(
-                                                    title: uiset.searchpagemove,
-                                                    righticon: true,
-                                                    lefticon: false,
-                                                    lefticonname: Icons.add,
-                                                    doubleicon: true,
-                                                    righticonname:
-                                                        Icons.star_border,
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                ],
-                                              );
-                                            }
-                                          } else {
-                                            return AppBarCustom(
-                                              title: '',
-                                              righticon: false,
-                                              lefticon: false,
-                                              lefticonname: Icons.add,
-                                              doubleicon: false,
-                                              righticonname:
-                                                  Icons.notifications_none,
-                                            );
-                                          }
-                                        }))),
-                            SearchUI(context, scrollController, controller,
-                                height, controller2, searchNode, controller3)
-                          ],
-                        ),
- */

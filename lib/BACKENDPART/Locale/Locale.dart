@@ -52,6 +52,7 @@ class Languages extends Translations {
           'profilepagetitleonebyone': 'Background',
           'profilepagetitleonebytwo': 'Text',
           'profilepagetitleonebythird': 'MenuBar',
+          'profilepagetitleonebyforth': 'Status',
           'profilepagetitletwobyone': 'Next Box',
           'profilepagetitlethirdbyone': 'Search Friends',
           'profilepagetitleforthbyone': 'Policy for this app',

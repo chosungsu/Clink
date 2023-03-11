@@ -21,7 +21,9 @@ SearchUI(context, scrollController, TextEditingController controller,
       ? Flexible(
           fit: FlexFit.tight,
           child: SizedBox(
-            width: draw.navishow == true ? Get.width - 120 : Get.width,
+            width: draw.navishow == true && Get.width > 1000
+                ? Get.width - 120
+                : Get.width,
             child: ScrollConfiguration(
               behavior: NoBehavior(),
               child: SingleChildScrollView(

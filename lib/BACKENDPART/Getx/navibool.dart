@@ -38,13 +38,13 @@ class navibool extends GetxController {
     if (navishow) {
     } else {
       if (navi == 0) {
-        if (Get.width < 800) {
+        if (Get.width < 1000) {
           xoffset = 60;
         } else {
           xoffset = 120;
         }
       } else {
-        if (Get.width < 800) {
+        if (Get.width < 1000) {
           xoffset = -60;
         } else {
           xoffset = -120;

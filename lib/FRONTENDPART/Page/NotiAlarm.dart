@@ -12,6 +12,7 @@ import '../../BACKENDPART/Getx/navibool.dart';
 import '../../Tool/NoBehavior.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
+import '../Widget/BottomScreen.dart';
 import '../Widget/buildTypeWidget.dart';
 
 class NotiAlarm extends StatefulWidget {
@@ -38,16 +39,17 @@ class _NotiAlarmState extends State<NotiAlarm> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<navibool>(
-        builder: (_) => SafeArea(
-            child: Scaffold(
-                backgroundColor: draw.backgroundcolor,
-                body: OrientationBuilder(
-                  builder: (context, orientation) {
-                    return GetBuilder<navibool>(
-                        builder: (_) => buildtypewidget(context, NotiBody()));
-                  },
-                ))));
+    return SafeArea(child: OrientationBuilder(
+      builder: (context, orientation) {
+        return Scaffold(
+            backgroundColor: draw.backgroundcolor,
+            bottomNavigationBar: uiset.loading
+                ? const SizedBox()
+                : (Get.width < 1000 ? const BottomScreen() : const SizedBox()),
+            body: GetBuilder<navibool>(
+                builder: (_) => buildtypewidget(context, NotiBody())));
+      },
+    ));
   }
 
   Widget NotiBody() {
@@ -77,7 +79,9 @@ class _NotiAlarmState extends State<NotiAlarm> {
                             color: draw.backgroundcolor,
                             child: Row(
                               children: [
-                                draw.navi == 0 && draw.navishow == true
+                                draw.navi == 0 &&
+                                        draw.navishow == true &&
+                                        Get.width > 1000
                                     ? innertype()
                                     : const SizedBox(),
                                 Column(
@@ -94,10 +98,8 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                       height: 20,
                                     ),
                                     SetBoxUI(
-                                      draw.navishow == true
-                                          ? (Get.width < 800
-                                              ? Get.width - 60
-                                              : Get.width - 120)
+                                      draw.navishow == true && Get.width > 1000
+                                          ? Get.width - 120
                                           : Get.width,
                                     ),
                                     const SizedBox(
@@ -106,21 +108,20 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                     Flexible(
                                       fit: FlexFit.tight,
                                       child: SizedBox(
-                                        width: draw.navishow == true
-                                            ? (Get.width < 800
-                                                ? Get.width - 60
-                                                : Get.width - 120)
+                                        width: draw.navishow == true &&
+                                                Get.width > 1000
+                                            ? Get.width - 120
                                             : Get.width,
                                         child: ScrollConfiguration(
                                             behavior: NoBehavior(),
                                             child: LayoutBuilder(
                                               builder: ((context, constraint) {
                                                 return UI(
-                                                  draw.navishow == true
-                                                      ? (Get.width < 800
-                                                          ? Get.width - 60
-                                                          : Get.width - 120)
-                                                      : Get.width,
+                                                  draw.navishow == true &&
+                                                          Get.width > 1000
+                                                      ? constraint.maxWidth -
+                                                          120
+                                                      : constraint.maxWidth,
                                                 );
                                               }),
                                             )),
@@ -128,7 +129,9 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                     ),
                                   ],
                                 ),
-                                draw.navi == 1 && draw.navishow == true
+                                draw.navi == 1 &&
+                                        draw.navishow == true &&
+                                        Get.width > 1000
                                     ? innertype()
                                     : const SizedBox(),
                               ],

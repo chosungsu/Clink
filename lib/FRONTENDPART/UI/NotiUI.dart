@@ -204,7 +204,6 @@ Page0([width]) {
                             ),
                             Text(
                               notilist.listappnoti[index].content,
-                              textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: contentsmallTextsize(),
@@ -261,7 +260,6 @@ Page1(width) {
                             ),
                             Text(
                               notilist.listappnoti[index].content,
-                              textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: contentsmallTextsize(),

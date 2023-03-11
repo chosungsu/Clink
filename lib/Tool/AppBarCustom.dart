@@ -47,7 +47,7 @@ class AppBarCustom extends StatelessWidget {
   Widget build(BuildContext context) {
     var updateid = '';
     var updateusername = [];
-    List<int> navinumlist = [0, 1, 2];
+    List<int> navinumlist = [0, 1, 2, 3];
     List<PageList> pagenamelist = [];
     final notilist = Get.put(notishow());
     final linkspaceset = Get.put(linkspacesetting());
@@ -60,8 +60,8 @@ class AppBarCustom extends StatelessWidget {
           builder: (_) => SafeArea(
               child: SizedBox(
                   height: 60,
-                  width: draw.navishow == true
-                      ? (Get.width < 800 ? Get.width - 60 : Get.width - 120)
+                  width: draw.navishow == true && Get.width > 1000
+                      ? Get.width - 120
                       : Get.width,
                   child: Padding(
                       padding: const EdgeInsets.only(
@@ -73,7 +73,8 @@ class AppBarCustom extends StatelessWidget {
                           children: [
                             navinumlist.contains(uiset.pagenumber) &&
                                     draw.navi == 0 &&
-                                    draw.navishow == false
+                                    draw.navishow == false &&
+                                    Get.width > 1000
                                 ? draw.drawopen == true ||
                                         Hive.box('user_setting')
                                                 .get('page_opened') ==
@@ -112,7 +113,8 @@ class AppBarCustom extends StatelessWidget {
                                 : const SizedBox(),
                             navinumlist.contains(uiset.pagenumber) &&
                                     draw.navi == 0 &&
-                                    draw.navishow == false
+                                    draw.navishow == false &&
+                                    Get.width > 1000
                                 ? const SizedBox(
                                     width: 10,
                                   )
@@ -265,14 +267,16 @@ class AppBarCustom extends StatelessWidget {
                             )),
                             navinumlist.contains(uiset.pagenumber) &&
                                     draw.navi == 1 &&
-                                    draw.navishow == false
+                                    draw.navishow == false &&
+                                    Get.width > 1000
                                 ? const SizedBox(
                                     width: 10,
                                   )
                                 : const SizedBox(),
                             navinumlist.contains(uiset.pagenumber) &&
                                     draw.navi == 1 &&
-                                    draw.navishow == false
+                                    draw.navishow == false &&
+                                    Get.width > 1000
                                 ? draw.drawopen == true ||
                                         Hive.box('user_setting')
                                                 .get('page_opened') ==
