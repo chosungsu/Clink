@@ -153,9 +153,9 @@ class uisetting extends GetxController {
   void setprofilespace({init = false}) async {
     List listopt = [
       Icons.tune,
-      AntDesign.notification,
       MaterialCommunityIcons.ab_testing,
       MaterialCommunityIcons.account_group,
+      Icons.portrait
     ];
     List title = [
       'profilepagetitleone',
