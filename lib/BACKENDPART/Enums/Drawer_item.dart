@@ -15,6 +15,6 @@ List<Map> drawerItems_view = [
         : MaterialCommunityIcons.bell_badge_outline,
   },
   {
-    'icon': Ionicons.settings_outline,
+    'icon': Ionicons.ios_person_outline,
   },
 ];

@@ -154,14 +154,12 @@ class uisetting extends GetxController {
     List listopt = [
       Icons.tune,
       MaterialCommunityIcons.ab_testing,
-      MaterialCommunityIcons.account_group,
       Icons.portrait
     ];
     List title = [
       'profilepagetitleone',
       'profilepagetitletwo',
       'profilepagetitlethird',
-      'profilepagetitleforth',
     ];
     List subtitles = [
       Get.width > 1000
@@ -180,15 +178,12 @@ class uisetting extends GetxController {
       ],
       [
         'profilepagetitlethirdbyone',
-      ],
-      [
-        'profilepagetitleforthbyone',
-        'profilepagetitleforthbytwo',
-        'profilepagetitleforthbythird',
+        'profilepagetitlethirdbytwo',
+        'profilepagetitlethirdbythird',
       ],
     ];
     profilescreen.clear();
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 3; i++) {
       profilescreen.add(Profile_item(
           icondata: listopt[i], title: title[i], subtitles: subtitles[i]));
     }

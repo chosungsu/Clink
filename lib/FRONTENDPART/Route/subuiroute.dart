@@ -3,6 +3,8 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:clickbyme/BACKENDPART/Enums/Variables.dart';
+import 'package:clickbyme/FRONTENDPART/Page/SettingPage.dart';
+import 'package:clickbyme/FRONTENDPART/Page/SettingSubPage.dart';
 import 'package:clickbyme/main.dart';
 import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
 import 'package:clickbyme/sheets/BSContents/appbarplusbtn.dart';
@@ -18,7 +20,6 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:status_bar_control/status_bar_control.dart';
 import '../../BACKENDPART/Enums/PushNotification.dart';
 import '../../Tool/AndroidIOS.dart';
 import '../../Tool/FlushbarStyle.dart';
@@ -56,6 +57,7 @@ Future<bool> onWillPop(context) async {
     draw.setclose();
   } else if (uiset.profileindex != 0) {
     uiset.checkprofilepageindex(0);
+    Get.back();
   } else if (uiset.searchpagemove != '') {
     uiset.searchpagemove = '';
     uiset.textrecognizer = '';
@@ -97,6 +99,14 @@ GoToMain() {
 
 GoToStartApp() {
   Get.offAll(() => const SplashPage(), transition: Transition.fade);
+}
+
+GoToSettingPage() async {
+  Get.to(() => const SettingPage(), transition: Transition.fade);
+}
+
+GoToSettingSubPage() async {
+  Get.to(() => const SettingSubPage(), transition: Transition.fade);
 }
 
 Future<String> getEmailBody() async {

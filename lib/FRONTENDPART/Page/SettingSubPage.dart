@@ -9,19 +9,18 @@ import '../../BACKENDPART/Getx/navibool.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../Tool/NoBehavior.dart';
 import '../../Tool/AppBarCustom.dart';
-import '../UI/ProfileUI.dart';
-import '../Widget/BottomScreen.dart';
+import '../Route/subuiroute.dart';
+import '../UI/SettingSubUI.dart';
 import '../Widget/buildTypeWidget.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+class SettingSubPage extends StatefulWidget {
+  const SettingSubPage({Key? key}) : super(key: key);
   @override
-  State<StatefulWidget> createState() => _ProfilePageState();
+  State<StatefulWidget> createState() => _SettingSubPageState();
 }
 
-class _ProfilePageState extends State<ProfilePage>
+class _SettingSubPageState extends State<SettingSubPage>
     with TickerProviderStateMixin {
-  TextEditingController _controller = TextEditingController();
   ScrollController scrollController = ScrollController();
   final searchNode = FocusNode();
   final draw = Get.put(navibool());
@@ -30,14 +29,11 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   void initState() {
     super.initState();
-    uiset.searchpagemove = '';
-    _controller = TextEditingController();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _controller.dispose();
     scrollController.dispose();
   }
 
@@ -47,16 +43,15 @@ class _ProfilePageState extends State<ProfilePage>
       builder: (context, orientation) {
         return Scaffold(
             backgroundColor: BGColor(),
-            bottomNavigationBar: uiset.loading
-                ? const SizedBox()
-                : (Get.width < 1000 ? const BottomScreen() : const SizedBox()),
-            body: GetBuilder<navibool>(
-                builder: (_) => buildtypewidget(context, ProfileBody())));
+            body: WillPopScope(
+                onWillPop: () => onWillPop(context),
+                child: GetBuilder<navibool>(
+                    builder: (_) => buildtypewidget(context, Body()))));
       },
     ));
   }
 
-  Widget ProfileBody() {
+  Widget Body() {
     return GetBuilder<navibool>(
         builder: (_) => AnimatedContainer(
               transform:
@@ -81,21 +76,16 @@ class _ProfilePageState extends State<ProfilePage>
                       color: draw.backgroundcolor,
                       child: Row(
                         children: [
-                          draw.navi == 0 &&
-                                  draw.navishow == true &&
-                                  Get.width > 1000
-                              ? innertype()
-                              : const SizedBox(),
                           Column(
                             children: [
                               GetBuilder<uisetting>(builder: (_) {
                                 return AppBarCustom(
                                   title: '',
-                                  lefticon: false,
-                                  lefticonname: Icons.add,
-                                  righticon: true,
+                                  lefticon: true,
+                                  lefticonname: MaterialIcons.chevron_left,
+                                  righticon: false,
                                   doubleicon: false,
-                                  righticonname: Ionicons.settings_outline,
+                                  righticonname: Icons.person_outline,
                                 );
                               }),
                               Flexible(
@@ -110,8 +100,6 @@ class _ProfilePageState extends State<ProfilePage>
                                       child: LayoutBuilder(
                                         builder: ((context, constraint) {
                                           return UI(
-                                              _controller,
-                                              searchNode,
                                               scrollController,
                                               draw.navishow == true &&
                                                       Get.width > 1000
@@ -124,11 +112,6 @@ class _ProfilePageState extends State<ProfilePage>
                               ),
                             ],
                           ),
-                          draw.navi == 1 &&
-                                  draw.navishow == true &&
-                                  Get.width > 1000
-                              ? innertype()
-                              : const SizedBox(),
                         ],
                       )),
                 ),

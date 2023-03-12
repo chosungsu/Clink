@@ -89,8 +89,8 @@ View(BuildContext context, List<Map> drawerItems) {
                                 )) {
                                   draw.setclose();
                                   uiset.setpageindex(2);
-                                } else if (element
-                                    .containsValue(Ionicons.settings_outline)) {
+                                } else if (element.containsValue(
+                                    Ionicons.ios_person_outline)) {
                                   draw.setclose();
                                   uiset.setpageindex(3);
                                 }

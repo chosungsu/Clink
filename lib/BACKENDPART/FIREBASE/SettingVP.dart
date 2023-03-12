@@ -1,20 +1,22 @@
 // ignore_for_file: unused_local_variable, non_constant_identifier_names
 
-import 'package:clickbyme/Tool/BGColor.dart';
-import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
+import '../../sheets/BottomSheet/AddContentWithBtn.dart';
 import '../Enums/Expandable.dart';
 import '../Enums/Variables.dart';
-import '../../Tool/ContainerDesign.dart';
 import '../../Tool/FlushbarStyle.dart';
 import '../Getx/PeopleAdd.dart';
 import '../Getx/uisetting.dart';
 import '../../Tool/TextSize.dart';
-import '../../sheets/BSContents/appbarpersonbtn.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import '../../BACKENDPART/Api/LoginApi.dart';
+import '../../FRONTENDPART/Route/subuiroute.dart';
+import '../../BACKENDPART/LocalNotiPlatform/NotificationApi.dart';
+import '../../Tool/BGColor.dart';
+import '../../Tool/ContainerDesign.dart';
 
 final peopleadd = Get.put(PeopleAdd());
 final uiset = Get.put(uisetting());
@@ -33,6 +35,78 @@ Settinglicensepage() {
               isExpanded: false));
     }
   });
+}
+
+Widgets_personchange(context, controller, searchnode) {
+  Widget title, content, btn;
+  final uiset = Get.put(uisetting());
+  final peopleadd = Get.put(PeopleAdd());
+
+  title = const SizedBox();
+  content = Column(
+    children: [
+      GestureDetector(
+          onTap: () async {
+            Get.back();
+            Clipboard.setData(ClipboardData(text: usercode)).whenComplete(() {
+              Snack.snackbars(
+                  context: context,
+                  title: '클립보드에 복사되었습니다.',
+                  backgroundcolor: Colors.green,
+                  bordercolor: draw.backgroundcolor);
+            });
+          },
+          child: ListTile(
+            leading: const Icon(
+              MaterialIcons.fiber_pin,
+              size: 30,
+              color: Colors.blue,
+            ),
+            title: Text('고유코드',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTitleTextsize())),
+            subtitle: SelectableText(usercode,
+                style: TextStyle(
+                    color: Colors.blue,
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTextsize())),
+            trailing: Icon(Ionicons.copy_outline,
+                size: 30, color: Colors.blue.shade400),
+          )),
+      GestureDetector(
+          onTap: () async {
+            Get.back();
+            uiset.checktf(true);
+            title = Widgets_settingpagenickchange(
+                context, controller, searchnode)[0];
+            content = Widgets_settingpagenickchange(
+                context, controller, searchnode)[1];
+            btn = Widgets_settingpagenickchange(
+                context, controller, searchnode)[2];
+            AddContentWithBtn(context, title, content, btn, searchnode);
+          },
+          child: ListTile(
+            leading: const Icon(
+              MaterialCommunityIcons.rename_box,
+              size: 30,
+              color: Colors.blue,
+            ),
+            title: Text('닉네임 변경',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTitleTextsize())),
+            trailing: Icon(
+              MaterialIcons.chevron_right,
+              size: 30,
+              color: draw.color_textstatus,
+            ),
+          )),
+    ],
+  );
+  return [title, content];
 }
 
 Widgets_tocompany(context, controller, searchnode) {
@@ -149,21 +223,239 @@ Widgets_tocompany(context, controller, searchnode) {
   return [title, content];
 }
 
-SPIconclick(
+Widgets_settingpagenickchange(
   context,
   textcontroller,
   searchnode,
 ) {
   Widget title;
   Widget content;
-  textcontroller.clear();
-  title = Widgets_settingpageiconclick(context, textcontroller, searchnode)[0];
-  content =
-      Widgets_settingpageiconclick(context, textcontroller, searchnode)[1];
-  AddContent(context, title, content, searchnode);
+  Widget btn;
+
+  title = SizedBox(
+      width: MediaQuery.of(context).size.width * 0.8,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          RichText(
+              maxLines: 2,
+              text: TextSpan(children: [
+                TextSpan(
+                    text: Hive.box('user_info').get('id'),
+                    style: TextStyle(
+                        color: Colors.blue.shade400,
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTitleTextsize())),
+                TextSpan(
+                    text: '님의 닉네임 변경',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTextsize()))
+              ]))
+        ],
+      ));
+  content = StatefulBuilder(builder: (_, StateSetter setState) {
+    return SizedBox(
+        child: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '닉네임',
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: contentTextsize(),
+              color: Colors.black),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        ContainerTextFieldDesign(
+          searchNodeAddSection: searchnode,
+          string: '이곳에 작성',
+          textEditingControllerAddSheet: textcontroller,
+        ),
+      ],
+    ));
+  });
+  btn = GetBuilder<uisetting>(
+    builder: (_) {
+      return Column(
+        children: [
+          SizedBox(
+            height: 50,
+            child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  backgroundColor: ButtonColor(),
+                ),
+                onPressed: () async {
+                  uiset.setloading(true);
+                  if (textcontroller.text.isEmpty) {
+                    uiset.checktf(false);
+                    uiset.setloading(false);
+                  } else {
+                    uiset.checktf(true);
+                    Hive.box('user_info').put('id', textcontroller.text);
+                    uiset.setloading(false);
+                    LoginApiProvider().updateTasks();
+                    Get.back();
+                    textcontroller.clear();
+                  }
+                },
+                child: Center(
+                  child: uiset.loading
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              '생성중',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: contentTextsize(),
+                                fontWeight: FontWeight.bold, // bold
+                              ),
+                            ),
+                          ],
+                        )
+                      : Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(
+                              child: Text(
+                                '변경',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTextsize(),
+                                    color: Colors.white),
+                              ),
+                            ),
+                          ],
+                        ),
+                )),
+          ),
+          uiset.isfilledtextfield == true
+              ? const SizedBox()
+              : Column(
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      '입력란이 비어있어요!',
+                      style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: contentsmallTextsize(),
+                          color: Colors.red),
+                      overflow: TextOverflow.fade,
+                    )
+                  ],
+                )
+        ],
+      );
+    },
+  );
+  return [title, content, btn];
 }
 
-Widgets_addpeople(context, controller, searchnode) {
+Widgets_settingpagedeleteuser(
+  context,
+  textcontroller,
+  searchnode,
+) {
+  Widget title;
+  Widget content;
+  Widget btn;
+
+  title = SizedBox(
+      height: 50,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: const [
+          Text(
+            '앱 내 데이터 삭제',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 25,
+              fontWeight: FontWeight.bold, // bold
+            ),
+          )
+        ],
+      ));
+  content = Column(
+    children: [
+      Text(
+        '데이터 삭제를 진행하겠습니까? '
+        '아래 버튼을 클릭하시면 기존알람들은 모두 초기화되며 삭제처리가 완료됩니다. '
+        '처리가 완료되기 전까지 뒤로 가기 버튼을 누르지 말아주세요!',
+        style: TextStyle(
+          color: Colors.red,
+          fontSize: contentTextsize(),
+          fontWeight: FontWeight.w600, // bold
+        ),
+      )
+    ],
+  );
+  btn = SizedBox(
+      width: MediaQuery.of(context).size.width - 40,
+      height: 40,
+      child: ElevatedButton(
+        onPressed: () async {
+          uiset.setloading(true);
+          await LoginApiProvider().deleteTasks();
+          await NotificationApi.cancelAll();
+          uiset.setloading(false);
+          GoToStartApp();
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.red,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+        ),
+        child: uiset.loading
+            ?
+            // ignore: dead_code
+            Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    '처리중',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: contentTextsize(),
+                      fontWeight: FontWeight.bold, // bold
+                    ),
+                  ),
+                ],
+              )
+            : Text(
+                '삭제',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: contentTextsize(),
+                  fontWeight: FontWeight.bold, // bold
+                ),
+              ),
+      ));
+  return [title, content, btn];
+}
+/*Widgets_addpeople(context, controller, searchnode) {
   Widget title;
   Widget content;
   final uiset = Get.put(uisetting());
@@ -439,4 +731,4 @@ getsearchuser(
           }
         });
   });
-}
+}*/

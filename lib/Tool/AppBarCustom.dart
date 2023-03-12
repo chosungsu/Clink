@@ -124,7 +124,10 @@ class AppBarCustom extends StatelessWidget {
                                     children: [
                                       GetBuilder<uisetting>(
                                           builder: (_) => GestureDetector(
-                                              onTap: () {},
+                                              onTap: () {
+                                                uiset.checkprofilepageindex(0);
+                                                Get.back();
+                                              },
                                               child: ContainerDesign(
                                                 color: draw.backgroundcolor,
                                                 child: Icon(
@@ -183,7 +186,7 @@ class AppBarCustom extends StatelessWidget {
                                                                 .backgroundcolor))
                                                     : const SizedBox()
                                                 : const SizedBox(),
-                                            uiset.pagenumber == 0 ||
+                                            /*uiset.pagenumber == 0 ||
                                                     uiset.pagenumber == 3
                                                 ? const SizedBox(
                                                     width: 10,
@@ -192,13 +195,13 @@ class AppBarCustom extends StatelessWidget {
                                                     ? const SizedBox(
                                                         width: 10,
                                                       )
-                                                    : const SizedBox()),
+                                                    : const SizedBox()),*/
                                             GestureDetector(
                                                 onTap: () {
                                                   OnClickedRightIcons(
                                                       context, righticonname);
                                                 },
-                                                child: Get.width < 600
+                                                child: Get.width < 1000
                                                     ? ContainerDesign(
                                                         color: draw
                                                             .backgroundcolor,
@@ -333,8 +336,8 @@ class AppBarCustom extends StatelessWidget {
             ? null
             : (righticonname == Icons.star_border || righticonname == Icons.star
                 ? func7()
-                : (righticonname == Icons.person_outline
-                    ? SPIconclick(context, textcontroller, searchnode)
+                : (righticonname == Ionicons.settings_outline
+                    ? GoToSettingPage()
                     : (righticonname == Icons.download
                         ? downloadFileExample(mainid, context)
                         : null))));
@@ -347,8 +350,8 @@ class AppBarCustom extends StatelessWidget {
             ? '옵션'
             : (righticonname == Icons.star_border || righticonname == Icons.star
                 ? '즐겨찾기'
-                : (righticonname == Icons.person_outline
-                    ? '계정'
+                : (righticonname == Ionicons.settings_outline
+                    ? '설정'
                     : (righticonname == Icons.download
                         ? ''
                         : (righticonname == Ionicons.ios_close ? '닫기' : '')))));
