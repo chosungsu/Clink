@@ -2,6 +2,7 @@
 
 import 'package:clickbyme/BACKENDPART/FIREBASE/SettingVP.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
+import 'package:clickbyme/main.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -25,9 +26,6 @@ class AppBarCustom extends StatelessWidget {
     required this.righticon,
     required this.righticonname,
     required this.doubleicon,
-    myindex,
-    indexcnt,
-    mainid,
     this.textcontroller,
     this.searchnode,
   }) : super(key: key);
@@ -60,7 +58,9 @@ class AppBarCustom extends StatelessWidget {
           builder: (_) => SafeArea(
               child: SizedBox(
                   height: 60,
-                  width: draw.navishow == true && Get.width > 1000
+                  width: draw.navishow == true &&
+                          Get.width > 1000 &&
+                          draw.settinginsidemap.containsKey(0) == true
                       ? Get.width - 120
                       : Get.width,
                   child: Padding(
@@ -74,7 +74,8 @@ class AppBarCustom extends StatelessWidget {
                             navinumlist.contains(uiset.pagenumber) &&
                                     draw.navi == 0 &&
                                     draw.navishow == false &&
-                                    Get.width > 1000
+                                    Get.width > 1000 &&
+                                    draw.settinginsidemap.containsKey(0) == true
                                 ? draw.drawopen == true ||
                                         Hive.box('user_setting')
                                                 .get('page_opened') ==
@@ -114,7 +115,8 @@ class AppBarCustom extends StatelessWidget {
                             navinumlist.contains(uiset.pagenumber) &&
                                     draw.navi == 0 &&
                                     draw.navishow == false &&
-                                    Get.width > 1000
+                                    Get.width > 1000 &&
+                                    draw.settinginsidemap.containsKey(0) == true
                                 ? const SizedBox(
                                     width: 10,
                                   )
@@ -125,7 +127,19 @@ class AppBarCustom extends StatelessWidget {
                                       GetBuilder<uisetting>(
                                           builder: (_) => GestureDetector(
                                               onTap: () {
-                                                uiset.checkprofilepageindex(0);
+                                                if (draw.settinginsidemap
+                                                        .containsKey(1) ==
+                                                    true) {
+                                                  draw.clicksettinginside(
+                                                      0, false);
+                                                } else if (draw.settinginsidemap
+                                                        .containsKey(2) ==
+                                                    true) {
+                                                  uiset
+                                                      .checkprofilepageindex(0);
+                                                  draw.clicksettinginside(
+                                                      1, true);
+                                                }
                                                 Get.back();
                                               },
                                               child: ContainerDesign(
@@ -271,7 +285,8 @@ class AppBarCustom extends StatelessWidget {
                             navinumlist.contains(uiset.pagenumber) &&
                                     draw.navi == 1 &&
                                     draw.navishow == false &&
-                                    Get.width > 1000
+                                    Get.width > 1000 &&
+                                    draw.settinginsidemap.containsKey(0) == true
                                 ? const SizedBox(
                                     width: 10,
                                   )
@@ -279,7 +294,8 @@ class AppBarCustom extends StatelessWidget {
                             navinumlist.contains(uiset.pagenumber) &&
                                     draw.navi == 1 &&
                                     draw.navishow == false &&
-                                    Get.width > 1000
+                                    Get.width > 1000 &&
+                                    draw.settinginsidemap.containsKey(0) == true
                                 ? draw.drawopen == true ||
                                         Hive.box('user_setting')
                                                 .get('page_opened') ==

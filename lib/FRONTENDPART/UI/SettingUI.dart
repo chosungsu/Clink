@@ -165,9 +165,9 @@ Opt_body(index, searchnode, controller) {
                           GoToSettingSubPage();
                         } else {
                           controller.clear();
-                          title = Widgets_personchange(
+                          title = Widgets_tocompany(
                               context, controller, searchnode)[0];
-                          content = Widgets_personchange(
+                          content = Widgets_tocompany(
                               context, controller, searchnode)[1];
                           AddContent(context, title, content, searchnode);
                         }
@@ -216,7 +216,7 @@ Opt_body(index, searchnode, controller) {
                                                       } else if (index2 == 2) {
                                                         draw.setnavi(0);
                                                       } else {
-                                                        draw.setclose();
+                                                        //draw.setclose();
                                                         draw.setmenushowing(
                                                             true);
                                                       }

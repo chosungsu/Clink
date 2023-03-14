@@ -431,7 +431,7 @@ content(
                               false;
                       if (reloadpage) {
                         setState(() {
-                          uisetting().setloading(true);
+                          uisetting().setloading(true, 1);
                         });
                         if (Hive.box('user_setting')
                                     .get('noti_calendar_click') ==
@@ -469,7 +469,7 @@ content(
                               .delete();
                         }
                         setState(() {
-                          uisetting().setloading(false);
+                          uisetting().setloading(false, 1);
                           CreateCalandmemoSuccessFlushbar('삭제 완료!', fToast);
                           Snack.isopensnacks();
                         });
@@ -555,7 +555,7 @@ content(
                       ),
                       onPressed: () async {
                         setState(() {
-                          uisetting().setloading(true);
+                          uisetting().setloading(true, 1);
                         });
 
                         await firestore
@@ -598,7 +598,7 @@ content(
                             'color': _color.value.toInt(),
                           });*/
                         setState(() {
-                          uisetting().setloading(false);
+                          uisetting().setloading(false, 1);
                           CreateCalandmemoSuccessFlushbar('수정 완료!', fToast);
                           Snack.isopensnacks();
                         });

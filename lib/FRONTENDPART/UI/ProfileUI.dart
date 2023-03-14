@@ -139,6 +139,7 @@ UserBoard(controller, searchnode) {
                             GestureDetector(
                                 onTap: () {
                                   controller.clear();
+                                  uiset.changeavailable(true);
                                   title = Widgets_personchange(
                                       context, controller, searchnode)[0];
                                   content = Widgets_personchange(
@@ -157,11 +158,11 @@ UserBoard(controller, searchnode) {
                           height: 20,
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Flexible(
                                 flex: 1,
-                                child: Row(
+                                child: Column(
                                   children: [
                                     Text(
                                       'userpeedone'.tr,
@@ -172,7 +173,7 @@ UserBoard(controller, searchnode) {
                                           color: draw.color_textstatus),
                                     ),
                                     const SizedBox(
-                                      width: 5,
+                                      height: 5,
                                     ),
                                     Text(
                                       '10',
@@ -186,7 +187,7 @@ UserBoard(controller, searchnode) {
                                 )),
                             Flexible(
                                 flex: 1,
-                                child: Row(
+                                child: Column(
                                   children: [
                                     Text(
                                       'userpeedtwo'.tr,
@@ -197,7 +198,7 @@ UserBoard(controller, searchnode) {
                                           color: draw.color_textstatus),
                                     ),
                                     const SizedBox(
-                                      width: 5,
+                                      height: 5,
                                     ),
                                     Text(
                                       '3',

@@ -591,7 +591,7 @@ void autodeletelogic(
       ), pressed2)) ??
       false;
   if (reloadpage) {
-    uisetting().setloading(true);
+    uisetting().setloading(true, 0);
     Hive.box('user_setting').put('alarm_memo_${docname}', false);
     controll_memo.setalarmmemo(docname, doc);
     _deleteFile(doc);
@@ -639,7 +639,7 @@ void autodeletelogic(
         firestore.collection('MemoDataBase').doc(deleteid[i]).delete();
       }
     }).whenComplete(() {
-      uisetting().setloading(false);
+      uisetting().setloading(false, 0);
       CreateCalandmemoSuccessFlushbar('메모삭제 완료!', fToast);
       isfromwhere == 'home' ? GoToMain() : Get.back();
     });
@@ -679,7 +679,7 @@ void autosavelogic(
     //제목이 같은 경우
   }
   if (text.isNotEmpty) {
-    uisetting().setloading(true);
+    uisetting().setloading(true, 0);
     firestore.collection('AppNoticeByUsers').add({
       'title': '[' + text + '] 메모가 변경되었습니다.',
       'date': DateFormat('yyyy-MM-dd hh:mm')
@@ -742,7 +742,7 @@ void autosavelogic(
     ).whenComplete(() {
       CreateCalandmemoSuccessFlushbar('저장완료', fToast);
       Future.delayed(const Duration(seconds: 1), () {
-        uisetting().setloading(false);
+        uisetting().setloading(false, 0);
         if (isfromwhere == 'home') {
           GoToMain();
         } else {

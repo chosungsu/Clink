@@ -292,21 +292,28 @@ Widgets_settingpagenickchange(
                   backgroundColor: ButtonColor(),
                 ),
                 onPressed: () async {
-                  uiset.setloading(true);
+                  uiset.setloading(true, 1);
                   if (textcontroller.text.isEmpty) {
                     uiset.checktf(false);
-                    uiset.setloading(false);
+                    uiset.setloading(false, 1);
                   } else {
-                    uiset.checktf(true);
-                    Hive.box('user_info').put('id', textcontroller.text);
-                    uiset.setloading(false);
-                    LoginApiProvider().updateTasks();
-                    Get.back();
-                    textcontroller.clear();
+                    var returndata = await LoginApiProvider().getTasks();
+                    if (returndata.toString().contains(textcontroller.text)) {
+                      uiset.checktf(true);
+                      uiset.changeavailable(false);
+                    } else {
+                      uiset.checktf(true);
+                      uiset.changeavailable(true);
+                      Hive.box('user_info').put('id', textcontroller.text);
+                      LoginApiProvider().updateTasks();
+                      Get.back();
+                      textcontroller.clear();
+                    }
+                    uiset.setloading(false, 1);
                   }
                 },
                 child: Center(
-                  child: uiset.loading
+                  child: uiset.sheetloading
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -344,7 +351,23 @@ Widgets_settingpagenickchange(
                 )),
           ),
           uiset.isfilledtextfield == true
-              ? const SizedBox()
+              ? (uiset.canchange == true
+                  ? const SizedBox()
+                  : Column(
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          '해당 닉네임은 이미 사용중입니다.',
+                          style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontSize: contentsmallTextsize(),
+                              color: Colors.red),
+                          overflow: TextOverflow.fade,
+                        )
+                      ],
+                    ))
               : Column(
                   children: [
                     const SizedBox(
@@ -410,10 +433,10 @@ Widgets_settingpagedeleteuser(
       height: 40,
       child: ElevatedButton(
         onPressed: () async {
-          uiset.setloading(true);
+          uiset.setloading(true, 1);
           await LoginApiProvider().deleteTasks();
           await NotificationApi.cancelAll();
-          uiset.setloading(false);
+          uiset.setloading(false, 1);
           GoToStartApp();
         },
         style: ElevatedButton.styleFrom(

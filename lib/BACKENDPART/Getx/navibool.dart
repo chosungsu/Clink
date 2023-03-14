@@ -8,6 +8,7 @@ import 'package:status_bar_control/status_bar_control.dart';
 import '../../Tool/MyTheme.dart';
 
 class navibool extends GetxController {
+  Map settinginsidemap = {};
   bool drawopen = Hive.box('user_setting').get('page_opened') ?? false;
   int currentpage = 1;
   double xoffset = 0;
@@ -30,6 +31,12 @@ class navibool extends GetxController {
 
   void setpagecurrent(int what) {
     currentpage = what;
+    update();
+    notifyChildrens();
+  }
+
+  void clicksettinginside(int integer, bool what) {
+    settinginsidemap = {integer: what};
     update();
     notifyChildrens();
   }

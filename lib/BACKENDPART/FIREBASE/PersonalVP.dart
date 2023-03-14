@@ -64,12 +64,12 @@ PageViewRes1_2(
   var insertlist;
   int changei = 0;
   String docid = '';
-  uiset.setloading(true);
+  uiset.setloading(true, 0);
   await firestore
       .collection('PageView')
       .doc(id)
       .update({'canshow': changeset}).whenComplete(() {
-    uiset.setloading(false);
+    uiset.setloading(false, 0);
   });
 }
 
@@ -499,7 +499,7 @@ Widgets_editpageconsole(
               ), pressed2)) ??
               false;
           if (reloadpage) {
-            uiset.setloading(true);
+            uiset.setloading(true, 0);
 
             var id = '';
             await firestore.collection('Pinchannel').get().then((value) {
@@ -532,7 +532,7 @@ Widgets_editpageconsole(
                     }
                   }
                 }).whenComplete(() {
-                  uiset.setloading(false);
+                  uiset.setloading(false, 0);
                   SaveNoti('page', uiset.pagelist[index].title, '',
                       delete: true);
                   Get.back();
@@ -865,7 +865,7 @@ Widgets_horizontalbtn(
                 ), pressed2)) ??
                 false;
             if (reloadpage) {
-              uiset.setloading(true);
+              uiset.setloading(true, 0);
 
               var boxparentid;
               await firestore
@@ -915,7 +915,7 @@ Widgets_horizontalbtn(
                     }
                   }).whenComplete(() {
                     SaveNoti('box', placestr, '', delete: true);
-                    uiset.setloading(false);
+                    uiset.setloading(false, 0);
                     Get.back();
                   });
                 });
@@ -1060,7 +1060,7 @@ Widgets_horizontalbtnsecond(
                 ), pressed2)) ??
                 false;
             if (reloadpage) {
-              uiset.setloading(true);
+              uiset.setloading(true, 0);
               var changeindex;
 
               await firestore.collection('Pinchannelin').get().then((value) {
@@ -1099,7 +1099,7 @@ Widgets_horizontalbtnsecond(
                       title: '삭제완료!',
                       backgroundcolor: Colors.red,
                       bordercolor: draw.backgroundcolor);
-                  uiset.setloading(false);
+                  uiset.setloading(false, 0);
                   SaveNoti('box', placestr, '', delete: true);
                   Get.back();
                 });
@@ -1137,7 +1137,7 @@ SummitEditpage(context, controller, updatelist, prevtitle) async {
   } else {
     updatelist.clear();
     var id = '';
-    uiset.setloading(true);
+    uiset.setloading(true, 0);
 
     await firestore.collection('Pinchannel').get().then((value) {
       for (int i = 0; i < value.docs.length; i++) {
@@ -1168,7 +1168,7 @@ SummitEditpage(context, controller, updatelist, prevtitle) async {
             title: '정상적으로 처리되었어요',
             backgroundcolor: Colors.green,
             bordercolor: draw.backgroundcolor);
-        uiset.setloading(false);
+        uiset.setloading(false, 0);
         SaveNoti('page', prevtitle, controller.text);
         Get.back();
         uiset.setuserspace(init: false);
@@ -1199,7 +1199,7 @@ SummitEditBox(
         backgroundcolor: Colors.red,
         bordercolor: draw.backgroundcolor);
   } else {
-    uiset.setloading(true);
+    uiset.setloading(true, 0);
     if (where == 'editnametemplate') {
       firestore.collection('PageView').doc(id).update(
           {'spacename': textEditingControllerAddSheet.text}).whenComplete(() {
@@ -1208,7 +1208,7 @@ SummitEditBox(
             title: '정상적으로 처리되었어요',
             backgroundcolor: Colors.green,
             bordercolor: draw.backgroundcolor);
-        uiset.setloading(false);
+        uiset.setloading(false, 0);
         linkspaceset.setspacelink(textEditingControllerAddSheet.text);
       }).whenComplete(() async {
         SaveNoti('box', prevtitle, textEditingControllerAddSheet.text);
@@ -1234,7 +1234,7 @@ SummitEditBox(
             title: '정상적으로 처리되었어요',
             backgroundcolor: Colors.green,
             bordercolor: draw.backgroundcolor);
-        uiset.setloading(false);
+        uiset.setloading(false, 0);
         linkspaceset.setspacelink(textEditingControllerAddSheet.text);
         SaveNoti('box', prevtitle, textEditingControllerAddSheet.text);
         Get.back();

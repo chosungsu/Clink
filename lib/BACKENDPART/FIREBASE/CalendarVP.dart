@@ -18,7 +18,7 @@ void savecalendarsandmemo(context, texteditingcontrollerlist, position, id) {
   final controllMemo = Get.put(memosetting());
   String code = '';
 
-  uiset.setloading(true);
+  uiset.setloading(true, 0);
   var firsttxt = '0' +
       texteditingcontrollerlist[1].text +
       ' - 0' +
@@ -104,7 +104,7 @@ void savecalendarsandmemo(context, texteditingcontrollerlist, position, id) {
                       : '예정된 시각 : ' + forthtxt),
             );
           }
-          uiset.setloading(false);
+          uiset.setloading(false, 0);
           Snack.snackbars(
               context: context,
               title: '저장완료함',
@@ -364,7 +364,7 @@ void savecalendarsandmemo(context, texteditingcontrollerlist, position, id) {
                     .split(' ')[0] +
                 '일',
           });
-          uiset.setloading(false);
+          uiset.setloading(false, 0);
           Snack.snackbars(
               context: context,
               title: '저장완료함',
@@ -648,7 +648,7 @@ void savecalendarsandmemo(context, texteditingcontrollerlist, position, id) {
                   .split(' ')[0] +
               '일',
         }, SetOptions(merge: true)).whenComplete(() {
-          uiset.setloading(false);
+          uiset.setloading(false, 0);
           Snack.snackbars(
               context: context,
               title: '저장완료함',
@@ -661,7 +661,7 @@ void savecalendarsandmemo(context, texteditingcontrollerlist, position, id) {
       });
     }
   } else {
-    uiset.setloading(false);
+    uiset.setloading(false, 0);
     Snack.snackbars(
         context: context,
         title: '제목이 비어있어요!',

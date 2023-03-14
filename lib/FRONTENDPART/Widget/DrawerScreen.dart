@@ -96,41 +96,21 @@ View(BuildContext context, List<Map> drawerItems) {
                                 }
                                 //Get.to(() => const mainroute(), transition: Transition.fade);
                               },
-                              child: Column(
-                                children: [
-                                  Icon(
-                                    element['icon'],
-                                    color: drawerItems.indexOf(element) ==
-                                            uiset.pagenumber
-                                        ? MyTheme.colorpastelpurple
-                                        : draw.color_textstatus,
-                                  ),
-                                ],
+                              child: Container(
+                                margin: const EdgeInsets.only(
+                                    bottom: 10, top: 10, left: 10, right: 10),
+                                child: Icon(
+                                  element['icon'],
+                                  color: drawerItems.indexOf(element) ==
+                                          uiset.pagenumber
+                                      ? MyTheme.colorpastelpurple
+                                      : draw.color_textstatus,
+                                ),
                               ),
                             )));
                   }).toList(),
                 ),
               )),
             ),
-            GetBuilder<PeopleAdd>(builder: (_) {
-              return InkWell(
-                  onTap: () {
-                    peopleadd.setpro();
-                  },
-                  child: SizedBox(
-                      width: 50,
-                      child: ContainerDesign(
-                          color: draw.backgroundcolor,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: const [
-                              Icon(
-                                Feather.shopping_cart,
-                                color: Colors.blue,
-                              ),
-                            ],
-                          ))));
-            })
           ]));
 }

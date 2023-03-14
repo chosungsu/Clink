@@ -926,13 +926,13 @@ class MemodrawerState extends State<Memodrawer> with WidgetsBindingObserver {
                           final image = await imagePicker.pickImage(
                               source: ImageSource.camera);
                           setState(() {
-                            uisetting().setloading(true);
+                            uisetting().setloading(true, 0);
                             _uploadFile(
                               context,
                               File(image!.path),
                               widget.doc,
                             );
-                            uisetting().setloading(false);
+                            uisetting().setloading(false, 0);
                           });
                         },
                         child: ListTile(
@@ -954,9 +954,9 @@ class MemodrawerState extends State<Memodrawer> with WidgetsBindingObserver {
                           final image = await imagePicker.pickImage(
                               source: ImageSource.gallery);
                           setState(() {
-                            uisetting().setloading(true);
+                            uisetting().setloading(true, 0);
                             _uploadFile(context, File(image!.path), widget.doc);
-                            uisetting().setloading(false);
+                            uisetting().setloading(false, 0);
                           });
                         },
                         child: ListTile(

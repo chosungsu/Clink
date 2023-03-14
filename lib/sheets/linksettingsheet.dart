@@ -680,7 +680,7 @@ contentforth(
                 primary: ButtonColor(),
               ),
               onPressed: () async {
-                uiset.setloading(true);
+                uiset.setloading(true, 1);
                 if (controller.text.isEmpty) {
                   Snack.snackbars(
                       context: context,
@@ -716,7 +716,7 @@ contentforth(
                     }
                   });
                 }
-                uiset.setloading(false);
+                uiset.setloading(false, 1);
                 Get.back();
               },
               child: Center(
@@ -919,9 +919,9 @@ contentaddaction(
                         allowMultiple: true,
                         onFileLoading: (status) {
                           if (status == FilePickerStatus.done) {
-                            uiset.setloading(false);
+                            uiset.setloading(false, 1);
                           } else {
-                            uiset.setloading(true);
+                            uiset.setloading(true, 1);
                           }
                         },
                         lockParentWindow: true);

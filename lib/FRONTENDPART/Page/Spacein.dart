@@ -69,6 +69,7 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
   @override
   void dispose() {
     super.dispose();
+    Hive.box('user_setting').put('widgetid', '');
     scrollController.dispose();
   }
 
@@ -213,7 +214,6 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
                                         righticon: true,
                                         doubleicon: false,
                                         righticonname: Icons.download,
-                                        mainid: widget.id,
                                       ),
                                     )
                                   : GetBuilder<uisetting>(
@@ -224,7 +224,6 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
                                         righticon: false,
                                         doubleicon: false,
                                         righticonname: Icons.download,
-                                        mainid: widget.id,
                                       ),
                                     )),
                           isinit == true

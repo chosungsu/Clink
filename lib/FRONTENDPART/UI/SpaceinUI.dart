@@ -125,7 +125,7 @@ DefaultUI(id, type) {
                                     'viewsetting': 0,
                                     'share': []
                                   }).whenComplete(() {
-                                    uiset.setloading(false);
+                                    uiset.setloading(false, 0);
                                   });
                                 });
                               },

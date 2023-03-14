@@ -89,14 +89,13 @@ class LoginApiProvider extends GetxController {
     notifyChildrens();
   }
 
-  getTasks(String searchcode) async {
+  getTasks() async {
     try {
-      var url = '$baseurl/users/$searchcode/';
+      var url = '$baseurl/users/';
       var response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
-        Hive.box('user_setting').put('usercode', data['code']);
-        Hive.box('user_info').put('id', data['nick']);
+        return data;
       } else {}
     } catch (e) {
       print(e);

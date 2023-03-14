@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../Tool/AppBarCustom.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
+import '../../Tool/BGColor.dart';
 import '../../Tool/NoBehavior.dart';
 import '../UI/MYPageUI.dart';
 import '../Widget/BottomScreen.dart';
@@ -55,7 +56,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
     return SafeArea(child: OrientationBuilder(
       builder: (context, orientation) {
         return Scaffold(
-            backgroundColor: draw.backgroundcolor,
+            backgroundColor: BGColor(),
             bottomNavigationBar: uiset.loading
                 ? const SizedBox()
                 : (Get.width < 1000 ? const BottomScreen() : const SizedBox()),

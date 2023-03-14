@@ -286,7 +286,7 @@ clickbtn1(context, textcontroller, where, id, categorynumber) {
   if (textcontroller.text.isEmpty) {
     uiset.checktf(false);
   } else {
-    uiset.setloading(true);
+    uiset.setloading(true, 1);
     firestore.collection('Pinchannel').add({
       'username': usercode,
       'linkname': textcontroller.text,
@@ -298,7 +298,7 @@ clickbtn1(context, textcontroller, where, id, categorynumber) {
           title: '정상적으로 처리되었어요',
           backgroundcolor: Colors.green,
           bordercolor: draw.backgroundcolor);
-      uiset.setloading(false);
+      uiset.setloading(false, 1);
       linkspaceset.setspacelink(textcontroller.text);
       SaveNoti('page', textcontroller.text, '', add: true);
       Get.back();
@@ -312,7 +312,7 @@ clickbtn2(context, textcontroller, checkid) {
   if (textcontroller.text == '') {
     uiset.checktf(false);
   } else {
-    uiset.setloading(true);
+    uiset.setloading(true, 1);
     firestore.collection('PageView').add({
       'id': checkid,
       'spacename': textcontroller.text,
@@ -326,7 +326,7 @@ clickbtn2(context, textcontroller, checkid) {
           title: '정상적으로 처리되었어요',
           backgroundcolor: Colors.green,
           bordercolor: draw.backgroundcolor);
-      uiset.setloading(false);
+      uiset.setloading(false, 1);
       linkspaceset.setspacelink(textcontroller.text);
       SaveNoti('box', uiset.pagelist[uiset.mypagelistindex].title,
           textcontroller.text,

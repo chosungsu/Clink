@@ -497,7 +497,7 @@ content(
                                     child: InkWell(
                                       onTap: () {
                                         setState(() {
-                                          uiset.setloading(true);
+                                          uiset.setloading(true, 1);
                                           if (doc_title != '') {
                                             if (controll_memo.hour1
                                                         .toString() ==
@@ -505,7 +505,7 @@ content(
                                                 controll_memo.minute1
                                                         .toString() ==
                                                     '99') {
-                                              uiset.setloading(false);
+                                              uiset.setloading(false, 1);
                                               CreateCalandmemoSuccessFlushbar(
                                                   '시간 설정안됨!', fToast);
                                             } else {
@@ -533,7 +533,7 @@ content(
                                                           controll_memo.minute2,
                                                           '',
                                                           '');
-                                              uiset.setloading(false);
+                                              uiset.setloading(false, 1);
                                               CreateCalandmemoSuccessFlushbar(
                                                   '설정 완료!', fToast);
                                               Snack.isopensnacks();
@@ -545,7 +545,7 @@ content(
                                                 controll_memo.minute2
                                                         .toString() ==
                                                     '99') {
-                                              uiset.setloading(false);
+                                              uiset.setloading(false, 1);
                                               CreateCalandmemoSuccessFlushbar(
                                                   '시간 설정안됨!', fToast);
                                             } else {
@@ -573,7 +573,7 @@ content(
                                                           controll_memo.minute2,
                                                           '',
                                                           '');
-                                              uiset.setloading(false);
+                                              uiset.setloading(false, 1);
                                               CreateCalandmemoSuccessFlushbar(
                                                   '설정 완료!', fToast);
                                               Snack.isopensnacks();
@@ -627,7 +627,7 @@ content(
                                       child: InkWell(
                                         onTap: () {
                                           setState(() {
-                                            uiset.setloading(true);
+                                            uiset.setloading(true, 1);
                                           });
                                           doc_title != ''
                                               ? Hive.box('user_setting').put(
@@ -638,7 +638,7 @@ content(
                                           controll_memo.setalarmmemo(
                                               doc_title, id);
                                           setState(() {
-                                            uiset.setloading(false);
+                                            uiset.setloading(false, 1);
                                             CreateCalandmemoSuccessFlushbar(
                                                 '해제 완료!', fToast);
                                             Snack.isopensnacks();

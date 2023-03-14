@@ -111,7 +111,8 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
     checkForInitialMessage();
-    uiset.setloading(true);
+    uiset.setloading(true, 0);
+    draw.clicksettinginside(0, false);
     uiset.searchpagemove = '';
     uiset.textrecognizer = '';
     initScreen();

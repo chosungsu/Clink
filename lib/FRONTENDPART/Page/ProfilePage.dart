@@ -79,57 +79,68 @@ class _ProfilePageState extends State<ProfilePage>
                   width: Get.width,
                   child: Container(
                       color: draw.backgroundcolor,
-                      child: Row(
-                        children: [
-                          draw.navi == 0 &&
-                                  draw.navishow == true &&
-                                  Get.width > 1000
-                              ? innertype()
-                              : const SizedBox(),
-                          Column(
+                      child: GetBuilder<navibool>(
+                        builder: (_) {
+                          return Row(
                             children: [
-                              GetBuilder<uisetting>(builder: (_) {
-                                return AppBarCustom(
-                                  title: '',
-                                  lefticon: false,
-                                  lefticonname: Icons.add,
-                                  righticon: true,
-                                  doubleicon: false,
-                                  righticonname: Ionicons.settings_outline,
-                                );
-                              }),
-                              Flexible(
-                                fit: FlexFit.tight,
-                                child: SizedBox(
-                                  width:
-                                      draw.navishow == true && Get.width > 1000
+                              draw.navi == 0 &&
+                                      draw.navishow == true &&
+                                      Get.width > 1000
+                                  ? (draw.settinginsidemap.containsKey(0) ==
+                                          false
+                                      ? const SizedBox()
+                                      : innertype())
+                                  : const SizedBox(),
+                              Column(
+                                children: [
+                                  GetBuilder<uisetting>(builder: (_) {
+                                    return AppBarCustom(
+                                      title: '',
+                                      lefticon: false,
+                                      lefticonname: Icons.add,
+                                      righticon: true,
+                                      doubleicon: false,
+                                      righticonname: Ionicons.settings_outline,
+                                    );
+                                  }),
+                                  Flexible(
+                                    fit: FlexFit.tight,
+                                    child: SizedBox(
+                                      width: draw.navishow == true &&
+                                              Get.width > 1000
                                           ? Get.width - 120
                                           : Get.width,
-                                  child: ScrollConfiguration(
-                                      behavior: NoBehavior(),
-                                      child: LayoutBuilder(
-                                        builder: ((context, constraint) {
-                                          return UI(
-                                              _controller,
-                                              searchNode,
-                                              scrollController,
-                                              draw.navishow == true &&
-                                                      Get.width > 1000
-                                                  ? constraint.maxWidth - 120
-                                                  : constraint.maxWidth,
-                                              constraint.maxHeight);
-                                        }),
-                                      )),
-                                ),
+                                      child: ScrollConfiguration(
+                                          behavior: NoBehavior(),
+                                          child: LayoutBuilder(
+                                            builder: ((context, constraint) {
+                                              return UI(
+                                                  _controller,
+                                                  searchNode,
+                                                  scrollController,
+                                                  draw.navishow == true &&
+                                                          Get.width > 1000
+                                                      ? constraint.maxWidth -
+                                                          120
+                                                      : constraint.maxWidth,
+                                                  constraint.maxHeight);
+                                            }),
+                                          )),
+                                    ),
+                                  ),
+                                ],
                               ),
+                              draw.navi == 1 &&
+                                      draw.navishow == true &&
+                                      Get.width > 1000
+                                  ? (draw.settinginsidemap.containsKey(0) ==
+                                          false
+                                      ? const SizedBox()
+                                      : innertype())
+                                  : const SizedBox(),
                             ],
-                          ),
-                          draw.navi == 1 &&
-                                  draw.navishow == true &&
-                                  Get.width > 1000
-                              ? innertype()
-                              : const SizedBox(),
-                        ],
+                          );
+                        },
                       )),
                 ),
               ),

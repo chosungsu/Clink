@@ -50,12 +50,10 @@ View(BuildContext context, List<Map> drawerItems) {
   return Container(
     padding: const EdgeInsets.only(bottom: 5, top: 5, left: 5, right: 5),
     child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: drawerItems.map((element) {
         return GetBuilder<navibool>(
-            builder: (_) => Padding(
-                padding: const EdgeInsets.only(top: 15, bottom: 15),
-                child: InkWell(
+            builder: (_) => InkWell(
                   onTap: () {
                     if (element.containsValue(SimpleLineIcons.home)) {
                       draw.setclose();
@@ -80,13 +78,17 @@ View(BuildContext context, List<Map> drawerItems) {
                     }
                     //Get.to(() => const mainroute(), transition: Transition.fade);
                   },
-                  child: Icon(
-                    element['icon'],
-                    color: drawerItems.indexOf(element) == uiset.pagenumber
-                        ? MyTheme.colorpastelpurple
-                        : draw.color_textstatus,
+                  child: Container(
+                    margin: const EdgeInsets.only(
+                        bottom: 10, top: 10, left: 10, right: 10),
+                    child: Icon(
+                      element['icon'],
+                      color: drawerItems.indexOf(element) == uiset.pagenumber
+                          ? MyTheme.colorpastelpurple
+                          : draw.color_textstatus,
+                    ),
                   ),
-                )));
+                ));
       }).toList(),
     ),
   );

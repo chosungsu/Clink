@@ -5,12 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import '../Api/LoginApi.dart';
 import '../Enums/PageList.dart';
 import '../Enums/Variables.dart';
 
 class uisetting extends GetxController {
   bool loading = false;
+  bool sheetloading = false;
+  bool canchange = true;
   bool isfilledtextfield = true;
   int profileindex = 0;
   List profilescreen = [];
@@ -33,8 +34,22 @@ class uisetting extends GetxController {
   ///setloading
   ///
   ///모든 UI상에서 로딩중인지를 판단하는 데에 사용된다.
-  void setloading(bool what) {
-    loading = what;
+  void setloading(bool what, int i) {
+    if (i == 0) {
+      loading = what;
+    } else {
+      sheetloading = what;
+    }
+
+    update();
+    notifyChildrens();
+  }
+
+  ///changeavailable
+  ///
+  ///변경 가능 시 아래에 띄워준다.
+  void changeavailable(bool what) {
+    canchange = what;
     update();
     notifyChildrens();
   }

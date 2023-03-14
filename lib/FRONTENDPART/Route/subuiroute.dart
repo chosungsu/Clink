@@ -51,12 +51,25 @@ void checkForInitialMessage() async {
 
 Future<bool> onWillPop(context) async {
   final uiset = Get.put(uisetting());
+  final draw = Get.put(navibool());
   final searchNode = FocusNode();
+  List<int> navinumlist = [0, 1, 2, 3];
   uiset.setmypagelistindex(Hive.box('user_setting').get('currentmypage') ?? 0);
   if (draw.drawopen == true) {
     draw.setclose();
   } else if (uiset.profileindex != 0) {
     uiset.checkprofilepageindex(0);
+    if (draw.settinginsidemap.containsKey(2) == true) {
+      draw.clicksettinginside(1, true);
+    }
+    Get.back();
+  } else if (draw.settinginsidemap.containsKey(1) == true ||
+      draw.settinginsidemap.containsKey(2) == true) {
+    if (draw.settinginsidemap.containsKey(1) == true) {
+      draw.clicksettinginside(0, false);
+    } else if (draw.settinginsidemap.containsKey(2) == true) {
+      draw.clicksettinginside(1, true);
+    }
     Get.back();
   } else if (uiset.searchpagemove != '') {
     uiset.searchpagemove = '';
@@ -93,8 +106,10 @@ void pressed2() {
 }
 
 GoToMain() {
+  final uiset = Get.put(uisetting());
   Hive.box('user_setting').put('currentmypage', 0);
-  //Get.offAll(() => const mainroute(), transition: Transition.fade);
+  uiset.setpageindex(uiset.pagenumber);
+  Get.back();
 }
 
 GoToStartApp() {
@@ -102,10 +117,15 @@ GoToStartApp() {
 }
 
 GoToSettingPage() async {
+  final draw = Get.put(navibool());
+  draw.setclose();
+  draw.clicksettinginside(1, true);
   Get.to(() => const SettingPage(), transition: Transition.fade);
 }
 
 GoToSettingSubPage() async {
+  final draw = Get.put(navibool());
+  draw.clicksettinginside(2, true);
   Get.to(() => const SettingSubPage(), transition: Transition.fade);
 }
 
@@ -402,7 +422,7 @@ func7() async {
         Hive.box('user_setting').put('currenteditpage', null);
       }
     }
-    uiset.setloading(false);
+    uiset.setloading(false, 0);
   });
 }
 
@@ -472,7 +492,7 @@ uploadfiles(String mainid) async {
   var snapshot;
   final urllist = [];
 
-  uiset.setloading(true);
+  uiset.setloading(true, 0);
   for (int i = 0; i < linkspaceset.selectedfile!.length; i++) {
     ref = FirebaseStorage.instance
         .ref()
@@ -494,7 +514,7 @@ uploadfiles(String mainid) async {
     }
     await firestore.collection('Pinchannelin').doc(mainid).update(
         {'spaceentercontent': linkspaceset.changeurllist}).whenComplete(() {
-      uiset.setloading(false);
+      uiset.setloading(false, 0);
     });
   });
   Get.back();
@@ -597,7 +617,7 @@ Future<void> deleteFileExample(String mainid, BuildContext context) async {
       }
       await firestore.collection('Pinchannelin').doc(mainid).update(
           {'spaceentercontent': linkspaceset.changeurllist}).whenComplete(() {
-        uiset.setloading(false);
+        uiset.setloading(false, 0);
         Snack.snackbars(
             context: context,
             title: '삭제가 완료됨.',

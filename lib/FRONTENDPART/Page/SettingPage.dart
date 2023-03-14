@@ -9,6 +9,7 @@ import '../../BACKENDPART/Getx/navibool.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../Tool/NoBehavior.dart';
 import '../../Tool/AppBarCustom.dart';
+import '../Route/subuiroute.dart';
 import '../UI/SettingUI.dart';
 import '../Widget/buildTypeWidget.dart';
 
@@ -46,8 +47,10 @@ class _SettingPageState extends State<SettingPage>
       builder: (context, orientation) {
         return Scaffold(
             backgroundColor: BGColor(),
-            body: GetBuilder<navibool>(
-                builder: (_) => buildtypewidget(context, Body())));
+            body: WillPopScope(
+                onWillPop: () => onWillPop(context),
+                child: GetBuilder<navibool>(
+                    builder: (_) => buildtypewidget(context, Body()))));
       },
     ));
   }
@@ -94,10 +97,7 @@ class _SettingPageState extends State<SettingPage>
                               Flexible(
                                 fit: FlexFit.tight,
                                 child: SizedBox(
-                                  width:
-                                      draw.navishow == true && Get.width > 1000
-                                          ? Get.width - 120
-                                          : Get.width,
+                                  width: Get.width,
                                   child: ScrollConfiguration(
                                       behavior: NoBehavior(),
                                       child: LayoutBuilder(
@@ -106,10 +106,7 @@ class _SettingPageState extends State<SettingPage>
                                               _controller,
                                               searchNode,
                                               scrollController,
-                                              draw.navishow == true &&
-                                                      Get.width > 1000
-                                                  ? constraint.maxWidth - 120
-                                                  : constraint.maxWidth,
+                                              constraint.maxWidth,
                                               constraint.maxHeight);
                                         }),
                                       )),
