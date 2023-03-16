@@ -3,7 +3,6 @@
 import 'package:clickbyme/FRONTENDPART/Route/subuiroute.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import '../../BACKENDPART/Enums/Variables.dart';
@@ -18,7 +17,7 @@ import '../../BACKENDPART/Getx/navibool.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 import 'DayContentHome.dart';
 
-SpaceinUI(
+/*SpaceinUI(
   String id,
   int type,
   bool isinit,
@@ -399,4 +398,4 @@ DefaultUI(id, type) {
       },
     );
   }));
-}
+}*/

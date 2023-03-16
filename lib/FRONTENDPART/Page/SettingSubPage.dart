@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:clickbyme/FRONTENDPART/Widget/responsiveWidget.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -9,9 +10,9 @@ import '../../BACKENDPART/Getx/navibool.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../Tool/NoBehavior.dart';
 import '../../Tool/AppBarCustom.dart';
+import '../../Tool/TextSize.dart';
 import '../Route/subuiroute.dart';
 import '../UI/SettingSubUI.dart';
-import '../Widget/buildTypeWidget.dart';
 
 class SettingSubPage extends StatefulWidget {
   const SettingSubPage({Key? key}) : super(key: key);
@@ -21,7 +22,6 @@ class SettingSubPage extends StatefulWidget {
 
 class _SettingSubPageState extends State<SettingSubPage>
     with TickerProviderStateMixin {
-  ScrollController scrollController = ScrollController();
   final searchNode = FocusNode();
   final draw = Get.put(navibool());
   final uiset = Get.put(uisetting());
@@ -34,7 +34,6 @@ class _SettingSubPageState extends State<SettingSubPage>
   @override
   void dispose() {
     super.dispose();
-    scrollController.dispose();
   }
 
   @override
@@ -45,8 +44,7 @@ class _SettingSubPageState extends State<SettingSubPage>
             backgroundColor: BGColor(),
             body: WillPopScope(
                 onWillPop: () => onWillPop(context),
-                child: GetBuilder<navibool>(
-                    builder: (_) => buildtypewidget(context, Body()))));
+                child: GetBuilder<navibool>(builder: (_) => Body())));
       },
     ));
   }
@@ -80,7 +78,16 @@ class _SettingSubPageState extends State<SettingSubPage>
                             children: [
                               GetBuilder<uisetting>(builder: (_) {
                                 return AppBarCustom(
-                                  title: '',
+                                  title: Text(
+                                    '',
+                                    maxLines: 1,
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: mainTitleTextsize(),
+                                        color: draw.color_textstatus),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                   lefticon: true,
                                   lefticonname: MaterialIcons.chevron_left,
                                   righticon: false,
@@ -90,25 +97,18 @@ class _SettingSubPageState extends State<SettingSubPage>
                               }),
                               Flexible(
                                 fit: FlexFit.tight,
-                                child: SizedBox(
-                                  width:
-                                      draw.navishow == true && Get.width > 1000
-                                          ? Get.width - 120
-                                          : Get.width,
-                                  child: ScrollConfiguration(
-                                      behavior: NoBehavior(),
-                                      child: LayoutBuilder(
-                                        builder: ((context, constraint) {
-                                          return UI(
-                                              scrollController,
-                                              draw.navishow == true &&
-                                                      Get.width > 1000
-                                                  ? constraint.maxWidth - 120
-                                                  : constraint.maxWidth,
-                                              constraint.maxHeight);
-                                        }),
-                                      )),
-                                ),
+                                child: responsivewidget(
+                                    SizedBox(
+                                      child: ScrollConfiguration(
+                                          behavior: NoBehavior(),
+                                          child: LayoutBuilder(
+                                            builder: ((context, constraint) {
+                                              return UI(constraint.maxWidth,
+                                                  constraint.maxHeight);
+                                            }),
+                                          )),
+                                    ),
+                                    Get.width),
                               ),
                             ],
                           ),

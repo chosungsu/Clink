@@ -10,6 +10,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import '../../../BACKENDPART/Enums/Linkpage.dart';
+import '../../../BACKENDPART/Getx/navibool.dart';
 import '../../../FRONTENDPART/Route/subuiroute.dart';
 import '../../../Tool/AppBarCustom.dart';
 import '../../../Tool/BGColor.dart';
@@ -42,6 +43,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
   ];
   List userviewlist = [];
   final peopleadd = Get.put(PeopleAdd());
+  final draw = Get.put(navibool());
   final linkspaceset = Get.put(linkspacesetting());
   final List<Linkspacepage> listspacepageset = [];
 
@@ -100,7 +102,16 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AppBarCustom(
-                title: '',
+                title: Text(
+                  '',
+                  maxLines: 1,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: mainTitleTextsize(),
+                      color: draw.color_textstatus),
+                  overflow: TextOverflow.ellipsis,
+                ),
                 righticon: true,
                 lefticon: false,
                 lefticonname: Icons.add,

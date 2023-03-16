@@ -195,6 +195,7 @@ class uisetting extends GetxController {
         'profilepagetitlethirdbyone',
         'profilepagetitlethirdbytwo',
         'profilepagetitlethirdbythird',
+        'profilepagetitlethirdbyforth',
       ],
     ];
     profilescreen.clear();

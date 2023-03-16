@@ -30,7 +30,7 @@ class Languages extends Translations {
           'profilepagetitlethirdbyone': '개인정보처리방침 및 이용동의',
           'profilepagetitlethirdbytwo': '라이선스',
           'profilepagetitlethirdbythird': '문의하기',
-          'profiledatadelete': '데이터삭제',
+          'profilepagetitlethirdbyforth': '데이터삭제',
         },
         'en_US': {
           'search': 'Search page title...',
@@ -59,7 +59,7 @@ class Languages extends Translations {
           'profilepagetitlethirdbyone': 'Policy for this app',
           'profilepagetitlethirdbytwo': 'Licenses',
           'profilepagetitlethirdbythird': 'Inquires',
-          'profiledatadelete': 'Data Delete',
+          'profilepagetitlethirdbyforth': 'Data Delete',
         },
       };
 }

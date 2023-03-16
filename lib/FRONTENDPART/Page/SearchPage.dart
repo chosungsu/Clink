@@ -10,10 +10,12 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import '../../BACKENDPART/Enums/Variables.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
+import '../../Tool/NoBehavior.dart';
+import '../../Tool/TextSize.dart';
 import '../UI/SearchUI.dart';
 import '../Widget/BottomScreen.dart';
 import '../Widget/buildTypeWidget.dart';
-import '../Widget/DrawerScreen.dart';
+import '../Widget/responsiveWidget.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -97,11 +99,19 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                 ? innertype()
                                 : const SizedBox(),
                             Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 uiset.searchpagemove == ''
                                     ? AppBarCustom(
-                                        title: '',
+                                        title: Text(
+                                          '',
+                                          maxLines: 1,
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: mainTitleTextsize(),
+                                              color: draw.color_textstatus),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                         lefticon: false,
                                         lefticonname: Icons.add,
                                         righticon: false,
@@ -119,8 +129,22 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                                   return Column(
                                                     children: [
                                                       AppBarCustom(
-                                                        title: uiset
-                                                            .searchpagemove,
+                                                        title: Text(
+                                                          uiset.searchpagemove,
+                                                          maxLines: 1,
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              fontSize:
+                                                                  mainTitleTextsize(),
+                                                              color: draw
+                                                                  .color_textstatus),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
                                                         lefticon: false,
                                                         lefticonname: Icons.add,
                                                         righticon: true,
@@ -137,8 +161,22 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                                   return Column(
                                                     children: [
                                                       AppBarCustom(
-                                                        title: uiset
-                                                            .searchpagemove,
+                                                        title: Text(
+                                                          uiset.searchpagemove,
+                                                          maxLines: 1,
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              fontSize:
+                                                                  mainTitleTextsize(),
+                                                              color: draw
+                                                                  .color_textstatus),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
                                                         righticon: true,
                                                         lefticon: false,
                                                         lefticonname: Icons.add,
@@ -154,7 +192,20 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                                 }
                                               } else {
                                                 return AppBarCustom(
-                                                  title: '',
+                                                  title: Text(
+                                                    '',
+                                                    maxLines: 1,
+                                                    textAlign: TextAlign.start,
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontSize:
+                                                            mainTitleTextsize(),
+                                                        color: draw
+                                                            .color_textstatus),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
                                                   righticon: false,
                                                   lefticon: false,
                                                   lefticonname: Icons.add,
@@ -164,16 +215,30 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                                 );
                                               }
                                             }))),
-                                SearchUI(
-                                    context,
-                                    scrollController,
-                                    controller,
-                                    draw.navishow == true && Get.width > 1000
-                                        ? Get.width - 120
-                                        : Get.width,
-                                    controller2,
-                                    searchNode,
-                                    controller3)
+                                Flexible(
+                                  fit: FlexFit.tight,
+                                  child: responsivewidget(
+                                      SizedBox(
+                                        child: ScrollConfiguration(
+                                            behavior: NoBehavior(),
+                                            child: LayoutBuilder(
+                                              builder: ((context, constraint) {
+                                                return SearchUI(
+                                                    context,
+                                                    scrollController,
+                                                    controller,
+                                                    draw.navishow == true &&
+                                                            Get.width > 1000
+                                                        ? Get.width - 120
+                                                        : Get.width,
+                                                    controller2,
+                                                    searchNode,
+                                                    controller3);
+                                              }),
+                                            )),
+                                      ),
+                                      Get.width),
+                                ),
                               ],
                             ),
                             draw.navi == 1 &&

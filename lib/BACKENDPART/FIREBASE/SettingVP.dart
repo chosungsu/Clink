@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import '../../sheets/BottomSheet/AddContentWithBtn.dart';
-import '../Enums/Expandable.dart';
 import '../Enums/Variables.dart';
 import '../../Tool/FlushbarStyle.dart';
 import '../Getx/PeopleAdd.dart';
@@ -20,22 +19,6 @@ import '../../Tool/ContainerDesign.dart';
 
 final peopleadd = Get.put(PeopleAdd());
 final uiset = Get.put(uisetting());
-
-Settingtestpage() {}
-
-Settinglicensepage() {
-  firestore.collection("AppLicense").doc('License').get().then((value) {
-    for (int i = 0; i < value.get('licensetitle').length; i++) {
-      uiset.setlicense(value.get('licensetitle')[i], value.get('content')[i]);
-      licensedata.insert(
-          0,
-          Expandable(
-              title: value.get('licensetitle')[i],
-              sub: value.get('content')[i],
-              isExpanded: false));
-    }
-  });
-}
 
 Widgets_personchange(context, controller, searchnode) {
   Widget title, content, btn;

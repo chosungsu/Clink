@@ -3,6 +3,7 @@ import 'package:clickbyme/BACKENDPART/Getx/linkspacesetting.dart';
 import 'package:clickbyme/BACKENDPART/Getx/uisetting.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
+import '../../Tool/TextSize.dart';
 import '../Route/subuiroute.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
 import '../../Tool/Loader.dart';
@@ -80,7 +81,16 @@ class _WallPaperPageState extends State<WallPaperPage> {
               child: Column(
                 children: [
                   AppBarCustom(
-                    title: linkspaceset.indexcnt[widget.index].placestr,
+                    title: Text(
+                      linkspaceset.indexcnt[widget.index].placestr,
+                      maxLines: 1,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: mainTitleTextsize(),
+                          color: draw.color_textstatus),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                     lefticon: false,
                     righticon: true,
                     doubleicon: false,

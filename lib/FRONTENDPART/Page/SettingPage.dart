@@ -9,9 +9,11 @@ import '../../BACKENDPART/Getx/navibool.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../Tool/NoBehavior.dart';
 import '../../Tool/AppBarCustom.dart';
+import '../../Tool/TextSize.dart';
 import '../Route/subuiroute.dart';
 import '../UI/SettingUI.dart';
 import '../Widget/buildTypeWidget.dart';
+import '../Widget/responsiveWidget.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -84,7 +86,16 @@ class _SettingPageState extends State<SettingPage>
                             children: [
                               GetBuilder<uisetting>(builder: (_) {
                                 return AppBarCustom(
-                                  title: '',
+                                  title: Text(
+                                    '',
+                                    maxLines: 1,
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: mainTitleTextsize(),
+                                        color: draw.color_textstatus),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                   lefticon: true,
                                   lefticonname: MaterialIcons.chevron_left,
                                   righticon: false,
@@ -96,21 +107,22 @@ class _SettingPageState extends State<SettingPage>
                               }),
                               Flexible(
                                 fit: FlexFit.tight,
-                                child: SizedBox(
-                                  width: Get.width,
-                                  child: ScrollConfiguration(
-                                      behavior: NoBehavior(),
-                                      child: LayoutBuilder(
-                                        builder: ((context, constraint) {
-                                          return UI(
-                                              _controller,
-                                              searchNode,
-                                              scrollController,
-                                              constraint.maxWidth,
-                                              constraint.maxHeight);
-                                        }),
-                                      )),
-                                ),
+                                child: responsivewidget(
+                                    SizedBox(
+                                      child: ScrollConfiguration(
+                                          behavior: NoBehavior(),
+                                          child: LayoutBuilder(
+                                            builder: ((context, constraint) {
+                                              return UI(
+                                                  _controller,
+                                                  searchNode,
+                                                  scrollController,
+                                                  constraint.maxWidth,
+                                                  constraint.maxHeight);
+                                            }),
+                                          )),
+                                    ),
+                                    Get.width),
                               ),
                             ],
                           ),

@@ -17,7 +17,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../BACKENDPART/Enums/PushNotification.dart';
@@ -57,12 +57,6 @@ Future<bool> onWillPop(context) async {
   uiset.setmypagelistindex(Hive.box('user_setting').get('currentmypage') ?? 0);
   if (draw.drawopen == true) {
     draw.setclose();
-  } else if (uiset.profileindex != 0) {
-    uiset.checkprofilepageindex(0);
-    if (draw.settinginsidemap.containsKey(2) == true) {
-      draw.clicksettinginside(1, true);
-    }
-    Get.back();
   } else if (draw.settinginsidemap.containsKey(1) == true ||
       draw.settinginsidemap.containsKey(2) == true) {
     if (draw.settinginsidemap.containsKey(1) == true) {

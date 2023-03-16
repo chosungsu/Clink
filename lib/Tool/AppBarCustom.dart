@@ -29,7 +29,7 @@ class AppBarCustom extends StatelessWidget {
     this.textcontroller,
     this.searchnode,
   }) : super(key: key);
-  final String title;
+  final Widget title;
   final bool righticon;
   final IconData righticonname;
   final bool doubleicon;
@@ -161,18 +161,7 @@ class AppBarCustom extends StatelessWidget {
                                 children: [
                                   Flexible(
                                       fit: FlexFit.tight,
-                                      child: SizedBox(
-                                        child: Text(
-                                          title.toString(),
-                                          maxLines: 1,
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: mainTitleTextsize(),
-                                              color: draw.color_textstatus),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      )),
+                                      child: SizedBox(child: title)),
                                   righticon == true
                                       ? Row(
                                           children: [

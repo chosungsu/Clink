@@ -2,7 +2,6 @@
 
 import 'package:clickbyme/BACKENDPART/FIREBASE/SettingVP.dart';
 import 'package:clickbyme/FRONTENDPART/Route/subuiroute.dart';
-import 'package:clickbyme/FRONTENDPART/Widget/responsiveWidget.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -25,7 +24,7 @@ final draw = Get.put(navibool());
 
 ///UI
 ///
-///ProfilePage의 UI
+///SettingPage의 UI
 UI(controller, searchnode, scrollcontroller, maxWidth, maxHeight) {
   return GetBuilder<uisetting>(builder: (_) {
     uiset.setprofilespace();
@@ -46,7 +45,6 @@ UI(controller, searchnode, scrollcontroller, maxWidth, maxHeight) {
                   const SizedBox(
                     height: 50,
                   ),
-                  ClickContent(context, controller, searchnode)
                 ],
               ));
         }));
@@ -77,57 +75,55 @@ OptionChoice(context, maxWidth, maxHeight, searchnode, controller) {
 }
 
 optview(context, maxWidth, searchnode, controller) {
-  return responsivewidget(
-      Column(
-        children: List.generate(3, (index) {
-          return Column(
-            children: [
-              ContainerDesign(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+  return Column(
+    children: List.generate(3, (index) {
+      return Column(
+        children: [
+          ContainerDesign(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                            alignment: Alignment.center,
-                            child: CircleAvatar(
-                              backgroundColor: draw.backgroundcolor,
-                              foregroundColor: draw.backgroundcolor,
-                              child: Icon(
-                                uiset.profilescreen[index].icondata,
-                                color: draw.color_textstatus,
-                              ),
-                            )),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          uiset.profilescreen[index].title.toString().tr,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTextsize(),
-                              color: draw.color_textstatus),
-                        ),
-                      ],
+                    Container(
+                        alignment: Alignment.center,
+                        child: CircleAvatar(
+                          backgroundColor: draw.backgroundcolor,
+                          foregroundColor: draw.backgroundcolor,
+                          child: Icon(
+                            uiset.profilescreen[index].icondata,
+                            color: draw.color_textstatus,
+                          ),
+                        )),
+                    const SizedBox(
+                      width: 10,
                     ),
-                    Divider(
-                      height: 10,
-                      thickness: 2,
-                      color: Colors.grey.shade400,
+                    Text(
+                      uiset.profilescreen[index].title.toString().tr,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTextsize(),
+                          color: draw.color_textstatus),
                     ),
-                    Opt_body(index, searchnode, controller)
                   ],
                 ),
-                color: draw.backgroundcolor,
-              ),
-              const SizedBox(
-                height: 20,
-              )
-            ],
-          );
-        }),
-      ),
-      maxWidth);
+                Divider(
+                  height: 10,
+                  thickness: 2,
+                  color: Colors.grey.shade400,
+                ),
+                Opt_body(index, searchnode, controller)
+              ],
+            ),
+            color: draw.backgroundcolor,
+          ),
+          const SizedBox(
+            height: 20,
+          )
+        ],
+      );
+    }),
+  );
 }
 
 ///Opt_body
@@ -136,6 +132,7 @@ optview(context, maxWidth, searchnode, controller) {
 Opt_body(index, searchnode, controller) {
   Widget title;
   Widget content;
+  Widget btn;
 
   return StatefulBuilder(
     builder: (context, setState) {
@@ -163,13 +160,22 @@ Opt_body(index, searchnode, controller) {
                         } else if (index2 == 1) {
                           uiset.checkprofilepageindex(2);
                           GoToSettingSubPage();
-                        } else {
+                        } else if (index2 == 2) {
                           controller.clear();
                           title = Widgets_tocompany(
                               context, controller, searchnode)[0];
                           content = Widgets_tocompany(
                               context, controller, searchnode)[1];
                           AddContent(context, title, content, searchnode);
+                        } else {
+                          title = Widgets_settingpagedeleteuser(
+                              context, controller, searchnode)[0];
+                          content = Widgets_settingpagedeleteuser(
+                              context, controller, searchnode)[1];
+                          btn = Widgets_settingpagedeleteuser(
+                              context, controller, searchnode)[2];
+                          AddContentWithBtn(
+                              context, title, content, btn, searchnode);
                         }
                       }
                     },
@@ -571,47 +577,5 @@ Opt_body(index, searchnode, controller) {
             }),
       );
     },
-  );
-}
-
-///ClickContent
-///
-///앱 내 데이터 삭제를 도와줌.
-ClickContent(context, controller, searchnode) {
-  return GestureDetector(
-      onTap: () {
-        FocusManager.instance.primaryFocus?.unfocus();
-      },
-      child: contentview(context, controller, searchnode));
-}
-
-contentview(context, controller, searchnode) {
-  Widget title, content, btn;
-  return SizedBox(
-    height: 50,
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        GestureDetector(
-          onTap: () {
-            title = Widgets_settingpagedeleteuser(
-                context, controller, searchnode)[0];
-            content = Widgets_settingpagedeleteuser(
-                context, controller, searchnode)[1];
-            btn = Widgets_settingpagedeleteuser(
-                context, controller, searchnode)[2];
-            AddContentWithBtn(context, title, content, btn, searchnode);
-          },
-          child: Text(
-            'profiledatadelete'.tr,
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: contentTextsize(),
-                color: Colors.grey),
-          ),
-        )
-      ],
-    ),
   );
 }

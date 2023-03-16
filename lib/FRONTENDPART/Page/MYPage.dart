@@ -10,6 +10,7 @@ import '../../Tool/AppBarCustom.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
 import '../../Tool/BGColor.dart';
 import '../../Tool/NoBehavior.dart';
+import '../../Tool/TextSize.dart';
 import '../UI/MYPageUI.dart';
 import '../Widget/BottomScreen.dart';
 
@@ -103,7 +104,16 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                   children: [
                                     GetBuilder<notishow>(builder: (_) {
                                       return AppBarCustom(
-                                        title: 'iTPLE',
+                                        title: Text(
+                                          'iTPLE',
+                                          maxLines: 1,
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: mainTitleTextsize(),
+                                              color: draw.color_textstatus),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                         lefticon: false,
                                         righticon: true,
                                         doubleicon: true,

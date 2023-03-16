@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names
 
-import 'package:clickbyme/BACKENDPART/Enums/Variables.dart';
 import 'package:clickbyme/BACKENDPART/FIREBASE/SettingVP.dart';
 import 'package:clickbyme/FRONTENDPART/Widget/responsiveWidget.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
@@ -10,8 +9,6 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
-import '../../../Tool/BGColor.dart';
 import '../../BACKENDPART/Getx/linkspacesetting.dart';
 import '../../../Tool/TextSize.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
@@ -59,15 +56,6 @@ View(context, maxWidth, maxHeight, searchnode, controller) {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
-        children: [view(context, maxWidth, searchnode, controller)],
-      ),
-    ),
-  );
-}
-
-view(context, maxWidth, searchnode, controller) {
-  return responsivewidget(
-      Column(
         children: [
           UserBoard(controller, searchnode),
           const Divider(
@@ -83,7 +71,8 @@ view(context, maxWidth, searchnode, controller) {
           ),
         ],
       ),
-      maxWidth);
+    ),
+  );
 }
 
 ///UserBoard

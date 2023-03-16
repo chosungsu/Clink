@@ -9,9 +9,11 @@ import '../../BACKENDPART/Getx/navibool.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../Tool/NoBehavior.dart';
 import '../../Tool/AppBarCustom.dart';
+import '../../Tool/TextSize.dart';
 import '../UI/ProfileUI.dart';
 import '../Widget/BottomScreen.dart';
 import '../Widget/buildTypeWidget.dart';
+import '../Widget/responsiveWidget.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -95,7 +97,16 @@ class _ProfilePageState extends State<ProfilePage>
                                 children: [
                                   GetBuilder<uisetting>(builder: (_) {
                                     return AppBarCustom(
-                                      title: '',
+                                      title: Text(
+                                        '',
+                                        maxLines: 1,
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: mainTitleTextsize(),
+                                            color: draw.color_textstatus),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                       lefticon: false,
                                       lefticonname: Icons.add,
                                       righticon: true,
@@ -105,28 +116,32 @@ class _ProfilePageState extends State<ProfilePage>
                                   }),
                                   Flexible(
                                     fit: FlexFit.tight,
-                                    child: SizedBox(
-                                      width: draw.navishow == true &&
-                                              Get.width > 1000
-                                          ? Get.width - 120
-                                          : Get.width,
-                                      child: ScrollConfiguration(
-                                          behavior: NoBehavior(),
-                                          child: LayoutBuilder(
-                                            builder: ((context, constraint) {
-                                              return UI(
-                                                  _controller,
-                                                  searchNode,
-                                                  scrollController,
-                                                  draw.navishow == true &&
-                                                          Get.width > 1000
-                                                      ? constraint.maxWidth -
-                                                          120
-                                                      : constraint.maxWidth,
-                                                  constraint.maxHeight);
-                                            }),
-                                          )),
-                                    ),
+                                    child: responsivewidget(
+                                        SizedBox(
+                                          width: draw.navishow == true &&
+                                                  Get.width > 1000
+                                              ? Get.width - 120
+                                              : Get.width,
+                                          child: ScrollConfiguration(
+                                              behavior: NoBehavior(),
+                                              child: LayoutBuilder(
+                                                builder:
+                                                    ((context, constraint) {
+                                                  return UI(
+                                                      _controller,
+                                                      searchNode,
+                                                      scrollController,
+                                                      draw.navishow == true &&
+                                                              Get.width > 1000
+                                                          ? constraint
+                                                                  .maxWidth -
+                                                              120
+                                                          : constraint.maxWidth,
+                                                      constraint.maxHeight);
+                                                }),
+                                              )),
+                                        ),
+                                        Get.width),
                                   ),
                                 ],
                               ),

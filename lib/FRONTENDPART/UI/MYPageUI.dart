@@ -19,6 +19,9 @@ import '../../BACKENDPART/Getx/uisetting.dart';
 final uiset = Get.put(uisetting());
 final linkspaceset = Get.put(linkspacesetting());
 
+///UI
+///
+///MYPage의 UI
 UI(id, controller, searchnode, maxWidth, maxHeight) {
   return GetBuilder<uisetting>(
     builder: (_) {

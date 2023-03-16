@@ -1,10 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable
 
-import 'package:clickbyme/BACKENDPART/Getx/category.dart';
 import 'package:clickbyme/BACKENDPART/Getx/linkspacesetting.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dotted_border/dotted_border.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -15,7 +11,6 @@ import 'package:status_bar_control/status_bar_control.dart';
 import '../BACKENDPART/Enums/Linkpage.dart';
 import '../BACKENDPART/Enums/Variables.dart';
 import '../FRONTENDPART/Route/subuiroute.dart';
-import '../Tool/AndroidIOS.dart';
 import '../Tool/BGColor.dart';
 import '../Tool/ContainerDesign.dart';
 import '../Tool/FlushbarStyle.dart';
@@ -885,7 +880,7 @@ addaction(
                 const SizedBox(
                   height: 20,
                 ),
-                contentaddaction(context, mainid),
+                //contentaddaction(context, mainid),
                 linkspaceset.selectedfile!.isEmpty
                     ? const SizedBox()
                     : bottomaddaction(
@@ -898,7 +893,7 @@ addaction(
           )));
 }
 
-contentaddaction(
+/*contentaddaction(
   BuildContext context,
   String mainid,
 ) {
@@ -1085,7 +1080,7 @@ contentaddaction(
               ],
             ));
   });
-}
+}*/
 
 bottomaddaction(BuildContext context, int numberfileslen, String mainid) {
   return GetBuilder<linkspacesetting>(

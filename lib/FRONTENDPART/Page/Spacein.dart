@@ -208,7 +208,16 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
                               : (widget.type == 0
                                   ? GetBuilder<uisetting>(
                                       builder: (_) => AppBarCustom(
-                                        title: widget.spacename,
+                                        title: Text(
+                                          widget.spacename,
+                                          maxLines: 1,
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: mainTitleTextsize(),
+                                              color: draw.color_textstatus),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                         lefticon: false,
                                         lefticonname: Icons.add,
                                         righticon: true,
@@ -218,7 +227,16 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
                                     )
                                   : GetBuilder<uisetting>(
                                       builder: (_) => AppBarCustom(
-                                        title: widget.spacename,
+                                        title: Text(
+                                          widget.spacename,
+                                          maxLines: 1,
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: mainTitleTextsize(),
+                                              color: draw.color_textstatus),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                         lefticon: false,
                                         lefticonname: Icons.add,
                                         righticon: false,
@@ -233,10 +251,10 @@ class _SpaceinState extends State<Spacein> with TickerProviderStateMixin {
                               : const SizedBox(
                                   height: 20,
                                 ),
-                          ScrollConfiguration(
+                          /*ScrollConfiguration(
                             behavior: NoBehavior(),
                             child: SpaceinUI(widget.id, widget.type, isinit),
-                          )
+                          )*/
                         ],
                       )),
                 ),

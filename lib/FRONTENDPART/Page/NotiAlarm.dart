@@ -4,16 +4,18 @@ import 'package:clickbyme/FRONTENDPART/UI/NotiUI.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import '../../BACKENDPART/Api/NoticeApi.dart';
 import '../../BACKENDPART/Getx/notishow.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../Tool/AppBarCustom.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
+import '../../Tool/MyTheme.dart';
 import '../../Tool/NoBehavior.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
+import '../../Tool/TextSize.dart';
 import '../Widget/BottomScreen.dart';
 import '../Widget/buildTypeWidget.dart';
+import '../Widget/responsiveWidget.dart';
 
 class NotiAlarm extends StatefulWidget {
   const NotiAlarm({Key? key}) : super(key: key);
@@ -87,7 +89,119 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                 Column(
                                   children: [
                                     AppBarCustom(
-                                      title: 'Notice',
+                                      title: GetBuilder<notishow>(builder: (_) {
+                                        return Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            GestureDetector(
+                                                onTap: () {
+                                                  notilist.setclicker(0);
+                                                },
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      '공지사항',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              'NanumMyeongjo',
+                                                          fontSize:
+                                                              mainTitleTextsize(),
+                                                          color: notilist
+                                                                      .clicker ==
+                                                                  0
+                                                              ? MyTheme
+                                                                  .colorpastelpurple
+                                                              : draw
+                                                                  .color_textstatus),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 10,
+                                                      child: Divider(
+                                                        height: 3,
+                                                        color: notilist
+                                                                    .clicker ==
+                                                                0
+                                                            ? MyTheme
+                                                                .colorpastelpurple
+                                                            : draw
+                                                                .backgroundcolor,
+                                                        thickness: 2,
+                                                        indent: 0,
+                                                        endIndent: 0,
+                                                      ),
+                                                    )
+                                                  ],
+                                                )),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            GestureDetector(
+                                                onTap: () {
+                                                  notilist.setclicker(1);
+                                                },
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'My',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              'NanumMyeongjo',
+                                                          fontSize:
+                                                              mainTitleTextsize(),
+                                                          color: notilist
+                                                                      .clicker ==
+                                                                  1
+                                                              ? MyTheme
+                                                                  .colorpastelpurple
+                                                              : draw
+                                                                  .color_textstatus),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 10,
+                                                      child: Divider(
+                                                        height: 3,
+                                                        color: notilist
+                                                                    .clicker ==
+                                                                1
+                                                            ? MyTheme
+                                                                .colorpastelpurple
+                                                            : draw
+                                                                .backgroundcolor,
+                                                        thickness: 2,
+                                                        indent: 0,
+                                                        endIndent: 0,
+                                                      ),
+                                                    )
+                                                  ],
+                                                )),
+                                          ],
+                                        );
+                                      }),
                                       lefticon: false,
                                       righticon: false,
                                       doubleicon: false,
@@ -97,35 +211,31 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                     const SizedBox(
                                       height: 20,
                                     ),
-                                    SetBoxUI(
-                                      draw.navishow == true && Get.width > 1000
-                                          ? Get.width - 120
-                                          : Get.width,
-                                    ),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
                                     Flexible(
                                       fit: FlexFit.tight,
-                                      child: SizedBox(
-                                        width: draw.navishow == true &&
-                                                Get.width > 1000
-                                            ? Get.width - 120
-                                            : Get.width,
-                                        child: ScrollConfiguration(
-                                            behavior: NoBehavior(),
-                                            child: LayoutBuilder(
-                                              builder: ((context, constraint) {
-                                                return UI(
-                                                  draw.navishow == true &&
-                                                          Get.width > 1000
-                                                      ? constraint.maxWidth -
-                                                          120
-                                                      : constraint.maxWidth,
-                                                );
-                                              }),
-                                            )),
-                                      ),
+                                      child: responsivewidget(
+                                          SizedBox(
+                                            width: draw.navishow == true &&
+                                                    Get.width > 1000
+                                                ? Get.width - 120
+                                                : Get.width,
+                                            child: ScrollConfiguration(
+                                                behavior: NoBehavior(),
+                                                child: LayoutBuilder(
+                                                  builder:
+                                                      ((context, constraint) {
+                                                    return UI(
+                                                      draw.navishow == true &&
+                                                              Get.width > 1000
+                                                          ? constraint
+                                                                  .maxWidth -
+                                                              120
+                                                          : constraint.maxWidth,
+                                                    );
+                                                  }),
+                                                )),
+                                          ),
+                                          Get.width),
                                     ),
                                   ],
                                 ),

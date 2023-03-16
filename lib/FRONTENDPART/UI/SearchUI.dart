@@ -10,7 +10,6 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../BACKENDPART/Enums/Variables.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
-import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
 
 final uiset = Get.put(uisetting());
@@ -18,56 +17,34 @@ final uiset = Get.put(uisetting());
 SearchUI(context, scrollController, TextEditingController controller,
     double width, TextEditingController controller2, searchNode, controller3) {
   return uiset.searchpagemove == ''
-      ? Flexible(
-          fit: FlexFit.tight,
-          child: SizedBox(
-            width: draw.navishow == true && Get.width > 1000
-                ? Get.width - 120
-                : Get.width,
-            child: ScrollConfiguration(
-              behavior: NoBehavior(),
-              child: SingleChildScrollView(
-                  controller: scrollController,
-                  child: StatefulBuilder(builder: (_, StateSetter setState) {
-                    return GetBuilder<uisetting>(
-                        builder: (_) => Column(
-                              children: [
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Se_Container0(width, controller, searchNode),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Se_Container01(width, controller, searchNode),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Se_Container1(width),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Se_Container11(width, controller, searchNode),
-                                SizedBox(
-                                  height: 50,
-                                ),
-                              ],
-                            ));
-                  })),
-            ),
-          ))
-      : Flexible(
-          fit: FlexFit.tight,
-          child: SizedBox(
-            width: draw.navishow == true ? Get.width - 120 : Get.width,
-            child: ScrollConfiguration(
-                behavior: NoBehavior(),
-                child: Se_Container2(
-                    context,
-                    uiset.editpagelist[0].id.toString(),
-                    controller3,
-                    searchNode)),
-          ));
+      ? SingleChildScrollView(
+          controller: scrollController,
+          child: GetBuilder<uisetting>(
+              builder: (_) => Column(
+                    children: [
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Se_Container0(width, controller, searchNode),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Se_Container01(width, controller, searchNode),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Se_Container1(width),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Se_Container11(width, controller, searchNode),
+                      SizedBox(
+                        height: 50,
+                      ),
+                    ],
+                  )))
+      : Se_Container2(context, uiset.editpagelist[0].id.toString(), controller3,
+          searchNode);
 }
 
 Se_Container0(double height, controller, searchNode) {
