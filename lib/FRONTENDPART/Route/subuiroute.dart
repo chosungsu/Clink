@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:clickbyme/BACKENDPART/Enums/Variables.dart';
 import 'package:clickbyme/FRONTENDPART/Page/SettingPage.dart';
 import 'package:clickbyme/FRONTENDPART/Page/SettingSubPage.dart';
-import 'package:clickbyme/main.dart';
 import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
 import 'package:clickbyme/sheets/BSContents/appbarplusbtn.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -15,6 +14,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -106,8 +106,12 @@ GoToMain() {
   Get.back();
 }
 
-GoToStartApp() {
-  Get.offAll(() => const SplashPage(), transition: Transition.fade);
+GoToStartApp(context) {
+  SystemNavigator.pop().whenComplete(() async {
+    Hive.box('user_info').put('id', '');
+    Hive.box('user_setting').put('usercode', '');
+    Phoenix.rebirth(context);
+  });
 }
 
 GoToSettingPage() async {

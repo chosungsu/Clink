@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
-import '../../BACKENDPART/FIREBASE/PaperVP.dart';
+import '../../BACKENDPART/ViewPoints/PaperVP.dart';
 import '../../Tool/AndroidIOS.dart';
 import '../../Tool/BGColor.dart';
 import '../../BACKENDPART/Getx/linkspacesetting.dart';

@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 import '../../BACKENDPART/Enums/Variables.dart';
 import '../../BACKENDPART/Getx/linkspacesetting.dart';
 import '../../../Tool/TextSize.dart';
-import '../../BACKENDPART/FIREBASE/PersonalVP.dart';
+import '../../BACKENDPART/ViewPoints/PersonalVP.dart';
 import '../../Tool/AndroidIOS.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 

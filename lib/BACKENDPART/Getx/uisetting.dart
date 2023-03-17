@@ -10,6 +10,7 @@ import '../Enums/Variables.dart';
 
 class uisetting extends GetxController {
   bool loading = false;
+  String usrimgurl = Hive.box('user_setting').get('usrimgurl') ?? '';
   bool sheetloading = false;
   bool canchange = true;
   bool isfilledtextfield = true;
@@ -41,6 +42,16 @@ class uisetting extends GetxController {
       sheetloading = what;
     }
 
+    update();
+    notifyChildrens();
+  }
+
+  ///setusrimg
+  ///
+  ///유저의 이미지를 생성하는 데에 사용된다.
+  void setusrimg(String imgurl) {
+    usrimgurl = imgurl;
+    Hive.box('user_setting').put('usrimgurl', imgurl);
     update();
     notifyChildrens();
   }
@@ -207,12 +218,5 @@ class uisetting extends GetxController {
       update();
       notifyChildrens();
     } else {}
-  }
-
-  void setlicense(String title, String content) async {
-    licenses_title.insert(0, title);
-    licenses_content.insert(0, content);
-    update();
-    notifyChildrens();
   }
 }

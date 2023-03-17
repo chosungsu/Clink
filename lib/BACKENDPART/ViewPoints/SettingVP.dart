@@ -1,9 +1,10 @@
-// ignore_for_file: unused_local_variable, non_constant_identifier_names
+// ignore_for_file: unused_local_variable, non_constant_identifier_names, file_names
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../sheets/BottomSheet/AddContentWithBtn.dart';
 import '../Enums/Variables.dart';
 import '../../Tool/FlushbarStyle.dart';
@@ -11,19 +12,167 @@ import '../Getx/PeopleAdd.dart';
 import '../Getx/uisetting.dart';
 import '../../Tool/TextSize.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import '../../BACKENDPART/Api/LoginApi.dart';
+import '../Api/LoginApi.dart';
 import '../../FRONTENDPART/Route/subuiroute.dart';
-import '../../BACKENDPART/LocalNotiPlatform/NotificationApi.dart';
+import '../LocalNotiPlatform/NotificationApi.dart';
 import '../../Tool/BGColor.dart';
 import '../../Tool/ContainerDesign.dart';
 
 final peopleadd = Get.put(PeopleAdd());
 final uiset = Get.put(uisetting());
 
-Widgets_personchange(context, controller, searchnode) {
+pickImage(source) async {
+  final image = await ImagePicker().pickImage(source: source);
+  if (image == null) return;
+  uiset.setusrimg(image.path);
+  Hive.box('user_setting').put('usrimgurl', image.path);
+}
+
+Widgets_personchange(context, controller, searchnode, section) {
   Widget title, content, btn;
-  final uiset = Get.put(uisetting());
-  final peopleadd = Get.put(PeopleAdd());
+
+  title = const SizedBox();
+  content = section == 0
+      ? Column(
+          children: [
+            GestureDetector(
+                onTap: () async {
+                  Get.back();
+                  await pickImage(ImageSource.camera);
+                },
+                child: ListTile(
+                  leading: const Icon(
+                    Ionicons.camera,
+                    size: 30,
+                    color: Colors.black,
+                  ),
+                  title: Text('사진촬영',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTitleTextsize())),
+                  trailing: const Icon(
+                    Ionicons.chevron_forward,
+                    size: 30,
+                    color: Colors.black,
+                  ),
+                )),
+            GestureDetector(
+                onTap: () async {
+                  Get.back();
+                  await pickImage(ImageSource.gallery);
+                },
+                child: ListTile(
+                  leading: const Icon(
+                    MaterialIcons.photo,
+                    size: 30,
+                    color: Colors.black,
+                  ),
+                  title: Text('갤러리 이동',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTitleTextsize())),
+                  trailing: const Icon(
+                    Ionicons.chevron_forward,
+                    size: 30,
+                    color: Colors.black,
+                  ),
+                )),
+            GestureDetector(
+                onTap: () async {
+                  Get.back();
+                  uiset.setusrimg('');
+                },
+                child: ListTile(
+                  leading: const Icon(
+                    MaterialCommunityIcons.delete_alert,
+                    size: 30,
+                    color: Colors.red,
+                  ),
+                  title: Text('이미지 삭제',
+                      style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTitleTextsize())),
+                  trailing: const Icon(
+                    Ionicons.chevron_forward,
+                    size: 30,
+                    color: Colors.black,
+                  ),
+                )),
+          ],
+        )
+      : Column(
+          children: [
+            GestureDetector(
+                onTap: () async {
+                  Get.back();
+                  Clipboard.setData(ClipboardData(text: peopleadd.usrcode))
+                      .whenComplete(() {
+                    Snack.snackbars(
+                        context: context,
+                        title: '클립보드에 복사되었습니다.',
+                        backgroundcolor: Colors.green,
+                        bordercolor: draw.backgroundcolor);
+                  });
+                },
+                child: ListTile(
+                  leading: const Icon(
+                    MaterialIcons.fiber_pin,
+                    size: 30,
+                    color: Colors.black,
+                  ),
+                  title: Text('고유코드',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTitleTextsize())),
+                  subtitle: SelectableText(peopleadd.usrcode,
+                      style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTextsize())),
+                  trailing: Icon(Ionicons.copy_outline,
+                      size: 30, color: Colors.blue.shade400),
+                )),
+            GestureDetector(
+                onTap: () async {
+                  Get.back();
+                  uiset.checktf(true);
+                  title = Widgets_settingpagenickchange(
+                      context, controller, searchnode)[0];
+                  content = Widgets_settingpagenickchange(
+                      context, controller, searchnode)[1];
+                  btn = Widgets_settingpagenickchange(
+                      context, controller, searchnode)[2];
+                  AddContentWithBtn(context, title, content, btn, searchnode);
+                },
+                child: ListTile(
+                  leading: const Icon(
+                    MaterialCommunityIcons.rename_box,
+                    size: 30,
+                    color: Colors.black,
+                  ),
+                  title: Text('닉네임 변경',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTitleTextsize())),
+                  trailing: const Icon(
+                    MaterialIcons.chevron_right,
+                    size: 30,
+                    color: Colors.black,
+                  ),
+                )),
+          ],
+        );
+  return [title, content];
+}
+
+Widgets_tocompany(context, controller, searchnode) {
+  Widget title;
+  Widget content;
 
   title = const SizedBox();
   content = Column(
@@ -31,7 +180,9 @@ Widgets_personchange(context, controller, searchnode) {
       GestureDetector(
           onTap: () async {
             Get.back();
-            Clipboard.setData(ClipboardData(text: usercode)).whenComplete(() {
+            Clipboard.setData(
+                    const ClipboardData(text: 'dev_habittracker_official'))
+                .whenComplete(() {
               Snack.snackbars(
                   context: context,
                   title: '클립보드에 복사되었습니다.',
@@ -40,167 +191,61 @@ Widgets_personchange(context, controller, searchnode) {
             });
           },
           child: ListTile(
-            leading: const Icon(
-              MaterialIcons.fiber_pin,
-              size: 30,
-              color: Colors.blue,
+            leading: Image.asset(
+              'assets/images/instagram.png',
+              width: 30,
+              height: 30,
             ),
-            title: Text('고유코드',
+            title: Text('광고문의',
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: contentTitleTextsize())),
-            subtitle: SelectableText(usercode,
-                style: TextStyle(
-                    color: Colors.blue,
-                    fontWeight: FontWeight.bold,
-                    fontSize: contentTextsize())),
-            trailing: Icon(Ionicons.copy_outline,
-                size: 30, color: Colors.blue.shade400),
+            subtitle: Text(
+              '@dev_habittracker_official',
+              style: TextStyle(color: Colors.grey.shade400, fontSize: 15),
+              overflow: TextOverflow.ellipsis,
+            ),
+            trailing: const Icon(
+              Ionicons.copy_outline,
+              size: 30,
+              color: Colors.blue,
+            ),
           )),
       GestureDetector(
           onTap: () async {
             Get.back();
-            uiset.checktf(true);
-            title = Widgets_settingpagenickchange(
-                context, controller, searchnode)[0];
-            content = Widgets_settingpagenickchange(
-                context, controller, searchnode)[1];
-            btn = Widgets_settingpagenickchange(
-                context, controller, searchnode)[2];
-            AddContentWithBtn(context, title, content, btn, searchnode);
+            Clipboard.setData(const ClipboardData(text: 'lenbizco@gmail.com'))
+                .whenComplete(() {
+              Snack.snackbars(
+                  context: context,
+                  title: '클립보드에 복사되었습니다.',
+                  backgroundcolor: Colors.green,
+                  bordercolor: draw.backgroundcolor);
+            });
           },
           child: ListTile(
-            leading: const Icon(
-              MaterialCommunityIcons.rename_box,
+            leading: Icon(
+              Icons.forward_to_inbox,
               size: 30,
-              color: Colors.blue,
+              color: Colors.blue.shade400,
             ),
-            title: Text('닉네임 변경',
+            title: Text('오류신고',
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: contentTitleTextsize())),
-            trailing: Icon(
-              MaterialIcons.chevron_right,
-              size: 30,
-              color: draw.color_textstatus,
+            subtitle: Text(
+              'lenbizco@gmail.com',
+              style: TextStyle(color: Colors.grey.shade400, fontSize: 15),
+              overflow: TextOverflow.ellipsis,
             ),
-          )),
-    ],
-  );
-  return [title, content];
-}
-
-Widgets_tocompany(context, controller, searchnode) {
-  Widget title;
-  Widget content;
-  final uiset = Get.put(uisetting());
-  final peopleadd = Get.put(PeopleAdd());
-
-  title = const SizedBox();
-  content = Column(
-    children: [
-      GestureDetector(
-        onTap: () async {
-          Get.back();
-          Clipboard.setData(
-                  const ClipboardData(text: 'dev_habittracker_official'))
-              .whenComplete(() {
-            Snack.snackbars(
-                context: context,
-                title: '클립보드에 복사되었습니다.',
-                backgroundcolor: Colors.green,
-                bordercolor: draw.backgroundcolor);
-          });
-        },
-        child: Row(
-          children: [
-            Flexible(
-                fit: FlexFit.tight,
-                child: Row(
-                  children: [
-                    Image.asset(
-                      'assets/images/instagram.png',
-                      width: 30,
-                      height: 30,
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('광고문의',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: contentTitleTextsize())),
-                        Text(
-                          '@dev_habittracker_official',
-                          style: TextStyle(
-                              color: Colors.grey.shade400, fontSize: 15),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    )
-                  ],
-                )),
-            Icon(Ionicons.copy_outline, color: Colors.blue.shade400)
-          ],
-        ),
-      ),
-      const SizedBox(
-        height: 30,
-      ),
-      GestureDetector(
-        onTap: () async {
-          Get.back();
-          Clipboard.setData(const ClipboardData(text: 'lenbizco@gmail.com'))
-              .whenComplete(() {
-            Snack.snackbars(
-                context: context,
-                title: '클립보드에 복사되었습니다.',
-                backgroundcolor: Colors.green,
-                bordercolor: draw.backgroundcolor);
-          });
-        },
-        child: Row(
-          children: [
-            Flexible(
-                fit: FlexFit.tight,
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.forward_to_inbox,
-                      size: 30,
-                      color: Colors.blue.shade400,
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('오류신고',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: contentTitleTextsize())),
-                        Text(
-                          'lenbizco@gmail.com',
-                          style: TextStyle(
-                              color: Colors.grey.shade400, fontSize: 15),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ],
-                )),
-            Icon(Ionicons.copy_outline, color: Colors.blue.shade400)
-          ],
-        ),
-      )
+            trailing: const Icon(
+              Ionicons.copy_outline,
+              size: 30,
+              color: Colors.blue,
+            ),
+          ))
     ],
   );
   return [title, content];
@@ -224,7 +269,7 @@ Widgets_settingpagenickchange(
               maxLines: 2,
               text: TextSpan(children: [
                 TextSpan(
-                    text: Hive.box('user_info').get('id'),
+                    text: peopleadd.nickname,
                     style: TextStyle(
                         color: Colors.blue.shade400,
                         fontWeight: FontWeight.bold,
@@ -291,6 +336,7 @@ Widgets_settingpagenickchange(
                     }
                     if (uiset.canchange) {
                       Hive.box('user_info').put('id', textcontroller.text);
+                      peopleadd.nickname = textcontroller.text;
                       LoginApiProvider().updateTasks();
                       Get.back();
                       textcontroller.clear();
@@ -421,9 +467,9 @@ Widgets_settingpagedeleteuser(
         onPressed: () async {
           uiset.setloading(true, 1);
           await LoginApiProvider().deleteTasks();
-          await NotificationApi.cancelAll();
+          //await NotificationApi.cancelAll();
           uiset.setloading(false, 1);
-          GoToStartApp();
+          GoToStartApp(context);
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.red,

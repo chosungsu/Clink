@@ -4,7 +4,7 @@ import 'package:clickbyme/sheets/BottomSheet/AddContentWithBtn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
-import '../../BACKENDPART/FIREBASE/NoticeVP.dart';
+import '../../BACKENDPART/ViewPoints/NoticeVP.dart';
 import '../../BACKENDPART/Enums/Variables.dart';
 import '../../Tool/BGColor.dart';
 import '../../Tool/ContainerDesign.dart';

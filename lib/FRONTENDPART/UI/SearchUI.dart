@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names
 
-import 'package:clickbyme/BACKENDPART/FIREBASE/PersonalVP.dart';
-import 'package:clickbyme/BACKENDPART/FIREBASE/SearchVP.dart';
+import 'package:clickbyme/BACKENDPART/ViewPoints/PersonalVP.dart';
+import 'package:clickbyme/BACKENDPART/ViewPoints/SearchVP.dart';
 import 'package:clickbyme/FRONTENDPART/UI/MYPageUI.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';

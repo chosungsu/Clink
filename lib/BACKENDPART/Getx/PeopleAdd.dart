@@ -1,17 +1,15 @@
 // ignore_for_file: unused_field
 
-import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import '../Api/LoginApi.dart';
 import '../Enums/Variables.dart';
 
 class PeopleAdd extends GetxController {
-  final loginapi = Get.put(LoginApiProvider());
   bool ispro = false;
   List people = [];
-  String secondname = Hive.box('user_info').get('id') ?? '';
+  String nickname = Hive.box('user_info').get('id') ?? '';
+  String usrcode = Hive.box('user_setting').get('usercode') ?? '';
   String code = '';
   List defaulthomeviewlist = [];
   List userviewlist = [];

@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names
 
-import 'package:clickbyme/BACKENDPART/FIREBASE/SettingVP.dart';
+import 'package:clickbyme/BACKENDPART/ViewPoints/SettingVP.dart';
 import 'package:clickbyme/FRONTENDPART/Route/subuiroute.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
@@ -65,11 +65,7 @@ OptionChoice(context, maxWidth, maxHeight, searchnode, controller) {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          optview(context, maxWidth, searchnode, controller)
-          /*Responsivelayout(lsoptview(maxWidth, searchnode, controller),
-              proptview(maxWidth, searchnode, controller))*/
-        ],
+        children: [optview(context, maxWidth, searchnode, controller)],
       ),
     ),
   );

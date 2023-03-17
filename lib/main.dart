@@ -1,11 +1,11 @@
 // ignore_for_file: prefer_const_constructors, unused_local_variable, non_constant_identifier_names
-import 'package:clickbyme/FRONTENDPART/Widget/BottomScreen.dart';
 import 'package:clickbyme/Tool/AndroidIOS.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/FRONTENDPART/Route/initScreenLoading.dart';
-import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -42,7 +42,9 @@ void main() async {
   await Hive.openBox('user_setting');
   NotificationApi.init(initScheduled: true);
   runApp(
-    const MyApp(),
+    Phoenix(
+      child: const MyApp(),
+    ),
   );
 }
 
@@ -116,6 +118,9 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     StatusBarControl.setColor(draw.backgroundcolor, animated: true);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarIconBrightness:
+            draw.statusbarcolor == 0 ? Brightness.dark : Brightness.light));
     return GetBuilder<navibool>(builder: (_) {
       return GetBuilder<uisetting>(
         builder: (_) {

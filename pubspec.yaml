@@ -50,6 +50,7 @@ dependencies:
   get: 
   async:
   http:
+  flutter_phoenix: 
   # Use these library for picker
   image_picker: 
   image_picker_for_web:

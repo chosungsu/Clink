@@ -1,6 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields, prefer_typing_uninitialized_variables, prefer_const_constructors
 
-import 'package:clickbyme/BACKENDPART/FIREBASE/SearchVP.dart';
+import 'package:clickbyme/BACKENDPART/ViewPoints/SearchVP.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/BACKENDPART/Getx/uisetting.dart';
 import 'package:clickbyme/Tool/AppBarCustom.dart';

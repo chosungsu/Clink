@@ -1,8 +1,9 @@
 // ignore_for_file: unused_local_variable, must_be_immutable, non_constant_identifier_names, prefer_typing_uninitialized_variables
 
-import 'package:clickbyme/BACKENDPART/FIREBASE/SettingVP.dart';
+import 'package:clickbyme/BACKENDPART/ViewPoints/SettingVP.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/main.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -52,6 +53,9 @@ class AppBarCustom extends StatelessWidget {
     final uiset = Get.put(uisetting());
     final draw = Get.put(navibool());
     StatusBarControl.setColor(draw.backgroundcolor, animated: true);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarIconBrightness:
+            draw.statusbarcolor == 0 ? Brightness.dark : Brightness.light));
 
     return StatefulBuilder(builder: ((context, setState) {
       return GetBuilder<navibool>(

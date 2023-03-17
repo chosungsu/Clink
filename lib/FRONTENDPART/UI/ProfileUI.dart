@@ -1,14 +1,13 @@
-// ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names
+// ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names, file_names
 
-import 'package:clickbyme/BACKENDPART/FIREBASE/SettingVP.dart';
-import 'package:clickbyme/FRONTENDPART/Widget/responsiveWidget.dart';
+import 'dart:io';
+import 'package:clickbyme/BACKENDPART/ViewPoints/SettingVP.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import '../../BACKENDPART/Getx/linkspacesetting.dart';
 import '../../../Tool/TextSize.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
@@ -81,6 +80,7 @@ View(context, maxWidth, maxHeight, searchnode, controller) {
 UserBoard(controller, searchnode) {
   Widget title;
   Widget content;
+
   return StatefulBuilder(
     builder: (context, setState) {
       return SizedBox(
@@ -91,20 +91,74 @@ UserBoard(controller, searchnode) {
             children: [
               Flexible(
                   flex: 1,
-                  child: Container(
-                    height: 100,
-                    width: 100,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        border:
-                            Border.all(color: draw.color_textstatus, width: 1)),
-                    child: Icon(
-                      Octicons.person,
-                      size: 30,
-                      color: draw.color_textstatus,
-                    ),
-                  )),
+                  child: GestureDetector(
+                      onTap: () {
+                        title = Widgets_personchange(
+                            context, controller, searchnode, 0)[0];
+                        content = Widgets_personchange(
+                            context, controller, searchnode, 0)[1];
+                        AddContent(context, title, content, searchnode);
+                      },
+                      child: uiset.usrimgurl != ''
+                          ? Container(
+                              height: 110,
+                              width: 110,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                      color: draw.color_textstatus, width: 1)),
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                      child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: Image.file(
+                                      File(uiset.usrimgurl),
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )),
+                                  const Positioned(
+                                      right: 0,
+                                      bottom: 0,
+                                      child: Icon(
+                                        FontAwesome.pencil_square_o,
+                                        size: 30,
+                                        color: Colors.blue,
+                                      )),
+                                ],
+                              ))
+                          : Stack(
+                              children: [
+                                Positioned(
+                                  child: Container(
+                                    height: 110,
+                                    width: 110,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            color: draw.color_textstatus,
+                                            width: 1)),
+                                    child: Icon(
+                                      Octicons.person,
+                                      size: 30,
+                                      color: draw.color_textstatus,
+                                    ),
+                                  ),
+                                ),
+                                const Positioned(
+                                    right: 0,
+                                    bottom: 0,
+                                    child: Icon(
+                                      FontAwesome.pencil_square_o,
+                                      size: 30,
+                                      color: Colors.blue,
+                                    )),
+                              ],
+                            ))),
               Flexible(
                   fit: FlexFit.tight,
                   child: Container(
@@ -114,32 +168,34 @@ UserBoard(controller, searchnode) {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Flexible(
-                              fit: FlexFit.tight,
-                              child: Text(
-                                Hive.box('user_info').get('id'),
-                                maxLines: 3,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: contentTextsize(),
-                                    color: draw.color_textstatus),
-                              ),
-                            ),
+                            GetBuilder<PeopleAdd>(builder: (_) {
+                              return Flexible(
+                                fit: FlexFit.tight,
+                                child: Text(
+                                  peopleadd.nickname,
+                                  maxLines: 3,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentTextsize(),
+                                      color: draw.color_textstatus),
+                                ),
+                              );
+                            }),
                             GestureDetector(
                                 onTap: () {
                                   controller.clear();
                                   uiset.changeavailable(true);
                                   title = Widgets_personchange(
-                                      context, controller, searchnode)[0];
+                                      context, controller, searchnode, 1)[0];
                                   content = Widgets_personchange(
-                                      context, controller, searchnode)[1];
+                                      context, controller, searchnode, 1)[1];
                                   AddContent(
                                       context, title, content, searchnode);
                                 },
-                                child: Icon(
+                                child: const Icon(
                                   FontAwesome.pencil_square_o,
                                   size: 30,
-                                  color: draw.color_textstatus,
+                                  color: Colors.blue,
                                 ))
                           ],
                         ),

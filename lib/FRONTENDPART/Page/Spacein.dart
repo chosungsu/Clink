@@ -1,5 +1,5 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names
-import 'package:clickbyme/BACKENDPART/FIREBASE/PersonalVP.dart';
+import 'package:clickbyme/BACKENDPART/ViewPoints/PersonalVP.dart';
 import 'package:clickbyme/BACKENDPART/Getx/linkspacesetting.dart';
 import 'package:clickbyme/BACKENDPART/Getx/uisetting.dart';
 import 'package:clickbyme/sheets/linksettingsheet.dart';

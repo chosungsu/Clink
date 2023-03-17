@@ -6,8 +6,11 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../Getx/PeopleAdd.dart';
 
 class LoginApiProvider extends GetxController {
+  final peopleadd = Get.put(PeopleAdd());
+
   fetchTasks() async {
     var url = '$baseurl/users/${Hive.box('user_setting').get('usercode')}/';
     var response = await http.get(Uri.parse(url));
@@ -35,11 +38,13 @@ class LoginApiProvider extends GetxController {
             5, (_) => chars.codeUnitAt(rnd.nextInt(chars.length))));
     Hive.box('user_setting').put('usercode', code.substring(5));
     Hive.box('user_info').put('id', code.substring(5));
+    peopleadd.nickname = code.substring(5);
+    peopleadd.usrcode = code.substring(5);
     try {
       Map data = {
-        "nick": Hive.box('user_info').get('id'),
+        "nick": peopleadd.nickname,
         "email": "",
-        "code": Hive.box('user_setting').get('usercode')
+        "code": peopleadd.usrcode
       };
       var res = await http.post(
         Uri.parse(url),
