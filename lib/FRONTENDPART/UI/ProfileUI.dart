@@ -92,8 +92,8 @@ UserBoard(controller, searchnode) {
               Flexible(
                   flex: 1,
                   child: Container(
-                    height: 50,
-                    width: 50,
+                    height: 100,
+                    width: 100,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(100),
@@ -114,16 +114,16 @@ UserBoard(controller, searchnode) {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              Hive.box('user_info').get('id'),
-                              maxLines: 3,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTextsize(),
-                                  color: draw.color_textstatus),
-                            ),
-                            const SizedBox(
-                              width: 5,
+                            Flexible(
+                              fit: FlexFit.tight,
+                              child: Text(
+                                Hive.box('user_info').get('id'),
+                                maxLines: 3,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTextsize(),
+                                    color: draw.color_textstatus),
+                              ),
                             ),
                             GestureDetector(
                                 onTap: () {

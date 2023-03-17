@@ -217,27 +217,36 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                             }))),
                                 Flexible(
                                   fit: FlexFit.tight,
-                                  child: responsivewidget(
-                                      SizedBox(
-                                        child: ScrollConfiguration(
-                                            behavior: NoBehavior(),
-                                            child: LayoutBuilder(
-                                              builder: ((context, constraint) {
-                                                return SearchUI(
-                                                    context,
-                                                    scrollController,
-                                                    controller,
-                                                    draw.navishow == true &&
-                                                            Get.width > 1000
-                                                        ? Get.width - 120
-                                                        : Get.width,
-                                                    controller2,
-                                                    searchNode,
-                                                    controller3);
-                                              }),
-                                            )),
-                                      ),
-                                      Get.width),
+                                  child: SizedBox(
+                                    width: draw.navishow == true &&
+                                            Get.width > 1000
+                                        ? Get.width - 120
+                                        : Get.width,
+                                    child: ScrollConfiguration(
+                                        behavior: NoBehavior(),
+                                        child: LayoutBuilder(
+                                          builder: ((context, constraint) {
+                                            return SingleChildScrollView(
+                                                child: Column(
+                                              children: [
+                                                responsivewidget(
+                                                    SearchUI(
+                                                        context,
+                                                        scrollController,
+                                                        controller,
+                                                        draw.navishow == true &&
+                                                                Get.width > 1000
+                                                            ? Get.width - 120
+                                                            : Get.width,
+                                                        controller2,
+                                                        searchNode,
+                                                        controller3),
+                                                    Get.width),
+                                              ],
+                                            ));
+                                          }),
+                                        )),
+                                  ),
                                 ),
                               ],
                             ),

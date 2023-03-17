@@ -97,18 +97,24 @@ class _SettingSubPageState extends State<SettingSubPage>
                               }),
                               Flexible(
                                 fit: FlexFit.tight,
-                                child: responsivewidget(
-                                    SizedBox(
-                                      child: ScrollConfiguration(
-                                          behavior: NoBehavior(),
-                                          child: LayoutBuilder(
-                                            builder: ((context, constraint) {
-                                              return UI(constraint.maxWidth,
-                                                  constraint.maxHeight);
-                                            }),
-                                          )),
-                                    ),
-                                    Get.width),
+                                child: SizedBox(
+                                  width: Get.width,
+                                  child: ScrollConfiguration(
+                                      behavior: NoBehavior(),
+                                      child: LayoutBuilder(
+                                        builder: ((context, constraint) {
+                                          return SingleChildScrollView(
+                                              child: Column(
+                                            children: [
+                                              responsivewidget(
+                                                  UI(constraint.maxWidth,
+                                                      constraint.maxHeight),
+                                                  Get.width),
+                                            ],
+                                          ));
+                                        }),
+                                      )),
+                                ),
                               ),
                             ],
                           ),

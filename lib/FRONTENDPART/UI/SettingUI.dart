@@ -15,6 +15,7 @@ import '../../../Tool/TextSize.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
 import '../../BACKENDPART/Getx/PeopleAdd.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
+import '../../Tool/FlushbarStyle.dart';
 import '../../sheets/BottomSheet/AddContentWithBtn.dart';
 
 final uiset = Get.put(uisetting());
@@ -226,6 +227,13 @@ Opt_body(index, searchnode, controller) {
                                                         draw.setmenushowing(
                                                             true);
                                                       }
+                                                      Snack.snackbars(
+                                                          context: context,
+                                                          title: '변경완료함',
+                                                          backgroundcolor:
+                                                              Colors.green,
+                                                          bordercolor: draw
+                                                              .backgroundcolor);
                                                     },
                                                   );
                                                 },
@@ -408,6 +416,13 @@ Opt_body(index, searchnode, controller) {
                                                         draw.setmenushowing(
                                                             false);
                                                       }
+                                                      Snack.snackbars(
+                                                          context: context,
+                                                          title: '변경완료함',
+                                                          backgroundcolor:
+                                                              Colors.green,
+                                                          bordercolor: draw
+                                                              .backgroundcolor);
                                                     },
                                                   );
                                                 },

@@ -122,8 +122,8 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                                                   0
                                                               ? MyTheme
                                                                   .colorpastelpurple
-                                                              : draw
-                                                                  .color_textstatus),
+                                                              : MyTheme
+                                                                  .colorgrey),
                                                     ),
                                                     const SizedBox(
                                                       height: 5,
@@ -175,8 +175,8 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                                                   1
                                                               ? MyTheme
                                                                   .colorpastelpurple
-                                                              : draw
-                                                                  .color_textstatus),
+                                                              : MyTheme
+                                                                  .colorgrey),
                                                     ),
                                                     const SizedBox(
                                                       height: 5,
@@ -213,29 +213,36 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                     ),
                                     Flexible(
                                       fit: FlexFit.tight,
-                                      child: responsivewidget(
-                                          SizedBox(
-                                            width: draw.navishow == true &&
-                                                    Get.width > 1000
-                                                ? Get.width - 120
-                                                : Get.width,
-                                            child: ScrollConfiguration(
-                                                behavior: NoBehavior(),
-                                                child: LayoutBuilder(
-                                                  builder:
-                                                      ((context, constraint) {
-                                                    return UI(
-                                                      draw.navishow == true &&
-                                                              Get.width > 1000
-                                                          ? constraint
-                                                                  .maxWidth -
-                                                              120
-                                                          : constraint.maxWidth,
-                                                    );
-                                                  }),
-                                                )),
-                                          ),
-                                          Get.width),
+                                      child: SizedBox(
+                                        width: draw.navishow == true &&
+                                                Get.width > 1000
+                                            ? Get.width - 120
+                                            : Get.width,
+                                        child: ScrollConfiguration(
+                                            behavior: NoBehavior(),
+                                            child: LayoutBuilder(
+                                              builder: ((context, constraint) {
+                                                return SingleChildScrollView(
+                                                    child: Column(
+                                                  children: [
+                                                    responsivewidget(
+                                                        UI(
+                                                          draw.navishow ==
+                                                                      true &&
+                                                                  Get.width >
+                                                                      1000
+                                                              ? constraint
+                                                                      .maxWidth -
+                                                                  120
+                                                              : constraint
+                                                                  .maxWidth,
+                                                        ),
+                                                        Get.width),
+                                                  ],
+                                                ));
+                                              }),
+                                            )),
+                                      ),
                                     ),
                                   ],
                                 ),

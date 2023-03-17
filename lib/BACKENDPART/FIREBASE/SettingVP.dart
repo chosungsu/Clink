@@ -281,17 +281,20 @@ Widgets_settingpagenickchange(
                     uiset.setloading(false, 1);
                   } else {
                     var returndata = await LoginApiProvider().getTasks();
-                    if (returndata.toString().contains(textcontroller.text)) {
-                      uiset.checktf(true);
-                      uiset.changeavailable(false);
-                    } else {
-                      uiset.checktf(true);
-                      uiset.changeavailable(true);
+                    uiset.checktf(true);
+                    for (int i = 0; i < returndata.length; i++) {
+                      if (returndata[i]['nick'].contains(textcontroller.text)) {
+                        if (uiset.canchange) {
+                          uiset.changeavailable(false);
+                        } else {}
+                      }
+                    }
+                    if (uiset.canchange) {
                       Hive.box('user_info').put('id', textcontroller.text);
                       LoginApiProvider().updateTasks();
                       Get.back();
                       textcontroller.clear();
-                    }
+                    } else {}
                     uiset.setloading(false, 1);
                   }
                 },

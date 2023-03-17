@@ -107,22 +107,28 @@ class _SettingPageState extends State<SettingPage>
                               }),
                               Flexible(
                                 fit: FlexFit.tight,
-                                child: responsivewidget(
-                                    SizedBox(
-                                      child: ScrollConfiguration(
-                                          behavior: NoBehavior(),
-                                          child: LayoutBuilder(
-                                            builder: ((context, constraint) {
-                                              return UI(
-                                                  _controller,
-                                                  searchNode,
-                                                  scrollController,
-                                                  constraint.maxWidth,
-                                                  constraint.maxHeight);
-                                            }),
-                                          )),
-                                    ),
-                                    Get.width),
+                                child: SizedBox(
+                                  width: Get.width,
+                                  child: ScrollConfiguration(
+                                      behavior: NoBehavior(),
+                                      child: LayoutBuilder(
+                                        builder: ((context, constraint) {
+                                          return SingleChildScrollView(
+                                              child: Column(
+                                            children: [
+                                              responsivewidget(
+                                                  UI(
+                                                      _controller,
+                                                      searchNode,
+                                                      scrollController,
+                                                      constraint.maxWidth,
+                                                      constraint.maxHeight),
+                                                  Get.width),
+                                            ],
+                                          ));
+                                        }),
+                                      )),
+                                ),
                               ),
                             ],
                           ),

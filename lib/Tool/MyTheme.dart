@@ -15,6 +15,7 @@ class MyTheme {
   static Color shimmer_home_highlightcolor = Colors.blueGrey.shade100;
   static Color colorWhite = Colors.white;
   static Color colorblack = Colors.black;
+  static Color colorgrey = Colors.grey;
   static Color colorWhitestatus = Colors.transparent;
   static Color colorblackstatus = Colors.transparent;
   static Color colorWhite_drawer = Colors.white;

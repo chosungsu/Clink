@@ -73,45 +73,43 @@ LicenseScreen(maxWidth, maxHeight) {
 }
 
 buildPanel(maxWidth) {
-  return responsivewidget(
-      SizedBox(
-        child: ListView.builder(
-          scrollDirection: Axis.vertical,
-          itemCount: licensedata.length,
-          physics: const BouncingScrollPhysics(),
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            return Column(
-              children: [
-                ContainerDesign(
-                    child: ListTile(
-                      title: Text(
-                        licensedata[index].title,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTextsize(),
-                            color: draw.color_textstatus),
-                      ),
-                      trailing: const Icon(
-                        FontAwesome.hand_o_right,
-                        color: Colors.grey,
-                        size: 30,
-                      ),
-                      onTap: () {
-                        var url = Uri.parse(licensedata[index].sub);
-                        launchUrl(url);
-                      },
-                    ),
-                    color: draw.backgroundcolor),
-                const SizedBox(
-                  height: 10,
+  return SizedBox(
+    child: ListView.builder(
+      scrollDirection: Axis.vertical,
+      itemCount: licensedata.length,
+      physics: const ScrollPhysics(),
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        return Column(
+          children: [
+            ContainerDesign(
+                child: ListTile(
+                  title: Text(
+                    licensedata[index].title,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentTextsize(),
+                        color: draw.color_textstatus),
+                  ),
+                  trailing: const Icon(
+                    FontAwesome.hand_o_right,
+                    color: Colors.grey,
+                    size: 30,
+                  ),
+                  onTap: () {
+                    var url = Uri.parse(licensedata[index].sub);
+                    launchUrl(url);
+                  },
                 ),
-              ],
-            );
-          },
-        ),
-      ),
-      maxWidth);
+                color: draw.backgroundcolor),
+            const SizedBox(
+              height: 10,
+            ),
+          ],
+        );
+      },
+    ),
+  );
 }
 /*ExpansionPanelList(
             expansionCallback: ((panelIndex, isExpanded) {
