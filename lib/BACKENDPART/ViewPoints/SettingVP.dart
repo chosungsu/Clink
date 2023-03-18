@@ -1,5 +1,6 @@
 // ignore_for_file: unused_local_variable, non_constant_identifier_names, file_names
 
+import 'package:clickbyme/Tool/AndroidIOS.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -14,7 +15,6 @@ import '../../Tool/TextSize.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../Api/LoginApi.dart';
 import '../../FRONTENDPART/Route/subuiroute.dart';
-import '../LocalNotiPlatform/NotificationApi.dart';
 import '../../Tool/BGColor.dart';
 import '../../Tool/ContainerDesign.dart';
 
@@ -82,7 +82,24 @@ Widgets_personchange(context, controller, searchnode, section) {
             GestureDetector(
                 onTap: () async {
                   Get.back();
-                  uiset.setusrimg('');
+                  final reloadpage = await Get.dialog(OSDialogforth(
+                          context,
+                          '알림',
+                          SingleChildScrollView(
+                            child: Text('정말 프로필 이미지를 삭제하시겠습니까?',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTextsize(),
+                                    color: Colors.red)),
+                          ),
+                          GetBackWithTrue)) ??
+                      false;
+                  if (reloadpage) {
+                    uiset.setusrimg('');
+                    Get.back();
+                  } else {
+                    Get.back();
+                  }
                 },
                 child: ListTile(
                   leading: const Icon(
@@ -327,6 +344,7 @@ Widgets_settingpagenickchange(
                   } else {
                     var returndata = await LoginApiProvider().getTasks();
                     uiset.checktf(true);
+                    uiset.changeavailable(true);
                     for (int i = 0; i < returndata.length; i++) {
                       if (returndata[i]['nick'].contains(textcontroller.text)) {
                         if (uiset.canchange) {
@@ -340,6 +358,11 @@ Widgets_settingpagenickchange(
                       LoginApiProvider().updateTasks();
                       Get.back();
                       textcontroller.clear();
+                      Snack.snackbars(
+                          context: context,
+                          title: '변경완료함',
+                          backgroundcolor: Colors.green,
+                          bordercolor: draw.backgroundcolor);
                     } else {}
                     uiset.setloading(false, 1);
                   }

@@ -429,7 +429,7 @@ class _ImageSliderPageState extends State<ImageSliderPage>
                                     fontWeight: FontWeight.bold,
                                     fontSize: contentTextsize(),
                                     color: Colors.blueGrey)),
-                            pressed2)) ??
+                            GetBackWithTrue)) ??
                         false;
                     if (reloadpage) {
                       _deleteFile(widget.doc, index);

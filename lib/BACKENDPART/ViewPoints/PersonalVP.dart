@@ -495,7 +495,7 @@ Widgets_editpageconsole(
                     ),
                   );
                 },
-              ), pressed2)) ??
+              ), GetBackWithTrue)) ??
               false;
           if (reloadpage) {
             uiset.setloading(true, 0);
@@ -861,7 +861,7 @@ Widgets_horizontalbtn(
                       ),
                     );
                   },
-                ), pressed2)) ??
+                ), GetBackWithTrue)) ??
                 false;
             if (reloadpage) {
               uiset.setloading(true, 0);
@@ -1056,7 +1056,7 @@ Widgets_horizontalbtnsecond(
                       ),
                     );
                   },
-                ), pressed2)) ??
+                ), GetBackWithTrue)) ??
                 false;
             if (reloadpage) {
               uiset.setloading(true, 0);

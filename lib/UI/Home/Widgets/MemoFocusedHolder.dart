@@ -588,7 +588,7 @@ void autodeletelogic(
             ),
           );
         },
-      ), pressed2)) ??
+      ), GetBackWithTrue)) ??
       false;
   if (reloadpage) {
     uisetting().setloading(true, 0);

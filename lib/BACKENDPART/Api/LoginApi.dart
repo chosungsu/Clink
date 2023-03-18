@@ -36,10 +36,11 @@ class LoginApiProvider extends GetxController {
     code = 'User#' +
         String.fromCharCodes(Iterable.generate(
             5, (_) => chars.codeUnitAt(rnd.nextInt(chars.length))));
-    Hive.box('user_setting').put('usercode', code.substring(5));
-    Hive.box('user_info').put('id', code.substring(5));
+
     peopleadd.nickname = code.substring(5);
     peopleadd.usrcode = code.substring(5);
+    Hive.box('user_setting').put('usercode', peopleadd.usrcode);
+    Hive.box('user_info').put('id', peopleadd.nickname);
     try {
       Map data = {
         "nick": peopleadd.nickname,

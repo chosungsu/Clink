@@ -5,7 +5,6 @@ import 'package:clickbyme/FRONTENDPART/Route/initScreenLoading.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -42,9 +41,7 @@ void main() async {
   await Hive.openBox('user_setting');
   NotificationApi.init(initScheduled: true);
   runApp(
-    Phoenix(
-      child: const MyApp(),
-    ),
+    const MyApp(),
   );
 }
 

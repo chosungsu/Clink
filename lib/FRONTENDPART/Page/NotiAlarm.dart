@@ -227,16 +227,16 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                                   children: [
                                                     responsivewidget(
                                                         UI(
-                                                          draw.navishow ==
-                                                                      true &&
-                                                                  Get.width >
-                                                                      1000
-                                                              ? constraint
-                                                                      .maxWidth -
-                                                                  120
-                                                              : constraint
-                                                                  .maxWidth,
-                                                        ),
+                                                            draw.navishow == true &&
+                                                                    Get.width >
+                                                                        1000
+                                                                ? constraint
+                                                                        .maxWidth -
+                                                                    120
+                                                                : constraint
+                                                                    .maxWidth,
+                                                            constraint
+                                                                .maxHeight),
                                                         Get.width),
                                                   ],
                                                 ));

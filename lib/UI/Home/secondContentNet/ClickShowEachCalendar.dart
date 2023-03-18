@@ -143,7 +143,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
               ),
             );
           },
-        ), pressed2)) ??
+        ), GetBackWithTrue)) ??
         false;
     if (reloadpage) {
       setState(() {
@@ -276,7 +276,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
                             ),
                           );
                         },
-                      ), pressed2)) ??
+                      ), GetBackWithTrue)) ??
                       false;
               if (reloadpage) {
                 Future.delayed(const Duration(seconds: 0), () async {

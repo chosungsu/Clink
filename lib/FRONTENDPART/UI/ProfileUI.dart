@@ -124,7 +124,8 @@ UserBoard(controller, searchnode) {
                                       right: 0,
                                       bottom: 0,
                                       child: Icon(
-                                        FontAwesome.pencil_square_o,
+                                        MaterialCommunityIcons
+                                            .image_filter_center_focus_weak,
                                         size: 30,
                                         color: Colors.blue,
                                       )),
@@ -153,7 +154,8 @@ UserBoard(controller, searchnode) {
                                     right: 0,
                                     bottom: 0,
                                     child: Icon(
-                                      FontAwesome.pencil_square_o,
+                                      MaterialCommunityIcons
+                                          .image_filter_center_focus_weak,
                                       size: 30,
                                       color: Colors.blue,
                                     )),

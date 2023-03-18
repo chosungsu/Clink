@@ -14,7 +14,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -49,6 +48,9 @@ void checkForInitialMessage() async {
   }
 }
 
+///onWillPop
+///
+///모든 페이지의 백버튼 이벤트를 관리합니다.
 Future<bool> onWillPop(context) async {
   final uiset = Get.put(uisetting());
   final draw = Get.put(navibool());
@@ -95,10 +97,13 @@ void pressed1() {
   SystemNavigator.pop();
 }
 
-void pressed2() {
+void GetBackWithTrue() {
   Get.back(result: true);
 }
 
+///GoToMain
+///
+///메인페이지로 이동합니다.
 GoToMain() {
   final uiset = Get.put(uisetting());
   Hive.box('user_setting').put('currentmypage', 0);
@@ -106,14 +111,18 @@ GoToMain() {
   Get.back();
 }
 
+///GoToStartApp
+///
+///앱을 닫습니다.
 GoToStartApp(context) {
-  SystemNavigator.pop().whenComplete(() async {
-    Hive.box('user_info').put('id', '');
-    Hive.box('user_setting').put('usercode', '');
-    Phoenix.rebirth(context);
-  });
+  final uiset = Get.put(uisetting());
+  uiset.settingdestroy();
+  SystemNavigator.pop();
 }
 
+///GoToSettingPage
+///
+///세팅페이지로 이동합니다.
 GoToSettingPage() async {
   final draw = Get.put(navibool());
   draw.setclose();
@@ -121,6 +130,9 @@ GoToSettingPage() async {
   Get.to(() => const SettingPage(), transition: Transition.fade);
 }
 
+///GoToSettingSubPage
+///
+///세부세팅페이지로 이동합니다.
 GoToSettingSubPage() async {
   final draw = Get.put(navibool());
   draw.clicksettinginside(2, true);
@@ -225,7 +237,7 @@ deletenoti(context) async {
                   fontWeight: FontWeight.bold,
                   fontSize: contentTextsize(),
                   color: Colors.blueGrey)),
-          pressed2)) ??
+          GetBackWithTrue)) ??
       false;
   if (reloadpage) {
     if (deletenotiindexlist.isEmpty) {

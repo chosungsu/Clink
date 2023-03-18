@@ -32,6 +32,21 @@ class uisetting extends GetxController {
   String searchpagemove = '';
   String textrecognizer = '';
 
+  ///settingdestroy
+  ///
+  ///모든 UI를 최초의 상태로 되돌리는 데에 사용된다.
+  void settingdestroy() {
+    Hive.box('user_info').put('id', '');
+    Hive.box('user_setting').put('usercode', '');
+    Hive.box('user_setting').put('usrimgurl', '');
+    Hive.box('user_setting').put('which_color_background', 0);
+    Hive.box('user_setting').put('which_text_size', 0);
+    Hive.box('user_setting').put('which_menu_pick', 0);
+
+    update();
+    notifyChildrens();
+  }
+
   ///setloading
   ///
   ///모든 UI상에서 로딩중인지를 판단하는 데에 사용된다.

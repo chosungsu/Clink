@@ -166,7 +166,7 @@ content(
                       ),
                     );
                   },
-                ), pressed2)) ??
+                ), GetBackWithTrue)) ??
                 false;
             if (reloadpage) {
               linkspaceset.setcompleted(true);

@@ -427,7 +427,7 @@ content(
                                     ),
                                   );
                                 },
-                              ), pressed2)) ??
+                              ), GetBackWithTrue)) ??
                               false;
                       if (reloadpage) {
                         setState(() {

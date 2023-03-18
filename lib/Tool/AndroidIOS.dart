@@ -53,15 +53,6 @@ Responsivelayout(landscape, portrait) {
   }
 }
 
-Responsivedrawer(dtview, mview) {
-  if (Device.screenType == ScreenType.desktop ||
-      Device.screenType == ScreenType.tablet) {
-    return dtview;
-  } else {
-    return mview;
-  }
-}
-
 getHeight(GlobalKey key) {
   if (key.currentContext != null) {
     final RenderBox renderBox =
@@ -80,7 +71,7 @@ getWidth(GlobalKey key) {
   }
 }
 
-OSDialog(BuildContext context, String title, content, pressed) {
+OSDialog(context, title, content, pressed) {
   return GetPlatform.isAndroid == true || GetPlatform.isWindows == true
       ? AlertDialog(
           shape: RoundedRectangleBorder(
@@ -136,7 +127,7 @@ OSDialog(BuildContext context, String title, content, pressed) {
         );
 }
 
-OSDialogsecond(BuildContext context, String title, content, pressed) {
+OSDialogsecond(context, title, content, pressed) {
   return GetPlatform.isAndroid == true
       ? AlertDialog(
           shape: RoundedRectangleBorder(
@@ -192,7 +183,7 @@ OSDialogsecond(BuildContext context, String title, content, pressed) {
         );
 }
 
-OSDialogthird(BuildContext context, String title, content, pressed) {
+OSDialogthird(context, title, content, pressed) {
   return GetPlatform.isAndroid == true
       ? AlertDialog(
           shape: RoundedRectangleBorder(
@@ -241,6 +232,62 @@ OSDialogthird(BuildContext context, String title, content, pressed) {
                 }),
             CupertinoDialogAction(
                 child: const Text("포함 안해요"),
+                onPressed: () {
+                  Navigator.pop(context, false);
+                })
+          ],
+        );
+}
+
+OSDialogforth(context, title, content, pressed) {
+  return GetPlatform.isAndroid == true
+      ? AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Text(title,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTitleTextsize())),
+          content: content,
+          actions: <Widget>[
+            TextButton(
+              onPressed: pressed,
+              child: Text('네',
+                  style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTextsize())),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+              child: Text('아니요',
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: contentTextsize())),
+            ),
+          ],
+        )
+      : CupertinoAlertDialog(
+          title: Text(title,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTitleTextsize())),
+          content: content,
+          actions: [
+            CupertinoDialogAction(
+                isDefaultAction: true,
+                child: const Text("네"),
+                onPressed: () {
+                  Navigator.pop(context);
+                }),
+            CupertinoDialogAction(
+                child: const Text("아니요"),
                 onPressed: () {
                   Navigator.pop(context, false);
                 })

@@ -24,7 +24,7 @@ final draw = Get.put(navibool());
 UI(maxWidth, maxHeight) {
   return responsivewidget(GetBuilder<uisetting>(builder: (_) {
     return Padding(
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
         child: uiset.profileindex == 1
             ? TestScreen(maxWidth, maxHeight)
             : LicenseScreen(maxWidth, maxHeight));

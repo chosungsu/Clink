@@ -1,7 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:clickbyme/BACKENDPART/Api/NoticeApi.dart';
-import 'package:clickbyme/FRONTENDPART/Widget/responsiveWidget.dart';
 import 'package:clickbyme/Tool/TextSize.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -16,7 +15,7 @@ final draw = Get.put(navibool());
 final uiset = Get.put(uisetting());
 final notilist = Get.put(notishow());
 
-UI(width) {
+UI(width, height) {
   return FutureBuilder(
     future: NoticeApiProvider().getTasks(),
     builder: (context, snapshot) {
@@ -34,8 +33,8 @@ UI(width) {
         return GetBuilder<notishow>(
           builder: (_) {
             return notilist.listappnoti.isEmpty || notilist.clicker == 1
-                ? NotInPageScreen(width)
-                : view(width);
+                ? NotInPageScreen(width, height)
+                : view(width, height);
           },
         );
       }
@@ -43,9 +42,10 @@ UI(width) {
   );
 }
 
-NotInPageScreen(width) {
+NotInPageScreen(width, height) {
   return Container(
     padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+    height: height,
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -68,7 +68,7 @@ NotInPageScreen(width) {
   );
 }
 
-view(width) {
+view(width, height) {
   return Container(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
       child: ListView.builder(

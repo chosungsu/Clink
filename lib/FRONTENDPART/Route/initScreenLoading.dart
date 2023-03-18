@@ -5,7 +5,6 @@ import 'package:clickbyme/BACKENDPART/Api/LicenseApi.dart';
 import 'package:clickbyme/BACKENDPART/Api/LoginApi.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import '../../BACKENDPART/ViewPoints/SettingVP.dart';
 import '../../BACKENDPART/Getx/PeopleAdd.dart';
 import '../../BACKENDPART/Getx/notishow.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
@@ -14,8 +13,9 @@ Future initScreen() async {
   final peopleadd = Get.put(PeopleAdd());
   final notilist = Get.put(notishow());
   final uiset = Get.put(uisetting());
-  //Hive.box('user_setting').put('usercode', '');
-  if (Hive.box('user_info').get('id') == '') {
+
+  var returndata = await LoginApiProvider().getTasks();
+  if (Hive.box('user_info').get('id') == '' || returndata.isEmpty) {
     /**
      * createTasks : name, usercode, licenselist를 생성함.
      */

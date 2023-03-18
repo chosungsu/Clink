@@ -120,7 +120,7 @@ class _DayScriptState extends State<DayScript> {
                     fontWeight: FontWeight.bold,
                     fontSize: contentTextsize(),
                     color: Colors.blueGrey)),
-            pressed2)) ??
+            GetBackWithTrue)) ??
         false;
     if (reloadpage) {
       controll_cal.setclickday(selectedDay, selectedDay);
@@ -200,7 +200,7 @@ class _DayScriptState extends State<DayScript> {
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: contentTextsize(),
                                                 color: Colors.blueGrey)),
-                                        pressed2)) ??
+                                        GetBackWithTrue)) ??
                                     false;
                                 if (reloadpage) {
                                   controll_cal.setclickday(
@@ -459,7 +459,7 @@ class _DayScriptState extends State<DayScript> {
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: contentTextsize(),
                                                 color: Colors.blueGrey)),
-                                        pressed2)) ??
+                                        GetBackWithTrue)) ??
                                     false;
                                 if (reloadpage) {
                                   controll_cal.setclickday(
