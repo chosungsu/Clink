@@ -11,6 +11,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:get/get.dart';
 import 'package:another_flushbar/flushbar.dart';
 
+import '../BACKENDPART/Enums/Variables.dart';
 import '../Tool/FlushbarStyle.dart';
 import '../BACKENDPART/Getx/PeopleAdd.dart';
 import '../BACKENDPART/Getx/selectcollection.dart';
@@ -62,12 +63,10 @@ content(
     String s,
     selectcollection scollection,
     bool isresponsive) {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
   PageController pageController =
       PageController(initialPage: s == 'outside' ? 0 : 1);
   String selectvalue = '';
-  final cal_share_person = Get.put(PeopleAdd());
-  String usercode = Hive.box('user_setting').get('usercode');
+  final peopleadd = Get.put(PeopleAdd());
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
       height: isresponsive == true ? 290 * 2 - 50 : 300,
@@ -168,7 +167,7 @@ content(
                         } else {
                           setState(() {
                             firestore.collection('MemoCollections').add({
-                              'madeUser': usercode,
+                              'madeUser': peopleadd.usrcode,
                               'title': textEditingController_add_sheet.text,
                             }).whenComplete(() {
                               setState(() {
@@ -276,7 +275,7 @@ content(
                       return StreamBuilder<QuerySnapshot>(
                         stream: firestore
                             .collection('MemoCollections')
-                            .where('madeUser', isEqualTo: usercode)
+                            .where('madeUser', isEqualTo: peopleadd.usrcode)
                             .snapshots(),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {

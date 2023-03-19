@@ -12,7 +12,6 @@ import '../../Tool/FlushbarStyle.dart';
 import '../Getx/PeopleAdd.dart';
 import '../Getx/uisetting.dart';
 import '../../Tool/TextSize.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import '../Api/LoginApi.dart';
 import '../../FRONTENDPART/Route/subuiroute.dart';
 import '../../Tool/BGColor.dart';
@@ -24,8 +23,8 @@ final uiset = Get.put(uisetting());
 pickImage(source) async {
   final image = await ImagePicker().pickImage(source: source);
   if (image == null) return;
-  uiset.setusrimg(image.path);
-  Hive.box('user_setting').put('usrimgurl', image.path);
+  peopleadd.setusrimg(image.path);
+  LoginApiProvider().updateTasks('img');
 }
 
 Widgets_personchange(context, controller, searchnode, section) {
@@ -95,7 +94,8 @@ Widgets_personchange(context, controller, searchnode, section) {
                           GetBackWithTrue)) ??
                       false;
                   if (reloadpage) {
-                    uiset.setusrimg('');
+                    peopleadd.setusrimg('');
+                    LoginApiProvider().updateTasks('img');
                     Get.back();
                   } else {
                     Get.back();
@@ -353,9 +353,8 @@ Widgets_settingpagenickchange(
                       }
                     }
                     if (uiset.canchange) {
-                      Hive.box('user_info').put('id', textcontroller.text);
                       peopleadd.nickname = textcontroller.text;
-                      LoginApiProvider().updateTasks();
+                      LoginApiProvider().updateTasks('nick');
                       Get.back();
                       textcontroller.clear();
                       Snack.snackbars(

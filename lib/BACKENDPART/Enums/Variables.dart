@@ -21,16 +21,16 @@ import 'Expandable.dart';
 import 'MemoList.dart';
 
 //Here are general Variables
-var baseurl = 'http://54.65.249.132:8000';
-var usercode = Hive.box('user_setting').get('usercode') ?? '';
-var appnickname = Hive.box('user_info').get('id') ?? '';
-var useremail = Hive.box('user_info').get('email') ?? '';
 final linkspaceset = Get.put(linkspacesetting());
 final uiset = Get.put(uisetting());
 final draw = Get.put(navibool());
 final notilist = Get.put(notishow());
 final peopleadd = Get.put(PeopleAdd());
 final scollection = Get.put(selectcollection());
+var baseurl = 'http://54.65.249.132:8000';
+var usercode = peopleadd.usrcode;
+var appnickname = peopleadd.nickname;
+var useremail = Hive.box('user_info').get('email') ?? '';
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 List pages = [
   const MYPage(),

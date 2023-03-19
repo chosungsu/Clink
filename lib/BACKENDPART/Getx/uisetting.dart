@@ -7,10 +7,11 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../Enums/PageList.dart';
 import '../Enums/Variables.dart';
+import 'PeopleAdd.dart';
 
 class uisetting extends GetxController {
+  final peopleadd = Get.put(PeopleAdd());
   bool loading = false;
-  String usrimgurl = Hive.box('user_setting').get('usrimgurl') ?? '';
   bool sheetloading = false;
   bool canchange = true;
   bool isfilledtextfield = true;
@@ -36,9 +37,9 @@ class uisetting extends GetxController {
   ///
   ///모든 UI를 최초의 상태로 되돌리는 데에 사용된다.
   void settingdestroy() {
-    Hive.box('user_info').put('id', '');
-    Hive.box('user_setting').put('usercode', '');
-    Hive.box('user_setting').put('usrimgurl', '');
+    peopleadd.nickname = '';
+    peopleadd.usrcode = '';
+    peopleadd.usrimgurl = '';
     Hive.box('user_setting').put('which_color_background', 0);
     Hive.box('user_setting').put('which_text_size', 0);
     Hive.box('user_setting').put('which_menu_pick', 0);
@@ -57,16 +58,6 @@ class uisetting extends GetxController {
       sheetloading = what;
     }
 
-    update();
-    notifyChildrens();
-  }
-
-  ///setusrimg
-  ///
-  ///유저의 이미지를 생성하는 데에 사용된다.
-  void setusrimg(String imgurl) {
-    usrimgurl = imgurl;
-    Hive.box('user_setting').put('usrimgurl', imgurl);
     update();
     notifyChildrens();
   }
@@ -158,8 +149,7 @@ class uisetting extends GetxController {
       updateid.clear();
       pagelist.clear();
       for (var element in value.docs) {
-        if (element.data()['username'] ==
-            Hive.box('user_setting').get('usercode')) {
+        if (element.data()['username'] == peopleadd.usrcode) {
           updateid.add(element.data()['linkname']);
           pagelist.add(PageList(
               title: element.data()['linkname'],
@@ -169,7 +159,7 @@ class uisetting extends GetxController {
       }
       if (updateid.isEmpty) {
         await firestore.collection('Pinchannel').add({
-          'username': Hive.box('user_setting').get('usercode'),
+          'username': peopleadd.usrcode,
           'nick': appnickname,
           'linkname': '빈 스페이스',
           'setting': 'block'

@@ -91,76 +91,82 @@ UserBoard(controller, searchnode) {
             children: [
               Flexible(
                   flex: 1,
-                  child: GestureDetector(
-                      onTap: () {
-                        title = Widgets_personchange(
-                            context, controller, searchnode, 0)[0];
-                        content = Widgets_personchange(
-                            context, controller, searchnode, 0)[1];
-                        AddContent(context, title, content, searchnode);
-                      },
-                      child: uiset.usrimgurl != ''
-                          ? Container(
-                              height: 110,
-                              width: 110,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                      color: draw.color_textstatus, width: 1)),
-                              child: Stack(
-                                children: [
-                                  Positioned(
-                                      child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(100),
-                                    child: Image.file(
-                                      File(uiset.usrimgurl),
-                                      width: 100,
-                                      height: 100,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  )),
-                                  const Positioned(
-                                      right: 0,
-                                      bottom: 0,
-                                      child: Icon(
-                                        MaterialCommunityIcons
-                                            .image_filter_center_focus_weak,
-                                        size: 30,
-                                        color: Colors.blue,
+                  child: GetBuilder<PeopleAdd>(
+                    builder: (_) {
+                      return GestureDetector(
+                          onTap: () {
+                            title = Widgets_personchange(
+                                context, controller, searchnode, 0)[0];
+                            content = Widgets_personchange(
+                                context, controller, searchnode, 0)[1];
+                            AddContent(context, title, content, searchnode);
+                          },
+                          child: peopleadd.usrimgurl != ''
+                              ? Container(
+                                  height: 110,
+                                  width: 110,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                          color: draw.color_textstatus,
+                                          width: 1)),
+                                  child: Stack(
+                                    children: [
+                                      Positioned(
+                                          child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        child: Image.file(
+                                          File(peopleadd.usrimgurl),
+                                          width: 100,
+                                          height: 100,
+                                          fit: BoxFit.cover,
+                                        ),
                                       )),
-                                ],
-                              ))
-                          : Stack(
-                              children: [
-                                Positioned(
-                                  child: Container(
-                                    height: 110,
-                                    width: 110,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                            color: draw.color_textstatus,
-                                            width: 1)),
-                                    child: Icon(
-                                      Octicons.person,
-                                      size: 30,
-                                      color: draw.color_textstatus,
+                                      const Positioned(
+                                          right: 0,
+                                          bottom: 0,
+                                          child: Icon(
+                                            MaterialCommunityIcons
+                                                .image_filter_center_focus_weak,
+                                            size: 30,
+                                            color: Colors.blue,
+                                          )),
+                                    ],
+                                  ))
+                              : Stack(
+                                  children: [
+                                    Positioned(
+                                      child: Container(
+                                        height: 110,
+                                        width: 110,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            border: Border.all(
+                                                color: draw.color_textstatus,
+                                                width: 1)),
+                                        child: Icon(
+                                          Octicons.person,
+                                          size: 30,
+                                          color: draw.color_textstatus,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                                const Positioned(
-                                    right: 0,
-                                    bottom: 0,
-                                    child: Icon(
-                                      MaterialCommunityIcons
-                                          .image_filter_center_focus_weak,
-                                      size: 30,
-                                      color: Colors.blue,
-                                    )),
-                              ],
-                            ))),
+                                    const Positioned(
+                                        right: 0,
+                                        bottom: 0,
+                                        child: Icon(
+                                          MaterialCommunityIcons
+                                              .image_filter_center_focus_weak,
+                                          size: 30,
+                                          color: Colors.blue,
+                                        )),
+                                  ],
+                                ));
+                    },
+                  )),
               Flexible(
                   fit: FlexFit.tight,
                   child: Container(

@@ -45,7 +45,6 @@ class _ChooseCalendarState extends State<ChooseCalendar>
     'id',
   );
   late FToast fToast;
-  String usercode = Hive.box('user_setting').get('usercode');
   static final cal_share_person = Get.put(PeopleAdd());
   final controll_memo = Get.put(memosetting());
   final cal_sort = Get.put(calendarsetting());

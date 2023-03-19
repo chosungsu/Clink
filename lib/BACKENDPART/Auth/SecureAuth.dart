@@ -1,10 +1,10 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:clickbyme/Tool/ContainerDesign.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:local_auth_android/local_auth_android.dart';
@@ -14,6 +14,7 @@ import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
 import '../../Tool/FlushbarStyle.dart';
 import '../../Tool/IconBtn.dart';
+import '../Enums/Variables.dart';
 
 class SecureAuth extends StatefulWidget {
   const SecureAuth({
@@ -34,11 +35,6 @@ class SecureAuth extends StatefulWidget {
 }
 
 class _SecureAuthState extends State<SecureAuth> {
-  double translateX = 0.0;
-  double translateY = 0.0;
-  double myWidth = 0.0;
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  String name = Hive.box('user_info').get('id');
   LocalAuthentication auth = LocalAuthentication();
   bool can_auth = false;
   List<BiometricType> availablebio = [];

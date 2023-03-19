@@ -10,6 +10,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import '../../../BACKENDPART/Enums/Linkpage.dart';
+import '../../../BACKENDPART/Enums/Variables.dart';
 import '../../../BACKENDPART/Getx/navibool.dart';
 import '../../../FRONTENDPART/Route/subuiroute.dart';
 import '../../../Tool/AppBarCustom.dart';
@@ -29,12 +30,10 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
-  double translateX = 0.0;
-  double translateY = 0.0;
-  double myWidth = 0.0;
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  String name = Hive.box('user_info').get('id');
-  String usercode = Hive.box('user_setting').get('usercode');
+  final peopleadd = Get.put(PeopleAdd());
+  final draw = Get.put(navibool());
+  final linkspaceset = Get.put(linkspacesetting());
+  final List<Linkspacepage> listspacepageset = [];
   List defaulthomeviewlist = [
     '오늘의 일정',
     '공유된 오늘의 일정',
@@ -42,10 +41,6 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
     '홈뷰에 저장된 메모',
   ];
   List userviewlist = [];
-  final peopleadd = Get.put(PeopleAdd());
-  final draw = Get.put(navibool());
-  final linkspaceset = Get.put(linkspacesetting());
-  final List<Linkspacepage> listspacepageset = [];
 
   @override
   void didChangeDependencies() {

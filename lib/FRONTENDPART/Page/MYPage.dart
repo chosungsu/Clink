@@ -92,7 +92,6 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                       builder: (_) {
                         return Container(
                             color: draw.backgroundcolor,
-                            padding: const EdgeInsets.only(bottom: 20),
                             child: Row(
                               children: [
                                 draw.navi == 0 &&
@@ -128,30 +127,37 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                     ),
                                     Flexible(
                                         fit: FlexFit.tight,
-                                        child: SizedBox(
+                                        child: Container(
                                           width: draw.navishow == true &&
                                                   Get.width > 1000
                                               ? Get.width - 120
                                               : Get.width,
+                                          padding:
+                                              const EdgeInsets.only(bottom: 20),
                                           child: ScrollConfiguration(
                                               behavior: NoBehavior(),
                                               child: LayoutBuilder(
                                                 builder:
                                                     ((context, constraint) {
-                                                  return UI(
-                                                      uiset
-                                                          .pagelist[uiset
-                                                              .mypagelistindex]
-                                                          .id,
-                                                      textcontroller,
-                                                      searchNode,
-                                                      draw.navishow == true &&
-                                                              Get.width > 1000
-                                                          ? constraint
-                                                                  .maxWidth -
-                                                              120
-                                                          : constraint.maxWidth,
-                                                      constraint.maxHeight);
+                                                  return SingleChildScrollView(
+                                                      child: UI(
+                                                          uiset
+                                                              .pagelist[uiset
+                                                                  .mypagelistindex]
+                                                              .id,
+                                                          textcontroller,
+                                                          searchNode,
+                                                          draw.navishow ==
+                                                                      true &&
+                                                                  Get.width >
+                                                                      1000
+                                                              ? constraint
+                                                                      .maxWidth -
+                                                                  120
+                                                              : constraint
+                                                                  .maxWidth,
+                                                          constraint
+                                                              .maxHeight));
                                                 }),
                                               )),
                                         )),

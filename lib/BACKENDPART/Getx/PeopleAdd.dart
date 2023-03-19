@@ -8,12 +8,22 @@ import '../Enums/Variables.dart';
 class PeopleAdd extends GetxController {
   bool ispro = false;
   List people = [];
-  String nickname = Hive.box('user_info').get('id') ?? '';
-  String usrcode = Hive.box('user_setting').get('usercode') ?? '';
+  String nickname = '';
+  String usrcode = '';
+  String usrimgurl = '';
   String code = '';
   List defaulthomeviewlist = [];
   List userviewlist = [];
   List friendlist = [];
+
+  ///setusrimg
+  ///
+  ///유저의 이미지를 생성하는 데에 사용된다.
+  void setusrimg(String imgurl) {
+    usrimgurl = imgurl;
+    update();
+    notifyChildrens();
+  }
 
   void peoplecalendar() {
     people = Hive.box('user_setting').get('share_cal_person');
@@ -31,7 +41,7 @@ class PeopleAdd extends GetxController {
   void friendset() async {
     firestore
         .collection('PeopleList')
-        .doc(Hive.box('user_setting').get('usercode'))
+        .doc(usrcode)
         .set({'friends': []}, SetOptions(merge: true));
 
     update();
@@ -39,10 +49,7 @@ class PeopleAdd extends GetxController {
   }
 
   void secondnameset(String code) {
-    firestore
-        .collection('User')
-        .doc(Hive.box('user_setting').get('usercode'))
-        .update({'nick': code});
+    firestore.collection('User').doc(usrcode).update({'nick': code});
     appnickname = code;
     update();
     notifyChildrens();

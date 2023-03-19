@@ -4,7 +4,6 @@ import 'dart:async';
 import 'package:clickbyme/BACKENDPART/Api/LicenseApi.dart';
 import 'package:clickbyme/BACKENDPART/Api/LoginApi.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import '../../BACKENDPART/Getx/PeopleAdd.dart';
 import '../../BACKENDPART/Getx/notishow.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
@@ -13,19 +12,18 @@ Future initScreen() async {
   final peopleadd = Get.put(PeopleAdd());
   final notilist = Get.put(notishow());
   final uiset = Get.put(uisetting());
+  /**
+  * fetchTasks : user 정보를 백엔드에서 불러옴.
+  */
+  await LoginApiProvider().fetchTasks();
 
-  var returndata = await LoginApiProvider().getTasks();
-  if (Hive.box('user_info').get('id') == '' || returndata.isEmpty) {
+  if (peopleadd.nickname == '') {
     /**
      * createTasks : name, usercode, licenselist를 생성함.
      */
     LoginApiProvider().createTasks();
     LicenseApiProvider().createTasks();
   } else {}
-  /**
-  * fetchTasks : user 정보를 백엔드에서 불러옴.
-  */
-  LoginApiProvider().fetchTasks();
   /**
   * friendset : user의 friendlist를 생성함.
   */

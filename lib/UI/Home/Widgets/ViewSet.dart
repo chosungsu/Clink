@@ -15,13 +15,11 @@ import '../secondContentNet/ClickShowEachNote.dart';
 
 ViewSet(List defaulthomeviewlist, List userviewlist, String usercode) {
   final peopleadd = Get.put(PeopleAdd());
-  String name = Hive.box('user_info').get('id');
   DateTime Date = DateTime.now();
   List contentmy = [];
   List contentshare = [];
   List memosavelist = [];
   List memotodaylist = [];
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
   firestore
       .collection('CalendarDataBase')
       .where('OriginalUser', isEqualTo: usercode)
@@ -345,8 +343,6 @@ stream1(
   List contentmy,
   String usercode,
 ) {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  String name = Hive.box('user_info').get('id');
   DateTime Date = DateTime.now();
   final peopleadd = Get.put(PeopleAdd());
   var updateidalarm = '';
@@ -388,7 +384,7 @@ stream1(
                           .then((value) {
                         if (value.docs.isNotEmpty) {
                           for (int i = 0; i < value.docs.length; i++) {
-                            if (value.docs[i].id == name) {
+                            if (value.docs[i].id == peopleadd.nickname) {
                               if (value.docs[i].data()['calcode'] ==
                                   contentmy[index].id) {
                                 updateidalarm = value.docs[i].id;
@@ -578,8 +574,6 @@ stream2(
   List contentshare,
   String usercode,
 ) {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  String name = Hive.box('user_info').get('id');
   DateTime Date = DateTime.now();
   final peopleadd = Get.put(PeopleAdd());
 
@@ -616,7 +610,7 @@ stream2(
                     firestore.collectionGroup('AlarmTable').get().then((value) {
                       if (value.docs.isNotEmpty) {
                         for (int i = 0; i < value.docs.length; i++) {
-                          if (value.docs[i].id == name) {
+                          if (value.docs[i].id == peopleadd.nickname) {
                             if (value.docs[i].data()['calcode'] ==
                                 snapshot.data!.docs[index].id) {
                               updateidalarm = value.docs[i].id;

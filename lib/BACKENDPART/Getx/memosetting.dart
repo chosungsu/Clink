@@ -2,18 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
 import '../LocalNotiPlatform/NotificationApi.dart';
-import '../../Tool/BGColor.dart';
+import 'PeopleAdd.dart';
 
 class memosetting extends GetxController {
+  final peopleadd = Get.put(PeopleAdd());
   Color color = Hive.box('user_setting').get('coloreachmemo') != null
       ? Color(Hive.box('user_setting').get('coloreachmemo'))
       : Colors.white;
   Color colorfont = Hive.box('user_setting').get('coloreachmemofont') != null
       ? Color(Hive.box('user_setting').get('coloreachmemofont'))
       : Colors.black;
-  String usercode = Hive.box('user_setting').get('usercode') ?? '';
   int memosort = 0;
   bool ischeckedtohideminus = false;
   bool isseveralmemoalarm = false;
@@ -65,7 +64,7 @@ class memosetting extends GetxController {
         NotificationApi.cancelNotification(id: 1);
         firestore
             .collection('MemoAllAlarm')
-            .doc(usercode)
+            .doc(peopleadd.usrcode)
             .update({'ok': false, 'alarmtime': '99:99'});
       }
     }
@@ -90,7 +89,7 @@ class memosetting extends GetxController {
       minute2 = Hive.box('user_setting').get('alarm_memo_minute');
       firestore
           .collection('MemoAllAlarm')
-          .doc(usercode)
+          .doc(peopleadd.usrcode)
           .update({'alarmtime': hour2.toString() + ':' + minute2.toString()});
     }
     update();
@@ -114,10 +113,10 @@ class memosetting extends GetxController {
               int.parse(hour), int.parse(minute), 0));
     } else {
       ischeckedpushmemoalarm = Hive.box('user_setting').get('alarm_memo');
-      firestore.collection('MemoAllAlarm').doc(usercode).update({
+      firestore.collection('MemoAllAlarm').doc(peopleadd.usrcode).update({
         'ok': true,
       });
-      await firestore.collection('MemoAllAlarm').doc(usercode).update({
+      await firestore.collection('MemoAllAlarm').doc(peopleadd.usrcode).update({
         'ok': false,
       });
       NotificationApi.showDailyNotification(
@@ -126,7 +125,10 @@ class memosetting extends GetxController {
           payload: 'memo',
           scheduledate: DateTime.utc(now.year, now.month, now.day,
               int.parse(hour), int.parse(minute), 0));
-      firestore.collection('MemoAllAlarm').doc(usercode).update({'ok': true});
+      firestore
+          .collection('MemoAllAlarm')
+          .doc(peopleadd.usrcode)
+          .update({'ok': true});
     }
     update();
     notifyChildrens();

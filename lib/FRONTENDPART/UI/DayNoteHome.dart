@@ -51,7 +51,6 @@ class _DayNoteHomeState extends State<DayNoteHome> with WidgetsBindingObserver {
   String username = Hive.box('user_info').get(
     'id',
   );
-  String usercode = Hive.box('user_setting').get('usercode');
   List<String> textsummary = [];
   String tmpsummary = '';
   DateTime Date = DateTime.now();

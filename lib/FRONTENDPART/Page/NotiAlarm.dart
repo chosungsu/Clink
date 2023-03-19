@@ -222,6 +222,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                             behavior: NoBehavior(),
                                             child: LayoutBuilder(
                                               builder: ((context, constraint) {
+                                                notilist.listappnoti.clear();
                                                 return SingleChildScrollView(
                                                     child: Column(
                                                   children: [

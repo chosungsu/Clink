@@ -3,7 +3,6 @@
 import 'dart:math';
 import 'package:clickbyme/BACKENDPART/Enums/Variables.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../Getx/PeopleAdd.dart';
@@ -12,16 +11,29 @@ class LoginApiProvider extends GetxController {
   final peopleadd = Get.put(PeopleAdd());
 
   fetchTasks() async {
-    var url = '$baseurl/users/${Hive.box('user_setting').get('usercode')}/';
-    var response = await http.get(Uri.parse(url));
-    if (response.statusCode == 200) {
-      var data = json.decode(response.body);
-      Hive.box('user_setting').put('usercode', data['code']);
-      Hive.box('user_info').put('id', data['nick']);
+    var url;
+    if (peopleadd.usrcode == '') {
+      url = '$baseurl/users/';
     } else {
-      Hive.box('user_setting').put('usercode', '');
-      Hive.box('user_info').put('id', '');
+      url = '$baseurl/users/${peopleadd.usrcode}/';
     }
+    var response = await http.get(Uri.parse(url));
+    var data = json.decode(utf8.decode(response.bodyBytes));
+    if (data.length == 0) {
+      createTasks();
+    } else {
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body);
+        peopleadd.nickname = data['nick'];
+        peopleadd.usrcode = data['code'];
+        peopleadd.usrimgurl = data['picture'] ?? '';
+      } else {
+        peopleadd.nickname = '';
+        peopleadd.usrcode = '';
+        peopleadd.usrimgurl = '';
+      }
+    }
+
     update();
     notifyChildrens();
   }
@@ -39,12 +51,11 @@ class LoginApiProvider extends GetxController {
 
     peopleadd.nickname = code.substring(5);
     peopleadd.usrcode = code.substring(5);
-    Hive.box('user_setting').put('usercode', peopleadd.usrcode);
-    Hive.box('user_info').put('id', peopleadd.nickname);
+    peopleadd.usrimgurl = '';
     try {
       Map data = {
         "nick": peopleadd.nickname,
-        "email": "",
+        "img": peopleadd.usrimgurl,
         "code": peopleadd.usrcode
       };
       var res = await http.post(
@@ -54,7 +65,6 @@ class LoginApiProvider extends GetxController {
         },
         body: jsonEncode(data),
       );
-      fetchTasks();
     } catch (e) {
       print(e);
     }
@@ -63,31 +73,33 @@ class LoginApiProvider extends GetxController {
   }
 
   deleteTasks() async {
-    var url = '$baseurl/users/${Hive.box('user_setting').get('usercode')}/';
+    var url = '$baseurl/users/${peopleadd.usrcode}/';
     await http.delete(
       Uri.parse(url),
     );
   }
 
-  updateTasks() async {
+  updateTasks(String what) async {
     try {
-      deleteTasks().whenComplete(() async {
-        var url = '$baseurl/usertype/create/';
-        Map data = {
-          "nick": Hive.box('user_info').get('id'),
-          "email": "",
-          "code": Hive.box('user_setting').get('usercode')
+      Map data;
+      var url = '$baseurl/users/${peopleadd.usrcode}/update';
+      if (what == 'nick') {
+        data = {"nick": peopleadd.nickname, "img": '', "code": ''};
+      } else {
+        data = {
+          "nick": '',
+          "img": peopleadd.usrimgurl == '' ? null : peopleadd.usrimgurl,
+          "code": ''
         };
-        var res = await http.post(
-          Uri.parse(url),
-          headers: <String, String>{
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: jsonEncode(data),
-        );
-        print(res.statusCode);
-      });
+      }
+      var res = await http.put(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: jsonEncode(data),
+      );
     } catch (e) {
       print(e);
     }

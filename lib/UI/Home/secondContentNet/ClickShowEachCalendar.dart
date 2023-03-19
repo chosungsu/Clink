@@ -84,7 +84,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
   String minute = '';
   var isChecked_pushalarmwhat = null;
   final draw = Get.put(navibool());
-  final cal_share_person = Get.put(PeopleAdd());
+  final peopleadd = Get.put(PeopleAdd());
   final controll_cal = Get.put(calendarsetting());
   String updateidalarm = '';
   String deleterepeatwhile = '';
@@ -178,8 +178,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
             .where('calname', isEqualTo: widget.code)
             .where('Daytodo', isEqualTo: widget.calinfo)
             .where('code', isEqualTo: widget.groupcode)
-            .where('OriginalUser',
-                isEqualTo: Hive.box('user_setting').get('usercode'))
+            .where('OriginalUser', isEqualTo: peopleadd.usrcode)
             /*.where('Date',
                 isEqualTo: widget.date.toString().split('-')[0] +
                     '-' +

@@ -202,15 +202,11 @@ content(
     doc_share,
     String secondname,
     FToast fToast) {
-  String username = Hive.box('user_info').get(
-    'id',
-  );
-  String usercode = Hive.box('user_setting').get('usercode');
   DateTime date = DateTime.now();
   Color _color = doc_color == null ? Colors.blue : Color(doc_color);
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   var controll_cals = Get.put(calendarsetting());
-  final cal_share_person = Get.put(PeopleAdd());
+  final peopleadd = Get.put(PeopleAdd());
   var controll_memo = Get.put(memosetting());
   List changepeople = [];
   List deleteid = [];
@@ -460,12 +456,12 @@ content(
                           });
                           await firestore
                               .collection('ShareHome_update')
-                              .doc(doc + '-' + usercode)
+                              .doc(doc + '-' + peopleadd.usrcode)
                               .delete();
                         } else {
                           await firestore
                               .collection('ShareHome_update')
-                              .doc(doc + '-' + usercode)
+                              .doc(doc + '-' + peopleadd.usrcode)
                               .delete();
                         }
                         setState(() {
@@ -500,7 +496,7 @@ content(
                                   .split(' ')[1]
                                   .split(':')[1],
                           'sharename': doc_share,
-                          'username': username,
+                          'username': peopleadd.nickname,
                           'read': 'no',
                         });
                       }
@@ -621,7 +617,7 @@ content(
                                   .split(' ')[1]
                                   .split(':')[1],
                           'sharename': doc_share,
-                          'username': username,
+                          'username': peopleadd.nickname,
                           'read': 'no',
                         });
 

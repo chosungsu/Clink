@@ -41,11 +41,6 @@ class drawingmemoState extends State<drawingmemo> with WidgetsBindingObserver {
   double myWidth = 0.0;
   List updateid = [];
   List deleteid = [];
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  String username = Hive.box('user_info').get(
-    'id',
-  );
-  String usercode = Hive.box('user_setting').get('usercode');
   final scollection = Get.put(selectcollection());
   final controll_memo = Get.put(memosetting());
   bool isresponsive = false;

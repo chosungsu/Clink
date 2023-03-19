@@ -11,6 +11,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import '../../../BACKENDPART/Enums/MemoList.dart';
+import '../../../BACKENDPART/Getx/PeopleAdd.dart';
 import '../../../FRONTENDPART/UI/DayScript.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../BACKENDPART/Getx/memosetting.dart';
@@ -69,9 +70,9 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
   String username = Hive.box('user_info').get(
     'id',
   );
-  String usercode = Hive.box('user_setting').get('usercode');
   final scollection = Get.put(selectcollection());
   final controll_memo = Get.put(memosetting());
+  final peopleadd = Get.put(PeopleAdd());
   List<TextEditingController> controllers = [];
   List<FocusNode> nodes = [];
   List<bool> checkbottoms = [
@@ -206,7 +207,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
         textEditingController1.text,
         scollection,
         widget.doccollection,
-        usercode,
+        peopleadd.usrcode,
         widget.securewith,
         _color,
         editDateTo,
@@ -293,7 +294,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                             scollection,
                                                             widget
                                                                 .doccollection,
-                                                            usercode,
+                                                            peopleadd.usrcode,
                                                             widget.securewith,
                                                             _color,
                                                             editDateTo,
@@ -400,7 +401,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
                                                               .text,
                                                           widget.doccollection,
                                                           context,
-                                                          usercode,
+                                                          peopleadd.usrcode,
                                                           widget.securewith,
                                                           _color,
                                                           editDateTo,
