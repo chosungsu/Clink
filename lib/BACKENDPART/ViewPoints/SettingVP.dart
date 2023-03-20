@@ -24,7 +24,7 @@ pickImage(source) async {
   final image = await ImagePicker().pickImage(source: source);
   if (image == null) return;
   peopleadd.setusrimg(image.path);
-  LoginApiProvider().updateTasks('img');
+  LoginApiProvider().updateTasks('img', peopleadd.usrimgurl);
 }
 
 Widgets_personchange(context, controller, searchnode, section) {
@@ -95,7 +95,7 @@ Widgets_personchange(context, controller, searchnode, section) {
                       false;
                   if (reloadpage) {
                     peopleadd.setusrimg('');
-                    LoginApiProvider().updateTasks('img');
+                    LoginApiProvider().updateTasks('img', peopleadd.usrimgurl);
                     Get.back();
                   } else {
                     Get.back();
@@ -354,7 +354,8 @@ Widgets_settingpagenickchange(
                     }
                     if (uiset.canchange) {
                       peopleadd.nickname = textcontroller.text;
-                      LoginApiProvider().updateTasks('nick');
+                      LoginApiProvider()
+                          .updateTasks('nick', peopleadd.nickname);
                       Get.back();
                       textcontroller.clear();
                       Snack.snackbars(

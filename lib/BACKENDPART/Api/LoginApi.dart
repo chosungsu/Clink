@@ -3,34 +3,36 @@
 import 'dart:math';
 import 'package:clickbyme/BACKENDPART/Enums/Variables.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../Getx/PeopleAdd.dart';
 
 class LoginApiProvider extends GetxController {
   final peopleadd = Get.put(PeopleAdd());
+  final box = GetStorage();
 
   fetchTasks() async {
-    var url;
-    if (peopleadd.usrcode == '') {
-      url = '$baseurl/users/';
+    var url, response, data;
+    if (peopleadd.nickname == '') {
     } else {
       url = '$baseurl/users/${peopleadd.usrcode}/';
-    }
-    var response = await http.get(Uri.parse(url));
-    var data = json.decode(utf8.decode(response.bodyBytes));
-    if (data.length == 0) {
-      createTasks();
-    } else {
+      response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
         peopleadd.nickname = data['nick'];
         peopleadd.usrcode = data['code'];
         peopleadd.usrimgurl = data['picture'] ?? '';
+        box.write('nick', peopleadd.nickname);
+        box.write('code', peopleadd.usrcode);
+        box.write('picture', peopleadd.usrimgurl);
       } else {
         peopleadd.nickname = '';
         peopleadd.usrcode = '';
         peopleadd.usrimgurl = '';
+        box.write('nick', '');
+        box.write('code', '');
+        box.write('picture', '');
       }
     }
 
@@ -52,6 +54,9 @@ class LoginApiProvider extends GetxController {
     peopleadd.nickname = code.substring(5);
     peopleadd.usrcode = code.substring(5);
     peopleadd.usrimgurl = '';
+    box.write('nick', peopleadd.nickname);
+    box.write('code', peopleadd.usrcode);
+    box.write('picture', peopleadd.usrimgurl);
     try {
       Map data = {
         "nick": peopleadd.nickname,
@@ -79,19 +84,21 @@ class LoginApiProvider extends GetxController {
     );
   }
 
-  updateTasks(String what) async {
+  updateTasks(String what, String change) async {
     try {
       Map data;
       var url = '$baseurl/users/${peopleadd.usrcode}/update';
       if (what == 'nick') {
-        data = {"nick": peopleadd.nickname, "img": '', "code": ''};
+        data = {"nick": change, "img": '', "code": ''};
+        box.remove('nick');
+        box.write('nick', change);
       } else {
-        data = {
-          "nick": '',
-          "img": peopleadd.usrimgurl == '' ? null : peopleadd.usrimgurl,
-          "code": ''
-        };
+        data = {"nick": '', "img": change == '' ? null : change, "code": ''};
+        box.remove('picture');
+        box.write('picture', change);
       }
+
+      peopleadd.checkusrinfo();
       var res = await http.put(
         Uri.parse(url),
         headers: <String, String>{

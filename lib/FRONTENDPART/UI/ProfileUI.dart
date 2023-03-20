@@ -118,7 +118,13 @@ UserBoard(controller, searchnode) {
                                         borderRadius:
                                             BorderRadius.circular(100),
                                         child: Image.file(
-                                          File(peopleadd.usrimgurl),
+                                          File(peopleadd.usrimgurl
+                                                      .contains('media') ==
+                                                  true
+                                              ? peopleadd.usrimgurl
+                                                  .toString()
+                                                  .substring(6)
+                                              : peopleadd.usrimgurl),
                                           width: 100,
                                           height: 100,
                                           fit: BoxFit.cover,

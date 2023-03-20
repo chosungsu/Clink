@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -35,7 +36,7 @@ void main() async {
             messagingSenderId: '789398252263',
             projectId: 'habit-tracker-8dad1'))
   }, null, null);
-
+  await GetStorage.init();
   await Hive.initFlutter();
   await Hive.openBox('user_info');
   await Hive.openBox('user_setting');

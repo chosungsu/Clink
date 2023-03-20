@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../Enums/Variables.dart';
 
@@ -15,12 +16,20 @@ class PeopleAdd extends GetxController {
   List defaulthomeviewlist = [];
   List userviewlist = [];
   List friendlist = [];
+  final box = GetStorage();
+
+  checkusrinfo() {
+    nickname = box.read('nick') ?? '';
+    usrcode = box.read('code') ?? '';
+    usrimgurl = box.read('picture') ?? '';
+  }
 
   ///setusrimg
   ///
   ///유저의 이미지를 생성하는 데에 사용된다.
   void setusrimg(String imgurl) {
     usrimgurl = imgurl;
+
     update();
     notifyChildrens();
   }
