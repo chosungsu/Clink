@@ -14,7 +14,7 @@ import '../../../FRONTENDPART/Route/subuiroute.dart';
 import '../../../Tool/AndroidIOS.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/ContainerDesign.dart';
-import '../../BACKENDPART/Getx/PeopleAdd.dart';
+import '../../BACKENDPART/Getx/UserInfo.dart';
 import '../../BACKENDPART/Getx/calendarsetting.dart';
 import '../../BACKENDPART/Getx/memosetting.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
@@ -49,7 +49,7 @@ class _DayScriptState extends State<DayScript> {
       List<FocusNode>.generate(7, ((index) => FocusNode()));
   late List<TextEditingController> texteditingcontrollerlist;
   final draw = Get.put(navibool());
-  final cal_share_person = Get.put(PeopleAdd());
+  final cal_share_person = Get.put(UserInfo());
   final controll_cal = Get.put(calendarsetting());
   final controll_memo = Get.put(memosetting());
   final scollection = Get.put(selectcollection());

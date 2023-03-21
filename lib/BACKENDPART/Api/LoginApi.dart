@@ -6,11 +6,14 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import '../Getx/PeopleAdd.dart';
+import '../Getx/UserInfo.dart';
 
 class LoginApiProvider extends GetxController {
-  final peopleadd = Get.put(PeopleAdd());
+  final peopleadd = Get.put(UserInfo());
   final box = GetStorage();
+  var chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  Random rnd = Random();
+  String code = '';
 
   fetchTasks() async {
     var url, response, data;
@@ -40,19 +43,24 @@ class LoginApiProvider extends GetxController {
     notifyChildrens();
   }
 
+  generatecode() {
+    code = String.fromCharCodes(Iterable.generate(
+        5, (_) => chars.codeUnitAt(rnd.nextInt(chars.length))));
+    update();
+    notifyChildrens();
+  }
+
   createTasks() async {
-    var chars =
-        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-    Random rnd = Random();
-    String code = '';
+    generatecode();
+    var returndata = await LoginApiProvider().getTasks();
+    for (int i = 0; i < returndata.length; i++) {
+      if (returndata[i]['nick'] == code || returndata[i]['code'] == code) {
+        generatecode();
+      }
+    }
     var url = '$baseurl/usertype/create/';
-
-    code = 'User#' +
-        String.fromCharCodes(Iterable.generate(
-            5, (_) => chars.codeUnitAt(rnd.nextInt(chars.length))));
-
-    peopleadd.nickname = code.substring(5);
-    peopleadd.usrcode = code.substring(5);
+    peopleadd.nickname = code;
+    peopleadd.usrcode = code;
     peopleadd.usrimgurl = '';
     box.write('nick', peopleadd.nickname);
     box.write('code', peopleadd.usrcode);

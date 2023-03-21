@@ -1,7 +1,8 @@
 // ignore_for_file: file_names, prefer_typing_uninitialized_variables, non_constant_identifier_names
 import 'dart:math';
 import 'package:clickbyme/BACKENDPART/Enums/Event.dart';
-import 'package:clickbyme/FRONTENDPART/Page/NotiAlarm.dart';
+import 'package:clickbyme/FRONTENDPART/Page/NotiPage.dart';
+import 'package:clickbyme/FRONTENDPART/Page/SettingPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,7 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../FRONTENDPART/Page/MYPage.dart';
 import '../../FRONTENDPART/Page/ProfilePage.dart';
 import '../../FRONTENDPART/Page/SearchPage.dart';
-import '../Getx/PeopleAdd.dart';
+import '../Getx/UserInfo.dart';
 import '../Getx/linkspacesetting.dart';
 import '../Getx/navibool.dart';
 import '../Getx/notishow.dart';
@@ -25,7 +26,7 @@ final linkspaceset = Get.put(linkspacesetting());
 final uiset = Get.put(uisetting());
 final draw = Get.put(navibool());
 final notilist = Get.put(notishow());
-final peopleadd = Get.put(PeopleAdd());
+final peopleadd = Get.put(UserInfo());
 final scollection = Get.put(selectcollection());
 var baseurl = 'http://54.65.249.132:8000';
 var usercode = peopleadd.usrcode;
@@ -34,9 +35,9 @@ var useremail = Hive.box('user_info').get('email') ?? '';
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 List pages = [
   const MYPage(),
-  const SearchPage(),
-  const NotiAlarm(),
+  const NotiPage(),
   const ProfilePage(),
+  const SettingPage(),
 ];
 //Here are PageUI Variables
 //Here are SpaceinUI Variables

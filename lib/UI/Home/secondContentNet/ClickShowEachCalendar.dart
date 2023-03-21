@@ -1,7 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:clickbyme/Tool/ContainerDesign.dart';
-import 'package:clickbyme/BACKENDPART/Getx/PeopleAdd.dart';
+import 'package:clickbyme/BACKENDPART/Getx/UserInfo.dart';
 import 'package:clickbyme/BACKENDPART/Getx/calendarsetting.dart';
 import 'package:clickbyme/Tool/IconBtn.dart';
 import 'package:clickbyme/sheets/pushalarmsettingcal.dart';
@@ -84,7 +84,7 @@ class _ClickShowEachCalendarState extends State<ClickShowEachCalendar>
   String minute = '';
   var isChecked_pushalarmwhat = null;
   final draw = Get.put(navibool());
-  final peopleadd = Get.put(PeopleAdd());
+  final peopleadd = Get.put(UserInfo());
   final controll_cal = Get.put(calendarsetting());
   String updateidalarm = '';
   String deleterepeatwhile = '';

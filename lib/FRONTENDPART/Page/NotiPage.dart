@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:clickbyme/FRONTENDPART/UI/NotiUI.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -17,13 +18,13 @@ import '../Widget/BottomScreen.dart';
 import '../Widget/buildTypeWidget.dart';
 import '../Widget/responsiveWidget.dart';
 
-class NotiAlarm extends StatefulWidget {
-  const NotiAlarm({Key? key}) : super(key: key);
+class NotiPage extends StatefulWidget {
+  const NotiPage({Key? key}) : super(key: key);
   @override
-  State<StatefulWidget> createState() => _NotiAlarmState();
+  State<StatefulWidget> createState() => _NotiPageState();
 }
 
-class _NotiAlarmState extends State<NotiAlarm> {
+class _NotiPageState extends State<NotiPage> {
   final draw = Get.put(navibool());
   final uiset = Get.put(uisetting());
   final notilist = Get.put(notishow());
@@ -43,6 +44,12 @@ class _NotiAlarmState extends State<NotiAlarm> {
   Widget build(BuildContext context) {
     return SafeArea(child: OrientationBuilder(
       builder: (context, orientation) {
+        SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+            statusBarColor: draw.backgroundcolor,
+            statusBarBrightness:
+                draw.statusbarcolor == 0 ? Brightness.dark : Brightness.light,
+            statusBarIconBrightness:
+                draw.statusbarcolor == 0 ? Brightness.dark : Brightness.light));
         return Scaffold(
             backgroundColor: draw.backgroundcolor,
             bottomNavigationBar: uiset.loading
@@ -107,7 +114,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                                       MainAxisAlignment.start,
                                                   children: [
                                                     Text(
-                                                      '공지사항',
+                                                      'notipagecompanytitle'.tr,
                                                       textAlign:
                                                           TextAlign.center,
                                                       style: TextStyle(
@@ -160,7 +167,7 @@ class _NotiAlarmState extends State<NotiAlarm> {
                                                       MainAxisAlignment.start,
                                                   children: [
                                                     Text(
-                                                      'My',
+                                                      'notipageusertitle'.tr,
                                                       textAlign:
                                                           TextAlign.center,
                                                       style: TextStyle(

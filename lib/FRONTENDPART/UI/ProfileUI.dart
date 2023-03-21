@@ -11,12 +11,12 @@ import 'package:get/get.dart';
 import '../../BACKENDPART/Getx/linkspacesetting.dart';
 import '../../../Tool/TextSize.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
-import '../../BACKENDPART/Getx/PeopleAdd.dart';
+import '../../BACKENDPART/Getx/UserInfo.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 
 final uiset = Get.put(uisetting());
 final linkspaceset = Get.put(linkspacesetting());
-final peopleadd = Get.put(PeopleAdd());
+final peopleadd = Get.put(UserInfo());
 final draw = Get.put(navibool());
 
 ///UI
@@ -57,14 +57,14 @@ View(context, maxWidth, maxHeight, searchnode, controller) {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           UserBoard(controller, searchnode),
-          const Divider(
+          /*const Divider(
             height: 20,
             color: Colors.grey,
             thickness: 1,
             indent: 0,
             endIndent: 0,
           ),
-          Content(controller, searchnode),
+          Content(controller, searchnode),*/
           const SizedBox(
             height: 50,
           ),
@@ -91,7 +91,7 @@ UserBoard(controller, searchnode) {
             children: [
               Flexible(
                   flex: 1,
-                  child: GetBuilder<PeopleAdd>(
+                  child: GetBuilder<UserInfo>(
                     builder: (_) {
                       return GestureDetector(
                           onTap: () {
@@ -182,7 +182,7 @@ UserBoard(controller, searchnode) {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            GetBuilder<PeopleAdd>(builder: (_) {
+                            GetBuilder<UserInfo>(builder: (_) {
                               return Flexible(
                                 fit: FlexFit.tight,
                                 child: Text(

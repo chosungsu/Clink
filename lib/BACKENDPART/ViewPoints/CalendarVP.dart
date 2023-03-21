@@ -8,13 +8,13 @@ import '../Enums/MemoList.dart';
 import '../Enums/Variables.dart';
 import '../LocalNotiPlatform/NotificationApi.dart';
 import '../../Tool/FlushbarStyle.dart';
-import '../Getx/PeopleAdd.dart';
+import '../Getx/UserInfo.dart';
 import '../Getx/calendarsetting.dart';
 import '../Getx/memosetting.dart';
 
 void savecalendarsandmemo(context, texteditingcontrollerlist, position, id) {
   final controllCal = Get.put(calendarsetting());
-  final calSharePerson = Get.put(PeopleAdd());
+  final calSharePerson = Get.put(UserInfo());
   final controllMemo = Get.put(memosetting());
   String code = '';
 

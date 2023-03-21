@@ -2,10 +2,12 @@
 import 'package:clickbyme/BACKENDPART/Getx/notishow.dart';
 import 'package:clickbyme/BACKENDPART/Getx/uisetting.dart';
 import 'package:clickbyme/FRONTENDPART/Widget/buildTypeWidget.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:status_bar_control/status_bar_control.dart';
 import '../../Tool/AppBarCustom.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
 import '../../Tool/BGColor.dart';
@@ -56,6 +58,12 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return SafeArea(child: OrientationBuilder(
       builder: (context, orientation) {
+        SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+            statusBarColor: draw.backgroundcolor,
+            statusBarBrightness:
+                draw.statusbarcolor == 0 ? Brightness.dark : Brightness.light,
+            statusBarIconBrightness:
+                draw.statusbarcolor == 0 ? Brightness.dark : Brightness.light));
         return Scaffold(
             backgroundColor: BGColor(),
             bottomNavigationBar: uiset.loading

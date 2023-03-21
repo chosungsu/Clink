@@ -1,10 +1,12 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:clickbyme/Tool/BGColor.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:status_bar_control/status_bar_control.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../Tool/NoBehavior.dart';
@@ -47,6 +49,12 @@ class _ProfilePageState extends State<ProfilePage>
   Widget build(BuildContext context) {
     return SafeArea(child: OrientationBuilder(
       builder: (context, orientation) {
+        SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+            statusBarColor: draw.backgroundcolor,
+            statusBarBrightness:
+                draw.statusbarcolor == 0 ? Brightness.dark : Brightness.light,
+            statusBarIconBrightness:
+                draw.statusbarcolor == 0 ? Brightness.dark : Brightness.light));
         return Scaffold(
             backgroundColor: BGColor(),
             bottomNavigationBar: uiset.loading
@@ -109,7 +117,7 @@ class _ProfilePageState extends State<ProfilePage>
                                       ),
                                       lefticon: false,
                                       lefticonname: Icons.add,
-                                      righticon: true,
+                                      righticon: false,
                                       doubleicon: false,
                                       righticonname: Ionicons.settings_outline,
                                     );

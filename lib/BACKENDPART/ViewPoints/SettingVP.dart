@@ -9,7 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../sheets/BottomSheet/AddContentWithBtn.dart';
 import '../Enums/Variables.dart';
 import '../../Tool/FlushbarStyle.dart';
-import '../Getx/PeopleAdd.dart';
+import '../Getx/UserInfo.dart';
 import '../Getx/uisetting.dart';
 import '../../Tool/TextSize.dart';
 import '../Api/LoginApi.dart';
@@ -17,7 +17,7 @@ import '../../FRONTENDPART/Route/subuiroute.dart';
 import '../../Tool/BGColor.dart';
 import '../../Tool/ContainerDesign.dart';
 
-final peopleadd = Get.put(PeopleAdd());
+final peopleadd = Get.put(UserInfo());
 final uiset = Get.put(uisetting());
 
 pickImage(source) async {
@@ -346,7 +346,7 @@ Widgets_settingpagenickchange(
                     uiset.checktf(true);
                     uiset.changeavailable(true);
                     for (int i = 0; i < returndata.length; i++) {
-                      if (returndata[i]['nick'].contains(textcontroller.text)) {
+                      if (returndata[i]['nick'] == textcontroller.text) {
                         if (uiset.canchange) {
                           uiset.changeavailable(false);
                         } else {}

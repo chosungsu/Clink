@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../Enums/Event.dart';
 import '../LocalNotiPlatform/NotificationApi.dart';
-import 'PeopleAdd.dart';
+import 'UserInfo.dart';
 
 class calendarsetting extends GetxController {
   List share = [];
@@ -336,7 +336,7 @@ class calendarsetting extends GetxController {
   }
 
   void settimeminute(int hour, int minute, String title, String id) {
-    final cal_share_person = Get.put(PeopleAdd());
+    final cal_share_person = Get.put(UserInfo());
     if (title != '') {
       hour1 = hour.toString();
       minute1 = minute.toString();

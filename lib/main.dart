@@ -1,18 +1,16 @@
 // ignore_for_file: prefer_const_constructors, unused_local_variable, non_constant_identifier_names
-import 'package:clickbyme/Tool/AndroidIOS.dart';
 import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:clickbyme/FRONTENDPART/Route/initScreenLoading.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:status_bar_control/status_bar_control.dart';
-import 'BACKENDPART/Getx/PeopleAdd.dart';
+import 'BACKENDPART/Getx/UserInfo.dart';
 import 'BACKENDPART/Getx/navibool.dart';
 import 'BACKENDPART/Getx/uisetting.dart';
 import 'BACKENDPART/Locale/Locale.dart';
@@ -24,9 +22,15 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 void main() async {
   ///flutter를 시작하게 하는 main function입니다.
   ///웹과 앱에서의 환경설정을 다르게 구성해야 하므로 아래처럼 작성되었습니다.
-
   WidgetsFlutterBinding.ensureInitialized();
-  CodeByPlatform({
+  await Firebase.initializeApp(
+      name: 'linki',
+      options: FirebaseOptions(
+          apiKey: 'AIzaSyDmkVyvA80pDPV59DNd27yhqLkEgcHHFJU',
+          appId: '1:789398252263:android:21d69620fcd7caaa8e5042',
+          messagingSenderId: '789398252263',
+          projectId: 'habit-tracker-8dad1'));
+  /*CodeByPlatform({
     MobileAds.instance.initialize(),
     await Firebase.initializeApp(
         name: 'linki',
@@ -35,12 +39,13 @@ void main() async {
             appId: '1:789398252263:android:21d69620fcd7caaa8e5042',
             messagingSenderId: '789398252263',
             projectId: 'habit-tracker-8dad1'))
-  }, null, null);
+  }, null, null);*/
   await GetStorage.init();
   await Hive.initFlutter();
   await Hive.openBox('user_info');
   await Hive.openBox('user_setting');
   NotificationApi.init(initScheduled: true);
+  peopleadd.loadLocale();
   runApp(
     const MyApp(),
   );
@@ -56,28 +61,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ResponsiveSizer(builder: ((p0, p1, p2) {
-      return ReturnByPlatform(
-          GetMaterialApp(
-            debugShowCheckedModeBanner: false,
-            translations: Languages(),
-            locale: Get.deviceLocale,
-            fallbackLocale: Locale('ko', 'KR'),
-            home: const SplashPage(),
-          ),
-          GetCupertinoApp(
-            debugShowCheckedModeBanner: false,
-            translations: Languages(),
-            locale: Get.deviceLocale,
-            fallbackLocale: Locale('ko', 'KR'),
-            home: const SplashPage(),
-          ),
-          GetMaterialApp(
-            debugShowCheckedModeBanner: false,
-            translations: Languages(),
-            locale: Get.deviceLocale,
-            fallbackLocale: Locale('ko', 'KR'),
-            home: const SplashPage(),
-          ));
+      return GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        translations: Languages(),
+        locale: peopleadd.locale ?? Get.deviceLocale,
+        supportedLocales: const [
+          Locale('en', ''), // English
+          Locale('ko', ''), // Korean
+        ],
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        fallbackLocale: Get.deviceLocale,
+        home: const SplashPage(),
+      );
     }));
   }
 }
@@ -94,7 +93,7 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
   final uiset = Get.put(uisetting());
-  final peopleadd = Get.put(PeopleAdd());
+  final peopleadd = Get.put(UserInfo());
   final draw = Get.put(navibool());
 
   @override
@@ -115,8 +114,10 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    StatusBarControl.setColor(draw.backgroundcolor, animated: true);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: draw.backgroundcolor,
+        statusBarBrightness:
+            draw.statusbarcolor == 0 ? Brightness.dark : Brightness.light,
         statusBarIconBrightness:
             draw.statusbarcolor == 0 ? Brightness.dark : Brightness.light));
     return GetBuilder<navibool>(builder: (_) {

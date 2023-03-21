@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../LocalNotiPlatform/NotificationApi.dart';
-import 'PeopleAdd.dart';
+import 'UserInfo.dart';
 
 class memosetting extends GetxController {
-  final peopleadd = Get.put(PeopleAdd());
+  final peopleadd = Get.put(UserInfo());
   Color color = Hive.box('user_setting').get('coloreachmemo') != null
       ? Color(Hive.box('user_setting').get('coloreachmemo'))
       : Colors.white;

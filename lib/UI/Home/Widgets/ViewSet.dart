@@ -8,13 +8,13 @@ import '../../../BACKENDPART/Enums/Variables.dart';
 import '../../../FRONTENDPART/UI/DayContentHome.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/ContainerDesign.dart';
-import '../../../BACKENDPART/Getx/PeopleAdd.dart';
+import '../../../BACKENDPART/Getx/UserInfo.dart';
 import '../../../BACKENDPART/Getx/calendarsetting.dart';
 import '../../../Tool/TextSize.dart';
 import '../secondContentNet/ClickShowEachNote.dart';
 
 ViewSet(List defaulthomeviewlist, List userviewlist, String usercode) {
-  final peopleadd = Get.put(PeopleAdd());
+  final peopleadd = Get.put(UserInfo());
   DateTime Date = DateTime.now();
   List contentmy = [];
   List contentshare = [];
@@ -344,7 +344,7 @@ stream1(
   String usercode,
 ) {
   DateTime Date = DateTime.now();
-  final peopleadd = Get.put(PeopleAdd());
+  final peopleadd = Get.put(UserInfo());
   var updateidalarm = '';
   List<bool> alarmtypes = [];
   bool isChecked_pushalarm = false;
@@ -575,7 +575,7 @@ stream2(
   String usercode,
 ) {
   DateTime Date = DateTime.now();
-  final peopleadd = Get.put(PeopleAdd());
+  final peopleadd = Get.put(UserInfo());
 
   List<Widget> list_all = [];
   List<Widget> children_cal2 = [];
@@ -782,7 +782,7 @@ FutureBuilder<QuerySnapshot<Object?>> stream3(
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   DateTime Date = DateTime.now();
-  final peopleadd = Get.put(PeopleAdd());
+  final peopleadd = Get.put(UserInfo());
 
   List<Widget> list_all = [];
   List<Widget> children_memo1 = [];
@@ -1063,7 +1063,7 @@ FutureBuilder<QuerySnapshot<Object?>> stream4(
 ) {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   DateTime Date = DateTime.now();
-  final peopleadd = Get.put(PeopleAdd());
+  final peopleadd = Get.put(UserInfo());
 
   List<Widget> list_all = [];
   List<Widget> children_memo2 = [];

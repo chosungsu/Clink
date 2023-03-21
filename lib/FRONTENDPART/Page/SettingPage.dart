@@ -1,6 +1,7 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, file_names
 
 import 'package:clickbyme/Tool/BGColor.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
@@ -10,8 +11,8 @@ import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../Tool/NoBehavior.dart';
 import '../../Tool/AppBarCustom.dart';
 import '../../Tool/TextSize.dart';
-import '../Route/subuiroute.dart';
 import '../UI/SettingUI.dart';
+import '../Widget/BottomScreen.dart';
 import '../Widget/buildTypeWidget.dart';
 import '../Widget/responsiveWidget.dart';
 
@@ -47,17 +48,24 @@ class _SettingPageState extends State<SettingPage>
   Widget build(BuildContext context) {
     return SafeArea(child: OrientationBuilder(
       builder: (context, orientation) {
+        SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+            statusBarColor: draw.backgroundcolor,
+            statusBarBrightness:
+                draw.statusbarcolor == 0 ? Brightness.dark : Brightness.light,
+            statusBarIconBrightness:
+                draw.statusbarcolor == 0 ? Brightness.dark : Brightness.light));
         return Scaffold(
             backgroundColor: BGColor(),
-            body: WillPopScope(
-                onWillPop: () => onWillPop(context),
-                child: GetBuilder<navibool>(
-                    builder: (_) => buildtypewidget(context, Body()))));
+            bottomNavigationBar: uiset.loading
+                ? const SizedBox()
+                : (Get.width < 1000 ? const BottomScreen() : const SizedBox()),
+            body: GetBuilder<navibool>(
+                builder: (_) => buildtypewidget(context, ProfileBody())));
       },
     ));
   }
 
-  Widget Body() {
+  Widget ProfileBody() {
     return GetBuilder<navibool>(
         builder: (_) => AnimatedContainer(
               transform:
@@ -80,59 +88,81 @@ class _SettingPageState extends State<SettingPage>
                   width: Get.width,
                   child: Container(
                       color: draw.backgroundcolor,
-                      child: Row(
-                        children: [
-                          Column(
+                      child: GetBuilder<navibool>(
+                        builder: (_) {
+                          return Row(
                             children: [
-                              GetBuilder<uisetting>(builder: (_) {
-                                return AppBarCustom(
-                                  title: Text(
-                                    '',
-                                    maxLines: 1,
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: mainTitleTextsize(),
-                                        color: draw.color_textstatus),
-                                    overflow: TextOverflow.ellipsis,
+                              draw.navi == 0 &&
+                                      draw.navishow == true &&
+                                      Get.width > 1000
+                                  ? (draw.settinginsidemap.containsKey(0) ==
+                                          false
+                                      ? const SizedBox()
+                                      : innertype())
+                                  : const SizedBox(),
+                              Column(
+                                children: [
+                                  GetBuilder<uisetting>(builder: (_) {
+                                    return AppBarCustom(
+                                      title: Text(
+                                        'settingpagetitle'.tr,
+                                        maxLines: 1,
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'NanumMyeongjo',
+                                            fontSize: mainTitleTextsize(),
+                                            color: draw.color_textstatus),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      lefticon: false,
+                                      lefticonname: Icons.add,
+                                      righticon: false,
+                                      doubleicon: false,
+                                      righticonname: Ionicons.settings_outline,
+                                    );
+                                  }),
+                                  Flexible(
+                                    fit: FlexFit.tight,
+                                    child: SizedBox(
+                                      width: draw.navishow == true &&
+                                              Get.width > 1000
+                                          ? Get.width - 120
+                                          : Get.width,
+                                      child: ScrollConfiguration(
+                                          behavior: NoBehavior(),
+                                          child: LayoutBuilder(
+                                            builder: ((context, constraint) {
+                                              return SingleChildScrollView(
+                                                  child: Column(
+                                                children: [
+                                                  responsivewidget(
+                                                      UI(
+                                                          _controller,
+                                                          searchNode,
+                                                          scrollController,
+                                                          constraint.maxWidth,
+                                                          constraint.maxHeight),
+                                                      Get.width),
+                                                ],
+                                              ));
+                                            }),
+                                          )),
+                                    ),
                                   ),
-                                  lefticon: true,
-                                  lefticonname: MaterialIcons.chevron_left,
-                                  righticon: false,
-                                  doubleicon: false,
-                                  righticonname: Icons.person_outline,
-                                  textcontroller: _controller,
-                                  searchnode: searchNode,
-                                );
-                              }),
-                              Flexible(
-                                fit: FlexFit.tight,
-                                child: SizedBox(
-                                  width: Get.width,
-                                  child: ScrollConfiguration(
-                                      behavior: NoBehavior(),
-                                      child: LayoutBuilder(
-                                        builder: ((context, constraint) {
-                                          return SingleChildScrollView(
-                                              child: Column(
-                                            children: [
-                                              responsivewidget(
-                                                  UI(
-                                                      _controller,
-                                                      searchNode,
-                                                      scrollController,
-                                                      constraint.maxWidth,
-                                                      constraint.maxHeight),
-                                                  Get.width),
-                                            ],
-                                          ));
-                                        }),
-                                      )),
-                                ),
+                                ],
                               ),
+                              draw.navi == 1 &&
+                                      draw.navishow == true &&
+                                      Get.width > 1000
+                                  ? (draw.settinginsidemap.containsKey(0) ==
+                                          false
+                                      ? const SizedBox()
+                                      : innertype())
+                                  : const SizedBox(),
                             ],
-                          ),
-                        ],
+                          );
+                        },
                       )),
                 ),
               ),

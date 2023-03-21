@@ -3,7 +3,6 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:status_bar_control/status_bar_control.dart';
 
 import '../../Tool/MyTheme.dart';
 
@@ -16,10 +15,11 @@ class navibool extends GetxController {
   double scalefactor = 1;
   bool navishow = Hive.box('user_setting').get('menushowing') ?? true;
   int navi = Hive.box('user_setting').get('which_menu_pick') ?? 0;
-  int statusbarcolor = Hive.box('user_setting').get('which_color_background') ==
-          null
-      ? 0
-      : (Hive.box('user_setting').get('which_color_background') == 0 ? 0 : 1);
+  int statusbarcolor =
+      Hive.box('user_setting').get('which_color_background') == null ||
+              Hive.box('user_setting').get('which_color_background') == 0
+          ? 0
+          : 1;
   Color backgroundcolor =
       Hive.box('user_setting').get('which_color_background') == null
           ? MyTheme.colorWhite
@@ -102,6 +102,7 @@ class navibool extends GetxController {
     ///setnavicolor
     ///
     ///바탕색을 결정
+
     Hive.box('user_setting').get('which_color_background') == null
         ? backgroundcolor = MyTheme.colorWhite
         : (Hive.box('user_setting').get('which_color_background') == 0
@@ -112,14 +113,15 @@ class navibool extends GetxController {
         : (Hive.box('user_setting').get('which_color_background') == 0
             ? statusbarcolor = 0
             : statusbarcolor = 1);
-
     Hive.box('user_setting').get('which_color_background') == null
         ? color_textstatus = MyTheme.colorblack_drawer
         : (Hive.box('user_setting').get('which_color_background') == 0
             ? color_textstatus = MyTheme.colorblack_drawer
             : color_textstatus = MyTheme.colorWhite_drawer);
-    StatusBarControl.setColor(backgroundcolor, animated: true);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: backgroundcolor,
+        statusBarBrightness:
+            statusbarcolor == 0 ? Brightness.dark : Brightness.light,
         statusBarIconBrightness:
             statusbarcolor == 0 ? Brightness.dark : Brightness.light));
     update();

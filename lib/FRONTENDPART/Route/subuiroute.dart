@@ -3,11 +3,9 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:clickbyme/BACKENDPART/Enums/Variables.dart';
-import 'package:clickbyme/FRONTENDPART/Page/SettingPage.dart';
 import 'package:clickbyme/FRONTENDPART/Page/SettingSubPage.dart';
 import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
 import 'package:clickbyme/sheets/BSContents/appbarplusbtn.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -16,7 +14,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../BACKENDPART/Enums/PushNotification.dart';
@@ -59,13 +56,8 @@ Future<bool> onWillPop(context) async {
   uiset.setmypagelistindex(Hive.box('user_setting').get('currentmypage') ?? 0);
   if (draw.drawopen == true) {
     draw.setclose();
-  } else if (draw.settinginsidemap.containsKey(1) == true ||
-      draw.settinginsidemap.containsKey(2) == true) {
-    if (draw.settinginsidemap.containsKey(1) == true) {
-      draw.clicksettinginside(0, false);
-    } else if (draw.settinginsidemap.containsKey(2) == true) {
-      draw.clicksettinginside(1, true);
-    }
+  } else if (draw.settinginsidemap.containsKey(1) == true) {
+    draw.clicksettinginside(0, false);
     Get.back();
   } else if (uiset.searchpagemove != '') {
     uiset.searchpagemove = '';
@@ -120,22 +112,12 @@ GoToStartApp(context) {
   SystemNavigator.pop();
 }
 
-///GoToSettingPage
-///
-///세팅페이지로 이동합니다.
-GoToSettingPage() async {
-  final draw = Get.put(navibool());
-  draw.setclose();
-  draw.clicksettinginside(1, true);
-  Get.to(() => const SettingPage(), transition: Transition.fade);
-}
-
 ///GoToSettingSubPage
 ///
 ///세부세팅페이지로 이동합니다.
 GoToSettingSubPage() async {
   final draw = Get.put(navibool());
-  draw.clicksettinginside(2, true);
+  draw.clicksettinginside(1, true);
   Get.to(() => const SettingSubPage(), transition: Transition.fade);
 }
 

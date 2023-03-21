@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 
 import '../Tool/BGColor.dart';
 import '../Tool/FlushbarStyle.dart';
-import '../BACKENDPART/Getx/PeopleAdd.dart';
+import '../BACKENDPART/Getx/UserInfo.dart';
 import '../BACKENDPART/Getx/navibool.dart';
 import '../Tool/IconBtn.dart';
 import '../Tool/NoBehavior.dart';
@@ -198,7 +198,7 @@ content(
   final controllCal = Get.put(calendarsetting());
   final controllMemo = Get.put(memosetting());
   TimeOfDay? pickednow;
-  final calSharePerson = Get.put(PeopleAdd());
+  final calSharePerson = Get.put(UserInfo());
 
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(

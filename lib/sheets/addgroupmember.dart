@@ -9,7 +9,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:get/get.dart';
 import 'package:another_flushbar/flushbar.dart';
 
-import '../BACKENDPART/Getx/PeopleAdd.dart';
+import '../BACKENDPART/Getx/UserInfo.dart';
 import '../Tool/NoBehavior.dart';
 
 addgroupmember(
@@ -211,7 +211,7 @@ Search(
   );
   int cnt = 0;
   List changepeople = [];
-  final cal_share_person = Get.put(PeopleAdd());
+  final cal_share_person = Get.put(UserInfo());
 
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,

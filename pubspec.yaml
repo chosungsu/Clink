@@ -29,9 +29,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  flutter_localizations:
+    sdk: flutter
   # Use this library for Dateformat
   intl: 
+  device_info:
   # Use this library for size responsive layout setting
   responsive_sizer:
   # Use these library for variable themes

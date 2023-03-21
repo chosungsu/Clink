@@ -17,7 +17,7 @@ import '../../../FRONTENDPART/Route/subuiroute.dart';
 import '../../../FRONTENDPART/UI/DayContentHome.dart';
 import '../../../Tool/ContainerDesign.dart';
 import '../../../Tool/FlushbarStyle.dart';
-import '../../../BACKENDPART/Getx/PeopleAdd.dart';
+import '../../../BACKENDPART/Getx/UserInfo.dart';
 import '../../../BACKENDPART/Getx/calendarsetting.dart';
 import '../../../BACKENDPART/Getx/memosetting.dart';
 import '../../../Tool/NoBehavior.dart';
@@ -45,7 +45,7 @@ class _ChooseCalendarState extends State<ChooseCalendar>
     'id',
   );
   late FToast fToast;
-  static final cal_share_person = Get.put(PeopleAdd());
+  static final cal_share_person = Get.put(UserInfo());
   final controll_memo = Get.put(memosetting());
   final cal_sort = Get.put(calendarsetting());
   final uiset = Get.put(uisetting());

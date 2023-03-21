@@ -1,5 +1,6 @@
 // ignore_for_file: camel_case_types, non_constant_identifier_names
 
+import 'dart:ui';
 import 'package:clickbyme/BACKENDPART/Enums/Profile_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -7,10 +8,10 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../Enums/PageList.dart';
 import '../Enums/Variables.dart';
-import 'PeopleAdd.dart';
+import 'UserInfo.dart';
 
 class uisetting extends GetxController {
-  final peopleadd = Get.put(PeopleAdd());
+  final peopleadd = Get.put(UserInfo());
   bool loading = false;
   bool sheetloading = false;
   bool canchange = true;
@@ -199,10 +200,12 @@ class uisetting extends GetxController {
               'profilepagetitleonebytwo',
               'profilepagetitleonebythird',
               'profilepagetitleonebyforth',
+              'profilepagetitleonebyfifth',
             ]
           : [
               'profilepagetitleonebyone',
               'profilepagetitleonebytwo',
+              'profilepagetitleonebythird',
             ],
       [
         'profilepagetitletwobyone',

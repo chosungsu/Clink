@@ -9,7 +9,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../Tool/FlushbarStyle.dart';
-import '../../../BACKENDPART/Getx/PeopleAdd.dart';
+import '../../../BACKENDPART/Getx/UserInfo.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../../Tool/TextSize.dart';
 import '../../../sheets/addgroupmember.dart';
@@ -59,7 +59,7 @@ class _PeopleGroupState extends State<PeopleGroup> {
   List deleteid = [];
   List<bool> isselected = List.filled(10000, false, growable: true);
   List<String> list_sp = [];
-  final cal_share_person = Get.put(PeopleAdd());
+  final cal_share_person = Get.put(UserInfo());
   List listselected_sp = [];
   var contacts;
   List usercontactlist = [];

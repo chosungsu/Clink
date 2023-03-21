@@ -14,7 +14,7 @@ import '../FRONTENDPART/Route/subuiroute.dart';
 import '../Tool/BGColor.dart';
 import '../Tool/ContainerDesign.dart';
 import '../Tool/FlushbarStyle.dart';
-import '../BACKENDPART/Getx/PeopleAdd.dart';
+import '../BACKENDPART/Getx/UserInfo.dart';
 import '../BACKENDPART/Getx/uisetting.dart';
 import '../Tool/NoBehavior.dart';
 import '../Tool/TextSize.dart';
@@ -22,7 +22,7 @@ import '../UI/Home/firstContentNet/HomeView.dart';
 
 final linkspaceset = Get.put(linkspacesetting());
 final uiset = Get.put(uisetting());
-final peopleadd = Get.put(PeopleAdd());
+final peopleadd = Get.put(UserInfo());
 
 linksetting(
   BuildContext context,

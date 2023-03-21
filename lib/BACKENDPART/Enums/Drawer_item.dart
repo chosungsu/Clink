@@ -7,14 +7,14 @@ List<Map> drawerItems_view = [
     'icon': SimpleLineIcons.home,
   },
   {
-    'icon': Ionicons.ios_search_outline,
-  },
-  {
     'icon': notilist.isread == true
         ? Ionicons.notifications_outline
         : MaterialCommunityIcons.bell_badge_outline,
   },
   {
     'icon': Ionicons.ios_person_outline,
+  },
+  {
+    'icon': Ionicons.settings_outline,
   },
 ];

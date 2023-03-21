@@ -13,7 +13,7 @@ import 'package:another_flushbar/flushbar.dart';
 
 import '../BACKENDPART/Enums/Variables.dart';
 import '../Tool/FlushbarStyle.dart';
-import '../BACKENDPART/Getx/PeopleAdd.dart';
+import '../BACKENDPART/Getx/UserInfo.dart';
 import '../BACKENDPART/Getx/selectcollection.dart';
 
 SheetPagememoCollection(
@@ -66,7 +66,7 @@ content(
   PageController pageController =
       PageController(initialPage: s == 'outside' ? 0 : 1);
   String selectvalue = '';
-  final peopleadd = Get.put(PeopleAdd());
+  final peopleadd = Get.put(UserInfo());
   return StatefulBuilder(builder: (_, StateSetter setState) {
     return SizedBox(
       height: isresponsive == true ? 290 * 2 - 50 : 300,

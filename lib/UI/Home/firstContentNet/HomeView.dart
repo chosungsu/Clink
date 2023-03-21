@@ -2,7 +2,7 @@
 
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/FlushbarStyle.dart';
-import 'package:clickbyme/BACKENDPART/Getx/PeopleAdd.dart';
+import 'package:clickbyme/BACKENDPART/Getx/UserInfo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -30,7 +30,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
-  final peopleadd = Get.put(PeopleAdd());
+  final peopleadd = Get.put(UserInfo());
   final draw = Get.put(navibool());
   final linkspaceset = Get.put(linkspacesetting());
   final List<Linkspacepage> listspacepageset = [];
@@ -168,7 +168,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
   BuildContent() {
     var user, linkname, updateid1, updateid2;
     return widget.where == 'home'
-        ? GetBuilder<PeopleAdd>(
+        ? GetBuilder<UserInfo>(
             builder: (_) => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -178,7 +178,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                             fontWeight: FontWeight.bold,
                             fontSize: contentTitleTextsize())),
                     peopleadd.defaulthomeviewlist.isNotEmpty
-                        ? GetBuilder<PeopleAdd>(
+                        ? GetBuilder<UserInfo>(
                             builder: ((controller) =>
                                 ReorderableListView.builder(
                                   physics: const NeverScrollableScrollPhysics(),
@@ -298,7 +298,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                                                       ),
                                                     )),
                                               ),
-                                              title: GetBuilder<PeopleAdd>(
+                                              title: GetBuilder<UserInfo>(
                                                 builder: (controller) => Text(
                                                     peopleadd
                                                         .defaulthomeviewlist[

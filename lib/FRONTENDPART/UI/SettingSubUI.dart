@@ -10,12 +10,12 @@ import '../../BACKENDPART/Enums/Variables.dart';
 import '../../BACKENDPART/Getx/linkspacesetting.dart';
 import '../../../Tool/TextSize.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
-import '../../BACKENDPART/Getx/PeopleAdd.dart';
+import '../../BACKENDPART/Getx/UserInfo.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 
 final uiset = Get.put(uisetting());
 final linkspaceset = Get.put(linkspacesetting());
-final peopleadd = Get.put(PeopleAdd());
+final peopleadd = Get.put(UserInfo());
 final draw = Get.put(navibool());
 
 ///UI
@@ -24,9 +24,9 @@ final draw = Get.put(navibool());
 UI(maxWidth, maxHeight) {
   return responsivewidget(GetBuilder<uisetting>(builder: (_) {
     return Padding(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
         child: uiset.profileindex == 1
-            ? TestScreen(maxWidth, maxHeight)
+            ? TestScreen(maxWidth, maxHeight - 20)
             : LicenseScreen(maxWidth, maxHeight));
   }), maxWidth);
 }

@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 import '../FRONTENDPART/Route/subuiroute.dart';
 import '../Tool/AndroidIOS.dart';
 import '../Tool/FlushbarStyle.dart';
-import '../BACKENDPART/Getx/PeopleAdd.dart';
+import '../BACKENDPART/Getx/UserInfo.dart';
 import '../BACKENDPART/Getx/calendarsetting.dart';
 import '../BACKENDPART/Getx/memosetting.dart';
 import '../BACKENDPART/Getx/uisetting.dart';
@@ -206,7 +206,7 @@ content(
   Color _color = doc_color == null ? Colors.blue : Color(doc_color);
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   var controll_cals = Get.put(calendarsetting());
-  final peopleadd = Get.put(PeopleAdd());
+  final peopleadd = Get.put(UserInfo());
   var controll_memo = Get.put(memosetting());
   List changepeople = [];
   List deleteid = [];

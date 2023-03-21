@@ -9,7 +9,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import '../../BACKENDPART/Enums/Event.dart';
 import '../../BACKENDPART/Enums/Variables.dart';
-import '../../BACKENDPART/Getx/PeopleAdd.dart';
+import '../../BACKENDPART/Getx/UserInfo.dart';
 import '../../BACKENDPART/Getx/calendarsetting.dart';
 import '../../../Tool/NoBehavior.dart';
 import '../../Tool/AndroidIOS.dart';
@@ -191,7 +191,7 @@ TimeLineView(id) {
   List<bool> alarmtypes = [];
   bool isChecked_pushalarm = false;
   final controll_cals = Get.put(calendarsetting());
-  final cal_share_person = Get.put(PeopleAdd());
+  final cal_share_person = Get.put(UserInfo());
   List<Widget> list_timelineview = [];
   return GetBuilder<calendarsetting>(
       builder: (_) => StreamBuilder<QuerySnapshot>(

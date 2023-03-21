@@ -5,19 +5,22 @@ import 'package:clickbyme/BACKENDPART/Api/LicenseApi.dart';
 import 'package:clickbyme/BACKENDPART/Api/LoginApi.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import '../../BACKENDPART/Getx/PeopleAdd.dart';
+import '../../BACKENDPART/Getx/UserInfo.dart';
 import '../../BACKENDPART/Getx/notishow.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 
 Future initScreen() async {
-  final peopleadd = Get.put(PeopleAdd());
+  final peopleadd = Get.put(UserInfo());
   final notilist = Get.put(notishow());
   final uiset = Get.put(uisetting());
   final box = GetStorage();
   /**
-  * fetchTasks : user 정보를 백엔드에서 불러옴.
+  * checkusrinfo : user 정보를 기기에서 읽어옴.
   */
   peopleadd.checkusrinfo();
+  /**
+  * fetchTasks : user 정보를 백엔드에서 불러옴.
+  */
   await LoginApiProvider().fetchTasks();
 
   if (box.read('nick') == '' || box.read('nick') == null) {
@@ -30,7 +33,7 @@ Future initScreen() async {
   /**
   * friendset : user의 friendlist를 생성함.
   */
-  peopleadd.friendset();
+  //peopleadd.friendset();
   /**
   * setprofilespace : profile 공간을 생성함.
   */

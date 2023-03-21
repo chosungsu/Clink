@@ -1,8 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:clickbyme/BACKENDPART/Enums/Drawer_item.dart';
-import 'package:clickbyme/BACKENDPART/Getx/PeopleAdd.dart';
-import 'package:clickbyme/Tool/ContainerDesign.dart';
+import 'package:clickbyme/BACKENDPART/Getx/UserInfo.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,7 +22,7 @@ class BottomScreen extends StatefulWidget {
 class _BottomScreenState extends State<BottomScreen> {
   final draw = Get.put(navibool());
   final uiset = Get.put(uisetting());
-  final peopleadd = Get.put(PeopleAdd());
+  final peopleadd = Get.put(UserInfo());
 
   @override
   void initState() {
@@ -60,19 +59,19 @@ View(BuildContext context, List<Map> drawerItems) {
                       uiset.setmypagelistindex(
                           Hive.box('user_setting').get('currentmypage') ?? 0);
                       uiset.setpageindex(0);
-                    } else if (element
-                        .containsValue(Ionicons.ios_search_outline)) {
-                      draw.setclose();
-                      uiset.setpageindex(1);
                     } else if (element.containsValue(
                       notilist.isread == true
                           ? Ionicons.notifications_outline
                           : MaterialCommunityIcons.bell_badge_outline,
                     )) {
                       draw.setclose();
-                      uiset.setpageindex(2);
+                      uiset.setpageindex(1);
                     } else if (element
                         .containsValue(Ionicons.ios_person_outline)) {
+                      draw.setclose();
+                      uiset.setpageindex(2);
+                    } else if (element
+                        .containsValue(Ionicons.settings_outline)) {
                       draw.setclose();
                       uiset.setpageindex(3);
                     }

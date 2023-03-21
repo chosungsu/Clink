@@ -11,7 +11,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import '../../../BACKENDPART/Enums/MemoList.dart';
-import '../../../BACKENDPART/Getx/PeopleAdd.dart';
+import '../../../BACKENDPART/Getx/UserInfo.dart';
 import '../../../FRONTENDPART/UI/DayScript.dart';
 import '../../../Tool/BGColor.dart';
 import '../../../BACKENDPART/Getx/memosetting.dart';
@@ -72,7 +72,7 @@ class _ClickShowEachNoteState extends State<ClickShowEachNote>
   );
   final scollection = Get.put(selectcollection());
   final controll_memo = Get.put(memosetting());
-  final peopleadd = Get.put(PeopleAdd());
+  final peopleadd = Get.put(UserInfo());
   List<TextEditingController> controllers = [];
   List<FocusNode> nodes = [];
   List<bool> checkbottoms = [

@@ -1,13 +1,10 @@
-// ignore_for_file: unused_local_variable, must_be_immutable, non_constant_identifier_names, prefer_typing_uninitialized_variables
+// ignore_for_file: unused_local_variable, must_be_immutable, non_constant_identifier_names, prefer_typing_uninitialized_variables, file_names
 
-import 'package:clickbyme/BACKENDPART/ViewPoints/SettingVP.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
-import 'package:clickbyme/main.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:status_bar_control/status_bar_control.dart';
 import '../BACKENDPART/Enums/PageList.dart';
 import '../BACKENDPART/Enums/Variables.dart';
 import '../FRONTENDPART/Route/subuiroute.dart';
@@ -52,12 +49,14 @@ class AppBarCustom extends StatelessWidget {
     final linkspaceset = Get.put(linkspacesetting());
     final uiset = Get.put(uisetting());
     final draw = Get.put(navibool());
-    StatusBarControl.setColor(draw.backgroundcolor, animated: true);
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarIconBrightness:
-            draw.statusbarcolor == 0 ? Brightness.dark : Brightness.light));
 
     return StatefulBuilder(builder: ((context, setState) {
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+          statusBarColor: draw.backgroundcolor,
+          statusBarBrightness:
+              draw.statusbarcolor == 0 ? Brightness.dark : Brightness.light,
+          statusBarIconBrightness:
+              draw.statusbarcolor == 0 ? Brightness.dark : Brightness.light));
       return GetBuilder<navibool>(
           builder: (_) => SafeArea(
               child: SizedBox(
@@ -131,19 +130,8 @@ class AppBarCustom extends StatelessWidget {
                                       GetBuilder<uisetting>(
                                           builder: (_) => GestureDetector(
                                               onTap: () {
-                                                if (draw.settinginsidemap
-                                                        .containsKey(1) ==
-                                                    true) {
-                                                  draw.clicksettinginside(
-                                                      0, false);
-                                                } else if (draw.settinginsidemap
-                                                        .containsKey(2) ==
-                                                    true) {
-                                                  uiset
-                                                      .checkprofilepageindex(0);
-                                                  draw.clicksettinginside(
-                                                      1, true);
-                                                }
+                                                draw.clicksettinginside(
+                                                    0, false);
                                                 Get.back();
                                               },
                                               child: ContainerDesign(
@@ -345,11 +333,9 @@ class AppBarCustom extends StatelessWidget {
             ? null
             : (righticonname == Icons.star_border || righticonname == Icons.star
                 ? func7()
-                : (righticonname == Ionicons.settings_outline
-                    ? GoToSettingPage()
-                    : (righticonname == Icons.download
-                        ? downloadFileExample(mainid, context)
-                        : null))));
+                : (righticonname == Icons.download
+                    ? downloadFileExample(mainid, context)
+                    : null)));
   }
 
   RightIconText(righticonname) {
