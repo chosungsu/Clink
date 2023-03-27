@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, unused_local_variable, prefer_typing_uninitialized_variables
 
+import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
 import 'package:clickbyme/sheets/BottomSheet/AddContentWithBtn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -13,8 +14,96 @@ import '../../BACKENDPART/Getx/linkspacesetting.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../Tool/TextSize.dart';
 
-final uiset = Get.put(uisetting());
-final linkspaceset = Get.put(linkspacesetting());
+plusBtn(context, textcontroller, searchnode) {
+  Widget title;
+  Widget content;
+  title = Contents_plusbtn(context, textcontroller, searchnode)[0];
+  content = Contents_plusbtn(context, textcontroller, searchnode)[1];
+  AddContent(context, title, content, searchnode);
+}
+
+Contents_plusbtn(context, textcontroller, searchnode) {
+  Widget title;
+  Widget content;
+  title = const SizedBox();
+  content = Column(
+    children: [
+      ListTile(
+        onTap: () {
+          Get.back();
+          /*title = Contents_plusbtn(
+            context,
+            textcontroller,
+            searchnode,
+            where,
+            id,
+            categorypicknum,
+          )[0];
+          content = Contents_plusbtn(
+            context,
+            textcontroller,
+            searchnode,
+            where,
+            id,
+            categorypicknum,
+          )[1];
+          AddContent(context, title, content, searchnode);*/
+        },
+        trailing: const Icon(
+          Ionicons.create_outline,
+          color: Colors.black,
+        ),
+        title: Text(
+          '페이지 생성',
+          softWrap: true,
+          textAlign: TextAlign.start,
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: contentTextsize()),
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
+      ListTile(
+        onTap: () {
+          Get.back();
+          /*title = Contents_plusbtn(
+            context,
+            textcontroller,
+            searchnode,
+            where,
+            id,
+            categorypicknum,
+          )[0];
+          content = Contents_plusbtn(
+            context,
+            textcontroller,
+            searchnode,
+            where,
+            id,
+            categorypicknum,
+          )[1];
+          AddContent(context, title, content, searchnode);*/
+        },
+        trailing: const Icon(
+          Feather.box,
+          color: Colors.black,
+        ),
+        title: Text(
+          '박스 생성',
+          softWrap: true,
+          textAlign: TextAlign.start,
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: contentTextsize()),
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
+    ],
+  );
+  return [title, content];
+}
 
 Widgets_plusbtn(
     context, checkid, textcontroller, searchnode, where, id, categorypicknum) {
@@ -107,6 +196,8 @@ Widgets_plusbtncontent1(
   id,
   categorypicknum,
 ) {
+  final uiset = Get.put(uisetting());
+  final linkspaceset = Get.put(linkspacesetting());
   Widget title;
   Widget content;
   Widget btn;
@@ -196,6 +287,8 @@ Widgets_plusbtncontent2(
   textcontroller,
   searchnode,
 ) {
+  final uiset = Get.put(uisetting());
+  final linkspaceset = Get.put(linkspacesetting());
   Widget title;
   Widget content;
   Widget btn;
@@ -278,6 +371,8 @@ Widgets_plusbtncontent2(
 }
 
 clickbtn1(context, textcontroller, where, id, categorynumber) {
+  final uiset = Get.put(uisetting());
+  final linkspaceset = Get.put(linkspacesetting());
   final updatelist = [];
   final initialtext = textcontroller.text;
   var updateid;
@@ -308,6 +403,8 @@ clickbtn1(context, textcontroller, where, id, categorynumber) {
 }
 
 clickbtn2(context, textcontroller, checkid) {
+  final uiset = Get.put(uisetting());
+  final linkspaceset = Get.put(linkspacesetting());
   int indexcnt = linkspaceset.indexcnt.length;
   if (textcontroller.text == '') {
     uiset.checktf(false);

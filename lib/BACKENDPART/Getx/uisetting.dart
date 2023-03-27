@@ -2,6 +2,8 @@
 
 import 'dart:ui';
 import 'package:clickbyme/BACKENDPART/Enums/Profile_item.dart';
+import 'package:clickbyme/BACKENDPART/Getx/navibool.dart';
+import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
@@ -12,6 +14,7 @@ import 'UserInfo.dart';
 
 class uisetting extends GetxController {
   final peopleadd = Get.put(UserInfo());
+  final navi = Get.put(navibool());
   bool loading = false;
   bool sheetloading = false;
   bool canchange = true;
@@ -41,9 +44,10 @@ class uisetting extends GetxController {
     peopleadd.nickname = '';
     peopleadd.usrcode = '';
     peopleadd.usrimgurl = '';
-    Hive.box('user_setting').put('which_color_background', 0);
-    Hive.box('user_setting').put('which_text_size', 0);
-    Hive.box('user_setting').put('which_menu_pick', 0);
+    navi.backgroundcolor = MyTheme.colorWhite;
+    navi.color_textstatus = MyTheme.colorblack;
+    navi.textsize = 0;
+    navi.navi = 0;
 
     update();
     notifyChildrens();
@@ -209,6 +213,7 @@ class uisetting extends GetxController {
             ],
       [
         'profilepagetitletwobyone',
+        'profilepagetitletwobytwo',
       ],
       [
         'profilepagetitlethirdbyone',

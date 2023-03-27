@@ -15,6 +15,7 @@ import '../../Tool/NoBehavior.dart';
 import '../../Tool/TextSize.dart';
 import '../UI/MYPageUI.dart';
 import '../Widget/BottomScreen.dart';
+import '../Widget/responsiveWidget.dart';
 
 class MYPage extends StatefulWidget {
   const MYPage({
@@ -28,7 +29,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
   ScrollController? scrollController;
   final searchNode = FocusNode();
   TextEditingController? textcontroller;
-  final draw = Get.put(navibool());
+  final navi = Get.put(navibool());
   final uiset = Get.put(uisetting());
   final notilist = Get.put(notishow());
 
@@ -59,13 +60,13 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
     return SafeArea(child: OrientationBuilder(
       builder: (context, orientation) {
         SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-            statusBarColor: draw.backgroundcolor,
+            statusBarColor: navi.backgroundcolor,
             statusBarBrightness:
-                draw.statusbarcolor == 0 ? Brightness.dark : Brightness.light,
+                navi.statusbarcolor == 0 ? Brightness.dark : Brightness.light,
             statusBarIconBrightness:
-                draw.statusbarcolor == 0 ? Brightness.dark : Brightness.light));
+                navi.statusbarcolor == 0 ? Brightness.dark : Brightness.light));
         return Scaffold(
-            backgroundColor: BGColor(),
+            backgroundColor: navi.backgroundcolor,
             bottomNavigationBar: uiset.loading
                 ? const SizedBox()
                 : (Get.width < 1000 ? const BottomScreen() : const SizedBox()),
@@ -80,15 +81,15 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
       return GetBuilder<navibool>(
           builder: (_) => AnimatedContainer(
                 transform:
-                    Matrix4.translationValues(draw.xoffset, draw.yoffset, 0)
-                      ..scale(draw.scalefactor),
+                    Matrix4.translationValues(navi.xoffset, navi.yoffset, 0)
+                      ..scale(navi.scalefactor),
                 duration: const Duration(milliseconds: 250),
                 child: GestureDetector(
                   onTap: () {
-                    draw.drawopen == true && draw.navishow == false
+                    navi.drawopen == true && navi.navishow == false
                         ? setState(() {
-                            draw.drawopen = false;
-                            draw.setclose();
+                            navi.drawopen = false;
+                            navi.setclose();
                             Hive.box('user_setting').put('page_opened', false);
                           })
                         : null;
@@ -99,11 +100,12 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                     child: GetBuilder<uisetting>(
                       builder: (_) {
                         return Container(
-                            color: draw.backgroundcolor,
+                            color: navi.backgroundcolor,
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                draw.navi == 0 &&
-                                        draw.navishow == true &&
+                                navi.navi == 0 &&
+                                        navi.navishow == true &&
                                         Get.width > 1000
                                     ? innertype()
                                     : const SizedBox(),
@@ -118,11 +120,11 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                           style: TextStyle(
                                               fontWeight: FontWeight.w700,
                                               fontSize: mainTitleTextsize(),
-                                              color: draw.color_textstatus),
+                                              color: navi.color_textstatus),
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                         lefticon: false,
-                                        righticon: true,
+                                        righticon: false,
                                         doubleicon: true,
                                         lefticonname: Ionicons.add_outline,
                                         righticonname: Ionicons.add_outline,
@@ -135,44 +137,38 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                     ),
                                     Flexible(
                                         fit: FlexFit.tight,
-                                        child: Container(
-                                          width: draw.navishow == true &&
+                                        child: responsivewidget(
+                                          Container(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 20),
+                                            child: ScrollConfiguration(
+                                                behavior: NoBehavior(),
+                                                child: LayoutBuilder(
+                                                  builder:
+                                                      ((context, constraint) {
+                                                    return SingleChildScrollView(
+                                                        child: UI(
+                                                            uiset
+                                                                .pagelist[uiset
+                                                                    .mypagelistindex]
+                                                                .id,
+                                                            textcontroller,
+                                                            searchNode,
+                                                            constraint.maxWidth,
+                                                            constraint
+                                                                .maxHeight));
+                                                  }),
+                                                )),
+                                          ),
+                                          navi.navishow == true &&
                                                   Get.width > 1000
                                               ? Get.width - 120
                                               : Get.width,
-                                          padding:
-                                              const EdgeInsets.only(bottom: 20),
-                                          child: ScrollConfiguration(
-                                              behavior: NoBehavior(),
-                                              child: LayoutBuilder(
-                                                builder:
-                                                    ((context, constraint) {
-                                                  return SingleChildScrollView(
-                                                      child: UI(
-                                                          uiset
-                                                              .pagelist[uiset
-                                                                  .mypagelistindex]
-                                                              .id,
-                                                          textcontroller,
-                                                          searchNode,
-                                                          draw.navishow ==
-                                                                      true &&
-                                                                  Get.width >
-                                                                      1000
-                                                              ? constraint
-                                                                      .maxWidth -
-                                                                  120
-                                                              : constraint
-                                                                  .maxWidth,
-                                                          constraint
-                                                              .maxHeight));
-                                                }),
-                                              )),
                                         )),
                                   ],
                                 ),
-                                draw.navi == 1 &&
-                                        draw.navishow == true &&
+                                navi.navi == 1 &&
+                                        navi.navishow == true &&
                                         Get.width > 1000
                                     ? innertype()
                                     : const SizedBox(),

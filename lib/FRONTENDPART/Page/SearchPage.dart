@@ -30,7 +30,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
   final searchNode = FocusNode();
   ScrollController scrollController = ScrollController();
   final uiset = Get.put(uisetting());
-  final draw = Get.put(navibool());
+  final navi = Get.put(navibool());
 
   @override
   void initState() {
@@ -56,7 +56,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
     return SafeArea(child: OrientationBuilder(
       builder: (context, orientation) {
         return Scaffold(
-            backgroundColor: BGColor(),
+            backgroundColor: navi.backgroundcolor,
             bottomNavigationBar: uiset.loading
                 ? const SizedBox()
                 : (Get.width < 1000 ? const BottomScreen() : const SizedBox()),
@@ -70,16 +70,16 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
     return GetBuilder<navibool>(
         builder: (_) => AnimatedContainer(
               transform:
-                  Matrix4.translationValues(draw.xoffset, draw.yoffset, 0)
-                    ..scale(draw.scalefactor),
+                  Matrix4.translationValues(navi.xoffset, navi.yoffset, 0)
+                    ..scale(navi.scalefactor),
               duration: const Duration(milliseconds: 250),
               child: GestureDetector(
                 onTap: () {
                   searchNode.unfocus();
-                  draw.drawopen == true && draw.navishow == false
+                  navi.drawopen == true && navi.navishow == false
                       ? setState(() {
-                          draw.drawopen = false;
-                          draw.setclose();
+                          navi.drawopen = false;
+                          navi.setclose();
                           Hive.box('user_setting').put('page_opened', false);
                         })
                       : null;
@@ -88,13 +88,13 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                   height: Get.height,
                   width: Get.width,
                   child: Container(
-                      color: draw.backgroundcolor,
+                      color: navi.backgroundcolor,
                       //decoration: BoxDecoration(color: colorselection),
                       child: GetBuilder<uisetting>(builder: (_) {
                         return Row(
                           children: [
-                            draw.navi == 0 &&
-                                    draw.navishow == true &&
+                            navi.navi == 0 &&
+                                    navi.navishow == true &&
                                     Get.width > 1000
                                 ? innertype()
                                 : const SizedBox(),
@@ -109,7 +109,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                           style: TextStyle(
                                               fontWeight: FontWeight.w700,
                                               fontSize: mainTitleTextsize(),
-                                              color: draw.color_textstatus),
+                                              color: navi.color_textstatus),
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                         lefticon: false,
@@ -140,7 +140,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                                                       .w700,
                                                               fontSize:
                                                                   mainTitleTextsize(),
-                                                              color: draw
+                                                              color: navi
                                                                   .color_textstatus),
                                                           overflow: TextOverflow
                                                               .ellipsis,
@@ -172,7 +172,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                                                       .w700,
                                                               fontSize:
                                                                   mainTitleTextsize(),
-                                                              color: draw
+                                                              color: navi
                                                                   .color_textstatus),
                                                           overflow: TextOverflow
                                                               .ellipsis,
@@ -201,7 +201,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                                             FontWeight.w700,
                                                         fontSize:
                                                             mainTitleTextsize(),
-                                                        color: draw
+                                                        color: navi
                                                             .color_textstatus),
                                                     overflow:
                                                         TextOverflow.ellipsis,
@@ -218,7 +218,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                 Flexible(
                                   fit: FlexFit.tight,
                                   child: SizedBox(
-                                    width: draw.navishow == true &&
+                                    width: navi.navishow == true &&
                                             Get.width > 1000
                                         ? Get.width - 120
                                         : Get.width,
@@ -234,7 +234,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                                         context,
                                                         scrollController,
                                                         controller,
-                                                        draw.navishow == true &&
+                                                        navi.navishow == true &&
                                                                 Get.width > 1000
                                                             ? Get.width - 120
                                                             : Get.width,
@@ -250,8 +250,8 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                 ),
                               ],
                             ),
-                            draw.navi == 1 &&
-                                    draw.navishow == true &&
+                            navi.navi == 1 &&
+                                    navi.navishow == true &&
                                     Get.width > 1000
                                 ? innertype()
                                 : const SizedBox(),

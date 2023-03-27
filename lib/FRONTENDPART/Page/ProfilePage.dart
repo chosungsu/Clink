@@ -28,7 +28,7 @@ class _ProfilePageState extends State<ProfilePage>
   TextEditingController _controller = TextEditingController();
   ScrollController scrollController = ScrollController();
   final searchNode = FocusNode();
-  final draw = Get.put(navibool());
+  final navi = Get.put(navibool());
   final uiset = Get.put(uisetting());
 
   @override
@@ -50,13 +50,13 @@ class _ProfilePageState extends State<ProfilePage>
     return SafeArea(child: OrientationBuilder(
       builder: (context, orientation) {
         SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-            statusBarColor: draw.backgroundcolor,
+            statusBarColor: navi.backgroundcolor,
             statusBarBrightness:
-                draw.statusbarcolor == 0 ? Brightness.dark : Brightness.light,
+                navi.statusbarcolor == 0 ? Brightness.dark : Brightness.light,
             statusBarIconBrightness:
-                draw.statusbarcolor == 0 ? Brightness.dark : Brightness.light));
+                navi.statusbarcolor == 0 ? Brightness.dark : Brightness.light));
         return Scaffold(
-            backgroundColor: BGColor(),
+            backgroundColor: navi.backgroundcolor,
             bottomNavigationBar: uiset.loading
                 ? const SizedBox()
                 : (Get.width < 1000 ? const BottomScreen() : const SizedBox()),
@@ -70,16 +70,16 @@ class _ProfilePageState extends State<ProfilePage>
     return GetBuilder<navibool>(
         builder: (_) => AnimatedContainer(
               transform:
-                  Matrix4.translationValues(draw.xoffset, draw.yoffset, 0)
-                    ..scale(draw.scalefactor),
+                  Matrix4.translationValues(navi.xoffset, navi.yoffset, 0)
+                    ..scale(navi.scalefactor),
               duration: const Duration(milliseconds: 250),
               child: GestureDetector(
                 onTap: () {
                   searchNode.unfocus();
-                  draw.drawopen == true && draw.navishow == false
+                  navi.drawopen == true && navi.navishow == false
                       ? setState(() {
-                          draw.drawopen = false;
-                          draw.setclose();
+                          navi.drawopen = false;
+                          navi.setclose();
                           Hive.box('user_setting').put('page_opened', false);
                         })
                       : null;
@@ -88,15 +88,15 @@ class _ProfilePageState extends State<ProfilePage>
                   height: Get.height,
                   width: Get.width,
                   child: Container(
-                      color: draw.backgroundcolor,
+                      color: navi.backgroundcolor,
                       child: GetBuilder<navibool>(
                         builder: (_) {
                           return Row(
                             children: [
-                              draw.navi == 0 &&
-                                      draw.navishow == true &&
+                              navi.navi == 0 &&
+                                      navi.navishow == true &&
                                       Get.width > 1000
-                                  ? (draw.settinginsidemap.containsKey(0) ==
+                                  ? (navi.settinginsidemap.containsKey(0) ==
                                           false
                                       ? const SizedBox()
                                       : innertype())
@@ -112,7 +112,7 @@ class _ProfilePageState extends State<ProfilePage>
                                         style: TextStyle(
                                             fontWeight: FontWeight.w700,
                                             fontSize: mainTitleTextsize(),
-                                            color: draw.color_textstatus),
+                                            color: navi.color_textstatus),
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                       lefticon: false,
@@ -125,7 +125,7 @@ class _ProfilePageState extends State<ProfilePage>
                                   Flexible(
                                     fit: FlexFit.tight,
                                     child: SizedBox(
-                                      width: draw.navishow == true &&
+                                      width: navi.navishow == true &&
                                               Get.width > 1000
                                           ? Get.width - 120
                                           : Get.width,
@@ -141,7 +141,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                           _controller,
                                                           searchNode,
                                                           scrollController,
-                                                          draw.navishow ==
+                                                          navi.navishow ==
                                                                       true &&
                                                                   Get.width >
                                                                       1000
@@ -160,10 +160,10 @@ class _ProfilePageState extends State<ProfilePage>
                                   ),
                                 ],
                               ),
-                              draw.navi == 1 &&
-                                      draw.navishow == true &&
+                              navi.navi == 1 &&
+                                      navi.navishow == true &&
                                       Get.width > 1000
-                                  ? (draw.settinginsidemap.containsKey(0) ==
+                                  ? (navi.settinginsidemap.containsKey(0) ==
                                           false
                                       ? const SizedBox()
                                       : innertype())

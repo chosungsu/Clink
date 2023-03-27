@@ -10,8 +10,9 @@ responsivewidget(widget, width) {
           width: width,
           child: widget,
         )
-      : SizedBox(
-          width: width * 0.6,
+      : Container(
+          alignment: Alignment.center,
+          width: width * 0.8,
           child: widget,
         );
 }

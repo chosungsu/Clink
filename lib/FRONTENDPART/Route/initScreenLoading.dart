@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'package:clickbyme/BACKENDPART/Api/LicenseApi.dart';
 import 'package:clickbyme/BACKENDPART/Api/LoginApi.dart';
+import 'package:clickbyme/BACKENDPART/Getx/navibool.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import '../../BACKENDPART/Getx/UserInfo.dart';
@@ -13,6 +14,7 @@ Future initScreen() async {
   final peopleadd = Get.put(UserInfo());
   final notilist = Get.put(notishow());
   final uiset = Get.put(uisetting());
+  final navi = Get.put(navibool());
   final box = GetStorage();
   /**
   * checkusrinfo : user 정보를 기기에서 읽어옴.
@@ -34,6 +36,10 @@ Future initScreen() async {
   * friendset : user의 friendlist를 생성함.
   */
   //peopleadd.friendset();
+  /**
+  * setappbox : app의 색상을 지정해줌.
+  */
+  navi.setappbox();
   /**
   * setprofilespace : profile 공간을 생성함.
   */

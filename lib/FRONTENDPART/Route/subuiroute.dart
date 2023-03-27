@@ -115,10 +115,14 @@ GoToStartApp(context) {
 ///GoToSettingSubPage
 ///
 ///세부세팅페이지로 이동합니다.
-GoToSettingSubPage() async {
+GoToSettingSubPage(title) async {
   final draw = Get.put(navibool());
   draw.clicksettinginside(1, true);
-  Get.to(() => const SettingSubPage(), transition: Transition.fade);
+  Get.to(
+      () => SettingSubPage(
+            title: title,
+          ),
+      transition: Transition.fade);
 }
 
 deletenoti(context) async {

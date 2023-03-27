@@ -2,25 +2,25 @@
 
 import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import '../BACKENDPART/Getx/navibool.dart';
+
+final navi = Get.put(navibool());
 
 Color BGColor() {
   Color color_bg = Colors.white;
-  Hive.box('user_setting').get('which_color_background') == null
+  navi.backgroundcolor == MyTheme.colorWhite
       ? color_bg = MyTheme.colorWhite
-      : (Hive.box('user_setting').get('which_color_background') == 0
-          ? color_bg = MyTheme.colorWhite
-          : color_bg = MyTheme.colorblack);
+      : color_bg = MyTheme.colorblack;
   return color_bg;
 }
 
 Color BGColor_shadowcolor() {
   Color color_bgstatus = Colors.white;
-  Hive.box('user_setting').get('which_color_background') == null
+  navi.backgroundcolor == MyTheme.colorWhite
       ? color_bgstatus = MyTheme.colorWhitestatus
-      : (Hive.box('user_setting').get('which_color_background') == 0
-          ? color_bgstatus = MyTheme.colorWhitestatus
-          : color_bgstatus = MyTheme.colorblackstatus);
+      : color_bgstatus = MyTheme.colorblackstatus;
   return color_bgstatus;
 }
 
@@ -29,32 +29,18 @@ Color ButtonColor() {
   return color_btn;
 }
 
-Color StatusColor() {
-  Color color_status = Colors.white60;
-  Hive.box('user_setting').get('which_color_background') == null
-      ? color_status = MyTheme.colorWhitestatus
-      : (Hive.box('user_setting').get('which_color_background') == 0
-          ? color_status = MyTheme.colorWhitestatus
-          : color_status = MyTheme.colorblackstatus);
-  return color_status;
-}
-
 Color TextColor() {
   Color color_text = Colors.white;
-  Hive.box('user_setting').get('which_color_background') == null
+  navi.backgroundcolor == MyTheme.colorblack
       ? color_text = MyTheme.colorblack
-      : (Hive.box('user_setting').get('which_color_background') == 0
-          ? color_text = MyTheme.colorblack
-          : color_text = MyTheme.colorWhite);
+      : color_text = MyTheme.colorWhite;
   return color_text;
 }
 
 Color TextColor_shadowcolor() {
   Color color_textstatus = Colors.white;
-  Hive.box('user_setting').get('which_color_background') == null
+  navi.backgroundcolor == MyTheme.colorblack
       ? color_textstatus = MyTheme.colorblackstatus
-      : (Hive.box('user_setting').get('which_color_background') == 0
-          ? color_textstatus = MyTheme.colorblackstatus
-          : color_textstatus = MyTheme.colorWhitestatus);
+      : color_textstatus = MyTheme.colorWhitestatus;
   return color_textstatus;
 }

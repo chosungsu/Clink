@@ -12,6 +12,8 @@ import '../../BACKENDPART/Getx/navibool.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
+import '../../sheets/BSContents/appbarplusbtn.dart';
+
 class DrawerScreen extends StatefulWidget {
   const DrawerScreen({
     Key? key,
@@ -24,10 +26,19 @@ class _DrawerScreenState extends State<DrawerScreen> {
   final draw = Get.put(navibool());
   final uiset = Get.put(uisetting());
   final peopleadd = Get.put(UserInfo());
+  final searchNode = FocusNode();
+  TextEditingController textcontroller = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    textcontroller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    textcontroller.dispose();
   }
 
   @override
@@ -45,12 +56,12 @@ class _DrawerScreenState extends State<DrawerScreen> {
                       color: draw.color_textstatus,
                       width: draw.navi == 0 ? 1 : 0)),
               color: draw.backgroundcolor),
-          child: View(context, drawerItems_view));
+          child: View(context, drawerItems_view, textcontroller, searchNode));
     });
   }
 }
 
-View(BuildContext context, List<Map> drawerItems) {
+View(BuildContext context, List<Map> drawerItems, textcontroller, searchnode) {
   return Container(
       padding: const EdgeInsets.only(bottom: 20, left: 5, right: 5),
       child: Column(
@@ -70,21 +81,18 @@ View(BuildContext context, List<Map> drawerItems) {
                             child: InkWell(
                               onTap: () {
                                 if (element
-                                    .containsValue(SimpleLineIcons.home)) {
+                                    .containsValue(AntDesign.paperclip)) {
                                   draw.setclose();
                                   uiset.setmypagelistindex(
                                       Hive.box('user_setting')
                                               .get('currentmypage') ??
                                           0);
                                   uiset.setpageindex(0);
-                                } else if (element.containsValue(
-                                  notilist.isread == true
-                                      ? Ionicons.notifications_outline
-                                      : MaterialCommunityIcons
-                                          .bell_badge_outline,
-                                )) {
+                                } else if (element
+                                    .containsValue(AntDesign.plus)) {
                                   draw.setclose();
-                                  uiset.setpageindex(1);
+                                  //uiset.setpageindex(1);
+                                  plusBtn(context, textcontroller, searchnode);
                                 } else if (element.containsValue(
                                     Ionicons.ios_person_outline)) {
                                   draw.setclose();

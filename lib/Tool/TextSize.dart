@@ -1,51 +1,34 @@
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:get/get.dart';
+import '../BACKENDPART/Getx/navibool.dart';
+
+final navi = Get.put(navibool());
 
 double mainTitleTextsize() {
   double ts = 0;
-  Hive.box('user_setting').get('which_text_size') == null
-      ? ts = 25
-      : (Hive.box('user_setting').get('which_text_size') == 0
-          ? ts = 25
-          : ts = 27);
+  navi.textsize == 0 ? ts = 25 : ts = 27;
   return ts;
 }
 
 double secondTitleTextsize() {
   double ts = 0;
-  Hive.box('user_setting').get('which_text_size') == null
-      ? ts = 23
-      : (Hive.box('user_setting').get('which_text_size') == 0
-          ? ts = 23
-          : ts = 25);
+  navi.textsize == 0 ? ts = 23 : ts = 25;
   return ts;
 }
 
 double contentTitleTextsize() {
   double ts = 0;
-  Hive.box('user_setting').get('which_text_size') == null
-      ? ts = 20
-      : (Hive.box('user_setting').get('which_text_size') == 0
-          ? ts = 20
-          : ts = 22);
+  navi.textsize == 0 ? ts = 20 : ts = 22;
   return ts;
 }
 
 double contentTextsize() {
   double ts = 0;
-  Hive.box('user_setting').get('which_text_size') == null
-      ? ts = 18
-      : (Hive.box('user_setting').get('which_text_size') == 0
-          ? ts = 18
-          : ts = 20);
+  navi.textsize == 0 ? ts = 18 : ts = 20;
   return ts;
 }
 
 double contentsmallTextsize() {
   double ts = 0;
-  Hive.box('user_setting').get('which_text_size') == null
-      ? ts = 13
-      : (Hive.box('user_setting').get('which_text_size') == 0
-          ? ts = 13
-          : ts = 15);
+  navi.textsize == 0 ? ts = 13 : ts = 15;
   return ts;
 }

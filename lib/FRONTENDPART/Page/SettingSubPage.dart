@@ -15,7 +15,8 @@ import '../Route/subuiroute.dart';
 import '../UI/SettingSubUI.dart';
 
 class SettingSubPage extends StatefulWidget {
-  const SettingSubPage({Key? key}) : super(key: key);
+  const SettingSubPage({Key? key, required this.title}) : super(key: key);
+  final String title;
   @override
   State<StatefulWidget> createState() => _SettingSubPageState();
 }
@@ -23,7 +24,7 @@ class SettingSubPage extends StatefulWidget {
 class _SettingSubPageState extends State<SettingSubPage>
     with TickerProviderStateMixin {
   final searchNode = FocusNode();
-  final draw = Get.put(navibool());
+  final navi = Get.put(navibool());
   final uiset = Get.put(uisetting());
 
   @override
@@ -41,7 +42,7 @@ class _SettingSubPageState extends State<SettingSubPage>
     return SafeArea(child: OrientationBuilder(
       builder: (context, orientation) {
         return Scaffold(
-            backgroundColor: BGColor(),
+            backgroundColor: navi.backgroundcolor,
             body: WillPopScope(
                 onWillPop: () => onWillPop(context),
                 child: GetBuilder<navibool>(builder: (_) => Body())));
@@ -53,16 +54,16 @@ class _SettingSubPageState extends State<SettingSubPage>
     return GetBuilder<navibool>(
         builder: (_) => AnimatedContainer(
               transform:
-                  Matrix4.translationValues(draw.xoffset, draw.yoffset, 0)
-                    ..scale(draw.scalefactor),
+                  Matrix4.translationValues(navi.xoffset, navi.yoffset, 0)
+                    ..scale(navi.scalefactor),
               duration: const Duration(milliseconds: 250),
               child: GestureDetector(
                 onTap: () {
                   searchNode.unfocus();
-                  draw.drawopen == true && draw.navishow == false
+                  navi.drawopen == true && navi.navishow == false
                       ? setState(() {
-                          draw.drawopen = false;
-                          draw.setclose();
+                          navi.drawopen = false;
+                          navi.setclose();
                           Hive.box('user_setting').put('page_opened', false);
                         })
                       : null;
@@ -71,22 +72,29 @@ class _SettingSubPageState extends State<SettingSubPage>
                   height: Get.height,
                   width: Get.width,
                   child: Container(
-                      color: draw.backgroundcolor,
+                      color: navi.backgroundcolor,
                       child: Row(
                         children: [
                           Column(
                             children: [
                               GetBuilder<uisetting>(builder: (_) {
                                 return AppBarCustom(
-                                  title: Text(
-                                    '',
-                                    maxLines: 1,
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: mainTitleTextsize(),
-                                        color: draw.color_textstatus),
-                                    overflow: TextOverflow.ellipsis,
+                                  title: Row(
+                                    children: [
+                                      const SizedBox(
+                                        width: 20,
+                                      ),
+                                      Text(
+                                        widget.title,
+                                        maxLines: 1,
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: mainTitleTextsize(),
+                                            color: navi.color_textstatus),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
                                   ),
                                   lefticon: true,
                                   lefticonname: MaterialIcons.chevron_left,

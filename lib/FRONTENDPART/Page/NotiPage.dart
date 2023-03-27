@@ -25,7 +25,7 @@ class NotiPage extends StatefulWidget {
 }
 
 class _NotiPageState extends State<NotiPage> {
-  final draw = Get.put(navibool());
+  final navi = Get.put(navibool());
   final uiset = Get.put(uisetting());
   final notilist = Get.put(notishow());
 
@@ -45,13 +45,13 @@ class _NotiPageState extends State<NotiPage> {
     return SafeArea(child: OrientationBuilder(
       builder: (context, orientation) {
         SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-            statusBarColor: draw.backgroundcolor,
+            statusBarColor: navi.backgroundcolor,
             statusBarBrightness:
-                draw.statusbarcolor == 0 ? Brightness.dark : Brightness.light,
+                navi.statusbarcolor == 0 ? Brightness.dark : Brightness.light,
             statusBarIconBrightness:
-                draw.statusbarcolor == 0 ? Brightness.dark : Brightness.light));
+                navi.statusbarcolor == 0 ? Brightness.dark : Brightness.light));
         return Scaffold(
-            backgroundColor: draw.backgroundcolor,
+            backgroundColor: navi.backgroundcolor,
             bottomNavigationBar: uiset.loading
                 ? const SizedBox()
                 : (Get.width < 1000 ? const BottomScreen() : const SizedBox()),
@@ -66,15 +66,15 @@ class _NotiPageState extends State<NotiPage> {
       return GetBuilder<navibool>(
           builder: (_) => AnimatedContainer(
                 transform:
-                    Matrix4.translationValues(draw.xoffset, draw.yoffset, 0)
-                      ..scale(draw.scalefactor),
+                    Matrix4.translationValues(navi.xoffset, navi.yoffset, 0)
+                      ..scale(navi.scalefactor),
                 duration: const Duration(milliseconds: 250),
                 child: GestureDetector(
                   onTap: () {
-                    draw.drawopen == true && draw.navishow == false
+                    navi.drawopen == true && navi.navishow == false
                         ? setState(() {
-                            draw.drawopen = false;
-                            draw.setclose();
+                            navi.drawopen = false;
+                            navi.setclose();
                             Hive.box('user_setting').put('page_opened', false);
                           })
                         : null;
@@ -85,11 +85,11 @@ class _NotiPageState extends State<NotiPage> {
                     child: GetBuilder<uisetting>(
                       builder: (_) {
                         return Container(
-                            color: draw.backgroundcolor,
+                            color: navi.backgroundcolor,
                             child: Row(
                               children: [
-                                draw.navi == 0 &&
-                                        draw.navishow == true &&
+                                navi.navi == 0 &&
+                                        navi.navishow == true &&
                                         Get.width > 1000
                                     ? innertype()
                                     : const SizedBox(),
@@ -144,7 +144,7 @@ class _NotiPageState extends State<NotiPage> {
                                                                 0
                                                             ? MyTheme
                                                                 .colorpastelpurple
-                                                            : draw
+                                                            : navi
                                                                 .backgroundcolor,
                                                         thickness: 2,
                                                         indent: 0,
@@ -197,7 +197,7 @@ class _NotiPageState extends State<NotiPage> {
                                                                 1
                                                             ? MyTheme
                                                                 .colorpastelpurple
-                                                            : draw
+                                                            : navi
                                                                 .backgroundcolor,
                                                         thickness: 2,
                                                         indent: 0,
@@ -221,7 +221,7 @@ class _NotiPageState extends State<NotiPage> {
                                     Flexible(
                                       fit: FlexFit.tight,
                                       child: SizedBox(
-                                        width: draw.navishow == true &&
+                                        width: navi.navishow == true &&
                                                 Get.width > 1000
                                             ? Get.width - 120
                                             : Get.width,
@@ -235,7 +235,7 @@ class _NotiPageState extends State<NotiPage> {
                                                   children: [
                                                     responsivewidget(
                                                         UI(
-                                                            draw.navishow == true &&
+                                                            navi.navishow == true &&
                                                                     Get.width >
                                                                         1000
                                                                 ? constraint
@@ -254,8 +254,8 @@ class _NotiPageState extends State<NotiPage> {
                                     ),
                                   ],
                                 ),
-                                draw.navi == 1 &&
-                                        draw.navishow == true &&
+                                navi.navi == 1 &&
+                                        navi.navishow == true &&
                                         Get.width > 1000
                                     ? innertype()
                                     : const SizedBox(),

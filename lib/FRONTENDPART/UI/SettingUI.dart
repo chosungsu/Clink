@@ -3,10 +3,12 @@
 import 'package:clickbyme/BACKENDPART/ViewPoints/SettingVP.dart';
 import 'package:clickbyme/FRONTENDPART/Route/subuiroute.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
+import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../Tool/BGColor.dart';
@@ -21,7 +23,8 @@ import '../../sheets/BottomSheet/AddContentWithBtn.dart';
 final uiset = Get.put(uisetting());
 final linkspaceset = Get.put(linkspacesetting());
 final peopleadd = Get.put(UserInfo());
-final draw = Get.put(navibool());
+final navi = Get.put(navibool());
+final box = GetStorage();
 
 ///UI
 ///
@@ -85,11 +88,11 @@ optview(context, maxWidth, searchnode, controller) {
                     Container(
                         alignment: Alignment.center,
                         child: CircleAvatar(
-                          backgroundColor: draw.backgroundcolor,
-                          foregroundColor: draw.backgroundcolor,
+                          backgroundColor: navi.backgroundcolor,
+                          foregroundColor: navi.backgroundcolor,
                           child: Icon(
                             uiset.profilescreen[index].icondata,
-                            color: draw.color_textstatus,
+                            color: navi.color_textstatus,
                           ),
                         )),
                     const SizedBox(
@@ -100,7 +103,7 @@ optview(context, maxWidth, searchnode, controller) {
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: contentTextsize(),
-                          color: draw.color_textstatus),
+                          color: navi.color_textstatus),
                     ),
                   ],
                 ),
@@ -112,7 +115,7 @@ optview(context, maxWidth, searchnode, controller) {
                 Opt_body(index, searchnode, controller)
               ],
             ),
-            color: draw.backgroundcolor,
+            color: navi.backgroundcolor,
           ),
           const SizedBox(
             height: 20,
@@ -147,8 +150,19 @@ Opt_body(index, searchnode, controller) {
                     onTap: () {
                       if (index == 0) {
                       } else if (index == 1) {
-                        uiset.checkprofilepageindex(1);
-                        GoToSettingSubPage();
+                        if (index2 == 0) {
+                          uiset.checkprofilepageindex(0);
+                          GoToSettingSubPage(uiset
+                              .profilescreen[index].subtitles[index2]
+                              .toString()
+                              .tr);
+                        } else {
+                          uiset.checkprofilepageindex(1);
+                          GoToSettingSubPage(uiset
+                              .profilescreen[index].subtitles[index2]
+                              .toString()
+                              .tr);
+                        }
                       } else {
                         if (index2 == 0) {
                           var url = Uri.parse(
@@ -156,7 +170,10 @@ Opt_body(index, searchnode, controller) {
                           launchUrl(url);
                         } else if (index2 == 1) {
                           uiset.checkprofilepageindex(2);
-                          GoToSettingSubPage();
+                          GoToSettingSubPage(uiset
+                              .profilescreen[index].subtitles[index2]
+                              .toString()
+                              .tr);
                         } else if (index2 == 2) {
                           controller.clear();
                           title = Widgets_tocompany(
@@ -190,7 +207,7 @@ Opt_body(index, searchnode, controller) {
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: contentTextsize(),
-                                  color: TextColor()),
+                                  color: navi.color_textstatus),
                             ),
                           ),
                           index == 0
@@ -211,21 +228,16 @@ Opt_body(index, searchnode, controller) {
                                                         if (index2 == 0) {
                                                         } else if (index2 ==
                                                             1) {
-                                                          Hive.box(
-                                                                  'user_setting')
-                                                              .put(
-                                                                  'which_color_background',
-                                                                  0);
-                                                          draw.setnavicolor();
+                                                          navi.changeappbox();
                                                         } else if (index2 ==
                                                             2) {
-                                                          draw.setts(0);
+                                                          navi.setts(0);
                                                         } else if (index2 ==
                                                             3) {
-                                                          draw.setnavi(0);
+                                                          navi.setnavi(0);
                                                         } else {
                                                           //draw.setclose();
-                                                          draw.setmenushowing(
+                                                          navi.setmenushowing(
                                                               true);
                                                         }
                                                         Snack.snackbars(
@@ -233,7 +245,7 @@ Opt_body(index, searchnode, controller) {
                                                             title: '변경완료함',
                                                             backgroundcolor:
                                                                 Colors.green,
-                                                            bordercolor: draw
+                                                            bordercolor: navi
                                                                 .backgroundcolor);
                                                       },
                                                     );
@@ -252,7 +264,7 @@ Opt_body(index, searchnode, controller) {
                                                                         .circular(
                                                                             15.0),
                                                                 border: Border.all(
-                                                                    color: draw
+                                                                    color: navi
                                                                         .color_textstatus,
                                                                     style: BorderStyle
                                                                         .solid,
@@ -284,9 +296,9 @@ Opt_body(index, searchnode, controller) {
                                                                             .bold,
                                                                     fontSize:
                                                                         contentsmallTextsize(),
-                                                                    color: draw
+                                                                    color: navi
                                                                         .color_textstatus),
-                                                                dropdownColor: draw
+                                                                dropdownColor: navi
                                                                     .backgroundcolor,
                                                                 items: [
                                                                   DropdownMenuItem(
@@ -303,7 +315,7 @@ Opt_body(index, searchnode, controller) {
                                                                           fontSize:
                                                                               contentsmallTextsize(),
                                                                           color:
-                                                                              draw.color_textstatus),
+                                                                              navi.color_textstatus),
                                                                     ),
                                                                   ),
                                                                   DropdownMenuItem(
@@ -320,7 +332,7 @@ Opt_body(index, searchnode, controller) {
                                                                           fontSize:
                                                                               contentsmallTextsize(),
                                                                           color:
-                                                                              draw.color_textstatus),
+                                                                              navi.color_textstatus),
                                                                     ),
                                                                   ),
                                                                 ],
@@ -330,11 +342,12 @@ Opt_body(index, searchnode, controller) {
                                                           ? CircleAvatar(
                                                               backgroundColor:
                                                                   Colors.white,
-                                                              child: Hive.box('user_setting').get(
-                                                                              'which_color_background') ==
-                                                                          0 ||
-                                                                      Hive.box('user_setting')
-                                                                              .get('which_color_background') ==
+                                                              child: box.read('backgroundcolor') ==
+                                                                          MyTheme
+                                                                              .colorWhite
+                                                                              .value ||
+                                                                      box.read(
+                                                                              'backgroundcolor') ==
                                                                           null
                                                                   ? Container(
                                                                       decoration: BoxDecoration(
@@ -342,7 +355,7 @@ Opt_body(index, searchnode, controller) {
                                                                               .circle,
                                                                           border: Border.all(
                                                                               width: 2,
-                                                                              color: Hive.box('user_setting').get('which_color_background') == 0 || Hive.box('user_setting').get('which_color_background') == null ? Colors.blue.shade400 : BGColor_shadowcolor())),
+                                                                              color: box.read('backgroundcolor') == MyTheme.colorWhite.value || box.read('backgroundcolor') == null ? Colors.blue.shade400 : BGColor_shadowcolor())),
                                                                       alignment:
                                                                           Alignment
                                                                               .center,
@@ -376,7 +389,7 @@ Opt_body(index, searchnode, controller) {
                                                                         border: Border.all(
                                                                             width:
                                                                                 2,
-                                                                            color: Hive.box('user_setting').get('which_text_size') == 0 || Hive.box('user_setting').get('which_text_size') == null
+                                                                            color: navi.textsize == 0
                                                                                 ? Colors.blue.shade400
                                                                                 : BGColor_shadowcolor())),
                                                                     alignment:
@@ -409,7 +422,7 @@ Opt_body(index, searchnode, controller) {
                                                                         decoration: BoxDecoration(
                                                                             shape:
                                                                                 BoxShape.circle,
-                                                                            border: Border.all(width: 2, color: draw.navi == 0 ? Colors.blue.shade400 : BGColor_shadowcolor())),
+                                                                            border: Border.all(width: 2, color: navi.navi == 0 ? Colors.blue.shade400 : BGColor_shadowcolor())),
                                                                         alignment:
                                                                             Alignment.center,
                                                                         child:
@@ -464,17 +477,13 @@ Opt_body(index, searchnode, controller) {
                                                     () {
                                                       if (index2 == 0) {
                                                       } else if (index2 == 1) {
-                                                        Hive.box('user_setting')
-                                                            .put(
-                                                                'which_color_background',
-                                                                1);
-                                                        draw.setnavicolor();
+                                                        navi.changeappbox();
                                                       } else if (index2 == 2) {
-                                                        draw.setts(1);
+                                                        navi.setts(1);
                                                       } else if (index2 == 3) {
-                                                        draw.setnavi(1);
+                                                        navi.setnavi(1);
                                                       } else {
-                                                        draw.setmenushowing(
+                                                        navi.setmenushowing(
                                                             false);
                                                       }
                                                       Snack.snackbars(
@@ -482,7 +491,7 @@ Opt_body(index, searchnode, controller) {
                                                           title: '변경완료함',
                                                           backgroundcolor:
                                                               Colors.green,
-                                                          bordercolor: draw
+                                                          bordercolor: navi
                                                               .backgroundcolor);
                                                     },
                                                   );
@@ -493,10 +502,11 @@ Opt_body(index, searchnode, controller) {
                                                         ? CircleAvatar(
                                                             backgroundColor:
                                                                 Colors.black,
-                                                            child: Hive.box('user_setting')
-                                                                        .get(
-                                                                            'which_color_background') ==
-                                                                    1
+                                                            child: box.read(
+                                                                        'backgroundcolor') ==
+                                                                    MyTheme
+                                                                        .colorblack
+                                                                        .value
                                                                 ? Container(
                                                                     decoration: BoxDecoration(
                                                                         shape: BoxShape
@@ -504,7 +514,7 @@ Opt_body(index, searchnode, controller) {
                                                                         border: Border.all(
                                                                             width:
                                                                                 2,
-                                                                            color: Hive.box('user_setting').get('which_color_background') == 1
+                                                                            color: box.read('backgroundcolor') == MyTheme.colorblack.value
                                                                                 ? Colors.blue.shade400
                                                                                 : BGColor_shadowcolor())),
                                                                     alignment:
@@ -541,7 +551,7 @@ Opt_body(index, searchnode, controller) {
                                                                       border: Border.all(
                                                                           width:
                                                                               2,
-                                                                          color: Hive.box('user_setting').get('which_text_size') == 1
+                                                                          color: navi.textsize == 1
                                                                               ? Colors.blue.shade400
                                                                               : BGColor_shadowcolor())),
                                                                   alignment:
@@ -576,7 +586,7 @@ Opt_body(index, searchnode, controller) {
                                                                               .circle,
                                                                           border: Border.all(
                                                                               width: 2,
-                                                                              color: draw.navi == 1 ? Colors.blue.shade400 : BGColor_shadowcolor())),
+                                                                              color: navi.navi == 1 ? Colors.blue.shade400 : BGColor_shadowcolor())),
                                                                       alignment:
                                                                           Alignment
                                                                               .center,
@@ -635,7 +645,7 @@ Opt_body(index, searchnode, controller) {
                               : Icon(
                                   Icons.keyboard_arrow_right,
                                   size: 30,
-                                  color: TextColor(),
+                                  color: navi.color_textstatus,
                                 ),
                         ],
                       ),
