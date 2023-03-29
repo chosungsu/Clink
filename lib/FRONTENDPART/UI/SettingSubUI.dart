@@ -7,6 +7,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../BACKENDPART/Api/LicenseApi.dart';
 import '../../BACKENDPART/Api/NoticeApi.dart';
 import '../../BACKENDPART/Enums/Variables.dart';
 import '../../BACKENDPART/Getx/linkspacesetting.dart';
@@ -192,43 +193,59 @@ LicenseScreen(maxWidth, maxHeight) {
 }
 
 buildPanel(maxWidth) {
-  return SizedBox(
-    child: ListView.builder(
-      scrollDirection: Axis.vertical,
-      itemCount: licensedata.length,
-      physics: const ScrollPhysics(),
-      shrinkWrap: true,
-      itemBuilder: (context, index) {
-        return Column(
-          children: [
-            ContainerDesign(
-                child: ListTile(
-                  title: Text(
-                    licensedata[index].title,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: contentTextsize(),
-                        color: draw.color_textstatus),
-                  ),
-                  trailing: const Icon(
-                    FontAwesome.hand_o_right,
-                    color: Colors.grey,
-                    size: 30,
-                  ),
-                  onTap: () {
-                    var url = Uri.parse(licensedata[index].sub);
-                    launchUrl(url);
-                  },
-                ),
-                color: draw.backgroundcolor),
-            const SizedBox(
-              height: 10,
+  return FutureBuilder(
+      future: LicenseApiProvider().getTasks(),
+      builder: ((context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return SpinKitThreeBounce(
+            size: 30,
+            itemBuilder: (BuildContext context, int index) {
+              return DecoratedBox(
+                decoration: BoxDecoration(
+                    color: Colors.blue.shade200, shape: BoxShape.circle),
+              );
+            },
+          );
+        } else {
+          return SizedBox(
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              itemCount: licensedata.length,
+              physics: const ScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    ContainerDesign(
+                        child: ListTile(
+                          title: Text(
+                            licensedata[index].title,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentTextsize(),
+                                color: draw.color_textstatus),
+                          ),
+                          trailing: const Icon(
+                            FontAwesome.hand_o_right,
+                            color: Colors.grey,
+                            size: 30,
+                          ),
+                          onTap: () {
+                            var url = Uri.parse(licensedata[index].sub);
+                            launchUrl(url);
+                          },
+                        ),
+                        color: draw.backgroundcolor),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                );
+              },
             ),
-          ],
-        );
-      },
-    ),
-  );
+          );
+        }
+      }));
 }
 /*ExpansionPanelList(
             expansionCallback: ((panelIndex, isExpanded) {

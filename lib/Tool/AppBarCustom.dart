@@ -147,9 +147,7 @@ class AppBarCustom extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Flexible(
-                                          fit: FlexFit.tight,
-                                          child: SizedBox(child: title)),
+                                      SizedBox(child: title),
                                       righticon == true
                                           ? Row(
                                               children: [
@@ -158,14 +156,7 @@ class AppBarCustom extends StatelessWidget {
                                                             uiset.pagenumber ==
                                                                 12
                                                         ? GestureDetector(
-                                                            onTap: () => func4(
-                                                              context,
-                                                              textcontroller,
-                                                              searchnode,
-                                                              'addpage',
-                                                              '',
-                                                              99,
-                                                            ),
+                                                            onTap: () {},
                                                             child: Icon(
                                                               Ionicons
                                                                   .add_outline,
@@ -192,63 +183,15 @@ class AppBarCustom extends StatelessWidget {
                                                           context,
                                                           righticonname);
                                                     },
-                                                    child: Get.width < 1000
-                                                        ? Icon(
-                                                            righticonname,
-                                                            size: 30,
-                                                            color: righticonname ==
-                                                                    Icons.star
-                                                                ? Colors.yellow
-                                                                : draw
-                                                                    .color_textstatus,
-                                                          )
-                                                        : ContainerDesign(
-                                                            child: Row(
-                                                              children: [
-                                                                Container(
-                                                                  padding:
-                                                                      EdgeInsets
-                                                                          .zero,
-                                                                  child: Icon(
-                                                                    righticonname,
-                                                                    size: 30,
-                                                                    color: righticonname ==
-                                                                            Icons
-                                                                                .star
-                                                                        ? Colors
-                                                                            .yellow
-                                                                        : draw
-                                                                            .color_textstatus,
-                                                                  ),
-                                                                ),
-                                                                const SizedBox(
-                                                                  width: 5,
-                                                                ),
-                                                                Text(
-                                                                  RightIconText(
-                                                                      righticonname),
-                                                                  maxLines: 1,
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .start,
-                                                                  style: TextStyle(
-                                                                      fontFamily:
-                                                                          'DancingScript',
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w700,
-                                                                      fontSize:
-                                                                          contentTextsize(),
-                                                                      color: draw
-                                                                          .color_textstatus),
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            color: draw
-                                                                .backgroundcolor))
+                                                    child: Icon(
+                                                      righticonname,
+                                                      size: 30,
+                                                      color: righticonname ==
+                                                              Icons.star
+                                                          ? Colors.yellow
+                                                          : draw
+                                                              .color_textstatus,
+                                                    ))
                                               ],
                                             )
                                           : const SizedBox()
@@ -323,18 +266,9 @@ class AppBarCustom extends StatelessWidget {
             ? func7()
             : (righticonname == Icons.download
                 ? downloadFileExample(mainid, context)
-                : null));
-  }
-
-  RightIconText(righticonname) {
-    return righticonname == SimpleLineIcons.grid
-        ? '옵션'
-        : (righticonname == Icons.star_border || righticonname == Icons.star
-            ? '즐겨찾기'
-            : (righticonname == Ionicons.settings_outline
-                ? '설정'
-                : (righticonname == Icons.download
-                    ? ''
-                    : (righticonname == Ionicons.ios_close ? '닫기' : ''))));
+                : (righticonname == Ionicons.search ||
+                        righticonname == Ionicons.close
+                    ? MakeAppbarwithsearchbar(textcontroller)
+                    : null)));
   }
 }

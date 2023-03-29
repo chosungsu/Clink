@@ -240,13 +240,6 @@ Opt_body(index, searchnode, controller) {
                                                           navi.setmenushowing(
                                                               true);
                                                         }
-                                                        Snack.snackbars(
-                                                            context: context,
-                                                            title: '변경완료함',
-                                                            backgroundcolor:
-                                                                Colors.green,
-                                                            bordercolor: navi
-                                                                .backgroundcolor);
                                                       },
                                                     );
                                                   },
@@ -486,13 +479,6 @@ Opt_body(index, searchnode, controller) {
                                                         navi.setmenushowing(
                                                             false);
                                                       }
-                                                      Snack.snackbars(
-                                                          context: context,
-                                                          title: '변경완료함',
-                                                          backgroundcolor:
-                                                              Colors.green,
-                                                          bordercolor: navi
-                                                              .backgroundcolor);
                                                     },
                                                   );
                                                 },

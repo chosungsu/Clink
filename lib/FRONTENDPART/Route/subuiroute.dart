@@ -66,8 +66,9 @@ Future<bool> onWillPop(context) async {
     uiset.pagenumber = 1;
   } else if (uiset.pagenumber != 0) {
     uiset.setpageindex(0);
-    //Get.to(() => const mainroute(), transition: Transition.fade);
+    uiset.setappbarwithsearch(init: true);
   } else {
+    uiset.setappbarwithsearch(init: true);
     return await Get.dialog(OSDialog(
             context,
             '종료',
@@ -123,6 +124,15 @@ GoToSettingSubPage(title) async {
             title: title,
           ),
       transition: Transition.fade);
+}
+
+///MakeAppbarwithsearchbar
+///
+///앱바를 서칭바로 변경하는데 사용합니다.
+MakeAppbarwithsearchbar(textcontroller) async {
+  final uiset = Get.put(uisetting());
+  textcontroller.text = '';
+  uiset.setappbarwithsearch();
 }
 
 deletenoti(context) async {
@@ -234,7 +244,7 @@ deletenoti(context) async {
     }
   }
 }
-
+/*
 func4(context, textcontroller, searchnode, where, id, categorypicknum) async {
   final uiset = Get.put(uisetting());
   var checkid = '';
@@ -298,7 +308,7 @@ func4(context, textcontroller, searchnode, where, id, categorypicknum) async {
         backgroundcolor: Colors.red,
         bordercolor: draw.backgroundcolor);
   }
-}
+}*/
 
 func7() async {
   final uiset = Get.put(uisetting());

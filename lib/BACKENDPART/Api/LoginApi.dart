@@ -30,12 +30,7 @@ class LoginApiProvider extends GetxController {
         box.write('code', peopleadd.usrcode);
         box.write('picture', peopleadd.usrimgurl);
       } else {
-        peopleadd.nickname = '';
-        peopleadd.usrcode = '';
-        peopleadd.usrimgurl = '';
-        box.write('nick', '');
-        box.write('code', '');
-        box.write('picture', '');
+        createTasks(init: true);
       }
     }
 
@@ -50,21 +45,25 @@ class LoginApiProvider extends GetxController {
     notifyChildrens();
   }
 
-  createTasks() async {
-    generatecode();
-    var returndata = await LoginApiProvider().getTasks();
-    for (int i = 0; i < returndata.length; i++) {
-      if (returndata[i]['nick'] == code || returndata[i]['code'] == code) {
-        generatecode();
-      }
-    }
+  createTasks({init = false}) async {
     var url = '$baseurl/usertype/create/';
-    peopleadd.nickname = code;
-    peopleadd.usrcode = code;
-    peopleadd.usrimgurl = '';
-    box.write('nick', peopleadd.nickname);
-    box.write('code', peopleadd.usrcode);
-    box.write('picture', peopleadd.usrimgurl);
+    if (init) {
+    } else {
+      generatecode();
+      var returndata = await LoginApiProvider().getTasks();
+      for (int i = 0; i < returndata.length; i++) {
+        if (returndata[i]['nick'] == code || returndata[i]['code'] == code) {
+          generatecode();
+        }
+      }
+      peopleadd.nickname = code;
+      peopleadd.usrcode = code;
+      peopleadd.usrimgurl = '';
+      box.write('nick', peopleadd.nickname);
+      box.write('code', peopleadd.usrcode);
+      box.write('picture', peopleadd.usrimgurl);
+    }
+
     try {
       Map data = {
         "nick": peopleadd.nickname,

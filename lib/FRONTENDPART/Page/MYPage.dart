@@ -7,13 +7,11 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:status_bar_control/status_bar_control.dart';
 import '../../Tool/AppBarCustom.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
-import '../../Tool/BGColor.dart';
 import '../../Tool/NoBehavior.dart';
 import '../../Tool/TextSize.dart';
-import '../UI/MYPageUI.dart';
+import '../UI/MYPageChangeUI.dart';
 import '../Widget/BottomScreen.dart';
 import '../Widget/responsiveWidget.dart';
 
@@ -86,6 +84,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                 duration: const Duration(milliseconds: 250),
                 child: GestureDetector(
                   onTap: () {
+                    searchNode.unfocus();
                     navi.drawopen == true && navi.navishow == false
                         ? setState(() {
                             navi.drawopen = false;
@@ -113,21 +112,29 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                   children: [
                                     GetBuilder<notishow>(builder: (_) {
                                       return AppBarCustom(
-                                        title: Text(
-                                          'iTPLE',
-                                          maxLines: 1,
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: mainTitleTextsize(),
-                                              color: navi.color_textstatus),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
+                                        title: uiset.changesearchbar == true
+                                            ? SearchBox(
+                                                textcontroller, searchNode)
+                                            : Text(
+                                                'Pinset',
+                                                maxLines: 1,
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize:
+                                                        mainTitleTextsize(),
+                                                    color:
+                                                        navi.color_textstatus),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
                                         lefticon: false,
-                                        righticon: false,
+                                        righticon: true,
                                         doubleicon: true,
                                         lefticonname: Ionicons.add_outline,
-                                        righticonname: Ionicons.add_outline,
+                                        righticonname:
+                                            uiset.changesearchbar == true
+                                                ? Ionicons.close
+                                                : Ionicons.search,
                                         textcontroller: textcontroller,
                                         searchnode: searchNode,
                                       );
@@ -148,6 +155,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                                       ((context, constraint) {
                                                     return SingleChildScrollView(
                                                         child: UI(
+                                                            context,
                                                             uiset
                                                                 .pagelist[uiset
                                                                     .mypagelistindex]

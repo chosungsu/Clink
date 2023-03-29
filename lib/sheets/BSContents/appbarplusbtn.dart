@@ -5,6 +5,9 @@ import 'package:clickbyme/sheets/BottomSheet/AddContentWithBtn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
+import '../../BACKENDPART/Api/PageApi.dart';
+import '../../BACKENDPART/Enums/Linkpage.dart';
+import '../../BACKENDPART/Getx/UserInfo.dart';
 import '../../BACKENDPART/ViewPoints/NoticeVP.dart';
 import '../../BACKENDPART/Enums/Variables.dart';
 import '../../Tool/BGColor.dart';
@@ -25,90 +28,6 @@ plusBtn(context, textcontroller, searchnode) {
 Contents_plusbtn(context, textcontroller, searchnode) {
   Widget title;
   Widget content;
-  title = const SizedBox();
-  content = Column(
-    children: [
-      ListTile(
-        onTap: () {
-          Get.back();
-          /*title = Contents_plusbtn(
-            context,
-            textcontroller,
-            searchnode,
-            where,
-            id,
-            categorypicknum,
-          )[0];
-          content = Contents_plusbtn(
-            context,
-            textcontroller,
-            searchnode,
-            where,
-            id,
-            categorypicknum,
-          )[1];
-          AddContent(context, title, content, searchnode);*/
-        },
-        trailing: const Icon(
-          Ionicons.create_outline,
-          color: Colors.black,
-        ),
-        title: Text(
-          '페이지 생성',
-          softWrap: true,
-          textAlign: TextAlign.start,
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: contentTextsize()),
-          overflow: TextOverflow.ellipsis,
-        ),
-      ),
-      ListTile(
-        onTap: () {
-          Get.back();
-          /*title = Contents_plusbtn(
-            context,
-            textcontroller,
-            searchnode,
-            where,
-            id,
-            categorypicknum,
-          )[0];
-          content = Contents_plusbtn(
-            context,
-            textcontroller,
-            searchnode,
-            where,
-            id,
-            categorypicknum,
-          )[1];
-          AddContent(context, title, content, searchnode);*/
-        },
-        trailing: const Icon(
-          Feather.box,
-          color: Colors.black,
-        ),
-        title: Text(
-          '박스 생성',
-          softWrap: true,
-          textAlign: TextAlign.start,
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: contentTextsize()),
-          overflow: TextOverflow.ellipsis,
-        ),
-      ),
-    ],
-  );
-  return [title, content];
-}
-
-Widgets_plusbtn(
-    context, checkid, textcontroller, searchnode, where, id, categorypicknum) {
-  Widget title;
-  Widget content;
   Widget btn;
   title = const SizedBox();
   content = Column(
@@ -116,29 +35,21 @@ Widgets_plusbtn(
       ListTile(
         onTap: () {
           Get.back();
+          textcontroller.text = '';
           title = Widgets_plusbtncontent1(
             context,
             textcontroller,
             searchnode,
-            where,
-            id,
-            categorypicknum,
           )[0];
           content = Widgets_plusbtncontent1(
             context,
             textcontroller,
             searchnode,
-            where,
-            id,
-            categorypicknum,
           )[1];
           btn = Widgets_plusbtncontent1(
             context,
             textcontroller,
             searchnode,
-            where,
-            id,
-            categorypicknum,
           )[2];
           AddContentWithBtn(context, title, content, btn, searchnode);
         },
@@ -160,12 +71,12 @@ Widgets_plusbtn(
       ListTile(
         onTap: () {
           Get.back();
-          title = Widgets_plusbtncontent2(
-              context, checkid, textcontroller, searchnode)[0];
-          content = Widgets_plusbtncontent2(
-              context, checkid, textcontroller, searchnode)[1];
-          btn = Widgets_plusbtncontent2(
-              context, checkid, textcontroller, searchnode)[2];
+          textcontroller.text = '';
+          title =
+              Widgets_plusbtncontent2(context, textcontroller, searchnode)[0];
+          content =
+              Widgets_plusbtncontent2(context, textcontroller, searchnode)[1];
+          btn = Widgets_plusbtncontent2(context, textcontroller, searchnode)[2];
           AddContentWithBtn(context, title, content, btn, searchnode);
         },
         trailing: const Icon(
@@ -192,9 +103,6 @@ Widgets_plusbtncontent1(
   context,
   textcontroller,
   searchnode,
-  where,
-  id,
-  categorypicknum,
 ) {
   final uiset = Get.put(uisetting());
   final linkspaceset = Get.put(linkspacesetting());
@@ -236,8 +144,7 @@ Widgets_plusbtncontent1(
                   backgroundColor: ButtonColor(),
                 ),
                 onPressed: () async {
-                  clickbtn1(
-                      context, textcontroller, where, id, categorypicknum);
+                  clickbtn1(context, textcontroller);
                 },
                 child: Center(
                   child: Row(
@@ -283,7 +190,6 @@ Widgets_plusbtncontent1(
 
 Widgets_plusbtncontent2(
   context,
-  checkid,
   textcontroller,
   searchnode,
 ) {
@@ -326,7 +232,7 @@ Widgets_plusbtncontent2(
                   backgroundColor: ButtonColor(),
                 ),
                 onPressed: () async {
-                  clickbtn2(context, textcontroller, checkid);
+                  clickbtn2(context, textcontroller);
                 },
                 child: Center(
                   child: Row(
@@ -370,39 +276,35 @@ Widgets_plusbtncontent2(
   return [title, content, btn];
 }
 
-clickbtn1(context, textcontroller, where, id, categorynumber) {
+clickbtn1(context, textcontroller) {
   final uiset = Get.put(uisetting());
+  final peopleadd = Get.put(UserInfo());
   final linkspaceset = Get.put(linkspacesetting());
-  final updatelist = [];
-  final initialtext = textcontroller.text;
-  var updateid;
-  int indexcnt = linkspaceset.indexcnt.length;
 
   if (textcontroller.text.isEmpty) {
     uiset.checktf(false);
   } else {
     uiset.setloading(true, 1);
-    firestore.collection('Pinchannel').add({
-      'username': usercode,
-      'linkname': textcontroller.text,
-      'setting': 'block',
-      'email': useremail
-    }).whenComplete(() {
-      Snack.snackbars(
-          context: context,
-          title: '정상적으로 처리되었어요',
-          backgroundcolor: Colors.green,
-          bordercolor: draw.backgroundcolor);
-      uiset.setloading(false, 1);
-      linkspaceset.setspacelink(textcontroller.text);
-      SaveNoti('page', textcontroller.text, '', add: true);
-      Get.back();
-      textcontroller.text = '';
-    });
+    linkspaceset.addlist.clear();
+    linkspaceset.setaddlist(MainPageLinkList(
+        title: textcontroller.text.toString(),
+        isavailableshow: 'no',
+        owner: peopleadd.usrcode,
+        url: 'http://gox.co.kr',
+        date: DateTime.now().toString()));
+    PageApiProvider().createTasks();
+    Snack.snackbars(
+        context: context,
+        title: '정상적으로 처리되었어요',
+        backgroundcolor: Colors.green,
+        bordercolor: draw.backgroundcolor);
+    uiset.setloading(false, 1);
+    Get.back();
+    textcontroller.text = '';
   }
 }
 
-clickbtn2(context, textcontroller, checkid) {
+clickbtn2(context, textcontroller) {
   final uiset = Get.put(uisetting());
   final linkspaceset = Get.put(linkspacesetting());
   int indexcnt = linkspaceset.indexcnt.length;

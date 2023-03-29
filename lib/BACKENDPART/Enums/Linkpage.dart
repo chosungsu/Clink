@@ -66,3 +66,22 @@ class LinkofPapers {
     this.mainid,
   });
 }
+
+class MainPageLinkList {
+  ///MainPageLinkList
+  ///
+  ///이 부분은 메인에서 사용자의 링크페이지목록을 생성할 때 호출되는 부분
+  final String title;
+  final String isavailableshow;
+  final String owner;
+  final String url;
+  final String date;
+
+  MainPageLinkList({
+    required this.title,
+    required this.isavailableshow,
+    required this.owner,
+    required this.url,
+    required this.date,
+  });
+}

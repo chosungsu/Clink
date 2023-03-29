@@ -37,6 +37,7 @@ class LicenseApiProvider extends GetxController {
   }
 
   getTasks() async {
+    licensedata.clear();
     try {
       var url = '$baseurl/license/';
       var response = await http.get(

@@ -8,6 +8,10 @@ import '../Enums/Linkpage.dart';
 import '../../Tool/BGColor.dart';
 
 class linkspacesetting extends GetxController {
+  List<MainPageLinkList> alllist = [];
+  List<MainPageLinkList> addlist = [];
+  int clickmainoption = 0;
+  String searchurl = '';
   List spacelink = [];
   List indexcnt = [];
   List indextreecnt = [];
@@ -25,6 +29,36 @@ class linkspacesetting extends GetxController {
   Color color = Hive.box('user_setting').get('colorlinkpage') != null
       ? Color(Hive.box('user_setting').get('colorlinkpage'))
       : BGColor();
+
+  ///setmainoption
+  ///
+  ///메인페이지에서 옵션을 선택하는 데에 사용된다.
+  void setmainoption(int i) {
+    clickmainoption = i;
+
+    update();
+    notifyChildrens();
+  }
+  void setalllist(what) {
+    alllist.add(what);
+
+    update();
+    notifyChildrens();
+  }
+
+  void setaddlist(what) {
+    addlist.add(what);
+
+    update();
+    notifyChildrens();
+  }
+
+  void setsearchurl(what) {
+    searchurl = what;
+
+    update();
+    notifyChildrens();
+  }
 
   void setindextreetmp() {
     indextreetmp.add(List.empty(growable: true));

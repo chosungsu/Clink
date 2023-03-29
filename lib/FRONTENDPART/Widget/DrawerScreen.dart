@@ -2,16 +2,15 @@
 
 import 'package:clickbyme/BACKENDPART/Enums/Drawer_item.dart';
 import 'package:clickbyme/BACKENDPART/Getx/UserInfo.dart';
-import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import '../../BACKENDPART/Enums/Variables.dart';
+import '../../BACKENDPART/Getx/linkspacesetting.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-
 import '../../sheets/BSContents/appbarplusbtn.dart';
 
 class DrawerScreen extends StatefulWidget {
@@ -102,7 +101,8 @@ View(BuildContext context, List<Map> drawerItems, textcontroller, searchnode) {
                                   draw.setclose();
                                   uiset.setpageindex(3);
                                 }
-                                //Get.to(() => const mainroute(), transition: Transition.fade);
+                                uiset.setappbarwithsearch(init: true);
+                                linkspacesetting().setmainoption(0);
                               },
                               child: Container(
                                 margin: const EdgeInsets.only(

@@ -6,6 +6,7 @@ import 'package:clickbyme/BACKENDPART/Api/LoginApi.dart';
 import 'package:clickbyme/BACKENDPART/Getx/navibool.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import '../../BACKENDPART/Api/PageApi.dart';
 import '../../BACKENDPART/Getx/UserInfo.dart';
 import '../../BACKENDPART/Getx/notishow.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
@@ -24,18 +25,20 @@ Future initScreen() async {
   * fetchTasks : user 정보를 백엔드에서 불러옴.
   */
   await LoginApiProvider().fetchTasks();
-
+  /**
+   * licenselist를 생성함.
+   */
+  LicenseApiProvider().createTasks();
   if (box.read('nick') == '' || box.read('nick') == null) {
     /**
      * createTasks : name, usercode, licenselist를 생성함.
      */
     LoginApiProvider().createTasks();
-    LicenseApiProvider().createTasks();
   } else {}
   /**
-  * friendset : user의 friendlist를 생성함.
+  * getTasks : user의 alllist를 생성함.
   */
-  //peopleadd.friendset();
+  PageApiProvider().getTasks();
   /**
   * setappbox : app의 색상을 지정해줌.
   */
@@ -44,10 +47,6 @@ Future initScreen() async {
   * setprofilespace : profile 공간을 생성함.
   */
   uiset.setprofilespace(init: true);
-  /**
-  * getTasks : licenselist를 불러옴.
-  */
-  LicenseApiProvider().getTasks();
   /**
   * setuserspace : pinchannel db에서 page contents를 로드함(존재하지 않는 경우 : default값).
   */

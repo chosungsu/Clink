@@ -39,6 +39,12 @@ List pages = [
   const ProfilePage(),
   const SettingPage(),
 ];
+//Here are MYPageUI Variables
+List optionname = [
+  'MYPageOption1'.tr,
+  'MYPageOption2'.tr,
+  'MYPageOption3'.tr,
+];
 //Here are PageUI Variables
 //Here are SpaceinUI Variables
 var spacefamilyid;

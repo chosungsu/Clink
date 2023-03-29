@@ -1,6 +1,5 @@
 // ignore_for_file: camel_case_types, non_constant_identifier_names
 
-import 'dart:ui';
 import 'package:clickbyme/BACKENDPART/Enums/Profile_item.dart';
 import 'package:clickbyme/BACKENDPART/Getx/navibool.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
@@ -36,6 +35,7 @@ class uisetting extends GetxController {
   int mypagelistindex = Hive.box('user_setting').get('currentmypage') ?? 0;
   String searchpagemove = '';
   String textrecognizer = '';
+  bool changesearchbar = false;
 
   ///settingdestroy
   ///
@@ -61,6 +61,20 @@ class uisetting extends GetxController {
       loading = what;
     } else {
       sheetloading = what;
+    }
+
+    update();
+    notifyChildrens();
+  }
+
+  ///setappbarwithsearch
+  ///
+  ///서칭바를 열고 닫는 데에 사용된다.
+  void setappbarwithsearch({init = false}) {
+    if (init) {
+      changesearchbar = false;
+    } else {
+      changesearchbar = !changesearchbar;
     }
 
     update();

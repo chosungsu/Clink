@@ -2,6 +2,7 @@
 
 import 'package:clickbyme/BACKENDPART/Enums/Drawer_item.dart';
 import 'package:clickbyme/BACKENDPART/Getx/UserInfo.dart';
+import 'package:clickbyme/BACKENDPART/Getx/linkspacesetting.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/sheets/BSContents/appbarplusbtn.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +83,8 @@ View(BuildContext context, List<Map> drawerItems, textcontroller, searchnode) {
                       draw.setclose();
                       uiset.setpageindex(3);
                     }
-                    //Get.to(() => const mainroute(), transition: Transition.fade);
+                    uiset.setappbarwithsearch(init: true);
+                    linkspacesetting().setmainoption(0);
                   },
                   child: Container(
                     margin: const EdgeInsets.only(
