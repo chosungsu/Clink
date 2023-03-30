@@ -36,6 +36,7 @@ class uisetting extends GetxController {
   String searchpagemove = '';
   String textrecognizer = '';
   bool changesearchbar = false;
+  int addpagecontroll = 0;
 
   ///settingdestroy
   ///

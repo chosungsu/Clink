@@ -1,21 +1,23 @@
 // ignore_for_file: non_constant_identifier_names, unused_local_variable, prefer_typing_uninitialized_variables
 
 import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
-import 'package:clickbyme/sheets/BottomSheet/AddContentWithBtn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import '../../BACKENDPART/Api/LoginApi.dart';
 import '../../BACKENDPART/Api/PageApi.dart';
 import '../../BACKENDPART/Enums/Linkpage.dart';
 import '../../BACKENDPART/Getx/UserInfo.dart';
 import '../../BACKENDPART/ViewPoints/NoticeVP.dart';
 import '../../BACKENDPART/Enums/Variables.dart';
-import '../../Tool/BGColor.dart';
-import '../../Tool/ContainerDesign.dart';
+import '../../FRONTENDPART/Route/subuiroute.dart';
+import '../../Tool/AndroidIOS.dart';
 import '../../Tool/FlushbarStyle.dart';
 import '../../BACKENDPART/Getx/linkspacesetting.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../Tool/TextSize.dart';
+import '../../Tool/pickimage.dart';
 
 plusBtn(context, textcontroller, searchnode) {
   Widget title;
@@ -29,29 +31,16 @@ Contents_plusbtn(context, textcontroller, searchnode) {
   Widget title;
   Widget content;
   Widget btn;
+  final uiset = Get.put(uisetting());
+
   title = const SizedBox();
   content = Column(
     children: [
       ListTile(
         onTap: () {
           Get.back();
-          textcontroller.text = '';
-          title = Widgets_plusbtncontent1(
-            context,
-            textcontroller,
-            searchnode,
-          )[0];
-          content = Widgets_plusbtncontent1(
-            context,
-            textcontroller,
-            searchnode,
-          )[1];
-          btn = Widgets_plusbtncontent1(
-            context,
-            textcontroller,
-            searchnode,
-          )[2];
-          AddContentWithBtn(context, title, content, btn, searchnode);
+          uiset.setpageindex(1);
+          uiset.addpagecontroll = 0;
         },
         trailing: const Icon(
           Ionicons.create_outline,
@@ -71,13 +60,8 @@ Contents_plusbtn(context, textcontroller, searchnode) {
       ListTile(
         onTap: () {
           Get.back();
-          textcontroller.text = '';
-          title =
-              Widgets_plusbtncontent2(context, textcontroller, searchnode)[0];
-          content =
-              Widgets_plusbtncontent2(context, textcontroller, searchnode)[1];
-          btn = Widgets_plusbtncontent2(context, textcontroller, searchnode)[2];
-          AddContentWithBtn(context, title, content, btn, searchnode);
+          uiset.setpageindex(1);
+          uiset.addpagecontroll = 1;
         },
         trailing: const Icon(
           Feather.box,
@@ -99,181 +83,99 @@ Contents_plusbtn(context, textcontroller, searchnode) {
   return [title, content];
 }
 
-Widgets_plusbtncontent1(
-  context,
-  textcontroller,
-  searchnode,
-) {
-  final uiset = Get.put(uisetting());
-  final linkspaceset = Get.put(linkspacesetting());
-  Widget title;
-  Widget content;
-  Widget btn;
+Widgets_pagethumnail(context) {
+  Widget title, content, btn;
 
-  title = SizedBox(
-      height: 50,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('페이지 추가',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: secondTitleTextsize()))
-        ],
-      ));
+  title = const SizedBox();
   content = Column(
     children: [
-      ContainerTextFieldDesign(
-        searchNodeAddSection: searchnode,
-        string: '추가할 페이지 제목 입력',
-        textEditingControllerAddSheet: textcontroller,
-      ),
+      GestureDetector(
+          onTap: () async {
+            Get.back();
+            await pickImage(ImageSource.camera);
+          },
+          child: ListTile(
+            leading: const Icon(
+              Ionicons.camera,
+              size: 30,
+              color: Colors.black,
+            ),
+            title: Text('사진촬영',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTitleTextsize())),
+            trailing: const Icon(
+              Ionicons.chevron_forward,
+              size: 30,
+              color: Colors.black,
+            ),
+          )),
+      GestureDetector(
+          onTap: () async {
+            Get.back();
+            await pickImage(ImageSource.gallery);
+          },
+          child: ListTile(
+            leading: const Icon(
+              MaterialIcons.photo,
+              size: 30,
+              color: Colors.black,
+            ),
+            title: Text('갤러리 이동',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTitleTextsize())),
+            trailing: const Icon(
+              Ionicons.chevron_forward,
+              size: 30,
+              color: Colors.black,
+            ),
+          )),
+      GestureDetector(
+          onTap: () async {
+            Get.back();
+            final reloadpage = await Get.dialog(OSDialogforth(
+                    context,
+                    '알림',
+                    SingleChildScrollView(
+                      child: Text('정말 이미지를 삭제하시겠습니까?',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: contentTextsize(),
+                              color: Colors.red)),
+                    ),
+                    GetBackWithTrue)) ??
+                false;
+            if (reloadpage) {
+              peopleadd.setusrimg('');
+              LoginApiProvider().updateTasks('img', peopleadd.usrimgurl);
+              Get.back();
+            } else {
+              Get.back();
+            }
+          },
+          child: ListTile(
+            leading: const Icon(
+              MaterialCommunityIcons.delete_alert,
+              size: 30,
+              color: Colors.red,
+            ),
+            title: Text('이미지 삭제',
+                style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTitleTextsize())),
+            trailing: const Icon(
+              Ionicons.chevron_forward,
+              size: 30,
+              color: Colors.black,
+            ),
+          )),
     ],
   );
-  btn = GetBuilder<uisetting>(
-    builder: (controller) {
-      return Column(
-        children: [
-          SizedBox(
-            height: 50,
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  backgroundColor: ButtonColor(),
-                ),
-                onPressed: () async {
-                  clickbtn1(context, textcontroller);
-                },
-                child: Center(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Center(
-                        child: Text(
-                          linkspaceset.iscompleted == false ? '생성하기' : '처리중...',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTextsize(),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                )),
-          ),
-          uiset.isfilledtextfield == true
-              ? const SizedBox()
-              : Column(
-                  children: [
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      '입력란이 비어있어요!',
-                      style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: contentsmallTextsize(),
-                          color: Colors.red),
-                      overflow: TextOverflow.fade,
-                    )
-                  ],
-                )
-        ],
-      );
-    },
-  );
-  return [title, content, btn];
-}
-
-Widgets_plusbtncontent2(
-  context,
-  textcontroller,
-  searchnode,
-) {
-  final uiset = Get.put(uisetting());
-  final linkspaceset = Get.put(linkspacesetting());
-  Widget title;
-  Widget content;
-  Widget btn;
-  title = SizedBox(
-      height: 50,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('박스 생성',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: secondTitleTextsize()))
-        ],
-      ));
-  content = Column(
-    children: [
-      ContainerTextFieldDesign(
-        searchNodeAddSection: searchnode,
-        string: '추가할 박스 제목 입력',
-        textEditingControllerAddSheet: textcontroller,
-      ),
-    ],
-  );
-  btn = GetBuilder<uisetting>(
-    builder: (controller) {
-      return Column(
-        children: [
-          SizedBox(
-            height: 50,
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  backgroundColor: ButtonColor(),
-                ),
-                onPressed: () async {
-                  clickbtn2(context, textcontroller);
-                },
-                child: Center(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Center(
-                        child: Text(
-                          linkspaceset.iscompleted == false ? '생성하기' : '처리중...',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTextsize(),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                )),
-          ),
-          uiset.isfilledtextfield == true
-              ? const SizedBox()
-              : Column(
-                  children: [
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      '입력란이 비어있어요!',
-                      style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: contentsmallTextsize(),
-                          color: Colors.red),
-                      overflow: TextOverflow.fade,
-                    )
-                  ],
-                )
-        ],
-      );
-    },
-  );
-  return [title, content, btn];
+  return [title, content];
 }
 
 clickbtn1(context, textcontroller) {
@@ -291,7 +193,8 @@ clickbtn1(context, textcontroller) {
         isavailableshow: 'no',
         owner: peopleadd.usrcode,
         url: 'http://gox.co.kr',
-        date: DateTime.now().toString()));
+        date: DateTime.now().toString(),
+        image: ''));
     PageApiProvider().createTasks();
     Snack.snackbars(
         context: context,

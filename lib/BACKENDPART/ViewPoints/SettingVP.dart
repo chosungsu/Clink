@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../Tool/pickimage.dart';
 import '../../sheets/BottomSheet/AddContentWithBtn.dart';
 import '../Enums/Variables.dart';
 import '../../Tool/FlushbarStyle.dart';
@@ -19,13 +20,6 @@ import '../../Tool/ContainerDesign.dart';
 
 final peopleadd = Get.put(UserInfo());
 final uiset = Get.put(uisetting());
-
-pickImage(source) async {
-  final image = await ImagePicker().pickImage(source: source);
-  if (image == null) return;
-  peopleadd.setusrimg(image.path);
-  LoginApiProvider().updateTasks('img', peopleadd.usrimgurl);
-}
 
 Widgets_personchange(context, controller, searchnode, section) {
   Widget title, content, btn;

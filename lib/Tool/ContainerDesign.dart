@@ -44,10 +44,11 @@ class ContainerTextFieldDesign extends StatelessWidget {
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
-          border: Border.all(color: Colors.black, width: 2)),
+          border: Border.all(color: draw.color_textstatus, width: 1)),
       child: TextField(
         focusNode: searchNodeAddSection,
-        style: TextStyle(fontSize: contentTextsize(), color: Colors.black45),
+        style: TextStyle(
+            fontSize: contentTextsize(), color: draw.color_textstatus),
         onChanged: (value) {
           uiset.settextrecognizer(value);
         },
@@ -56,11 +57,34 @@ class ContainerTextFieldDesign extends StatelessWidget {
           border: InputBorder.none,
           isCollapsed: true,
           hintText: string,
-          hintStyle:
-              TextStyle(fontSize: contentTextsize(), color: Colors.black45),
+          hintStyle: TextStyle(
+              fontSize: contentTextsize(), color: draw.color_textstatus),
         ),
         controller: textEditingControllerAddSheet,
       ),
     );
+  }
+}
+
+class InfoContainerDesign extends StatelessWidget {
+  const InfoContainerDesign(
+      {Key? key, required this.child, required this.color})
+      : super(key: key);
+  final Widget child;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<navibool>(
+        builder: (_) => Container(
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.only(
+                  left: 10, right: 10, top: 10, bottom: 10),
+              child: child,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: color,
+              ),
+            ));
   }
 }

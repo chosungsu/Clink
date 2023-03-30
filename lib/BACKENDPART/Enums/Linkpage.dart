@@ -76,6 +76,7 @@ class MainPageLinkList {
   final String owner;
   final String url;
   final String date;
+  final String image;
 
   MainPageLinkList({
     required this.title,
@@ -83,5 +84,6 @@ class MainPageLinkList {
     required this.owner,
     required this.url,
     required this.date,
+    required this.image,
   });
 }

@@ -11,6 +11,7 @@ class linkspacesetting extends GetxController {
   List<MainPageLinkList> alllist = [];
   List<MainPageLinkList> addlist = [];
   int clickmainoption = 0;
+  String shareoption = 'no';
   String searchurl = '';
   List spacelink = [];
   List indexcnt = [];
@@ -39,6 +40,17 @@ class linkspacesetting extends GetxController {
     update();
     notifyChildrens();
   }
+
+  ///setshareoption
+  ///
+  ///생성페이지에서 공유여부 옵션을 선택하는 데에 사용된다.
+  void setshareoption(what) {
+    shareoption = what;
+
+    update();
+    notifyChildrens();
+  }
+
   void setalllist(what) {
     alllist.add(what);
 

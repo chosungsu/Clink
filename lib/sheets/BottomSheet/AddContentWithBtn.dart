@@ -1,7 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/material.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import '../../Tool/NoBehavior.dart';
 
@@ -9,9 +8,7 @@ AddContentWithBtn(context, title, content, btn, searchnode) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
       constraints: BoxConstraints(
-        maxWidth: MediaQuery.of(context).orientation == Orientation.portrait
-            ? (Get.width > 1000 ? Get.width * 0.7 : Get.width)
-            : Get.width * 0.5,
+        maxWidth: Get.width > 1000 ? Get.width * 0.7 : Get.width,
       ),
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -27,10 +24,7 @@ AddContentWithBtn(context, title, content, btn, searchnode) {
             padding: MediaQuery.of(context).viewInsets,
             child: Container(
               constraints: BoxConstraints(
-                maxWidth:
-                    MediaQuery.of(context).orientation == Orientation.portrait
-                        ? (Get.width > 1000 ? Get.width * 0.7 : Get.width)
-                        : Get.width * 0.5,
+                maxWidth: Get.width > 1000 ? Get.width * 0.7 : Get.width,
               ),
               decoration: const BoxDecoration(
                   color: Colors.white,
@@ -77,12 +71,7 @@ infos(context, title, content, btn) {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                          width: MediaQuery.of(context).orientation ==
-                                  Orientation.portrait
-                              ? (MediaQuery.of(context).size.width - 40) * 0.2
-                              : (Get.width > 1500
-                                  ? (Get.width / 3 - 40) * 0.2
-                                  : (Get.width / 2 - 40) * 0.2),
+                          width: 10,
                           alignment: Alignment.topCenter,
                           color: Colors.black45),
                     ],

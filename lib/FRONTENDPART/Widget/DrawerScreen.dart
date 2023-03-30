@@ -90,7 +90,6 @@ View(BuildContext context, List<Map> drawerItems, textcontroller, searchnode) {
                                 } else if (element
                                     .containsValue(AntDesign.plus)) {
                                   draw.setclose();
-                                  //uiset.setpageindex(1);
                                   plusBtn(context, textcontroller, searchnode);
                                 } else if (element.containsValue(
                                     Ionicons.ios_person_outline)) {

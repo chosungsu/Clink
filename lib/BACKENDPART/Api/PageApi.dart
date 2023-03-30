@@ -23,14 +23,19 @@ class PageApiProvider extends GetxController {
           "owner": linkspaceset.addlist[i].owner,
           "url": linkspaceset.addlist[i].url,
           "date": linkspaceset.addlist[i].date,
+          "image": linkspaceset.addlist[i].image,
         };
-        res = await http.post(
+        res = await http
+            .post(
           Uri.parse(url),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: jsonEncode(data),
-        );
+        )
+            .whenComplete(() {
+          getTasks();
+        });
       }
     } catch (e) {
       print(e);
@@ -63,12 +68,14 @@ class PageApiProvider extends GetxController {
           final owner = data[i]['owner'];
           final url = data[i]['url'];
           final date = data[i]['date'];
+          final image = data[i]['image'];
           linkspaceset.setalllist(MainPageLinkList(
               title: title,
               isavailableshow: isavailableshow,
               owner: owner,
               url: url,
-              date: date));
+              date: date,
+              image: image));
         }
       } else {}
     } catch (e) {

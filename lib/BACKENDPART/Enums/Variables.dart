@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, prefer_typing_uninitialized_variables, non_constant_identifier_names
 import 'dart:math';
 import 'package:clickbyme/BACKENDPART/Enums/Event.dart';
+import 'package:clickbyme/FRONTENDPART/Page/AddPage.dart';
 import 'package:clickbyme/FRONTENDPART/Page/NotiPage.dart';
 import 'package:clickbyme/FRONTENDPART/Page/SettingPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -35,15 +36,9 @@ var useremail = Hive.box('user_info').get('email') ?? '';
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 List pages = [
   const MYPage(),
-  const NotiPage(),
+  const AddPage(),
   const ProfilePage(),
   const SettingPage(),
-];
-//Here are MYPageUI Variables
-List optionname = [
-  'MYPageOption1'.tr,
-  'MYPageOption2'.tr,
-  'MYPageOption3'.tr,
 ];
 //Here are PageUI Variables
 //Here are SpaceinUI Variables
