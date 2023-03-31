@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names, file_names
 
+import 'dart:io';
+
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/datecheck.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +49,7 @@ PageUI0(context, id, controller, searchnode, maxHeight, maxWidth) {
       const SizedBox(
         width: 20,
       ),
-      View(maxHeight, maxWidth - 120)
+      View(maxHeight, maxWidth - 120, 'ls')
     ],
   );
 }
@@ -60,7 +62,7 @@ PageUI1(context, id, controller, searchnode, maxHeight, maxWidth) {
       const SizedBox(
         height: 20,
       ),
-      View(maxHeight - 80, maxWidth)
+      View(maxHeight - 80, maxWidth, 'pr')
     ],
   );
 }
@@ -209,7 +211,7 @@ OptionBox(maxWidth, maxHeight, position) {
         );
 }
 
-View(maxHeight, maxWidth) {
+View(maxHeight, maxWidth, pageoption) {
   return SizedBox(
       height: maxHeight,
       width: maxWidth,
@@ -250,8 +252,9 @@ View(maxHeight, maxWidth) {
                         },
                         child: ConstrainedBox(
                           constraints: BoxConstraints(
-                            minHeight: 150, // 최소 세로 크기
-                            maxHeight: 25.h, // 최대 세로 크기
+                            minHeight: 200, // 최소 세로 크기
+                            maxHeight:
+                                pageoption == 'pr' ? 30.h : 40.h, // 최대 세로 크기
                           ),
                           child: ContainerDesign(
                             child: Column(
@@ -260,8 +263,21 @@ View(maxHeight, maxWidth) {
                               children: [
                                 Flexible(
                                     flex: 3,
+                                    fit: FlexFit.tight,
                                     child: Container(
-                                      color: Colors.amber,
+                                      alignment: Alignment.center,
+                                      child: Image.file(
+                                        File(linkspaceset.alllist[index].image
+                                                    .contains('media') ==
+                                                true
+                                            ? linkspaceset.alllist[index].image
+                                                .toString()
+                                                .substring(6)
+                                            : linkspaceset
+                                                .alllist[index].image),
+                                        width: maxWidth * 0.8,
+                                        fit: BoxFit.cover,
+                                      ),
                                     )),
                                 const SizedBox(
                                   height: 10,

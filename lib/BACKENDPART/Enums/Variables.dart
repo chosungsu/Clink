@@ -40,7 +40,12 @@ List pages = [
   const ProfilePage(),
   const SettingPage(),
 ];
-//Here are PageUI Variables
+//Here are AddUI Variables
+List pageviewoptionname = [
+  'addview',
+  'preview',
+  'upload',
+];
 //Here are SpaceinUI Variables
 var spacefamilyid;
 var spacefamilytype;

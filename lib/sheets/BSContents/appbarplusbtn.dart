@@ -85,6 +85,7 @@ Contents_plusbtn(context, textcontroller, searchnode) {
 
 Widgets_pagethumnail(context) {
   Widget title, content, btn;
+  final linkspaceset = Get.put(linkspacesetting());
 
   title = const SizedBox();
   content = Column(
@@ -92,7 +93,7 @@ Widgets_pagethumnail(context) {
       GestureDetector(
           onTap: () async {
             Get.back();
-            await pickImage(ImageSource.camera);
+            await pickImage(ImageSource.camera, 'page');
           },
           child: ListTile(
             leading: const Icon(
@@ -114,7 +115,7 @@ Widgets_pagethumnail(context) {
       GestureDetector(
           onTap: () async {
             Get.back();
-            await pickImage(ImageSource.gallery);
+            await pickImage(ImageSource.gallery, 'page');
           },
           child: ListTile(
             leading: const Icon(
@@ -149,8 +150,7 @@ Widgets_pagethumnail(context) {
                     GetBackWithTrue)) ??
                 false;
             if (reloadpage) {
-              peopleadd.setusrimg('');
-              LoginApiProvider().updateTasks('img', peopleadd.usrimgurl);
+              linkspaceset.setpageimg('');
               Get.back();
             } else {
               Get.back();
@@ -178,32 +178,45 @@ Widgets_pagethumnail(context) {
   return [title, content];
 }
 
-clickbtn1(context, textcontroller) {
+clickbtn1(
+  context,
+  textcontroller,
+  pagecontroller,
+) {
   final uiset = Get.put(uisetting());
   final peopleadd = Get.put(UserInfo());
   final linkspaceset = Get.put(linkspacesetting());
 
-  if (textcontroller.text.isEmpty) {
-    uiset.checktf(false);
+  if (textcontroller[0].text.isEmpty || textcontroller[1].text.isEmpty) {
+    //uiset.checktf(false);
+    uiset.isfilledtextfield = false;
+    pagecontroller.animateToPage(
+      0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
   } else {
-    uiset.setloading(true, 1);
+    //uiset.setloading(true, 0);
+    uiset.loading = true;
     linkspaceset.addlist.clear();
     linkspaceset.setaddlist(MainPageLinkList(
-        title: textcontroller.text.toString(),
-        isavailableshow: 'no',
+        title: textcontroller[0].text.toString(),
+        isavailableshow: linkspaceset.shareoption,
         owner: peopleadd.usrcode,
-        url: 'http://gox.co.kr',
+        url: 'http://pinset.co.kr/${textcontroller[1].text.toString()}',
         date: DateTime.now().toString(),
-        image: ''));
+        image: linkspaceset.previewpageimgurl));
     PageApiProvider().createTasks();
     Snack.snackbars(
         context: context,
         title: '정상적으로 처리되었어요',
         backgroundcolor: Colors.green,
         bordercolor: draw.backgroundcolor);
-    uiset.setloading(false, 1);
-    Get.back();
-    textcontroller.text = '';
+    //uiset.setloading(false, 0);
+    uiset.loading = false;
+    linkspaceset.setpageimg('');
+    uiset.setpageindex(0);
+    uiset.setappbarwithsearch(init: true);
   }
 }
 

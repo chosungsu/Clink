@@ -12,6 +12,8 @@ class linkspacesetting extends GetxController {
   List<MainPageLinkList> addlist = [];
   int clickmainoption = 0;
   String shareoption = 'no';
+  int pageviewnum = 0;
+  String previewpageimgurl = '';
   String searchurl = '';
   List spacelink = [];
   List indexcnt = [];
@@ -46,6 +48,26 @@ class linkspacesetting extends GetxController {
   ///생성페이지에서 공유여부 옵션을 선택하는 데에 사용된다.
   void setshareoption(what) {
     shareoption = what;
+
+    update();
+    notifyChildrens();
+  }
+
+  ///setpageimg
+  ///
+  ///페이지의 이미지를 생성하는 데에 사용된다.
+  void setpageimg(String imgurl) {
+    previewpageimgurl = imgurl;
+
+    update();
+    notifyChildrens();
+  }
+
+  ///setpageviewnum
+  ///
+  ///생성페이지의 페이지뷰 이벤트에 사용된다.
+  void setpageviewnum(int i) {
+    pageviewnum = i;
 
     update();
     notifyChildrens();

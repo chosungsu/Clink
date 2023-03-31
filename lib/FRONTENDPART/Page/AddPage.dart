@@ -24,6 +24,7 @@ class AddPage extends StatefulWidget {
 
 class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
   ScrollController scrollController = ScrollController();
+  final PageController pageController = PageController(initialPage: 0);
   List<TextEditingController> controllersall = [];
   List<FocusNode> searchNodeall = [];
   final navi = Get.put(navibool());
@@ -35,8 +36,10 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     uiset.searchpagemove = '';
+    uiset.isfilledtextfield = true;
     uiset.addpagecontroll == 0 ? count = 3 : count = 4;
     linkspaceset.shareoption = 'no';
+    linkspaceset.previewpageimgurl = '';
     for (int i = 0; i < count; i++) {
       controllersall.insert(i, TextEditingController());
       searchNodeall.insert(i, FocusNode());
@@ -142,13 +145,13 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
                                           behavior: NoBehavior(),
                                           child: LayoutBuilder(
                                             builder: ((context, constraint) {
-                                              return SingleChildScrollView(
-                                                  child: Column(
+                                              return Column(
                                                 children: [
                                                   responsivewidget(
                                                       UI(
                                                           controllersall,
                                                           searchNodeall,
+                                                          pageController,
                                                           scrollController,
                                                           navi.navishow ==
                                                                       true &&
@@ -162,7 +165,7 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
                                                           constraint.maxHeight),
                                                       Get.width),
                                                 ],
-                                              ));
+                                              );
                                             }),
                                           )),
                                     ),

@@ -31,7 +31,7 @@ Widgets_personchange(context, controller, searchnode, section) {
             GestureDetector(
                 onTap: () async {
                   Get.back();
-                  await pickImage(ImageSource.camera);
+                  await pickImage(ImageSource.camera, 'profile');
                 },
                 child: ListTile(
                   leading: const Icon(
@@ -53,7 +53,7 @@ Widgets_personchange(context, controller, searchnode, section) {
             GestureDetector(
                 onTap: () async {
                   Get.back();
-                  await pickImage(ImageSource.gallery);
+                  await pickImage(ImageSource.gallery, 'profile');
                 },
                 child: ListTile(
                   leading: const Icon(

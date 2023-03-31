@@ -134,7 +134,7 @@ class _SplashPageState extends State<SplashPage> {
                           ? Stack(
                               children: [
                                 ModalBarrier(
-                                  color: BGColor(),
+                                  color: draw.backgroundcolor,
                                   dismissible: false,
                                 ),
                                 FirstView(constraint.maxHeight),
