@@ -1,10 +1,10 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:clickbyme/FRONTENDPART/Route/subuiroute.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_utils/src/platform/platform.dart';
+import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-
 import 'TextSize.dart';
 
 CodeByPlatform(actionandroid, actionios, actionweb) {
@@ -32,24 +32,10 @@ ReturnByPlatform(actionandroid, actionios, actionweb) {
 }
 
 Responsivelayout(landscape, portrait) {
-  if (Device.screenType == ScreenType.desktop) {
-    if (Device.orientation == Orientation.landscape) {
-      return landscape;
-    } else {
-      return portrait;
-    }
-  } else if (Device.screenType == ScreenType.mobile) {
-    if (Device.orientation == Orientation.landscape) {
-      return landscape;
-    } else {
-      return portrait;
-    }
+  if (Device.orientation == Orientation.landscape) {
+    return landscape;
   } else {
-    if (Device.orientation == Orientation.landscape) {
-      return landscape;
-    } else {
-      return portrait;
-    }
+    return portrait;
   }
 }
 
@@ -283,9 +269,7 @@ OSDialogforth(context, title, content, pressed) {
             CupertinoDialogAction(
                 isDefaultAction: true,
                 child: const Text("네"),
-                onPressed: () {
-                  Navigator.pop(context);
-                }),
+                onPressed: pressed),
             CupertinoDialogAction(
                 child: const Text("아니요"),
                 onPressed: () {

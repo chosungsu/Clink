@@ -42,7 +42,7 @@ class ContainerTextFieldDesign extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: draw.backgroundcolor,
           borderRadius: BorderRadius.circular(15),
           border: Border.all(color: draw.color_textstatus, width: 1)),
       child: TextField(

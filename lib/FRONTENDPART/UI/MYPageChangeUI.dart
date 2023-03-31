@@ -1,17 +1,13 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names, file_names
 
 import 'dart:io';
-
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/datecheck.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../BACKENDPART/Api/PageApi.dart';
-import '../../BACKENDPART/Enums/Variables.dart';
 import '../../BACKENDPART/Getx/linkspacesetting.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
@@ -44,6 +40,7 @@ PageUI0(context, id, controller, searchnode, maxHeight, maxWidth) {
   //landscape
   return Row(
     crossAxisAlignment: CrossAxisAlignment.start,
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       OptionBox(maxWidth, maxHeight, 'ls'),
       const SizedBox(
@@ -214,7 +211,7 @@ OptionBox(maxWidth, maxHeight, position) {
 View(maxHeight, maxWidth, pageoption) {
   return SizedBox(
       height: maxHeight,
-      width: maxWidth,
+      width: pageoption == 'ls' ? maxWidth * 0.6 : maxWidth,
       child: linkspaceset.alllist.isEmpty
           ? SizedBox(
               child: Column(
@@ -275,7 +272,9 @@ View(maxHeight, maxWidth, pageoption) {
                                                 .substring(6)
                                             : linkspaceset
                                                 .alllist[index].image),
-                                        width: maxWidth * 0.8,
+                                        width: pageoption == 'ls'
+                                            ? maxWidth * 0.6
+                                            : maxWidth,
                                         fit: BoxFit.cover,
                                       ),
                                     )),

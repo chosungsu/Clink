@@ -64,9 +64,20 @@ Future<bool> onWillPop(context) async {
     uiset.textrecognizer = '';
     searchNode.unfocus();
     uiset.pagenumber = 1;
-  } else if (uiset.pagenumber != 0) {
+  } else if (uiset.pagenumber != 0 && uiset.pagenumber != 1) {
     uiset.setpageindex(0);
     uiset.setappbarwithsearch(init: true);
+  } else if (uiset.pagenumber == 1) {
+    return await Get.dialog(OSDialogforth(
+            context,
+            '주의',
+            Text('확인을 누르시면 지금 작성중인 내용은 사라집니다.',
+                style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentTextsize())),
+            GetBackinpage)) ??
+        false;
   } else {
     uiset.setappbarwithsearch(init: true);
     return await Get.dialog(OSDialog(
@@ -92,6 +103,12 @@ void pressed1() {
 
 void GetBackWithTrue() {
   Get.back(result: true);
+}
+
+void GetBackinpage() {
+  Get.back();
+  uiset.setpageindex(0);
+  uiset.setappbarwithsearch(init: true);
 }
 
 ///GoToMain

@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names, file_names
 
 import 'dart:io';
-
 import 'package:clickbyme/BACKENDPART/Enums/Variables.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
@@ -17,7 +16,6 @@ import '../../BACKENDPART/Getx/navibool.dart';
 import '../../BACKENDPART/Getx/UserInfo.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../Tool/AndroidIOS.dart';
-import '../../Tool/BGColor.dart';
 import '../../Tool/FlushbarStyle.dart';
 import '../../Tool/datecheck.dart';
 import '../../sheets/BottomSheet/AddContent.dart';
@@ -124,7 +122,7 @@ StepView(context, maxWidth, maxHeight, pageoption, pagecontroller) {
                               style: TextStyle(
                                   color: index == linkspaceset.pageviewnum
                                       ? MyTheme.colororigblue
-                                      : draw.color_textstatus,
+                                      : MyTheme.colorgrey,
                                   fontWeight: FontWeight.bold,
                                   fontSize: contentTextsize()),
                             ),
@@ -140,9 +138,10 @@ StepView(context, maxWidth, maxHeight, pageoption, pagecontroller) {
           },
         )
       : GetBuilder<linkspacesetting>(builder: (_) {
-          return SizedBox(
+          return Container(
             height: 50,
             width: maxWidth,
+            padding: const EdgeInsets.only(left: 20, right: 20),
             child: ListView.builder(
                 physics: const ScrollPhysics(),
                 scrollDirection: Axis.horizontal,
@@ -173,7 +172,7 @@ StepView(context, maxWidth, maxHeight, pageoption, pagecontroller) {
                             style: TextStyle(
                                 color: index == linkspaceset.pageviewnum
                                     ? MyTheme.colororigblue
-                                    : draw.color_textstatus,
+                                    : MyTheme.colorgrey,
                                 fontWeight: FontWeight.bold,
                                 fontSize: contentTextsize()),
                           ),
@@ -267,7 +266,7 @@ Preview(context, maxWidth, searchnode, controller, pageoption) {
                                       .substring(6)
                                   : linkspaceset.previewpageimgurl),
                               fit: BoxFit.cover,
-                              width: (maxWidth - 40) * 0.8,
+                              width: (maxWidth - 40),
                             ))),
                 const SizedBox(
                   height: 10,
@@ -345,7 +344,7 @@ Upload(context, textcontroller, pagecontroller) {
           height: 50,
           child: ContainerDesign(
               child: Text(
-                'http://pinset.co.kr/${peopleadd.usrcode}',
+                'http://pinset.co.kr/${textcontroller[1].text}',
                 softWrap: true,
                 maxLines: 1,
                 textAlign: TextAlign.start,
@@ -365,11 +364,11 @@ Upload(context, textcontroller, pagecontroller) {
             child: GestureDetector(
               onTap: () {
                 Clipboard.setData(ClipboardData(
-                        text: 'http://pinset.co.kr/${peopleadd.usrcode}'))
+                        text: 'http://pinset.co.kr/${textcontroller[1].text}'))
                     .whenComplete(() {
                   Snack.snackbars(
                       context: context,
-                      title: '클립보드에 복사되었습니다.',
+                      title: 'clipboard'.tr,
                       backgroundcolor: Colors.green,
                       bordercolor: draw.backgroundcolor);
                 });
@@ -449,7 +448,7 @@ TitleSpace(searchnode, controller) {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Text(
-        '제목',
+        'pagetitle'.tr,
         softWrap: true,
         maxLines: 1,
         textAlign: TextAlign.start,
@@ -463,7 +462,7 @@ TitleSpace(searchnode, controller) {
       ),
       ContainerTextFieldDesign(
           searchNodeAddSection: searchnode,
-          string: '이곳에 입력해주세요',
+          string: 'pagetitlehint'.tr,
           textEditingControllerAddSheet: controller),
       uiset.isfilledtextfield == false && controller.text == ''
           ? Column(
@@ -472,7 +471,7 @@ TitleSpace(searchnode, controller) {
                   height: 5,
                 ),
                 Text(
-                  'Here is empty space',
+                  'pagetitlenothing'.tr,
                   style: TextStyle(
                       fontWeight: FontWeight.normal,
                       fontSize: contentsmallTextsize(),
@@ -496,7 +495,7 @@ AvailablecheckSpace() {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Text(
-        '공유여부',
+        'pageshare'.tr,
         softWrap: true,
         maxLines: 1,
         textAlign: TextAlign.start,
@@ -573,7 +572,7 @@ MakeUrlSpace(searchnode, controller) {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Text(
-        'URL 설정',
+        'pageurl'.tr,
         softWrap: true,
         maxLines: 1,
         textAlign: TextAlign.start,
@@ -585,36 +584,30 @@ MakeUrlSpace(searchnode, controller) {
       const SizedBox(
         height: 20,
       ),
-      Row(
-        children: [
-          SizedBox(
-            height: 50,
-            child: ContainerDesign(
-                child: Text(
-                  'http://pinset.co.kr',
-                  softWrap: true,
-                  maxLines: 1,
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                      color: draw.color_textstatus,
-                      fontWeight: FontWeight.bold,
-                      fontSize: contentTextsize()),
-                ),
-                color: draw.backgroundcolor),
-          ),
-          const SizedBox(
-            width: 10,
-          ),
-          Flexible(
-              fit: FlexFit.tight,
-              child: SizedBox(
-                height: 50,
-                child: ContainerTextFieldDesign(
-                    searchNodeAddSection: searchnode,
-                    string: '원하는 url 네임을 작성해주세요',
-                    textEditingControllerAddSheet: controller),
-              ))
-        ],
+      SizedBox(
+        height: 50,
+        child: ContainerTextFieldDesign(
+            searchNodeAddSection: searchnode,
+            string: 'pageurlhint'.tr,
+            textEditingControllerAddSheet: controller),
+      ),
+      const SizedBox(
+        height: 10,
+      ),
+      SizedBox(
+        height: 50,
+        child: InfoContainerDesign(
+            child: Text(
+              'pageurlinfo'.tr,
+              softWrap: true,
+              maxLines: 1,
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentsmallTextsize()),
+            ),
+            color: MyTheme.colorpastelblue),
       ),
       uiset.isfilledtextfield == false && controller.text == ''
           ? Column(
@@ -623,7 +616,7 @@ MakeUrlSpace(searchnode, controller) {
                   height: 5,
                 ),
                 Text(
-                  'Here is empty space',
+                  'pageurlnothing'.tr,
                   style: TextStyle(
                       fontWeight: FontWeight.normal,
                       fontSize: contentsmallTextsize(),
@@ -653,7 +646,7 @@ ThumbnailSpace(context, searchnode) {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Text(
-        '썸네일 이미지 설정',
+        'pagethumbnail'.tr,
         softWrap: true,
         maxLines: 1,
         textAlign: TextAlign.start,
@@ -677,7 +670,10 @@ ThumbnailSpace(context, searchnode) {
             width: 100,
             child: linkspaceset.previewpageimgurl == ''
                 ? ContainerDesign(
-                    child: const Icon(Ionicons.add),
+                    child: Icon(
+                      Ionicons.add,
+                      color: draw.color_textstatus,
+                    ),
                     color: draw.backgroundcolor)
                 : ContainerDesign(
                     child: Image.file(
@@ -702,7 +698,7 @@ ThumbnailSpace(context, searchnode) {
         height: 50,
         child: InfoContainerDesign(
             child: Text(
-              '안내 - 페이지 썸네일은 1장으로 제한됩니다.',
+              'pagethumbnailinfo'.tr,
               softWrap: true,
               maxLines: 1,
               textAlign: TextAlign.start,
@@ -711,7 +707,7 @@ ThumbnailSpace(context, searchnode) {
                   fontWeight: FontWeight.bold,
                   fontSize: contentsmallTextsize()),
             ),
-            color: Colors.red.shade200),
+            color: MyTheme.colorpastelred),
       ),
       const SizedBox(
         height: 20,

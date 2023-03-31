@@ -143,8 +143,44 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                       height: 20,
                                     ),
                                     Flexible(
-                                        fit: FlexFit.tight,
-                                        child: responsivewidget(
+                                      fit: FlexFit.tight,
+                                      child: SizedBox(
+                                        width: navi.navishow == true &&
+                                                Get.width > 1000
+                                            ? Get.width - 120
+                                            : Get.width,
+                                        child: ScrollConfiguration(
+                                            behavior: NoBehavior(),
+                                            child: LayoutBuilder(
+                                              builder: ((context, constraint) {
+                                                return Column(
+                                                  children: [
+                                                    responsivewidget(
+                                                        UI(
+                                                            context,
+                                                            uiset
+                                                                .pagelist[uiset
+                                                                    .mypagelistindex]
+                                                                .id,
+                                                            textcontroller,
+                                                            searchNode,
+                                                            navi.navishow == true &&
+                                                                    Get.width >
+                                                                        1000
+                                                                ? constraint
+                                                                        .maxWidth -
+                                                                    120
+                                                                : constraint
+                                                                    .maxWidth,
+                                                            constraint
+                                                                .maxHeight),
+                                                        Get.width),
+                                                  ],
+                                                );
+                                              }),
+                                            )),
+                                      ),
+                                      /*responsivewidget(
                                           Container(
                                             padding: const EdgeInsets.only(
                                                 bottom: 20),
@@ -172,7 +208,8 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                                   Get.width > 1000
                                               ? Get.width - 120
                                               : Get.width,
-                                        )),
+                                        )*/
+                                    ),
                                   ],
                                 ),
                                 navi.navi == 1 &&
