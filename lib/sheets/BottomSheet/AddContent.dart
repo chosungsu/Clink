@@ -11,7 +11,7 @@ AddContent(context, title, content, searchnode) {
       constraints: BoxConstraints(
         maxWidth: Get.width > 1000 ||
                 MediaQuery.of(context).orientation == Orientation.landscape
-            ? Get.width * 0.7
+            ? Get.width * 0.5
             : Get.width,
       ),
       shape: const RoundedRectangleBorder(
@@ -31,7 +31,7 @@ AddContent(context, title, content, searchnode) {
                 maxWidth: Get.width > 1000 ||
                         MediaQuery.of(context).orientation ==
                             Orientation.landscape
-                    ? Get.width * 0.7
+                    ? Get.width * 0.5
                     : Get.width,
               ),
               decoration: const BoxDecoration(

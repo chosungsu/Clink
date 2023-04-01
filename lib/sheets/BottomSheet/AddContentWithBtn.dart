@@ -10,7 +10,7 @@ AddContentWithBtn(context, title, content, btn, searchnode) {
       constraints: BoxConstraints(
         maxWidth: Get.width > 1000 ||
                 MediaQuery.of(context).orientation == Orientation.landscape
-            ? Get.width * 0.7
+            ? Get.width * 0.5
             : Get.width,
       ),
       shape: const RoundedRectangleBorder(
@@ -30,7 +30,7 @@ AddContentWithBtn(context, title, content, btn, searchnode) {
                 maxWidth: Get.width > 1000 ||
                         MediaQuery.of(context).orientation ==
                             Orientation.landscape
-                    ? Get.width * 0.7
+                    ? Get.width * 0.5
                     : Get.width,
               ),
               decoration: const BoxDecoration(

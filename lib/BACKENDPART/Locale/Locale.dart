@@ -6,7 +6,7 @@ class Languages extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'ko_KR': {
-          'search': '탐색하실 페이지 제목 입력...',
+          'search': '페이지 제목 입력',
           'clipboard': '클립보드에 복사되었습니다.',
           'MYPageOption1': '전체보기',
           'MYPageOption2': '즐겨찾기',
@@ -24,6 +24,7 @@ class Languages extends Translations {
           'pageurlnothing': 'url 네임란이 비어있어요!',
           'pagethumbnail': '썸네일 이미지',
           'pagethumbnailinfo': '안내 - 페이지 썸네일은 1장으로 제한됩니다.',
+          'previewtitlespace': '제목 위치',
           'address': '업로드 링크',
           'uploadok': '업로드 진행',
           'addresscopy': '링크복사',
@@ -59,7 +60,7 @@ class Languages extends Translations {
           'profilepagetitlethirdbyforth': '데이터삭제',
         },
         'en_US': {
-          'search': 'Search page title...',
+          'search': 'Enter Page title',
           'clipboard': 'Copy to Clipboard',
           'MYPageOption1': 'All',
           'MYPageOption2': 'Favorite',
@@ -77,6 +78,7 @@ class Languages extends Translations {
           'pageurlnothing': 'Nothing in Url space!',
           'pagethumbnail': 'Thumbnail',
           'pagethumbnailinfo': 'Info - Thumbnail can upload one image',
+          'previewtitlespace': 'Example Title',
           'address': 'Upload Link',
           'uploadok': 'OK',
           'addresscopy': 'Link Copy',

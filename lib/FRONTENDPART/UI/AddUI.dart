@@ -233,11 +233,8 @@ Preview(context, maxWidth, searchnode, controller, pageoption) {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        ConstrainedBox(
-          constraints: const BoxConstraints(
-            minHeight: 200, // 최소 세로 크기
-            maxHeight: 300, // 최대 세로 크기
-          ),
+        SizedBox(
+          height: maxWidth * 0.3,
           child: ContainerDesign(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -275,7 +272,7 @@ Preview(context, maxWidth, searchnode, controller, pageoption) {
                   flex: 1,
                   child: Text(
                     controller[0].text == ''
-                        ? 'example title'
+                        ? 'previewtitlespace'.tr
                         : controller[0].text,
                     softWrap: true,
                     maxLines: 2,
@@ -293,15 +290,24 @@ Preview(context, maxWidth, searchnode, controller, pageoption) {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(
-                      peopleadd.usrcode,
-                      softWrap: true,
-                      maxLines: 1,
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          color: draw.color_textstatus,
-                          fontWeight: FontWeight.bold,
-                          fontSize: contentTextsize()),
+                    Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.only(
+                          left: 10, right: 10, top: 5, bottom: 5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: MyTheme.colororiggreen,
+                      ),
+                      child: Text(
+                        'my',
+                        softWrap: true,
+                        maxLines: 2,
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            color: draw.backgroundcolor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTextsize()),
+                      ),
                     ),
                     Container(
                       width: 5,

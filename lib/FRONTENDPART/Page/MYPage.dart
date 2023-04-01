@@ -180,35 +180,6 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                               }),
                                             )),
                                       ),
-                                      /*responsivewidget(
-                                          Container(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 20),
-                                            child: ScrollConfiguration(
-                                                behavior: NoBehavior(),
-                                                child: LayoutBuilder(
-                                                  builder:
-                                                      ((context, constraint) {
-                                                    return SingleChildScrollView(
-                                                        child: UI(
-                                                            context,
-                                                            uiset
-                                                                .pagelist[uiset
-                                                                    .mypagelistindex]
-                                                                .id,
-                                                            textcontroller,
-                                                            searchNode,
-                                                            constraint.maxWidth,
-                                                            constraint
-                                                                .maxHeight));
-                                                  }),
-                                                )),
-                                          ),
-                                          navi.navishow == true &&
-                                                  Get.width > 1000
-                                              ? Get.width - 120
-                                              : Get.width,
-                                        )*/
                                     ),
                                   ],
                                 ),
