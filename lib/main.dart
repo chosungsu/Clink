@@ -172,7 +172,7 @@ class _SplashPageState extends State<SplashPage> {
                   width: 10,
                 ),
                 NeumorphicText(
-                  'iTPLE',
+                  'Pinset',
                   style: const NeumorphicStyle(
                     shape: NeumorphicShape.flat,
                     depth: 3,

@@ -37,7 +37,6 @@ FirebaseFirestore firestore = FirebaseFirestore.instance;
 List pages = [
   const MYPage(),
   const AddPage(),
-  const ProfilePage(),
   const SettingPage(),
 ];
 //Here are AddUI Variables

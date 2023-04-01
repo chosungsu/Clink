@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/datecheck.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -67,7 +68,7 @@ PageUI1(context, id, controller, searchnode, maxHeight, maxWidth) {
 SearchBox(controller, searchnode) {
   return SizedBox(
       height: 50,
-      width: 80.w,
+      width: 50.w,
       child: ContainerDesign(
           color: draw.backgroundcolor,
           child: StatefulBuilder(
@@ -235,113 +236,104 @@ View(maxHeight, maxWidth, pageoption) {
                 ],
               ),
             )
-          : ListView.builder(
-              physics: const ScrollPhysics(),
-              scrollDirection: Axis.vertical,
-              shrinkWrap: false,
-              itemCount: linkspaceset.alllist.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    GestureDetector(
-                        onTap: () {
-                          //uiset.setmainoption(index);
-                        },
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            minHeight: 200, // 최소 세로 크기
-                            maxHeight:
-                                pageoption == 'pr' ? 30.h : 40.h, // 최대 세로 크기
-                          ),
-                          child: ContainerDesign(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Flexible(
-                                    flex: 3,
-                                    fit: FlexFit.tight,
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      child: Image.file(
-                                        File(linkspaceset.alllist[index].image
-                                                    .contains('media') ==
-                                                true
-                                            ? linkspaceset.alllist[index].image
-                                                .toString()
-                                                .substring(6)
-                                            : linkspaceset
-                                                .alllist[index].image),
-                                        width: pageoption == 'ls'
-                                            ? maxWidth * 0.6
-                                            : maxWidth,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Flexible(
-                                  flex: 1,
-                                  child: Text(
-                                    linkspaceset.alllist[index].title,
-                                    softWrap: true,
-                                    maxLines: 2,
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                        color: draw.color_textstatus,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: contentTitleTextsize(),
-                                        overflow: TextOverflow.ellipsis),
+          : StaggeredGrid.count(
+              crossAxisCount: pageoption == 'pr' ? 2 : 1,
+              mainAxisSpacing: 20,
+              crossAxisSpacing: 20,
+              children: List.generate(linkspaceset.alllist.length, (index) {
+                return GestureDetector(
+                    onTap: () {
+                      //uiset.setmainoption(index);
+                    },
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(
+                        minHeight: 200, // 최소 세로 크기
+                        maxHeight: 300, // 최대 세로 크기
+                      ),
+                      child: ContainerDesign(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Flexible(
+                                flex: 3,
+                                fit: FlexFit.tight,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: Image.file(
+                                    File(linkspaceset.alllist[index].image
+                                                .contains('media') ==
+                                            true
+                                        ? linkspaceset.alllist[index].image
+                                            .toString()
+                                            .substring(6)
+                                        : linkspaceset.alllist[index].image),
+                                    width: pageoption == 'ls'
+                                        ? maxWidth * 0.6
+                                        : maxWidth,
+                                    fit: BoxFit.cover,
                                   ),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      linkspaceset.alllist[index].owner,
-                                      softWrap: true,
-                                      maxLines: 1,
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          color: draw.color_textstatus,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: contentTextsize()),
-                                    ),
-                                    Container(
-                                      width: 5,
-                                      height: 5,
-                                      margin: const EdgeInsets.only(
-                                          left: 5, right: 5),
-                                      decoration: BoxDecoration(
-                                          color: draw.color_textstatus,
-                                          shape: BoxShape.circle),
-                                    ),
-                                    Text(
-                                      datecheck(DateTime.parse(
-                                          linkspaceset.alllist[index].date)),
-                                      softWrap: true,
-                                      maxLines: 1,
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          color: draw.color_textstatus,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: contentTextsize()),
-                                    ),
-                                  ],
-                                )
-                              ],
+                                )),
+                            const SizedBox(
+                              height: 10,
                             ),
-                            color: draw.backgroundcolor,
-                          ),
-                        )),
-                    const SizedBox(
-                      height: 10,
-                    )
-                  ],
-                );
-              }));
+                            Flexible(
+                              flex: 1,
+                              child: Text(
+                                linkspaceset.alllist[index].title,
+                                softWrap: true,
+                                maxLines: 2,
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                    color: draw.color_textstatus,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentTitleTextsize(),
+                                    overflow: TextOverflow.ellipsis),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  linkspaceset.alllist[index].owner,
+                                  softWrap: true,
+                                  maxLines: 1,
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      color: draw.color_textstatus,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentTextsize()),
+                                ),
+                                Container(
+                                  width: 5,
+                                  height: 5,
+                                  margin:
+                                      const EdgeInsets.only(left: 5, right: 5),
+                                  decoration: BoxDecoration(
+                                      color: draw.color_textstatus,
+                                      shape: BoxShape.circle),
+                                ),
+                                Text(
+                                  datecheck(DateTime.parse(
+                                      linkspaceset.alllist[index].date)),
+                                  softWrap: true,
+                                  maxLines: 1,
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      color: draw.color_textstatus,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentTextsize()),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                        color: draw.backgroundcolor,
+                      ),
+                    ));
+              }),
+            ));
 }

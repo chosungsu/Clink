@@ -234,9 +234,9 @@ Preview(context, maxWidth, searchnode, controller, pageoption) {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: 150, // 최소 세로 크기
-            maxHeight: pageoption == 'pr' ? 30.h : 50.h, // 최대 세로 크기
+          constraints: const BoxConstraints(
+            minHeight: 200, // 최소 세로 크기
+            maxHeight: 300, // 최대 세로 크기
           ),
           child: ContainerDesign(
             child: Column(

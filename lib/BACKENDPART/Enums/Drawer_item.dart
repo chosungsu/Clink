@@ -9,9 +9,6 @@ List<Map> drawerItems_view = [
     'icon': AntDesign.plus,
   },
   {
-    'icon': Ionicons.ios_person_outline,
-  },
-  {
     'icon': Ionicons.settings_outline,
   },
 ];

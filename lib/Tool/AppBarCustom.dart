@@ -1,7 +1,6 @@
 // ignore_for_file: unused_local_variable, must_be_immutable, non_constant_identifier_names, prefer_typing_uninitialized_variables, file_names
 
 import 'package:clickbyme/FRONTENDPART/Widget/responsiveWidget.dart';
-import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -13,7 +12,6 @@ import '../BACKENDPART/Getx/linkspacesetting.dart';
 import '../BACKENDPART/Getx/navibool.dart';
 import '../BACKENDPART/Getx/notishow.dart';
 import '../BACKENDPART/Getx/uisetting.dart';
-import 'TextSize.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 class AppBarCustom extends StatelessWidget {
@@ -181,7 +179,9 @@ class AppBarCustom extends StatelessWidget {
                                                     onTap: () {
                                                       OnClickedRightIcons(
                                                           context,
-                                                          righticonname);
+                                                          righticonname,
+                                                          textcontroller,
+                                                          searchnode);
                                                     },
                                                     child: Icon(
                                                       righticonname,
@@ -259,16 +259,14 @@ class AppBarCustom extends StatelessWidget {
     }));
   }
 
-  OnClickedRightIcons(context, righticonname) {
-    return righticonname == SimpleLineIcons.grid
-        ? null
+  OnClickedRightIcons(context, righticonname, controller, searchnode) {
+    return righticonname == Octicons.person
+        ? personiconclick(context, controller, searchnode)
         : (righticonname == Icons.star_border || righticonname == Icons.star
             ? func7()
-            : (righticonname == Icons.download
-                ? downloadFileExample(mainid, context)
-                : (righticonname == Ionicons.search ||
-                        righticonname == Ionicons.close
-                    ? MakeAppbarwithsearchbar(textcontroller)
-                    : null)));
+            : (righticonname == Ionicons.search ||
+                    righticonname == Ionicons.close
+                ? MakeAppbarwithsearchbar(textcontroller)
+                : null));
   }
 }

@@ -74,13 +74,9 @@ View(BuildContext context, List<Map> drawerItems, textcontroller, searchnode) {
                       draw.setclose();
                       plusBtn(context, textcontroller, searchnode);
                     } else if (element
-                        .containsValue(Ionicons.ios_person_outline)) {
-                      draw.setclose();
-                      uiset.setpageindex(2);
-                    } else if (element
                         .containsValue(Ionicons.settings_outline)) {
                       draw.setclose();
-                      uiset.setpageindex(3);
+                      uiset.setpageindex(2);
                     }
                     uiset.setappbarwithsearch(init: true);
                     linkspacesetting().setmainoption(0);

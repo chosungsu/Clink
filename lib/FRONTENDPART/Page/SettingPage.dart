@@ -118,9 +118,11 @@ class _SettingPageState extends State<SettingPage>
                                       ),
                                       lefticon: false,
                                       lefticonname: Icons.add,
-                                      righticon: false,
+                                      righticon: true,
                                       doubleicon: false,
-                                      righticonname: Ionicons.settings_outline,
+                                      righticonname: Octicons.person,
+                                      textcontroller: _controller,
+                                      searchnode: searchNode,
                                     );
                                   }),
                                   Flexible(

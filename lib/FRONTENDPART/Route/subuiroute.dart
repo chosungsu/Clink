@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:clickbyme/BACKENDPART/Enums/Variables.dart';
 import 'package:clickbyme/FRONTENDPART/Page/SettingSubPage.dart';
 import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
-import 'package:clickbyme/sheets/BSContents/appbarplusbtn.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -24,6 +23,7 @@ import '../../BACKENDPART/Getx/navibool.dart';
 import '../../BACKENDPART/Getx/notishow.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../Tool/TextSize.dart';
+import '../../sheets/BSContents/appbarpersonbtn.dart';
 
 ///checkForInitialMessage
 ///
@@ -106,6 +106,7 @@ void GetBackWithTrue() {
 }
 
 void GetBackinpage() {
+  final uiset = Get.put(uisetting());
   Get.back();
   uiset.setpageindex(0);
   uiset.setappbarwithsearch(init: true);
@@ -152,10 +153,24 @@ MakeAppbarwithsearchbar(textcontroller) async {
   uiset.setappbarwithsearch();
 }
 
+///personiconclick
+///
+///icon click 이벤트에 사용합니다.
+void personiconclick(context, controller, searchnode) {
+  Widget title, content;
+  final uiset = Get.put(uisetting());
+  controller.clear();
+  uiset.changeavailable(true);
+  title = Widgets_personinfo(context, controller, searchnode)[0];
+  content = Widgets_personinfo(context, controller, searchnode)[1];
+  AddContent(context, title, content, searchnode);
+}
+
 deletenoti(context) async {
   var deleteid = '';
   var updateusername = [];
   final notilist = Get.put(notishow());
+  final draw = Get.put(navibool());
   List deletenotiindexlist = [];
   for (int i = 0; i < notilist.checkboxnoti.length; i++) {
     if (notilist.checkboxnoti[i] == true) {
@@ -329,6 +344,7 @@ func4(context, textcontroller, searchnode, where, id, categorypicknum) async {
 
 func7() async {
   final uiset = Get.put(uisetting());
+  final draw = Get.put(navibool());
   var deleteid = '';
   var title = uiset.editpagelist[0].title;
   var setting = uiset.editpagelist[0].setting;
@@ -386,6 +402,7 @@ ADSHOW() {
     height: 50,
     child: AdWidget(ad: banner),
   );*/
+  final draw = Get.put(navibool());
   return GetBuilder<navibool>(builder: (_) {
     return Container(
       height: 60,
@@ -413,6 +430,7 @@ ADSHOW() {
 searchfiles(
     BuildContext context, String mainid, FilePickerResult? result) async {
   final linkspaceset = Get.put(linkspacesetting());
+  final draw = Get.put(navibool());
   final filenames = [];
   if (result != null) {
     for (int i = 0; i < result.files.length; i++) {
@@ -431,6 +449,7 @@ searchfiles(
 uploadfiles(String mainid) async {
   final linkspaceset = Get.put(linkspacesetting());
   final uiset = Get.put(uisetting());
+  final draw = Get.put(navibool());
   final path = mainid + '/';
   var ref;
   var snapshot;
@@ -470,6 +489,7 @@ Future<void> downloadFileExample(String mainid, BuildContext context) async {
   String downloadname = '';
   String downloadurl = '';
   var pathseveral;
+  final draw = Get.put(navibool());
 
   var httpsReference;
 
@@ -540,6 +560,7 @@ Future<void> deleteFileExample(String mainid, BuildContext context) async {
   final storageRef = FirebaseStorage.instance.ref();
   final linkspaceset = Get.put(linkspacesetting());
   final uiset = Get.put(uisetting());
+  final draw = Get.put(navibool());
 
   downloadfile.add(linkspaceset
       .inindextreetmp[linkspaceset.islongchecked.indexOf(true)].substrcode);
@@ -573,6 +594,7 @@ Future<void> deleteFileExample(String mainid, BuildContext context) async {
 }
 
 Future<void> _requestPermission(BuildContext context) async {
+  final draw = Get.put(navibool());
   var status = await Permission.storage.status;
   if (status.isDenied) {
     Snack.snackbars(

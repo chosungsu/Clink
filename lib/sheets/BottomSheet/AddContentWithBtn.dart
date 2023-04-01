@@ -71,7 +71,7 @@ infos(context, title, content, btn) {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                          width: 10,
+                          width: 30,
                           alignment: Alignment.topCenter,
                           color: Colors.black45),
                     ],
