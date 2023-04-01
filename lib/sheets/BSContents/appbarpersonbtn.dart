@@ -1,22 +1,18 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:io';
+import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:clickbyme/Tool/AndroidIOS.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:image_picker/image_picker.dart';
-import '../../BACKENDPART/Api/LoginApi.dart';
 import '../../BACKENDPART/Getx/UserInfo.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../BACKENDPART/ViewPoints/SettingVP.dart';
-import '../../Tool/pickimage.dart';
 import '../../sheets/BottomSheet/AddContentWithBtn.dart';
 import '../../Tool/FlushbarStyle.dart';
 import '../../Tool/TextSize.dart';
-import '../../FRONTENDPART/Route/subuiroute.dart';
 import '../BottomSheet/AddContent.dart';
 
 final peopleadd = Get.put(UserInfo());
@@ -48,8 +44,8 @@ Widgets_personinfo(context, controller, searchnode) {
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          border: Border.all(
-                              color: draw.color_textstatus, width: 1)),
+                          border:
+                              Border.all(color: MyTheme.colorblack, width: 1)),
                       child: Stack(
                         children: [
                           Positioned(
@@ -85,11 +81,11 @@ Widgets_personinfo(context, controller, searchnode) {
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                    color: draw.color_textstatus, width: 1)),
+                                    color: MyTheme.colorblack, width: 1)),
                             child: Icon(
                               Octicons.person,
                               size: 30,
-                              color: draw.color_textstatus,
+                              color: MyTheme.colorblack,
                             ),
                           ),
                         ),
