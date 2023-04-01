@@ -238,11 +238,18 @@ View(maxHeight, maxWidth, pageoption) {
                 ],
               ),
             )
-          : StaggeredGrid.count(
-              crossAxisCount: pageoption == 'pr' ? 2 : 1,
-              mainAxisSpacing: 20,
-              crossAxisSpacing: 20,
-              children: List.generate(linkspaceset.alllist.length, (index) {
+          : GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 3 / 6,
+                  mainAxisSpacing: 20,
+                  crossAxisSpacing: 20),
+              physics: const BouncingScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: linkspaceset.alllist.length,
+              padding: const EdgeInsets.only(left: 5, right: 5),
+              itemBuilder: (context, index) {
                 return GestureDetector(
                     onTap: () {
                       //uiset.setmainoption(index);
@@ -351,6 +358,5 @@ View(maxHeight, maxWidth, pageoption) {
                         color: draw.backgroundcolor,
                       ),
                     ));
-              }),
-            ));
+              }));
 }

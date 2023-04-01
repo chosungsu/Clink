@@ -593,6 +593,7 @@ Widgets_editpagesecond(
         searchNodeAddSection: searchnode,
         string: '변경할 제목입력',
         textEditingControllerAddSheet: textcontroller,
+        section: 1,
       ),
     ],
   );
@@ -696,6 +697,7 @@ Widgets_horizontalbtn(
               searchNodeAddSection: searchNode,
               string: '변경할 이름 입력',
               textEditingControllerAddSheet: controller,
+              section: 1,
             );
             btn2 = SizedBox(
               height: 50,
@@ -986,6 +988,7 @@ Widgets_horizontalbtnsecond(
               searchNodeAddSection: searchNode,
               string: '변경할 이름 입력',
               textEditingControllerAddSheet: controller,
+              section: 1,
             );
             btn2 = SizedBox(
               height: 50,

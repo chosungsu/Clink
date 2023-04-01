@@ -461,9 +461,11 @@ TitleSpace(searchnode, controller) {
         height: 20,
       ),
       ContainerTextFieldDesign(
-          searchNodeAddSection: searchnode,
-          string: 'pagetitlehint'.tr,
-          textEditingControllerAddSheet: controller),
+        searchNodeAddSection: searchnode,
+        string: 'pagetitlehint'.tr,
+        textEditingControllerAddSheet: controller,
+        section: 0,
+      ),
       uiset.isfilledtextfield == false && controller.text == ''
           ? Column(
               children: [
@@ -587,9 +589,11 @@ MakeUrlSpace(searchnode, controller) {
       SizedBox(
         height: 50,
         child: ContainerTextFieldDesign(
-            searchNodeAddSection: searchnode,
-            string: 'pageurlhint'.tr,
-            textEditingControllerAddSheet: controller),
+          searchNodeAddSection: searchnode,
+          string: 'pageurlhint'.tr,
+          textEditingControllerAddSheet: controller,
+          section: 0,
+        ),
       ),
       const SizedBox(
         height: 10,

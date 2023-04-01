@@ -8,7 +8,10 @@ AddContentWithBtn(context, title, content, btn, searchnode) {
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
       constraints: BoxConstraints(
-        maxWidth: Get.width > 1000 ? Get.width * 0.7 : Get.width,
+        maxWidth: Get.width > 1000 ||
+                MediaQuery.of(context).orientation == Orientation.landscape
+            ? Get.width * 0.7
+            : Get.width,
       ),
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -24,7 +27,11 @@ AddContentWithBtn(context, title, content, btn, searchnode) {
             padding: MediaQuery.of(context).viewInsets,
             child: Container(
               constraints: BoxConstraints(
-                maxWidth: Get.width > 1000 ? Get.width * 0.7 : Get.width,
+                maxWidth: Get.width > 1000 ||
+                        MediaQuery.of(context).orientation ==
+                            Orientation.landscape
+                    ? Get.width * 0.7
+                    : Get.width,
               ),
               decoration: const BoxDecoration(
                   color: Colors.white,

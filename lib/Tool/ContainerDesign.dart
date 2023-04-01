@@ -1,5 +1,6 @@
 import 'package:clickbyme/BACKENDPART/Enums/Variables.dart';
 import 'package:clickbyme/BACKENDPART/Getx/navibool.dart';
+import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'TextSize.dart';
@@ -27,28 +28,31 @@ class ContainerDesign extends StatelessWidget {
 }
 
 class ContainerTextFieldDesign extends StatelessWidget {
-  const ContainerTextFieldDesign({
-    Key? key,
-    required this.searchNodeAddSection,
-    required this.string,
-    required this.textEditingControllerAddSheet,
-  }) : super(key: key);
+  const ContainerTextFieldDesign(
+      {Key? key,
+      required this.searchNodeAddSection,
+      required this.string,
+      required this.textEditingControllerAddSheet,
+      required this.section})
+      : super(key: key);
   final FocusNode searchNodeAddSection;
   final String string;
   final TextEditingController textEditingControllerAddSheet;
+  final int section;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-          color: draw.backgroundcolor,
+          color: section == 0 ? draw.backgroundcolor : MyTheme.colorWhite,
           borderRadius: BorderRadius.circular(15),
           border: Border.all(color: draw.color_textstatus, width: 1)),
       child: TextField(
         focusNode: searchNodeAddSection,
         style: TextStyle(
-            fontSize: contentTextsize(), color: draw.color_textstatus),
+            fontSize: contentTextsize(),
+            color: section == 0 ? draw.color_textstatus : MyTheme.colorblack),
         onChanged: (value) {
           uiset.settextrecognizer(value);
         },
@@ -58,7 +62,8 @@ class ContainerTextFieldDesign extends StatelessWidget {
           isCollapsed: true,
           hintText: string,
           hintStyle: TextStyle(
-              fontSize: contentTextsize(), color: draw.color_textstatus),
+              fontSize: contentTextsize(),
+              color: section == 0 ? draw.color_textstatus : MyTheme.colorgrey),
         ),
         controller: textEditingControllerAddSheet,
       ),

@@ -314,6 +314,7 @@ Widgets_settingpagenickchange(
           searchNodeAddSection: searchnode,
           string: '이곳에 작성',
           textEditingControllerAddSheet: textcontroller,
+          section: 1,
         ),
       ],
     ));

@@ -539,6 +539,7 @@ contentthird(
             ? '변경할 스페이스 이름 입력'
             : '추가할 페이지 제목 입력',
         textEditingControllerAddSheet: textEditingControllerAddSheet,
+        section: 1,
       ),
       const SizedBox(
         height: 30,
