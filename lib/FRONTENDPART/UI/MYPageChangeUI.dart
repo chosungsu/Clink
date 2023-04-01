@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names, file_names
 
 import 'dart:io';
+import 'package:clickbyme/BACKENDPART/Enums/Variables.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
+import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/Tool/datecheck.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -297,15 +299,30 @@ View(maxHeight, maxWidth, pageoption) {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Text(
-                                  linkspaceset.alllist[index].owner,
-                                  softWrap: true,
-                                  maxLines: 1,
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                      color: draw.color_textstatus,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentTextsize()),
+                                Container(
+                                  alignment: Alignment.center,
+                                  padding: const EdgeInsets.only(
+                                      left: 10, right: 10, top: 5, bottom: 5),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: peopleadd.usrcode ==
+                                            linkspaceset.alllist[index].owner
+                                        ? MyTheme.colororiggreen
+                                        : MyTheme.colororigorange,
+                                  ),
+                                  child: Text(
+                                    peopleadd.usrcode ==
+                                            linkspaceset.alllist[index].owner
+                                        ? 'my'
+                                        : linkspaceset.alllist[index].owner,
+                                    softWrap: true,
+                                    maxLines: 1,
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: draw.backgroundcolor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentTextsize()),
+                                  ),
                                 ),
                                 Container(
                                   width: 5,

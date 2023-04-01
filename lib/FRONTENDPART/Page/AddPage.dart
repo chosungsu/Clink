@@ -24,7 +24,7 @@ class AddPage extends StatefulWidget {
 
 class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
   ScrollController scrollController = ScrollController();
-  final PageController pageController = PageController(initialPage: 0);
+  late PageController pageController;
   List<TextEditingController> controllersall = [];
   List<FocusNode> searchNodeall = [];
   final navi = Get.put(navibool());
@@ -44,6 +44,9 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
       controllersall.insert(i, TextEditingController());
       searchNodeall.insert(i, FocusNode());
     }
+    pageController = PageController(
+        initialPage:
+            linkspaceset.pageviewnum == 0 ? 0 : linkspaceset.pageviewnum);
   }
 
   @override
@@ -65,6 +68,9 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
                 navi.statusbarcolor == 0 ? Brightness.dark : Brightness.light,
             statusBarIconBrightness:
                 navi.statusbarcolor == 0 ? Brightness.dark : Brightness.light));
+        pageController = PageController(
+            initialPage:
+                linkspaceset.pageviewnum == 0 ? 0 : linkspaceset.pageviewnum);
         return Scaffold(
             backgroundColor: navi.backgroundcolor,
             bottomNavigationBar: uiset.loading

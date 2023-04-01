@@ -198,7 +198,7 @@ View(context, maxWidth, maxHeight, searchnode, controller, pagecontroller,
       height: maxHeight,
       child: PageView(
         controller: pagecontroller,
-        scrollDirection: pageoption == 'pr' ? Axis.vertical : Axis.horizontal,
+        scrollDirection: Axis.horizontal,
         onPageChanged: (int pageIndex) {
           linkspaceset.setpageviewnum(pageIndex);
         },

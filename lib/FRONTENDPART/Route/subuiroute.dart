@@ -51,6 +51,7 @@ void checkForInitialMessage() async {
 Future<bool> onWillPop(context) async {
   final uiset = Get.put(uisetting());
   final draw = Get.put(navibool());
+
   final searchNode = FocusNode();
   List<int> navinumlist = [0, 1, 2, 3];
   uiset.setmypagelistindex(Hive.box('user_setting').get('currentmypage') ?? 0);
@@ -106,9 +107,11 @@ void GetBackWithTrue() {
 }
 
 void GetBackinpage() {
+  final linkspaceset = Get.put(linkspacesetting());
   final uiset = Get.put(uisetting());
   Get.back();
   uiset.setpageindex(0);
+  linkspaceset.setpageviewnum(0);
   uiset.setappbarwithsearch(init: true);
 }
 
