@@ -25,17 +25,19 @@ final linkspaceset = Get.put(linkspacesetting());
 ///
 ///MYPage의 UI
 UI(context, id, controller, searchnode, maxWidth, maxHeight) {
-  return GetBuilder<linkspacesetting>(builder: (_) {
-    return Container(
-      height: maxHeight,
-      width: maxWidth,
-      padding: const EdgeInsets.only(left: 20, right: 20),
-      child: Responsivelayout(
-          PageUI0(
-              context, id, controller, searchnode, maxHeight, maxWidth - 40),
-          PageUI1(
-              context, id, controller, searchnode, maxHeight, maxWidth - 40)),
-    );
+  return GetBuilder<uisetting>(builder: (_) {
+    return GetBuilder<linkspacesetting>(builder: (_) {
+      return Container(
+        height: maxHeight,
+        width: maxWidth,
+        padding: const EdgeInsets.only(left: 20, right: 20),
+        child: Responsivelayout(
+            PageUI0(
+                context, id, controller, searchnode, maxHeight, maxWidth - 40),
+            PageUI1(
+                context, id, controller, searchnode, maxHeight, maxWidth - 40)),
+      );
+    });
   });
 }
 
@@ -120,78 +122,161 @@ OptionBox(maxWidth, maxHeight, position) {
       ? SizedBox(
           height: 60,
           width: maxWidth,
-          child: ListView.builder(
-              physics: const ScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              shrinkWrap: false,
-              itemCount: 3,
-              itemBuilder: (context, index) {
-                return Row(
-                  children: [
-                    GestureDetector(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              uiset.pageshowoption == 0
+                  ? GestureDetector(
                       onTap: () {
-                        linkspaceset.setmainoption(index);
-                        PageApiProvider().getTasks();
+                        //linkspaceset.setmainoption(index);
+                        //PageApiProvider().getTasks();
+                        uiset.changehomeviewoption();
                       },
-                      child: Container(
-                        height: 50,
-                        width: 100,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            border: Border.all(
-                                color: index == linkspaceset.clickmainoption
-                                    ? Colors.pink.shade300
-                                    : draw.color_textstatus,
-                                width: 1)),
-                        child: Text(
-                          optionname[index],
-                          softWrap: true,
-                          maxLines: 1,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: draw.color_textstatus,
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTextsize()),
-                        ),
-                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 50,
+                            width: 100,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                border: Border.all(
+                                    color: MyTheme.colorpastelpurple,
+                                    width: 1)),
+                            child: Text(
+                              uiset.pageshowtitle,
+                              softWrap: true,
+                              maxLines: 1,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: draw.color_textstatus,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTextsize()),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Icon(
+                            Entypo.chevron_small_right,
+                            color: draw.color_textstatus,
+                            size: 30,
+                          ),
+                        ],
+                      ))
+                  : SizedBox(
+                      width: maxWidth - 40,
+                      child: ListView.builder(
+                          physics: const ScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: false,
+                          itemCount: 3,
+                          itemBuilder: (context, index) {
+                            return Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    //linkspaceset.setmainoption(index);
+                                    //PageApiProvider().getTasks();
+                                    uiset.changehomeviewoption();
+                                    uiset.homeviewname(optionname[index]);
+                                  },
+                                  child: Container(
+                                    height: 50,
+                                    width: 100,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        border: Border.all(
+                                            color: uiset.pageshowtitle ==
+                                                    optionname[index]
+                                                ? MyTheme.colorpastelpurple
+                                                : draw.color_textstatus,
+                                            width: 1)),
+                                    child: Text(
+                                      optionname[index],
+                                      softWrap: true,
+                                      maxLines: 1,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: draw.color_textstatus,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: contentTextsize()),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                index == 2
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          uiset.changehomeviewoption();
+                                        },
+                                        child: Icon(
+                                          Entypo.chevron_small_left,
+                                          color: draw.color_textstatus,
+                                          size: 30,
+                                        ),
+                                      )
+                                    : const SizedBox()
+                              ],
+                            );
+                          }),
                     ),
-                    const SizedBox(
-                      width: 10,
-                    )
-                  ],
-                );
-              }),
+              const SizedBox(
+                width: 10,
+              ),
+              GestureDetector(
+                onTap: () {
+                  uiset.changesortoption();
+                },
+                child: Icon(
+                  uiset.pagesortoption == 0
+                      ? MaterialCommunityIcons.sort_clock_descending_outline
+                      : MaterialCommunityIcons.sort_clock_ascending_outline,
+                  color: draw.color_textstatus,
+                  size: 30,
+                ),
+              ),
+            ],
+          ),
         )
       : SizedBox(
           height: maxHeight,
           width: 100,
-          child: ListView.builder(
-              physics: const ScrollPhysics(),
-              scrollDirection: Axis.vertical,
-              shrinkWrap: false,
-              itemCount: 3,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        linkspaceset.setmainoption(index);
-                        PageApiProvider().getTasks();
-                      },
-                      child: Container(
-                        height: 50,
-                        width: 100,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            border: Border.all(
-                                color: index == linkspaceset.clickmainoption
-                                    ? Colors.pink.shade300
-                                    : draw.color_textstatus,
-                                width: 1)),
-                        child: Text(
-                          optionname[index],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GestureDetector(
+                  onTap: () {
+                    uiset.changesortoption();
+                  },
+                  child: Container(
+                    height: 50,
+                    width: 100,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(
+                            color: MyTheme.colorpastelpurple, width: 1)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          uiset.pagesortoption == 0
+                              ? MaterialCommunityIcons
+                                  .sort_clock_descending_outline
+                              : MaterialCommunityIcons
+                                  .sort_clock_ascending_outline,
+                          color: draw.color_textstatus,
+                          size: 30,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          'MYPageOption4'.tr,
                           softWrap: true,
                           maxLines: 1,
                           textAlign: TextAlign.center,
@@ -199,15 +284,114 @@ OptionBox(maxWidth, maxHeight, position) {
                               color: draw.color_textstatus,
                               fontWeight: FontWeight.bold,
                               fontSize: contentTextsize()),
-                        ),
-                      ),
+                        )
+                      ],
                     ),
-                    const SizedBox(
-                      height: 10,
+                  )),
+              const SizedBox(
+                height: 10,
+              ),
+              uiset.pageshowoption == 0
+                  ? GestureDetector(
+                      onTap: () {
+                        //linkspaceset.setmainoption(index);
+                        //PageApiProvider().getTasks();
+                        uiset.changehomeviewoption();
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 50,
+                            width: 100,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                border: Border.all(
+                                    color: MyTheme.colorpastelpurple,
+                                    width: 1)),
+                            child: Text(
+                              uiset.pageshowtitle,
+                              softWrap: true,
+                              maxLines: 1,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: draw.color_textstatus,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTextsize()),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Icon(
+                            Entypo.chevron_small_down,
+                            color: draw.color_textstatus,
+                            size: 30,
+                          ),
+                        ],
+                      ))
+                  : SizedBox(
+                      height: maxHeight - 60,
+                      child: ListView.builder(
+                          physics: const ScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: false,
+                          itemCount: 3,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    //linkspaceset.setmainoption(index);
+                                    //PageApiProvider().getTasks();
+                                    uiset.changehomeviewoption();
+                                    uiset.homeviewname(optionname[index]);
+                                  },
+                                  child: Container(
+                                    height: 50,
+                                    width: 100,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        border: Border.all(
+                                            color: uiset.pageshowtitle ==
+                                                    optionname[index]
+                                                ? MyTheme.colorpastelpurple
+                                                : draw.color_textstatus,
+                                            width: 1)),
+                                    child: Text(
+                                      optionname[index],
+                                      softWrap: true,
+                                      maxLines: 1,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: draw.color_textstatus,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: contentTextsize()),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                index == 2
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          uiset.changehomeviewoption();
+                                        },
+                                        child: Icon(
+                                          Entypo.chevron_small_up,
+                                          color: draw.color_textstatus,
+                                          size: 30,
+                                        ),
+                                      )
+                                    : const SizedBox()
+                              ],
+                            );
+                          }),
                     )
-                  ],
-                );
-              }),
+            ],
+          ),
         );
 }
 
@@ -239,11 +423,13 @@ View(maxHeight, maxWidth, pageoption) {
               ),
             )
           : GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: Get.width > 1000 ? 2 : 1,
-                childAspectRatio: Get.width > 1000 ? 0.8 : 5,
-                mainAxisSpacing: 20,
-                crossAxisSpacing: 20,
+              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: maxWidth,
+                childAspectRatio: pageoption == 'ls' && Get.width > 1000
+                    ? 2
+                    : (Get.width > 700 ? 3 / 1 : 3 / 2),
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
               ),
               physics: const BouncingScrollPhysics(),
               scrollDirection: Axis.vertical,
@@ -256,7 +442,7 @@ View(maxHeight, maxWidth, pageoption) {
                       //uiset.setmainoption(index);
                     },
                     child: ContainerDesign(
-                      child: Get.width > 1000
+                      child: pageoption == 'ls' && Get.width > 1000
                           ? Column(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               crossAxisAlignment: CrossAxisAlignment.start,

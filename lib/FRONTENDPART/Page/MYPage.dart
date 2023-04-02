@@ -41,6 +41,9 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
     super.initState();
     uiset.pagenumber = 0;
     uiset.searchpagemove = '';
+    uiset.pagesortoption = 0;
+    uiset.pageshowoption = 0;
+    uiset.pageshowtitle = 'MYPageOption1'.tr;
     uiset.mypagelistindex = Hive.box('user_setting').get('currentmypage') ?? 0;
     textcontroller = TextEditingController();
     scrollController = ScrollController();
@@ -120,7 +123,7 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                                 maxLines: 1,
                                                 textAlign: TextAlign.start,
                                                 style: TextStyle(
-                                                    fontWeight: FontWeight.w700,
+                                                    fontWeight: FontWeight.bold,
                                                     fontSize:
                                                         mainTitleTextsize(),
                                                     color:

@@ -17,6 +17,11 @@ class uisetting extends GetxController {
   bool loading = false;
   bool sheetloading = false;
   bool canchange = true;
+  bool changesearchbar = false;
+  int addpagecontroll = 0;
+  int pageshowoption = 0;
+  int pagesortoption = 0;
+  String pageshowtitle = '';
   bool isfilledtextfield = true;
   int profileindex = 0;
   List profilescreen = [];
@@ -35,8 +40,6 @@ class uisetting extends GetxController {
   int mypagelistindex = Hive.box('user_setting').get('currentmypage') ?? 0;
   String searchpagemove = '';
   String textrecognizer = '';
-  bool changesearchbar = false;
-  int addpagecontroll = 0;
 
   ///settingdestroy
   ///
@@ -78,6 +81,33 @@ class uisetting extends GetxController {
       changesearchbar = !changesearchbar;
     }
 
+    update();
+    notifyChildrens();
+  }
+
+  ///homeviewname
+  ///
+  ///홈뷰 변경에 사용한다.
+  void homeviewname(what) {
+    pageshowtitle = what;
+    update();
+    notifyChildrens();
+  }
+
+  ///changehomeviewoption
+  ///
+  ///홈뷰 변경에 사용한다.
+  void changehomeviewoption() {
+    pageshowoption = pageshowoption == 1 ? 0 : 1;
+    update();
+    notifyChildrens();
+  }
+
+  ///changesortoption
+  ///
+  ///목록의 정렬 변경에 사용한다.
+  void changesortoption() {
+    pagesortoption = pagesortoption == 1 ? 0 : 1;
     update();
     notifyChildrens();
   }

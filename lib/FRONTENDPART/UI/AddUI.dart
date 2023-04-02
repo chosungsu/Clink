@@ -95,7 +95,7 @@ StepView(context, maxWidth, maxHeight, pageoption, pagecontroller) {
                   physics: const ScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   shrinkWrap: false,
-                  itemCount: 3,
+                  itemCount: 2,
                   itemBuilder: (context, index) {
                     return Column(
                       children: [
@@ -204,7 +204,6 @@ View(context, maxWidth, maxHeight, searchnode, controller, pagecontroller,
         },
         children: [
           Form(context, searchnode, controller),
-          Preview(context, maxWidth, searchnode, controller, pageoption),
           Upload(context, controller, pagecontroller)
         ],
       ));
@@ -234,100 +233,107 @@ Preview(context, maxWidth, searchnode, controller, pageoption) {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SizedBox(
-          height: maxWidth * 0.3,
+          height: maxWidth > 300 ? 300 : maxWidth * 0.3,
           child: ContainerDesign(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Flexible(
-                    flex: 3,
-                    fit: FlexFit.tight,
-                    child: linkspaceset.previewpageimgurl == ''
-                        ? Container(
-                            alignment: Alignment.center,
-                            child: Icon(
-                              Feather.image,
-                              size: 100,
-                              color: MyTheme.colorgrey,
-                            ),
-                          )
-                        : Container(
-                            alignment: Alignment.center,
-                            child: Image.file(
-                              File(linkspaceset.previewpageimgurl
-                                          .contains('media') ==
-                                      true
-                                  ? linkspaceset.previewpageimgurl
-                                      .toString()
-                                      .substring(6)
-                                  : linkspaceset.previewpageimgurl),
-                              fit: BoxFit.cover,
-                              width: (maxWidth - 40),
-                            ))),
+                linkspaceset.previewpageimgurl == ''
+                    ? Container(
+                        alignment: Alignment.center,
+                        child: Icon(
+                          Feather.image,
+                          size: 150,
+                          color: MyTheme.colorgrey,
+                        ),
+                      )
+                    : Container(
+                        alignment: Alignment.center,
+                        child: Image.file(
+                          File(linkspaceset.previewpageimgurl
+                                      .contains('media') ==
+                                  true
+                              ? linkspaceset.previewpageimgurl
+                                  .toString()
+                                  .substring(6)
+                              : linkspaceset.previewpageimgurl),
+                          fit: BoxFit.cover,
+                          width: (maxWidth - 40),
+                        )),
                 const SizedBox(
-                  height: 10,
+                  width: 10,
                 ),
                 Flexible(
-                  flex: 1,
-                  child: Text(
-                    controller[0].text == ''
-                        ? 'previewtitlespace'.tr
-                        : controller[0].text,
-                    softWrap: true,
-                    maxLines: 2,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        color: draw.color_textstatus,
-                        fontWeight: FontWeight.bold,
-                        fontSize: contentTitleTextsize(),
-                        overflow: TextOverflow.ellipsis),
+                  fit: FlexFit.tight,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SingleChildScrollView(
+                        physics: const ScrollPhysics(),
+                        child: Text(
+                          controller[0].text == ''
+                              ? 'previewtitlespace'.tr
+                              : controller[0].text,
+                          softWrap: true,
+                          maxLines: 2,
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              color: draw.color_textstatus,
+                              fontWeight: FontWeight.bold,
+                              fontSize: contentTitleTextsize(),
+                              overflow: TextOverflow.ellipsis),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.only(
+                                left: 10, right: 10, top: 5, bottom: 5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: MyTheme.colororiggreen,
+                            ),
+                            child: Text(
+                              'my',
+                              softWrap: true,
+                              maxLines: 2,
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  color: draw.backgroundcolor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: contentTextsize()),
+                            ),
+                          ),
+                          Container(
+                            width: 5,
+                            height: 5,
+                            margin: const EdgeInsets.only(left: 5, right: 5),
+                            decoration: BoxDecoration(
+                                color: draw.color_textstatus,
+                                shape: BoxShape.circle),
+                          ),
+                          Text(
+                            datecheck(DateTime.now()),
+                            softWrap: true,
+                            maxLines: 1,
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                color: draw.color_textstatus,
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentTextsize()),
+                          ),
+                        ],
+                      )
+                    ],
                   ),
                 ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.only(
-                          left: 10, right: 10, top: 5, bottom: 5),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: MyTheme.colororiggreen,
-                      ),
-                      child: Text(
-                        'my',
-                        softWrap: true,
-                        maxLines: 2,
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            color: draw.backgroundcolor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTextsize()),
-                      ),
-                    ),
-                    Container(
-                      width: 5,
-                      height: 5,
-                      margin: const EdgeInsets.only(left: 5, right: 5),
-                      decoration: BoxDecoration(
-                          color: draw.color_textstatus, shape: BoxShape.circle),
-                    ),
-                    Text(
-                      datecheck(DateTime.now()),
-                      softWrap: true,
-                      maxLines: 1,
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          color: draw.color_textstatus,
-                          fontWeight: FontWeight.bold,
-                          fontSize: contentTextsize()),
-                    ),
-                  ],
-                )
               ],
             ),
             color: draw.backgroundcolor,

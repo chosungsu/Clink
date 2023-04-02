@@ -42,7 +42,6 @@ List pages = [
 //Here are AddUI Variables
 List pageviewoptionname = [
   'addview',
-  'preview',
   'upload',
 ];
 //Here are SpaceinUI Variables

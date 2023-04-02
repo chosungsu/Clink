@@ -47,7 +47,14 @@ class ContainerTextFieldDesign extends StatelessWidget {
       decoration: BoxDecoration(
           color: section == 0 ? draw.backgroundcolor : MyTheme.colorWhite,
           borderRadius: BorderRadius.circular(15),
-          border: Border.all(color: MyTheme.colorblack, width: 1)),
+          border: Border.all(
+              color: section == 0
+                  ? (uiset.isfilledtextfield == false &&
+                          textEditingControllerAddSheet.text == ''
+                      ? MyTheme.colororigred
+                      : draw.color_textstatus)
+                  : MyTheme.colorblack,
+              width: 1)),
       child: TextField(
         focusNode: searchNodeAddSection,
         style: TextStyle(

@@ -111,7 +111,6 @@ class _SettingPageState extends State<SettingPage>
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            fontFamily: 'NanumMyeongjo',
                                             fontSize: mainTitleTextsize(),
                                             color: navi.color_textstatus),
                                         overflow: TextOverflow.ellipsis,
