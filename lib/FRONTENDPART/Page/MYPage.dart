@@ -159,25 +159,26 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                                                 return Column(
                                                   children: [
                                                     responsivewidget(
-                                                        UI(
-                                                            context,
-                                                            uiset
-                                                                .pagelist[uiset
-                                                                    .mypagelistindex]
-                                                                .id,
-                                                            textcontroller,
-                                                            searchNode,
-                                                            navi.navishow == true &&
-                                                                    Get.width >
-                                                                        1000
-                                                                ? constraint
-                                                                        .maxWidth -
-                                                                    120
-                                                                : constraint
-                                                                    .maxWidth,
-                                                            constraint
-                                                                .maxHeight),
-                                                        Get.width),
+                                                      UI(
+                                                          context,
+                                                          uiset
+                                                              .pagelist[uiset
+                                                                  .mypagelistindex]
+                                                              .id,
+                                                          textcontroller,
+                                                          searchNode,
+                                                          navi.navishow ==
+                                                                      true &&
+                                                                  Get.width >
+                                                                      1000
+                                                              ? constraint
+                                                                      .maxWidth -
+                                                                  120
+                                                              : constraint
+                                                                  .maxWidth,
+                                                          constraint.maxHeight),
+                                                      Get.width,
+                                                    ),
                                                   ],
                                                 );
                                               }),

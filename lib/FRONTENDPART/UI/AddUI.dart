@@ -40,11 +40,17 @@ UI(controller, searchnode, pagecontroller, scrollcontroller, maxWidth,
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Responsivelayout(
-                      PageUI0(context, maxWidth - 40, maxHeight, searchnode,
-                          controller, pagecontroller),
-                      PageUI1(context, maxWidth - 40, maxHeight, searchnode,
-                          controller, pagecontroller))
+                  uiset.addpagecontroll == 0
+                      ? Responsivelayout(
+                          PageUI0(context, maxWidth - 40, maxHeight, searchnode,
+                              controller, pagecontroller),
+                          PageUI1(context, maxWidth - 40, maxHeight, searchnode,
+                              controller, pagecontroller))
+                      : Responsivelayout(
+                          PageUI2(context, maxWidth - 40, maxHeight, searchnode,
+                              controller, pagecontroller),
+                          PageUI3(context, maxWidth - 40, maxHeight, searchnode,
+                              controller, pagecontroller))
                 ],
               ));
         }));
@@ -61,7 +67,7 @@ PageUI0(context, maxWidth, maxHeight, searchnode, controller, pagecontroller) {
       ),
       Flexible(
           fit: FlexFit.tight,
-          child: View(context, maxWidth - 120, maxHeight, searchnode,
+          child: View1(context, maxWidth - 120, maxHeight, searchnode,
               controller, pagecontroller, 'ls'))
     ],
   );
@@ -75,7 +81,37 @@ PageUI1(context, maxWidth, maxHeight, searchnode, controller, pagecontroller) {
       const SizedBox(
         height: 20,
       ),
-      View(context, maxWidth, maxHeight - 70, searchnode, controller,
+      View1(context, maxWidth, maxHeight - 70, searchnode, controller,
+          pagecontroller, 'pr')
+    ],
+  );
+}
+
+PageUI2(context, maxWidth, maxHeight, searchnode, controller, pagecontroller) {
+  return Row(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      StepView(context, maxWidth, maxHeight, 'ls', pagecontroller),
+      const SizedBox(
+        width: 20,
+      ),
+      Flexible(
+          fit: FlexFit.tight,
+          child: View2(context, maxWidth - 120, maxHeight, searchnode,
+              controller, pagecontroller, 'ls'))
+    ],
+  );
+}
+
+PageUI3(context, maxWidth, maxHeight, searchnode, controller, pagecontroller) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      StepView(context, maxWidth, maxHeight, 'pr', pagecontroller),
+      const SizedBox(
+        height: 20,
+      ),
+      View2(context, maxWidth, maxHeight - 70, searchnode, controller,
           pagecontroller, 'pr')
     ],
   );
@@ -146,7 +182,7 @@ StepView(context, maxWidth, maxHeight, pageoption, pagecontroller) {
                 physics: const ScrollPhysics(),
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: false,
-                itemCount: 3,
+                itemCount: 2,
                 itemBuilder: (context, index) {
                   return Row(
                     children: [
@@ -190,8 +226,8 @@ StepView(context, maxWidth, maxHeight, pageoption, pagecontroller) {
 
 ///View
 ///
-///ProfilePage의 기본UI
-View(context, maxWidth, maxHeight, searchnode, controller, pagecontroller,
+///AddPage의 기본UI
+View1(context, maxWidth, maxHeight, searchnode, controller, pagecontroller,
     pageoption) {
   return SizedBox(
       width: maxWidth,
@@ -203,13 +239,34 @@ View(context, maxWidth, maxHeight, searchnode, controller, pagecontroller,
           linkspaceset.setpageviewnum(pageIndex);
         },
         children: [
-          Form(context, searchnode, controller),
-          Upload(context, controller, pagecontroller)
+          Form1(context, searchnode, controller),
+          Upload1(context, controller, pagecontroller, maxHeight, maxWidth)
         ],
       ));
 }
 
-Form(context, searchnode, controller) {
+///View
+///
+///AddPage의 기본UI
+View2(context, maxWidth, maxHeight, searchnode, controller, pagecontroller,
+    pageoption) {
+  return SizedBox(
+      width: maxWidth,
+      height: maxHeight,
+      child: PageView(
+        controller: pagecontroller,
+        scrollDirection: Axis.horizontal,
+        onPageChanged: (int pageIndex) {
+          linkspaceset.setpageviewnum(pageIndex);
+        },
+        children: [
+          Form2(context, searchnode, controller),
+          Upload2(context, controller, pagecontroller, maxHeight, maxWidth)
+        ],
+      ));
+}
+
+Form1(context, searchnode, controller) {
   return SingleChildScrollView(
       child: Padding(
     padding: const EdgeInsets.only(left: 20, right: 20),
@@ -218,239 +275,427 @@ Form(context, searchnode, controller) {
         TitleSpace(searchnode[0], controller[0]),
         ThumbnailSpace(context, searchnode[2]),
         AvailablecheckSpace(),
-        MakeUrlSpace(searchnode[1], controller[1]),
+        MakeUrlSpace(searchnode[1], controller[1], 'page'),
       ],
     ),
   ));
 }
 
-Preview(context, maxWidth, searchnode, controller, pageoption) {
-  return Padding(
+Form2(context, searchnode, controller) {
+  return SingleChildScrollView(
+      child: Padding(
     padding: const EdgeInsets.only(left: 20, right: 20),
     child: Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SizedBox(
-          height: maxWidth > 300 ? 300 : maxWidth * 0.3,
-          child: ContainerDesign(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                linkspaceset.previewpageimgurl == ''
-                    ? Container(
-                        alignment: Alignment.center,
-                        child: Icon(
-                          Feather.image,
-                          size: 150,
-                          color: MyTheme.colorgrey,
+        PreviewSpace(),
+        MakeUrlSpace(searchnode[1], controller[1], 'box'),
+      ],
+    ),
+  ));
+}
+
+PreviewSpace() {
+  return Column(
+    mainAxisSize: MainAxisSize.min,
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      SizedBox(
+        height: Get.height > 800 ? 600 : 300,
+        child: ContainerDesign(
+          child: Column(
+            children: [],
+          ),
+          color: draw.backgroundcolor,
+        ),
+      ),
+      const SizedBox(
+        height: 20,
+      ),
+      Row(
+        children: [
+          SizedBox(
+            height: 50,
+            child: InfoContainerDesign(
+                child: const Center(
+                    child: Icon(
+                  AntDesign.minus,
+                  size: 30,
+                  color: Colors.white,
+                )),
+                color: MyTheme.colorpastelred,
+                borderwhere: 'left',
+                borderok: 'no'),
+          ),
+          const SizedBox(
+            width: 5,
+          ),
+          Flexible(
+              fit: FlexFit.tight,
+              child: SizedBox(
+                height: 50,
+                child: InfoContainerDesign(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            uiset.boxpreviewnumset('minus');
+                          },
+                          child: const Center(
+                              child: Icon(
+                            Entypo.chevron_small_left,
+                            size: 30,
+                            color: Colors.white,
+                          )),
                         ),
-                      )
-                    : Container(
-                        alignment: Alignment.center,
-                        child: Image.file(
-                          File(linkspaceset.previewpageimgurl
-                                      .contains('media') ==
-                                  true
-                              ? linkspaceset.previewpageimgurl
-                                  .toString()
-                                  .substring(6)
-                              : linkspaceset.previewpageimgurl),
-                          fit: BoxFit.cover,
-                          width: (maxWidth - 40),
-                        )),
-                const SizedBox(
-                  width: 10,
-                ),
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SingleChildScrollView(
-                        physics: const ScrollPhysics(),
-                        child: Text(
-                          controller[0].text == ''
-                              ? 'previewtitlespace'.tr
-                              : controller[0].text,
-                          softWrap: true,
-                          maxLines: 2,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              color: draw.color_textstatus,
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTitleTextsize(),
-                              overflow: TextOverflow.ellipsis),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Container(
-                            alignment: Alignment.center,
-                            padding: const EdgeInsets.only(
-                                left: 10, right: 10, top: 5, bottom: 5),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: MyTheme.colororiggreen,
-                            ),
-                            child: Text(
-                              'my',
-                              softWrap: true,
-                              maxLines: 2,
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  color: draw.backgroundcolor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: contentTextsize()),
-                            ),
-                          ),
-                          Container(
-                            width: 5,
-                            height: 5,
-                            margin: const EdgeInsets.only(left: 5, right: 5),
-                            decoration: BoxDecoration(
-                                color: draw.color_textstatus,
-                                shape: BoxShape.circle),
-                          ),
-                          Text(
-                            datecheck(DateTime.now()),
+                        GetBuilder<uisetting>(builder: (_) {
+                          return Text(
+                            '${uiset.boxpreviewnum + 1}/2',
                             softWrap: true,
-                            maxLines: 1,
                             textAlign: TextAlign.start,
                             style: TextStyle(
-                                color: draw.color_textstatus,
+                                color: Colors.white,
                                 fontWeight: FontWeight.bold,
-                                fontSize: contentTextsize()),
-                          ),
-                        ],
-                      )
+                                fontSize: contentsmallTextsize()),
+                          );
+                        }),
+                        GestureDetector(
+                          onTap: () {
+                            uiset.boxpreviewnumset('plus');
+                          },
+                          child: const Center(
+                              child: Icon(
+                            Entypo.chevron_small_right,
+                            size: 30,
+                            color: Colors.white,
+                          )),
+                        )
+                      ],
+                    ),
+                    color: MyTheme.colorpastelpurple,
+                    borderwhere: 'nothing',
+                    borderok: 'no'),
+              )),
+          const SizedBox(
+            width: 5,
+          ),
+          SizedBox(
+            height: 50,
+            child: InfoContainerDesign(
+              child: const Center(
+                  child: Icon(
+                Ionicons.add,
+                size: 30,
+                color: Colors.white,
+              )),
+              color: MyTheme.colorpastelblue,
+              borderwhere: 'right',
+              borderok: 'no',
+            ),
+          )
+        ],
+      ),
+      const SizedBox(
+        height: 20,
+      ),
+    ],
+  );
+}
+
+Upload1(context, textcontroller, pagecontroller, maxHeight, maxWidth) {
+  return SingleChildScrollView(
+    child: Padding(
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: SizedBox(
+        height: maxHeight,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 50,
+              width: maxWidth * 0.6,
+              child: ContainerDesign(
+                  child: SingleChildScrollView(
+                    child: Text(
+                      textcontroller[1].text.length > 10
+                          ? 'http://pinset.co.kr/${textcontroller[1].text.toString().substring(0, 5)}...'
+                          : 'http://pinset.co.kr/${textcontroller[1].text}',
+                      maxLines: 1,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          color: draw.color_textstatus,
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTextsize()),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  color: draw.backgroundcolor),
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+            Get.height > 800
+                ? Column(
+                    children: [
+                      SizedBox(
+                          height: 50,
+                          width: 50.w,
+                          child: GestureDetector(
+                            onTap: () {
+                              Clipboard.setData(ClipboardData(
+                                      text:
+                                          'http://pinset.co.kr/${textcontroller[1].text}'))
+                                  .whenComplete(() {
+                                Snack.snackbars(
+                                    context: context,
+                                    title: 'clipboard'.tr,
+                                    backgroundcolor: Colors.green,
+                                    bordercolor: draw.backgroundcolor);
+                              });
+                            },
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: MyTheme.colororiggreen),
+                                child: Center(
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Center(
+                                        child: NeumorphicText(
+                                          'addresscopy'.tr,
+                                          style: const NeumorphicStyle(
+                                            shape: NeumorphicShape.flat,
+                                            depth: 3,
+                                            color: Colors.white,
+                                          ),
+                                          textStyle: NeumorphicTextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: contentTextsize(),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )),
+                          )),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                          height: 50,
+                          width: 50.w,
+                          child: GestureDetector(
+                            onTap: () {
+                              clickbtn1(
+                                  context, textcontroller, pagecontroller);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: MyTheme.colororigblue),
+                              child: Center(
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Center(
+                                      child: NeumorphicText(
+                                        'uploadok'.tr,
+                                        style: const NeumorphicStyle(
+                                          shape: NeumorphicShape.flat,
+                                          depth: 3,
+                                          color: Colors.white,
+                                        ),
+                                        textStyle: NeumorphicTextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: contentTextsize(),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )),
+                    ],
+                  )
+                : Column(
+                    children: [
+                      SizedBox(
+                          height: 50,
+                          width: 50.w,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Clipboard.setData(ClipboardData(
+                                          text:
+                                              'http://pinset.co.kr/${textcontroller[1].text}'))
+                                      .whenComplete(() {
+                                    Snack.snackbars(
+                                        context: context,
+                                        title: 'clipboard'.tr,
+                                        backgroundcolor: Colors.green,
+                                        bordercolor: draw.backgroundcolor);
+                                  });
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: MyTheme.colororiggreen),
+                                  child: const Center(
+                                      child: Icon(
+                                    Ionicons.copy_outline,
+                                    size: 30,
+                                    color: Colors.white,
+                                  )),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  clickbtn1(
+                                      context, textcontroller, pagecontroller);
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: MyTheme.colororigblue),
+                                  child: const Center(
+                                      child: Icon(
+                                    AntDesign.upload,
+                                    size: 30,
+                                    color: Colors.white,
+                                  )),
+                                ),
+                              )
+                            ],
+                          )),
                     ],
                   ),
-                ),
-              ],
-            ),
-            color: draw.backgroundcolor,
-          ),
-        )
-      ],
+          ],
+        ),
+      ),
     ),
   );
 }
 
-Upload(context, textcontroller, pagecontroller) {
-  return Padding(
-    padding: const EdgeInsets.only(left: 20, right: 20),
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        SizedBox(
-          height: 50,
-          child: ContainerDesign(
-              child: Text(
-                'http://pinset.co.kr/${textcontroller[1].text}',
-                softWrap: true,
-                maxLines: 1,
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    color: draw.color_textstatus,
-                    fontWeight: FontWeight.bold,
-                    fontSize: contentTextsize()),
-              ),
-              color: draw.backgroundcolor),
-        ),
-        const SizedBox(
-          height: 50,
-        ),
-        SizedBox(
-            height: 50,
-            width: 50.w,
-            child: GestureDetector(
-              onTap: () {
-                Clipboard.setData(ClipboardData(
-                        text: 'http://pinset.co.kr/${textcontroller[1].text}'))
-                    .whenComplete(() {
-                  Snack.snackbars(
-                      context: context,
-                      title: 'clipboard'.tr,
-                      backgroundcolor: Colors.green,
-                      bordercolor: draw.backgroundcolor);
-                });
-              },
-              child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: MyTheme.colororiggreen),
-                  child: Center(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Center(
-                          child: NeumorphicText(
-                            'addresscopy'.tr,
-                            style: const NeumorphicStyle(
-                              shape: NeumorphicShape.flat,
-                              depth: 3,
-                              color: Colors.white,
-                            ),
-                            textStyle: NeumorphicTextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTextsize(),
-                            ),
-                          ),
-                        ),
-                      ],
+Upload2(context, textcontroller, pagecontroller, maxHeight, maxWidth) {
+  return SingleChildScrollView(
+    child: Padding(
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: SizedBox(
+        height: maxHeight,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 50,
+              width: maxWidth * 0.6,
+              child: ContainerDesign(
+                  child: SingleChildScrollView(
+                    child: Text(
+                      textcontroller[1].text.length > 10
+                          ? 'http://pinset.co.kr/${textcontroller[1].text.toString().substring(0, 5)}...'
+                          : 'http://pinset.co.kr/${textcontroller[1].text}',
+                      maxLines: 1,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          color: draw.color_textstatus,
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTextsize()),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  )),
-            )),
-        const SizedBox(
-          height: 20,
-        ),
-        SizedBox(
-            height: 50,
-            width: 50.w,
-            child: GestureDetector(
-              onTap: () {
-                clickbtn1(context, textcontroller, pagecontroller);
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: MyTheme.colororigblue),
-                child: Center(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  ),
+                  color: draw.backgroundcolor),
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+            Get.height > 800
+                ? Column(
                     children: [
-                      Center(
-                        child: NeumorphicText(
-                          'uploadok'.tr,
-                          style: const NeumorphicStyle(
-                            shape: NeumorphicShape.flat,
-                            depth: 3,
-                            color: Colors.white,
-                          ),
-                          textStyle: NeumorphicTextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: contentTextsize(),
-                          ),
-                        ),
-                      ),
+                      SizedBox(
+                          height: 50,
+                          width: 50.w,
+                          child: GestureDetector(
+                            onTap: () {
+                              clickbtn1(
+                                  context, textcontroller, pagecontroller);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: MyTheme.colororigblue),
+                              child: Center(
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Center(
+                                      child: NeumorphicText(
+                                        'uploadok'.tr,
+                                        style: const NeumorphicStyle(
+                                          shape: NeumorphicShape.flat,
+                                          depth: 3,
+                                          color: Colors.white,
+                                        ),
+                                        textStyle: NeumorphicTextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: contentTextsize(),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )),
+                    ],
+                  )
+                : Column(
+                    children: [
+                      SizedBox(
+                          height: 50,
+                          width: 50.w,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  clickbtn1(
+                                      context, textcontroller, pagecontroller);
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: MyTheme.colororigblue),
+                                  child: const Center(
+                                      child: Icon(
+                                    AntDesign.upload,
+                                    size: 30,
+                                    color: Colors.white,
+                                  )),
+                                ),
+                              )
+                            ],
+                          )),
                     ],
                   ),
-                ),
-              ),
-            )),
-      ],
+          ],
+        ),
+      ),
     ),
   );
 }
@@ -509,7 +754,7 @@ AvailablecheckSpace() {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Text(
-        'pageshare'.tr,
+        uiset.addpagecontroll == 0 ? 'pagecanshow'.tr : 'pageshare'.tr,
         softWrap: true,
         maxLines: 1,
         textAlign: TextAlign.start,
@@ -581,77 +826,130 @@ AvailablecheckSpace() {
   );
 }
 
-MakeUrlSpace(searchnode, controller) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        'pageurl'.tr,
-        softWrap: true,
-        maxLines: 1,
-        textAlign: TextAlign.start,
-        style: TextStyle(
-            color: draw.color_textstatus,
-            fontWeight: FontWeight.bold,
-            fontSize: contentTextsize()),
-      ),
-      const SizedBox(
-        height: 20,
-      ),
-      SizedBox(
-        height: 50,
-        child: ContainerTextFieldDesign(
-          searchNodeAddSection: searchnode,
-          string: 'pageurlhint'.tr,
-          textEditingControllerAddSheet: controller,
-          section: 0,
-        ),
-      ),
-      const SizedBox(
-        height: 10,
-      ),
-      SizedBox(
-        height: 50,
-        child: InfoContainerDesign(
-            child: Text(
-              'pageurlinfo'.tr,
+MakeUrlSpace(searchnode, controller, s) {
+  return s == 'page'
+      ? Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'pageurl'.tr,
               softWrap: true,
               maxLines: 1,
               textAlign: TextAlign.start,
               style: TextStyle(
-                  color: Colors.white,
+                  color: draw.color_textstatus,
                   fontWeight: FontWeight.bold,
-                  fontSize: contentsmallTextsize()),
+                  fontSize: contentTextsize()),
             ),
-            color: MyTheme.colorpastelblue),
-      ),
-      uiset.isfilledtextfield == false && controller.text == ''
-          ? Column(
-              children: [
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  'pageurlnothing'.tr,
-                  style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: contentsmallTextsize(),
-                      color: Colors.red),
-                  overflow: TextOverflow.fade,
-                )
-              ],
-            )
-          : const SizedBox(
-              height: 0,
+            const SizedBox(
+              height: 20,
             ),
-      const SizedBox(
-        height: 20,
-      ),
-      const SizedBox(
-        height: 100,
-      ),
-    ],
-  );
+            SizedBox(
+              height: 50,
+              child: ContainerTextFieldDesign(
+                searchNodeAddSection: searchnode,
+                string: 'pageurlhint'.tr,
+                textEditingControllerAddSheet: controller,
+                section: 0,
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            SizedBox(
+              height: 50,
+              child: InfoContainerDesign(
+                  child: SingleChildScrollView(
+                    child: Text(
+                      'pageurlinfo'.tr,
+                      softWrap: true,
+                      maxLines: 2,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentsmallTextsize()),
+                    ),
+                  ),
+                  color: MyTheme.colorpastelblue,
+                  borderwhere: 'all',
+                  borderok: 'no'),
+            ),
+            uiset.isfilledtextfield == false && controller.text == ''
+                ? Column(
+                    children: [
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        'pageurlnothing'.tr,
+                        style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                            fontSize: contentsmallTextsize(),
+                            color: Colors.red),
+                        overflow: TextOverflow.fade,
+                      )
+                    ],
+                  )
+                : const SizedBox(
+                    height: 0,
+                  ),
+            const SizedBox(
+              height: 50,
+            ),
+          ],
+        )
+      : Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'pageurl'.tr,
+              softWrap: true,
+              maxLines: 1,
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                  color: draw.color_textstatus,
+                  fontWeight: FontWeight.bold,
+                  fontSize: contentTextsize()),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+              height: 50,
+              child: InfoContainerDesign(
+                child: SingleChildScrollView(
+                    child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'pageurlclick'.tr,
+                      softWrap: true,
+                      maxLines: 2,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          color: draw.color_textstatus,
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTextsize()),
+                    ),
+                    Center(
+                        child: Icon(
+                      Entypo.mouse_pointer,
+                      size: 30,
+                      color: draw.color_textstatus,
+                    )),
+                  ],
+                )),
+                color: draw.backgroundcolor,
+                borderwhere: 'all',
+                borderok: 'ok',
+              ),
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+          ],
+        );
 }
 
 ThumbnailSpace(context, searchnode) {
@@ -713,17 +1011,21 @@ ThumbnailSpace(context, searchnode) {
       SizedBox(
         height: 50,
         child: InfoContainerDesign(
-            child: Text(
-              'pagethumbnailinfo'.tr,
-              softWrap: true,
-              maxLines: 1,
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: contentsmallTextsize()),
+            child: SingleChildScrollView(
+              child: Text(
+                'pagethumbnailinfo'.tr,
+                softWrap: true,
+                maxLines: 2,
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: contentsmallTextsize()),
+              ),
             ),
-            color: MyTheme.colorpastelred),
+            color: MyTheme.colorpastelred,
+            borderwhere: 'all',
+            borderok: 'no'),
       ),
       const SizedBox(
         height: 20,

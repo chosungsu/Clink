@@ -80,10 +80,16 @@ class ContainerTextFieldDesign extends StatelessWidget {
 
 class InfoContainerDesign extends StatelessWidget {
   const InfoContainerDesign(
-      {Key? key, required this.child, required this.color})
+      {Key? key,
+      required this.child,
+      required this.color,
+      required this.borderwhere,
+      required this.borderok})
       : super(key: key);
   final Widget child;
   final Color color;
+  final String borderwhere;
+  final String borderok;
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +100,20 @@ class InfoContainerDesign extends StatelessWidget {
                   left: 10, right: 10, top: 10, bottom: 10),
               child: child,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
+                border: borderok == 'ok'
+                    ? Border.all(color: draw.color_textstatus, width: 1)
+                    : Border.all(color: color, width: 0),
+                borderRadius: borderwhere == 'all'
+                    ? BorderRadius.circular(15)
+                    : (borderwhere == 'left'
+                        ? const BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            bottomLeft: Radius.circular(15))
+                        : (borderwhere == 'right'
+                            ? const BorderRadius.only(
+                                topRight: Radius.circular(15),
+                                bottomRight: Radius.circular(15))
+                            : BorderRadius.zero)),
                 color: color,
               ),
             ));

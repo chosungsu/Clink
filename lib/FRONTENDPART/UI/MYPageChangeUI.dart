@@ -118,9 +118,10 @@ OptionBox(maxWidth, maxHeight, position) {
     'MYPageOption2'.tr,
     'MYPageOption3'.tr,
   ];
+
   return position == 'pr'
       ? SizedBox(
-          height: 60,
+          height: 30,
           width: maxWidth,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -133,9 +134,10 @@ OptionBox(maxWidth, maxHeight, position) {
                         uiset.changehomeviewoption();
                       },
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
-                            height: 50,
+                            height: 30,
                             width: 100,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -155,7 +157,7 @@ OptionBox(maxWidth, maxHeight, position) {
                             ),
                           ),
                           const SizedBox(
-                            width: 10,
+                            width: 5,
                           ),
                           Icon(
                             Entypo.chevron_small_right,
@@ -173,6 +175,7 @@ OptionBox(maxWidth, maxHeight, position) {
                           itemCount: 3,
                           itemBuilder: (context, index) {
                             return Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 GestureDetector(
                                   onTap: () {
@@ -182,7 +185,7 @@ OptionBox(maxWidth, maxHeight, position) {
                                     uiset.homeviewname(optionname[index]);
                                   },
                                   child: Container(
-                                    height: 50,
+                                    height: 30,
                                     width: 100,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
@@ -206,7 +209,7 @@ OptionBox(maxWidth, maxHeight, position) {
                                   ),
                                 ),
                                 const SizedBox(
-                                  width: 10,
+                                  width: 5,
                                 ),
                                 index == 2
                                     ? GestureDetector(
@@ -253,7 +256,7 @@ OptionBox(maxWidth, maxHeight, position) {
                     uiset.changesortoption();
                   },
                   child: Container(
-                    height: 50,
+                    height: 30,
                     width: 100,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
@@ -273,7 +276,7 @@ OptionBox(maxWidth, maxHeight, position) {
                           size: 30,
                         ),
                         const SizedBox(
-                          width: 10,
+                          width: 5,
                         ),
                         Text(
                           'MYPageOption4'.tr,
@@ -299,9 +302,10 @@ OptionBox(maxWidth, maxHeight, position) {
                         uiset.changehomeviewoption();
                       },
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
-                            height: 50,
+                            height: 30,
                             width: 100,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -321,7 +325,7 @@ OptionBox(maxWidth, maxHeight, position) {
                             ),
                           ),
                           const SizedBox(
-                            height: 10,
+                            height: 5,
                           ),
                           Icon(
                             Entypo.chevron_small_down,
@@ -339,6 +343,7 @@ OptionBox(maxWidth, maxHeight, position) {
                           itemCount: 3,
                           itemBuilder: (context, index) {
                             return Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 GestureDetector(
                                   onTap: () {
@@ -348,7 +353,7 @@ OptionBox(maxWidth, maxHeight, position) {
                                     uiset.homeviewname(optionname[index]);
                                   },
                                   child: Container(
-                                    height: 50,
+                                    height: 30,
                                     width: 100,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
@@ -372,7 +377,7 @@ OptionBox(maxWidth, maxHeight, position) {
                                   ),
                                 ),
                                 const SizedBox(
-                                  height: 10,
+                                  height: 5,
                                 ),
                                 index == 2
                                     ? GestureDetector(
@@ -422,160 +427,55 @@ View(maxHeight, maxWidth, pageoption) {
                 ],
               ),
             )
-          : GridView.builder(
-              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: maxWidth,
-                childAspectRatio: pageoption == 'ls' && Get.width > 1000
-                    ? 2
-                    : (Get.width > 700 ? 3 / 1 : 3 / 2),
+          : SingleChildScrollView(
+              physics: const ScrollPhysics(),
+              child: StaggeredGrid.extent(
+                maxCrossAxisExtent: pageoption == 'ls' && maxWidth < 1000
+                    ? maxWidth
+                    : maxWidth * 0.5,
                 mainAxisSpacing: 10,
                 crossAxisSpacing: 10,
-              ),
-              physics: const BouncingScrollPhysics(),
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: linkspaceset.alllist.length,
-              padding: const EdgeInsets.only(left: 5, right: 5),
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                    onTap: () {
-                      //uiset.setmainoption(index);
-                    },
-                    child: ContainerDesign(
-                      child: pageoption == 'ls' && Get.width > 1000
-                          ? Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Flexible(
-                                    flex: 3,
-                                    fit: FlexFit.tight,
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      child: Image.file(
-                                        File(linkspaceset.alllist[index].image
-                                                    .contains('media') ==
-                                                true
-                                            ? linkspaceset.alllist[index].image
-                                                .toString()
-                                                .substring(6)
-                                            : linkspaceset
-                                                .alllist[index].image),
-                                        width: pageoption == 'ls'
-                                            ? maxWidth * 0.8
-                                            : maxWidth,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Flexible(
-                                  flex: 2,
-                                  child: SingleChildScrollView(
-                                    physics: const ScrollPhysics(),
-                                    child: Text(
-                                      linkspaceset.alllist[index].title,
-                                      softWrap: true,
-                                      maxLines: 2,
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          color: draw.color_textstatus,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: contentTitleTextsize(),
-                                          overflow: TextOverflow.ellipsis),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
+                axisDirection: AxisDirection.down,
+                children: List.generate(linkspaceset.alllist.length, (index) {
+                  return GestureDetector(
+                      onTap: () {
+                        //uiset.setmainoption(index);
+                      },
+                      child: SizedBox(
+                        height: maxHeight > 800 ? 250 : 200,
+                        child: ContainerDesign(
+                          child: pageoption == 'pr' || maxWidth > 1000
+                              ? Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Container(
-                                      alignment: Alignment.center,
-                                      padding: const EdgeInsets.only(
-                                          left: 10,
-                                          right: 10,
-                                          top: 5,
-                                          bottom: 5),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(15),
-                                        color: peopleadd.usrcode ==
-                                                linkspaceset
-                                                    .alllist[index].owner
-                                            ? MyTheme.colororiggreen
-                                            : MyTheme.colororigorange,
-                                      ),
-                                      child: Text(
-                                        peopleadd.usrcode ==
-                                                linkspaceset
-                                                    .alllist[index].owner
-                                            ? 'my'
-                                            : linkspaceset.alllist[index].owner,
-                                        softWrap: true,
-                                        maxLines: 2,
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                            color: draw.backgroundcolor,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: contentTextsize()),
-                                      ),
+                                    Flexible(
+                                        flex: 3,
+                                        fit: FlexFit.tight,
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          child: Image.file(
+                                            File(linkspaceset
+                                                        .alllist[index].image
+                                                        .contains('media') ==
+                                                    true
+                                                ? linkspaceset
+                                                    .alllist[index].image
+                                                    .toString()
+                                                    .substring(6)
+                                                : linkspaceset
+                                                    .alllist[index].image),
+                                            fit: BoxFit.cover,
+                                            width: maxWidth * 0.5,
+                                          ),
+                                        )),
+                                    const SizedBox(
+                                      height: 10,
                                     ),
-                                    Container(
-                                      width: 5,
-                                      height: 5,
-                                      margin: const EdgeInsets.only(
-                                          left: 5, right: 5),
-                                      decoration: BoxDecoration(
-                                          color: draw.color_textstatus,
-                                          shape: BoxShape.circle),
-                                    ),
-                                    Text(
-                                      datecheck(DateTime.parse(
-                                          linkspaceset.alllist[index].date)),
-                                      softWrap: true,
-                                      maxLines: 1,
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          color: draw.color_textstatus,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: contentTextsize()),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            )
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Image.file(
-                                    File(linkspaceset.alllist[index].image
-                                                .contains('media') ==
-                                            true
-                                        ? linkspaceset.alllist[index].image
-                                            .toString()
-                                            .substring(6)
-                                        : linkspaceset.alllist[index].image),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Flexible(
-                                  fit: FlexFit.tight,
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SingleChildScrollView(
+                                    Flexible(
+                                      flex: 2,
+                                      child: SingleChildScrollView(
                                         physics: const ScrollPhysics(),
                                         child: Text(
                                           linkspaceset.alllist[index].title,
@@ -589,74 +489,198 @@ View(maxHeight, maxWidth, pageoption) {
                                               overflow: TextOverflow.ellipsis),
                                         ),
                                       ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Row(
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Container(
+                                          alignment: Alignment.center,
+                                          padding: const EdgeInsets.only(
+                                              left: 10,
+                                              right: 10,
+                                              top: 5,
+                                              bottom: 5),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            color: peopleadd.usrcode ==
+                                                    linkspaceset
+                                                        .alllist[index].owner
+                                                ? MyTheme.colororiggreen
+                                                : MyTheme.colororigorange,
+                                          ),
+                                          child: Text(
+                                            peopleadd.usrcode ==
+                                                    linkspaceset
+                                                        .alllist[index].owner
+                                                ? 'my'
+                                                : linkspaceset
+                                                    .alllist[index].owner,
+                                            softWrap: true,
+                                            maxLines: 2,
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                color: draw.backgroundcolor,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: contentTextsize()),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: 5,
+                                          height: 5,
+                                          margin: const EdgeInsets.only(
+                                              left: 5, right: 5),
+                                          decoration: BoxDecoration(
+                                              color: draw.color_textstatus,
+                                              shape: BoxShape.circle),
+                                        ),
+                                        Text(
+                                          datecheck(DateTime.parse(linkspaceset
+                                              .alllist[index].date)),
+                                          softWrap: true,
+                                          maxLines: 1,
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              color: draw.color_textstatus,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: contentTextsize()),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                )
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Flexible(
+                                        flex: 1,
+                                        fit: FlexFit.tight,
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          child: Image.file(
+                                            File(linkspaceset
+                                                        .alllist[index].image
+                                                        .contains('media') ==
+                                                    true
+                                                ? linkspaceset
+                                                    .alllist[index].image
+                                                    .toString()
+                                                    .substring(6)
+                                                : linkspaceset
+                                                    .alllist[index].image),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        )),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Flexible(
+                                      fit: FlexFit.tight,
+                                      child: Column(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.end,
+                                            MainAxisAlignment.spaceEvenly,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Container(
-                                            alignment: Alignment.center,
-                                            padding: const EdgeInsets.only(
-                                                left: 10,
-                                                right: 10,
-                                                top: 5,
-                                                bottom: 5),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              color: peopleadd.usrcode ==
-                                                      linkspaceset
-                                                          .alllist[index].owner
-                                                  ? MyTheme.colororiggreen
-                                                  : MyTheme.colororigorange,
-                                            ),
+                                          SingleChildScrollView(
+                                            physics: const ScrollPhysics(),
                                             child: Text(
-                                              peopleadd.usrcode ==
-                                                      linkspaceset
-                                                          .alllist[index].owner
-                                                  ? 'my'
-                                                  : linkspaceset
-                                                      .alllist[index].owner,
+                                              linkspaceset.alllist[index].title,
                                               softWrap: true,
                                               maxLines: 2,
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
-                                                  color: draw.backgroundcolor,
+                                                  color: draw.color_textstatus,
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: contentTextsize()),
+                                                  fontSize:
+                                                      contentTitleTextsize(),
+                                                  overflow:
+                                                      TextOverflow.ellipsis),
                                             ),
                                           ),
-                                          Container(
-                                            width: 5,
+                                          const SizedBox(
                                             height: 5,
-                                            margin: const EdgeInsets.only(
-                                                left: 5, right: 5),
-                                            decoration: BoxDecoration(
-                                                color: draw.color_textstatus,
-                                                shape: BoxShape.circle),
                                           ),
-                                          Text(
-                                            datecheck(DateTime.parse(
-                                                linkspaceset
-                                                    .alllist[index].date)),
-                                            softWrap: true,
-                                            maxLines: 1,
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: draw.color_textstatus,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: contentTextsize()),
-                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Container(
+                                                alignment: Alignment.center,
+                                                padding: const EdgeInsets.only(
+                                                    left: 10,
+                                                    right: 10,
+                                                    top: 5,
+                                                    bottom: 5),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                  color: peopleadd.usrcode ==
+                                                          linkspaceset
+                                                              .alllist[index]
+                                                              .owner
+                                                      ? MyTheme.colororiggreen
+                                                      : MyTheme.colororigorange,
+                                                ),
+                                                child: Text(
+                                                  peopleadd.usrcode ==
+                                                          linkspaceset
+                                                              .alllist[index]
+                                                              .owner
+                                                      ? 'my'
+                                                      : linkspaceset
+                                                          .alllist[index].owner,
+                                                  softWrap: true,
+                                                  maxLines: 2,
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color:
+                                                          draw.backgroundcolor,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          contentTextsize()),
+                                                ),
+                                              ),
+                                              Container(
+                                                width: 5,
+                                                height: 5,
+                                                margin: const EdgeInsets.only(
+                                                    left: 5, right: 5),
+                                                decoration: BoxDecoration(
+                                                    color:
+                                                        draw.color_textstatus,
+                                                    shape: BoxShape.circle),
+                                              ),
+                                              Text(
+                                                datecheck(DateTime.parse(
+                                                    linkspaceset
+                                                        .alllist[index].date)),
+                                                softWrap: true,
+                                                maxLines: 1,
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color:
+                                                        draw.color_textstatus,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize:
+                                                        contentTextsize()),
+                                              ),
+                                            ],
+                                          )
                                         ],
-                                      )
-                                    ],
-                                  ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                      color: draw.backgroundcolor,
-                    ));
-              }));
+                          color: draw.backgroundcolor,
+                        ),
+                      ));
+                }),
+              ),
+            ));
 }

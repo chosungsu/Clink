@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 responsivewidget(widget, width) {
   double ratio = Get.height / Get.width;
-  return ratio > 1
+  return ratio > 1 && width < 1000
       ? SizedBox(
           width: width,
           child: widget,

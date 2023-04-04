@@ -28,6 +28,7 @@ class uisetting extends GetxController {
   List<String> licenses_title = List.empty(growable: true);
   List<String> licenses_content = List.empty(growable: true);
   int pagenumber = 0;
+  int boxpreviewnum = 0;
   bool showtopbutton = false;
   List updateid = [];
   List<PageList> pagelist = [];
@@ -117,6 +118,23 @@ class uisetting extends GetxController {
   ///변경 가능 시 아래에 띄워준다.
   void changeavailable(bool what) {
     canchange = what;
+    update();
+    notifyChildrens();
+  }
+
+  ///homeviewname
+  ///
+  ///홈뷰 변경에 사용한다.
+  void boxpreviewnumset(what) {
+    if (what == 'minus') {
+      if (boxpreviewnum == 0) {
+      } else {
+        boxpreviewnum -= 1;
+      }
+    } else {
+      boxpreviewnum += 1;
+    }
+
     update();
     notifyChildrens();
   }
