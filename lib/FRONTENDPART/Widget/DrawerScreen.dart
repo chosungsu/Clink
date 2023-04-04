@@ -89,8 +89,12 @@ View(BuildContext context, List<Map> drawerItems, textcontroller, searchnode) {
                                   uiset.setpageindex(0);
                                 } else if (element
                                     .containsValue(AntDesign.plus)) {
-                                  draw.setclose();
-                                  plusBtn(context, textcontroller, searchnode);
+                                  if (uiset.pagenumber == 1) {
+                                  } else {
+                                    draw.setclose();
+                                    plusBtn(
+                                        context, textcontroller, searchnode);
+                                  }
                                 } else if (element
                                     .containsValue(Ionicons.settings_outline)) {
                                   draw.setclose();

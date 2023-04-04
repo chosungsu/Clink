@@ -430,7 +430,7 @@ View(maxHeight, maxWidth, pageoption) {
           : SingleChildScrollView(
               physics: const ScrollPhysics(),
               child: StaggeredGrid.extent(
-                maxCrossAxisExtent: pageoption == 'ls' && maxWidth < 1000
+                maxCrossAxisExtent: maxWidth >= 700 || pageoption == 'pr'
                     ? maxWidth
                     : maxWidth * 0.5,
                 mainAxisSpacing: 10,
@@ -442,9 +442,9 @@ View(maxHeight, maxWidth, pageoption) {
                         //uiset.setmainoption(index);
                       },
                       child: SizedBox(
-                        height: maxHeight > 800 ? 250 : 200,
+                        height: maxHeight >= 700 ? 250 : 200,
                         child: ContainerDesign(
-                          child: pageoption == 'pr' || maxWidth > 1000
+                          child: maxWidth < 700
                               ? Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
@@ -494,7 +494,8 @@ View(maxHeight, maxWidth, pageoption) {
                                       height: 5,
                                     ),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Container(
                                           alignment: Alignment.center,
@@ -512,36 +513,42 @@ View(maxHeight, maxWidth, pageoption) {
                                                 ? MyTheme.colororiggreen
                                                 : MyTheme.colororigorange,
                                           ),
-                                          child: Text(
-                                            peopleadd.usrcode ==
-                                                    linkspaceset
-                                                        .alllist[index].owner
-                                                ? 'my'
-                                                : linkspaceset
-                                                    .alllist[index].owner,
-                                            softWrap: true,
-                                            maxLines: 2,
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: draw.backgroundcolor,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: contentTextsize()),
+                                          child: SingleChildScrollView(
+                                            child: Text(
+                                              peopleadd.usrcode ==
+                                                      linkspaceset
+                                                          .alllist[index].owner
+                                                  ? 'my'
+                                                  : (linkspaceset.alllist[index]
+                                                              .owner
+                                                              .toString()
+                                                              .length >
+                                                          5
+                                                      ? linkspaceset
+                                                              .alllist[index]
+                                                              .owner
+                                                              .toString()
+                                                              .substring(0, 5) +
+                                                          '...'
+                                                      : linkspaceset
+                                                          .alllist[index]
+                                                          .owner),
+                                              softWrap: true,
+                                              maxLines: 2,
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: draw.backgroundcolor,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: contentTextsize()),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
                                           ),
-                                        ),
-                                        Container(
-                                          width: 5,
-                                          height: 5,
-                                          margin: const EdgeInsets.only(
-                                              left: 5, right: 5),
-                                          decoration: BoxDecoration(
-                                              color: draw.color_textstatus,
-                                              shape: BoxShape.circle),
                                         ),
                                         Text(
                                           datecheck(DateTime.parse(linkspaceset
                                               .alllist[index].date)),
                                           softWrap: true,
-                                          maxLines: 1,
+                                          maxLines: 2,
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               color: draw.color_textstatus,
@@ -549,18 +556,19 @@ View(maxHeight, maxWidth, pageoption) {
                                               fontSize: contentTextsize()),
                                         ),
                                       ],
-                                    )
+                                    ),
                                   ],
                                 )
                               : Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
                                   children: [
                                     Flexible(
                                         flex: 1,
                                         fit: FlexFit.tight,
                                         child: Container(
-                                          alignment: Alignment.center,
+                                          alignment: Alignment.centerLeft,
                                           child: Image.file(
                                             File(linkspaceset
                                                         .alllist[index].image
@@ -572,7 +580,7 @@ View(maxHeight, maxWidth, pageoption) {
                                                     .substring(6)
                                                 : linkspaceset
                                                     .alllist[index].image),
-                                            fit: BoxFit.cover,
+                                            fit: BoxFit.fill,
                                           ),
                                         )),
                                     const SizedBox(
@@ -582,7 +590,7 @@ View(maxHeight, maxWidth, pageoption) {
                                       fit: FlexFit.tight,
                                       child: Column(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
+                                            MainAxisAlignment.spaceBetween,
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
@@ -607,7 +615,7 @@ View(maxHeight, maxWidth, pageoption) {
                                           ),
                                           Row(
                                             mainAxisAlignment:
-                                                MainAxisAlignment.end,
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               Container(
                                                 alignment: Alignment.center,
@@ -632,8 +640,24 @@ View(maxHeight, maxWidth, pageoption) {
                                                               .alllist[index]
                                                               .owner
                                                       ? 'my'
-                                                      : linkspaceset
-                                                          .alllist[index].owner,
+                                                      : (linkspaceset
+                                                                  .alllist[
+                                                                      index]
+                                                                  .owner
+                                                                  .toString()
+                                                                  .length >
+                                                              5
+                                                          ? linkspaceset
+                                                                  .alllist[
+                                                                      index]
+                                                                  .owner
+                                                                  .toString()
+                                                                  .substring(
+                                                                      0, 5) +
+                                                              '...'
+                                                          : linkspaceset
+                                                              .alllist[index]
+                                                              .owner),
                                                   softWrap: true,
                                                   maxLines: 2,
                                                   textAlign: TextAlign.start,
@@ -646,22 +670,12 @@ View(maxHeight, maxWidth, pageoption) {
                                                           contentTextsize()),
                                                 ),
                                               ),
-                                              Container(
-                                                width: 5,
-                                                height: 5,
-                                                margin: const EdgeInsets.only(
-                                                    left: 5, right: 5),
-                                                decoration: BoxDecoration(
-                                                    color:
-                                                        draw.color_textstatus,
-                                                    shape: BoxShape.circle),
-                                              ),
                                               Text(
                                                 datecheck(DateTime.parse(
                                                     linkspaceset
                                                         .alllist[index].date)),
                                                 softWrap: true,
-                                                maxLines: 1,
+                                                maxLines: 2,
                                                 textAlign: TextAlign.start,
                                                 style: TextStyle(
                                                     color:
