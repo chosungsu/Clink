@@ -1,6 +1,7 @@
 // ignore_for_file: body_might_complete_normally_nullable, non_constant_identifier_names, unused_local_variable
 
 import 'dart:async';
+import 'package:clickbyme/BACKENDPART/Api/BoxApi.dart';
 import 'package:clickbyme/BACKENDPART/Api/LicenseApi.dart';
 import 'package:clickbyme/BACKENDPART/Api/LoginApi.dart';
 import 'package:clickbyme/BACKENDPART/Getx/navibool.dart';
@@ -22,6 +23,10 @@ Future initScreen() async {
   */
   peopleadd.checkusrinfo();
   /**
+  * setappbox : app의 색상을 지정해줌.
+  */
+  navi.setappbox();
+  /**
   * fetchTasks : user 정보를 백엔드에서 불러옴.
   */
   await LoginApiProvider().fetchTasks();
@@ -29,6 +34,7 @@ Future initScreen() async {
    * licenselist를 생성함.
    */
   LicenseApiProvider().createTasks();
+  BoxApiProvider().createTasks();
   if (box.read('nick') == '' || box.read('nick') == null) {
     /**
      * createTasks : name, usercode, licenselist를 생성함.
@@ -39,10 +45,6 @@ Future initScreen() async {
   * getTasks : user의 alllist를 생성함.
   */
   PageApiProvider().getTasks();
-  /**
-  * setappbox : app의 색상을 지정해줌.
-  */
-  navi.setappbox();
   /**
   * setprofilespace : profile 공간을 생성함.
   */

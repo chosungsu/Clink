@@ -1,5 +1,6 @@
 // ignore_for_file: file_names, prefer_typing_uninitialized_variables, non_constant_identifier_names
 import 'dart:math';
+import 'package:clickbyme/BACKENDPART/Enums/BoxSelection.dart';
 import 'package:clickbyme/BACKENDPART/Enums/Event.dart';
 import 'package:clickbyme/FRONTENDPART/Page/AddPage.dart';
 import 'package:clickbyme/FRONTENDPART/Page/NotiPage.dart';
@@ -44,6 +45,7 @@ List pageviewoptionname = [
   'addview',
   'upload',
 ];
+List<BoxSelection> boxtypedata = [];
 //Here are SpaceinUI Variables
 var spacefamilyid;
 var spacefamilytype;

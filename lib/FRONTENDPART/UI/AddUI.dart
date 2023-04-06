@@ -1,12 +1,14 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, non_constant_identifier_names, file_names
 
 import 'dart:io';
+import 'package:clickbyme/BACKENDPART/Api/BoxApi.dart';
 import 'package:clickbyme/BACKENDPART/Enums/Variables.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:clickbyme/sheets/BSContents/appbarplusbtn.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -17,7 +19,6 @@ import '../../BACKENDPART/Getx/UserInfo.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../Tool/AndroidIOS.dart';
 import '../../Tool/FlushbarStyle.dart';
-import '../../Tool/datecheck.dart';
 import '../../sheets/BottomSheet/AddContent.dart';
 
 final uiset = Get.put(uisetting());
@@ -137,7 +138,7 @@ StepView(context, maxWidth, maxHeight, pageoption, pagecontroller) {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            pagecontroller.animateToPage(
+                            pagecontroller[0].animateToPage(
                               index,
                               duration: const Duration(milliseconds: 500),
                               curve: Curves.easeInOut,
@@ -174,10 +175,9 @@ StepView(context, maxWidth, maxHeight, pageoption, pagecontroller) {
           },
         )
       : GetBuilder<linkspacesetting>(builder: (_) {
-          return Container(
+          return SizedBox(
             height: 50,
             width: maxWidth,
-            padding: const EdgeInsets.only(left: 20, right: 20),
             child: ListView.builder(
                 physics: const ScrollPhysics(),
                 scrollDirection: Axis.horizontal,
@@ -188,7 +188,7 @@ StepView(context, maxWidth, maxHeight, pageoption, pagecontroller) {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          pagecontroller.animateToPage(
+                          pagecontroller[0].animateToPage(
                             index,
                             duration: const Duration(milliseconds: 500),
                             curve: Curves.easeInOut,
@@ -233,7 +233,7 @@ View1(context, maxWidth, maxHeight, searchnode, controller, pagecontroller,
       width: maxWidth,
       height: maxHeight,
       child: PageView(
-        controller: pagecontroller,
+        controller: pagecontroller[0],
         scrollDirection: Axis.horizontal,
         onPageChanged: (int pageIndex) {
           linkspaceset.setpageviewnum(pageIndex);
@@ -254,13 +254,14 @@ View2(context, maxWidth, maxHeight, searchnode, controller, pagecontroller,
       width: maxWidth,
       height: maxHeight,
       child: PageView(
-        controller: pagecontroller,
+        controller: pagecontroller[0],
         scrollDirection: Axis.horizontal,
         onPageChanged: (int pageIndex) {
           linkspaceset.setpageviewnum(pageIndex);
         },
         children: [
-          Form2(context, searchnode, controller),
+          Form2(context, searchnode, pagecontroller, controller, maxHeight,
+              maxWidth),
           Upload2(context, controller, pagecontroller, maxHeight, maxWidth)
         ],
       ));
@@ -268,138 +269,352 @@ View2(context, maxWidth, maxHeight, searchnode, controller, pagecontroller,
 
 Form1(context, searchnode, controller) {
   return SingleChildScrollView(
-      child: Padding(
-    padding: const EdgeInsets.only(left: 20, right: 20),
-    child: Column(
-      children: [
-        TitleSpace(searchnode[0], controller[0]),
-        ThumbnailSpace(context, searchnode[2]),
-        AvailablecheckSpace(),
-        MakeUrlSpace(searchnode[1], controller[1], 'page'),
-      ],
-    ),
-  ));
-}
-
-Form2(context, searchnode, controller) {
-  return SingleChildScrollView(
-      child: Padding(
-    padding: const EdgeInsets.only(left: 20, right: 20),
-    child: Column(
-      children: [
-        PreviewSpace(),
-        MakeUrlSpace(searchnode[1], controller[1], 'box'),
-      ],
-    ),
-  ));
-}
-
-PreviewSpace() {
-  return Column(
-    mainAxisSize: MainAxisSize.min,
-    mainAxisAlignment: MainAxisAlignment.center,
-    crossAxisAlignment: CrossAxisAlignment.center,
+      child: Column(
     children: [
-      SizedBox(
-        height: Get.height > 800 ? 600 : 300,
-        child: ContainerDesign(
-          child: Column(
-            children: [],
-          ),
-          color: draw.backgroundcolor,
-        ),
-      ),
-      const SizedBox(
-        height: 20,
-      ),
-      Row(
+      TitleSpace(searchnode[0], controller[0]),
+      ThumbnailSpace(context, searchnode[2]),
+      AvailablecheckSpace(),
+      MakeUrlSpace(searchnode[1], controller[1], 'page'),
+    ],
+  ));
+}
+
+Form2(context, searchnode, pagecontroller, controller, maxHeight, maxWidth) {
+  return SingleChildScrollView(
+      child: SizedBox(
+    height: maxHeight,
+    child: Column(
+      children: [
+        PreviewSpace(pagecontroller, maxHeight, maxWidth),
+        //MakeUrlSpace(searchnode[1], controller[1], 'box'),
+      ],
+    ),
+  ));
+}
+
+PreviewSpace(pagecontroller, maxHeight, maxWidth) {
+  return SizedBox(
+    height: maxHeight,
+    child: SingleChildScrollView(
+      child: Column(
         children: [
-          SizedBox(
-            height: 50,
-            child: InfoContainerDesign(
-                child: const Center(
-                    child: Icon(
-                  AntDesign.minus,
-                  size: 30,
-                  color: Colors.white,
-                )),
-                color: MyTheme.colorpastelred,
-                borderwhere: 'left',
-                borderok: 'no'),
-          ),
+          GetBuilder<uisetting>(builder: (_) {
+            return Row(
+              children: [
+                Flexible(
+                    fit: FlexFit.tight,
+                    child: SizedBox(
+                      height: 50,
+                      child: InfoContainerDesign(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'pagetype'.tr,
+                                softWrap: true,
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentsmallTextsize()),
+                              ),
+                              GetBuilder<linkspacesetting>(builder: (_) {
+                                return Text(
+                                  linkspaceset.pageboxtype == ''
+                                      ? 'nothing'
+                                      : linkspaceset.pageboxtype,
+                                  softWrap: true,
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentsmallTextsize()),
+                                );
+                              }),
+                            ],
+                          ),
+                          color: MyTheme.colorpastelpurple,
+                          borderwhere: 'left',
+                          borderok: 'no'),
+                    )),
+                const SizedBox(
+                  width: 5,
+                ),
+                GestureDetector(
+                    onTap: () {
+                      uiset.changeshowboxtype(!uiset.showboxlist);
+                    },
+                    child: SizedBox(
+                      height: 50,
+                      child: InfoContainerDesign(
+                        child: Center(
+                            child: Icon(
+                          uiset.showboxlist == false
+                              ? Entypo.chevron_small_down
+                              : Entypo.chevron_small_up,
+                          size: 30,
+                          color: Colors.white,
+                        )),
+                        color: MyTheme.colorpastelblue,
+                        borderwhere: 'right',
+                        borderok: 'no',
+                      ),
+                    )),
+              ],
+            );
+          }),
+          GetBuilder<uisetting>(builder: (_) {
+            return uiset.showboxlist == false
+                ? const SizedBox()
+                : FutureBuilder(
+                    future: BoxApiProvider().getTasks(),
+                    builder: (context, snapshot) {
+                      return Column(
+                        children: [
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          GetBuilder<linkspacesetting>(builder: (_) {
+                            return SizedBox(
+                              height: 200,
+                              child: InfoContainerDesign(
+                                child: SingleChildScrollView(
+                                    child: snapshot.hasError
+                                        ? Column(
+                                            children: [
+                                              SpinKitThreeBounce(
+                                                size: 30,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  return const DecoratedBox(
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        shape: BoxShape.circle),
+                                                  );
+                                                },
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Text(
+                                                'pagetypeerror'.tr,
+                                                softWrap: true,
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize:
+                                                        contentsmallTextsize()),
+                                              )
+                                            ],
+                                          )
+                                        : Column(
+                                            children: List.generate(
+                                                linkspaceset.boxtypelist.length,
+                                                (index) {
+                                              return ListTile(
+                                                onTap: () {
+                                                  linkspaceset.setpageboxtype(
+                                                      linkspaceset
+                                                          .boxtypelist[index]
+                                                          .title);
+                                                  uiset.changeshowboxtype(
+                                                      !uiset.showboxlist);
+                                                },
+                                                trailing: Icon(
+                                                  linkspaceset
+                                                              .boxtypelist[
+                                                                  index]
+                                                              .isavailable ==
+                                                          'open'
+                                                      ? Ionicons
+                                                          .lock_open_outline
+                                                      : Ionicons
+                                                          .lock_closed_outline,
+                                                  color: Colors.white,
+                                                ),
+                                                title: Text(
+                                                  linkspaceset
+                                                      .boxtypelist[index].title,
+                                                  softWrap: true,
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          contentTextsize()),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              );
+                                            }),
+                                          )),
+                                color: MyTheme.colorpastelblue,
+                                borderwhere: 'all',
+                                borderok: 'no',
+                              ),
+                            );
+                          })
+                        ],
+                      );
+                    },
+                  );
+          }),
           const SizedBox(
-            width: 5,
+            height: 20,
           ),
-          Flexible(
-              fit: FlexFit.tight,
-              child: SizedBox(
-                height: 50,
-                child: InfoContainerDesign(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            uiset.boxpreviewnumset('minus');
-                          },
-                          child: const Center(
-                              child: Icon(
-                            Entypo.chevron_small_left,
-                            size: 30,
-                            color: Colors.white,
-                          )),
+          SizedBox(
+            height: Get.height > 800 ? 600 : 400,
+            child: ContainerDesign(
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  return PageView(
+                    controller: pagecontroller[1],
+                    scrollDirection: Axis.horizontal,
+                    onPageChanged: (int pageIndex) {
+                      linkspaceset.boxpreviewnumset(pageIndex);
+                    },
+                    children:
+                        List.generate(linkspaceset.pageboxtotalnum, (index) {
+                      return SizedBox(
+                        width: maxWidth - 40,
+                        height: Get.height > 800 ? 600 : 400,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: const [
+                            Icon(
+                              AntDesign.minus,
+                              size: 30,
+                              color: Colors.black,
+                            )
+                          ],
                         ),
-                        GetBuilder<uisetting>(builder: (_) {
-                          return Text(
-                            '${uiset.boxpreviewnum + 1}/2',
-                            softWrap: true,
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: contentsmallTextsize()),
-                          );
-                        }),
-                        GestureDetector(
-                          onTap: () {
-                            uiset.boxpreviewnumset('plus');
-                          },
-                          child: const Center(
-                              child: Icon(
-                            Entypo.chevron_small_right,
-                            size: 30,
-                            color: Colors.white,
-                          )),
-                        )
-                      ],
-                    ),
-                    color: MyTheme.colorpastelpurple,
-                    borderwhere: 'nothing',
-                    borderok: 'no'),
-              )),
-          const SizedBox(
-            width: 5,
-          ),
-          SizedBox(
-            height: 50,
-            child: InfoContainerDesign(
-              child: const Center(
-                  child: Icon(
-                Ionicons.add,
-                size: 30,
-                color: Colors.white,
-              )),
-              color: MyTheme.colorpastelblue,
-              borderwhere: 'right',
-              borderok: 'no',
+                      );
+                    }),
+                  );
+                },
+              ),
+              color: draw.backgroundcolor,
             ),
-          )
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Row(
+            children: [
+              SizedBox(
+                height: 50,
+                child: GestureDetector(
+                  onTap: () {
+                    linkspaceset
+                        .setpagetotalviewnum(linkspaceset.pageboxtotalnum - 1);
+                  },
+                  child: InfoContainerDesign(
+                      child: const Center(
+                          child: Icon(
+                        AntDesign.minus,
+                        size: 30,
+                        color: Colors.white,
+                      )),
+                      color: MyTheme.colorpastelred,
+                      borderwhere: 'left',
+                      borderok: 'no'),
+                ),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              Flexible(
+                  fit: FlexFit.tight,
+                  child: SizedBox(
+                    height: 50,
+                    child: InfoContainerDesign(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                linkspaceset.boxpreviewnumset('minus');
+                                pagecontroller[1].animateToPage(
+                                  linkspaceset.boxpreviewnum,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                );
+                              },
+                              child: const Center(
+                                  child: Icon(
+                                Entypo.chevron_small_left,
+                                size: 30,
+                                color: Colors.white,
+                              )),
+                            ),
+                            GetBuilder<linkspacesetting>(builder: (_) {
+                              return Text(
+                                '${linkspaceset.boxpreviewnum + 1}/${linkspaceset.pageboxtotalnum}',
+                                softWrap: true,
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: contentsmallTextsize()),
+                              );
+                            }),
+                            GestureDetector(
+                              onTap: () {
+                                linkspaceset.boxpreviewnumset('plus');
+                                pagecontroller[1].animateToPage(
+                                  linkspaceset.boxpreviewnum,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                );
+                              },
+                              child: const Center(
+                                  child: Icon(
+                                Entypo.chevron_small_right,
+                                size: 30,
+                                color: Colors.white,
+                              )),
+                            )
+                          ],
+                        ),
+                        color: MyTheme.colorpastelpurple,
+                        borderwhere: 'nothing',
+                        borderok: 'no'),
+                  )),
+              const SizedBox(
+                width: 5,
+              ),
+              SizedBox(
+                height: 50,
+                child: GestureDetector(
+                  onTap: () {
+                    linkspaceset
+                        .setpagetotalviewnum(linkspaceset.pageboxtotalnum + 1);
+                  },
+                  child: InfoContainerDesign(
+                    child: const Center(
+                        child: Icon(
+                      Ionicons.add,
+                      size: 30,
+                      color: Colors.white,
+                    )),
+                    color: MyTheme.colorpastelblue,
+                    borderwhere: 'right',
+                    borderok: 'no',
+                  ),
+                ),
+              )
+            ],
+          ),
+          const SizedBox(
+            height: 20,
+          ),
         ],
       ),
-      const SizedBox(
-        height: 20,
-      ),
-    ],
+    ),
   );
 }
 
@@ -493,7 +708,7 @@ Upload1(context, textcontroller, pagecontroller, maxHeight, maxWidth) {
                           child: GestureDetector(
                             onTap: () {
                               clickbtn1(
-                                  context, textcontroller, pagecontroller);
+                                  context, textcontroller, pagecontroller[0]);
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -561,8 +776,8 @@ Upload1(context, textcontroller, pagecontroller, maxHeight, maxWidth) {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  clickbtn1(
-                                      context, textcontroller, pagecontroller);
+                                  clickbtn1(context, textcontroller,
+                                      pagecontroller[0]);
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.all(10),
@@ -631,7 +846,7 @@ Upload2(context, textcontroller, pagecontroller, maxHeight, maxWidth) {
                           child: GestureDetector(
                             onTap: () {
                               clickbtn1(
-                                  context, textcontroller, pagecontroller);
+                                  context, textcontroller, pagecontroller[0]);
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -673,8 +888,8 @@ Upload2(context, textcontroller, pagecontroller, maxHeight, maxWidth) {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  clickbtn1(
-                                      context, textcontroller, pagecontroller);
+                                  clickbtn1(context, textcontroller,
+                                      pagecontroller[0]);
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.all(10),

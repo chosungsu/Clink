@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:clickbyme/FRONTENDPART/Route/subuiroute.dart';
 import 'package:clickbyme/FRONTENDPART/UI/AddUI.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -24,7 +25,7 @@ class AddPage extends StatefulWidget {
 
 class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
   ScrollController scrollController = ScrollController();
-  late PageController pageController;
+  List<PageController> pageController = [];
   List<TextEditingController> controllersall = [];
   List<FocusNode> searchNodeall = [];
   final navi = Get.put(navibool());
@@ -35,18 +36,18 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    uiset.searchpagemove = '';
-    uiset.isfilledtextfield = true;
+    AddPageinit();
     uiset.addpagecontroll == 0 ? count = 3 : count = 4;
-    linkspaceset.shareoption = 'no';
-    linkspaceset.previewpageimgurl = '';
     for (int i = 0; i < count; i++) {
       controllersall.insert(i, TextEditingController());
       searchNodeall.insert(i, FocusNode());
     }
-    pageController = PageController(
-        initialPage:
-            linkspaceset.pageviewnum == 0 ? 0 : linkspaceset.pageviewnum);
+    pageController.insert(
+        0,
+        PageController(
+            initialPage:
+                linkspaceset.pageviewnum == 0 ? 0 : linkspaceset.pageviewnum));
+    pageController.insert(1, PageController());
   }
 
   @override
@@ -68,7 +69,7 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
                 navi.statusbarcolor == 0 ? Brightness.dark : Brightness.light,
             statusBarIconBrightness:
                 navi.statusbarcolor == 0 ? Brightness.dark : Brightness.light));
-        pageController = PageController(
+        pageController[0] = PageController(
             initialPage:
                 linkspaceset.pageviewnum == 0 ? 0 : linkspaceset.pageviewnum);
         return Scaffold(

@@ -1,5 +1,6 @@
 // ignore_for_file: camel_case_types
 
+import 'package:clickbyme/BACKENDPART/Enums/BoxSelection.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,10 @@ class linkspacesetting extends GetxController {
   String shareoption = 'no';
   int pageviewnum = 0;
   String previewpageimgurl = '';
+  List<BoxSelection> boxtypelist = [];
+  String pageboxtype = '';
+  int boxpreviewnum = 0;
+  int pageboxtotalnum = 0;
   String searchurl = '';
   List spacelink = [];
   List indexcnt = [];
@@ -68,6 +73,61 @@ class linkspacesetting extends GetxController {
   ///생성페이지의 페이지뷰 이벤트에 사용된다.
   void setpageviewnum(int i) {
     pageviewnum = i;
+
+    update();
+    notifyChildrens();
+  }
+
+  ///homeviewname
+  ///
+  ///홈뷰 변경에 사용한다.
+  void boxpreviewnumset(what) {
+    if (what == 'minus') {
+      if (boxpreviewnum == 0) {
+      } else {
+        boxpreviewnum -= 1;
+      }
+    } else if (what == 'plus') {
+      if (pageboxtotalnum == boxpreviewnum + 1) {
+      } else {
+        boxpreviewnum += 1;
+      }
+    } else {
+      boxpreviewnum = what;
+    }
+
+    update();
+    notifyChildrens();
+  }
+
+  ///setpagetotalviewnum
+  ///
+  ///생성페이지의 페이지뷰 이벤트에 사용된다.
+  void setpagetotalviewnum(int i) {
+    if (i == 0) {
+    } else {
+      pageboxtotalnum = i;
+    }
+
+    update();
+    notifyChildrens();
+  }
+
+  ///setpageboxtypelist
+  ///
+  ///생성페이지의 박스 리스트 생성에 사용된다.
+  void setpageboxtypelist(what) {
+    boxtypelist.add(what);
+
+    update();
+    notifyChildrens();
+  }
+
+  ///setpageboxtype
+  ///
+  ///생성페이지의 박스명 표기에 사용된다.
+  void setpageboxtype(what) {
+    pageboxtype = what;
 
     update();
     notifyChildrens();

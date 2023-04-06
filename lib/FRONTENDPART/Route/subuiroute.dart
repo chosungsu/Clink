@@ -45,6 +45,21 @@ void checkForInitialMessage() async {
   }
 }
 
+///AddPageinit
+///
+///AddPage의 initstate를 관리합니다.
+void AddPageinit() {
+  final uiset = Get.put(uisetting());
+  final linkspaceset = Get.put(linkspacesetting());
+  uiset.searchpagemove = '';
+  uiset.showboxlist = false;
+  uiset.isfilledtextfield = true;
+  linkspaceset.shareoption = 'no';
+  linkspaceset.pageboxtype = '';
+  linkspaceset.previewpageimgurl = '';
+  linkspaceset.pageboxtotalnum = linkspaceset.boxpreviewnum + 1;
+}
+
 ///onWillPop
 ///
 ///모든 페이지의 백버튼 이벤트를 관리합니다.

@@ -16,6 +16,9 @@ class Languages extends Translations {
           'preview': '미리보기',
           'boxadd': '박스추가',
           'upload': '업로드',
+          'pagetype': '타입',
+          'pagetypeerror':
+              '서버에서 타입리스트를 불러오는데 실패하였습니다! 재부팅 시에도 동일한 오류가 발생시 문의바랍니다!',
           'pagetitle': '제목',
           'pagetitlehint': '이곳에 입력해주세요',
           'pagetitlenothing': '제목란이 비어있어요!',
@@ -74,6 +77,9 @@ class Languages extends Translations {
           'preview': 'Preview',
           'boxadd': 'Box Add',
           'upload': 'upload',
+          'pagetype': 'type',
+          'pagetypeerror':
+              'Fail to load data in server! Please Reboot app and contact us when you still have same situations',
           'pagetitle': 'Title',
           'pagetitlehint': 'Enter here',
           'pagetitlenothing': 'Nothing in Title space!',

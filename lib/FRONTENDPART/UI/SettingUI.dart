@@ -17,7 +17,6 @@ import '../../../Tool/TextSize.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
 import '../../BACKENDPART/Getx/UserInfo.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
-import '../../Tool/FlushbarStyle.dart';
 import '../../sheets/BottomSheet/AddContentWithBtn.dart';
 
 final uiset = Get.put(uisetting());
