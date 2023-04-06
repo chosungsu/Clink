@@ -57,6 +57,7 @@ void AddPageinit() {
   linkspaceset.shareoption = 'no';
   linkspaceset.pageboxtype = '';
   linkspaceset.previewpageimgurl = '';
+  linkspaceset.boxpreviewnum = 0;
   linkspaceset.pageboxtotalnum = linkspaceset.boxpreviewnum + 1;
 }
 
