@@ -22,7 +22,7 @@ class Snack {
         style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            fontSize: contentTextsize(),
+            fontSize: contentsmallTextsize(),
             overflow: TextOverflow.ellipsis),
       ),
       duration: const Duration(milliseconds: 1000),

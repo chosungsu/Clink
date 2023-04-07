@@ -3,24 +3,15 @@
 class BoxSelection {
   final String title;
   final String isavailable;
+  final String content;
 
-  BoxSelection({
-    required this.title,
-    required this.isavailable,
-  });
+  BoxSelection(
+      {required this.title, required this.isavailable, required this.content});
 }
 
 List<Map> boxtypedatamap = [
-  {
-    "title": "Url",
-    "isavailable": "open",
-  },
-  {
-    "title": "Calendar",
-    "isavailable": "open",
-  },
-  {
-    "title": "Simple memo",
-    "isavailable": "open",
-  },
+  {"title": "Url", "isavailable": "open", "content": ""},
+  {"title": "Calendar", "isavailable": "open", "content": ""},
+  {"title": "Simple memo", "isavailable": "close", "content": ""},
+  {"title": "Map", "isavailable": "update", "content": ""},
 ];

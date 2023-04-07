@@ -20,6 +20,7 @@ import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../Tool/AndroidIOS.dart';
 import '../../Tool/FlushbarStyle.dart';
 import '../../sheets/BottomSheet/AddContent.dart';
+import '../Route/subuiroute.dart';
 
 final uiset = Get.put(uisetting());
 final linkspaceset = Get.put(linkspacesetting());
@@ -413,42 +414,43 @@ PreviewSpace(pagecontroller, maxHeight, maxWidth) {
                                             children: List.generate(
                                                 linkspaceset.boxtypelist.length,
                                                 (index) {
-                                              return ListTile(
-                                                onTap: () {
-                                                  linkspaceset.setpageboxtype(
-                                                      linkspaceset
+                                              return linkspaceset
                                                           .boxtypelist[index]
-                                                          .title);
-                                                  uiset.changeshowboxtype(
-                                                      !uiset.showboxlist);
-                                                },
-                                                trailing: Icon(
-                                                  linkspaceset
-                                                              .boxtypelist[
-                                                                  index]
-                                                              .isavailable ==
-                                                          'open'
-                                                      ? Ionicons
-                                                          .lock_open_outline
-                                                      : Ionicons
-                                                          .lock_closed_outline,
-                                                  color: Colors.white,
-                                                ),
-                                                title: Text(
-                                                  linkspaceset
-                                                      .boxtypelist[index].title,
-                                                  softWrap: true,
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize:
-                                                          contentTextsize()),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              );
+                                                          .isavailable ==
+                                                      'open'
+                                                  ? ListTile(
+                                                      onTap: () {
+                                                        linkspaceset
+                                                            .setpageboxtype(
+                                                                linkspaceset
+                                                                    .boxtypelist[
+                                                                        index]
+                                                                    .title);
+                                                        uiset.changeshowboxtype(
+                                                            !uiset.showboxlist);
+                                                      },
+                                                      trailing: const Icon(
+                                                        Ionicons.enter_outline,
+                                                        color: Colors.white,
+                                                      ),
+                                                      title: Text(
+                                                        linkspaceset
+                                                            .boxtypelist[index]
+                                                            .title,
+                                                        softWrap: true,
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize:
+                                                                contentTextsize()),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    )
+                                                  : const SizedBox();
                                             }),
                                           )),
                                 color: MyTheme.colorpastelblue,

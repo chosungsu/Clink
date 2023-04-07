@@ -7,6 +7,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../BACKENDPART/Api/BoxApi.dart';
 import '../../BACKENDPART/Api/LicenseApi.dart';
 import '../../BACKENDPART/Api/NoticeApi.dart';
 import '../../BACKENDPART/Enums/Variables.dart';
@@ -16,6 +17,8 @@ import '../../BACKENDPART/Getx/navibool.dart';
 import '../../BACKENDPART/Getx/UserInfo.dart';
 import '../../BACKENDPART/Getx/notishow.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
+import '../../Tool/FlushbarStyle.dart';
+import '../../Tool/MyTheme.dart';
 
 final uiset = Get.put(uisetting());
 final linkspaceset = Get.put(linkspacesetting());
@@ -160,27 +163,162 @@ TestScreen(maxWidth, maxHeight) {
 
 testview(maxWidth, maxHeight) {
   return SizedBox(
-    height: maxHeight,
-    child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Icon(
-            AntDesign.frowno,
-            color: Colors.orange,
-            size: 30,
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          Text(
-            '새로운 잇플\'s Box들을 열심히 개발중이에요~~!',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: contentTextsize(), color: draw.color_textstatus),
-          ),
-        ]),
-  );
+      height: maxHeight,
+      child: FutureBuilder(
+        future: BoxApiProvider().getTasks(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SpinKitThreeBounce(
+                    size: 30,
+                    itemBuilder: (BuildContext context, int index) {
+                      return DecoratedBox(
+                        decoration: BoxDecoration(
+                            color: MyTheme.colorpastelblue,
+                            shape: BoxShape.circle),
+                      );
+                    },
+                  ),
+                ]);
+          } else if (snapshot.hasError) {
+            return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Icon(
+                    AntDesign.frowno,
+                    color: Colors.orange,
+                    size: 30,
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    'pagetypeerror'.tr,
+                    softWrap: true,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: draw.color_textstatus,
+                        fontWeight: FontWeight.bold,
+                        fontSize: contentsmallTextsize()),
+                  )
+                ]);
+          } else {
+            return Column(
+              children: [
+                GetBuilder<uisetting>(builder: (_) {
+                  return SingleChildScrollView(
+                      child: Column(
+                    children:
+                        List.generate(linkspaceset.boxtypelist.length, (index) {
+                      return ListTile(
+                        onTap: () {
+                          if (linkspaceset.boxtypelist[index].isavailable ==
+                              'open') {
+                          } else if (linkspaceset
+                                  .boxtypelist[index].isavailable ==
+                              'close') {
+                            if (uiset.showboxlist) {
+                            } else {
+                              linkspaceset.setindex(index);
+                              Snack.snackbars(
+                                  context: context,
+                                  title: '언락된 타입입니다.',
+                                  backgroundcolor: Colors.black,
+                                  bordercolor: draw.backgroundcolor);
+                            }
+                            uiset.changeshowboxtype(!uiset.showboxlist);
+                          } else {
+                            Snack.snackbars(
+                                context: context,
+                                title: '새 버전으로 업데이트가 필요합니다!',
+                                backgroundcolor: Colors.red,
+                                bordercolor: draw.backgroundcolor);
+                          }
+                        },
+                        trailing: Icon(
+                          linkspaceset.boxtypelist[index].isavailable == 'open'
+                              ? Ionicons.enter_outline
+                              : (linkspaceset.boxtypelist[index].isavailable ==
+                                      'close'
+                                  ? (uiset.showboxlist == true
+                                      ? Entypo.chevron_small_up
+                                      : Ionicons.lock_closed_outline)
+                                  : MaterialIcons.fiber_new),
+                          color: draw.color_textstatus,
+                        ),
+                        subtitle: index == linkspaceset.selectindex
+                            ? (uiset.showboxlist == true
+                                ? Text(
+                                    linkspaceset
+                                        .boxtypelist[linkspaceset.selectindex]
+                                        .content,
+                                    softWrap: true,
+                                    maxLines: 5,
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: MyTheme.colorgrey,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: contentsmallTextsize()),
+                                    overflow: TextOverflow.ellipsis,
+                                  )
+                                : SizedBox(
+                                    width: maxWidth * 0.6,
+                                    child: Row(
+                                      children: [
+                                        Flexible(
+                                            fit: FlexFit.tight,
+                                            child: Text(
+                                              linkspaceset
+                                                  .boxtypelist[
+                                                      linkspaceset.selectindex]
+                                                  .content,
+                                              softWrap: true,
+                                              maxLines: 1,
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: MyTheme.colorgrey,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize:
+                                                      contentsmallTextsize()),
+                                              overflow: TextOverflow.ellipsis,
+                                            )),
+                                        Text(
+                                          'more',
+                                          softWrap: true,
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              color: MyTheme.colororigblue,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: contentsmallTextsize()),
+                                          overflow: TextOverflow.ellipsis,
+                                        )
+                                      ],
+                                    ),
+                                  ))
+                            : null,
+                        title: Text(
+                          linkspaceset.boxtypelist[index].title,
+                          softWrap: true,
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              color: draw.color_textstatus,
+                              fontWeight: FontWeight.bold,
+                              fontSize: contentTextsize()),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      );
+                    }),
+                  ));
+                }),
+              ],
+            );
+          }
+        },
+      ));
 }
 
 ///LicenseHome

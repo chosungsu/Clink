@@ -53,13 +53,15 @@ class BoxApiProvider extends GetxController {
         for (int i = 0; i < data.length; i++) {
           final title = data[i]['title'];
           final isavailable = data[i]['isavailable'];
+          final content = data[i]['content'];
           linkspaceset.setpageboxtypelist(BoxSelection(
-            title: title,
-            isavailable: isavailable,
-          ));
+              title: title, isavailable: isavailable, content: content));
         }
-        return linkspaceset.boxtypelist;
+        //return linkspaceset.boxtypelist;
       } else {}
+      linkspaceset.boxtypelist.sort(((a, b) {
+        return a.title.compareTo(b.title);
+      }));
     } catch (e) {
       print(e);
     }

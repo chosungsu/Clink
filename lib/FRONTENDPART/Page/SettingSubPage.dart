@@ -30,6 +30,7 @@ class _SettingSubPageState extends State<SettingSubPage>
   @override
   void initState() {
     super.initState();
+    uiset.showboxlist = false;
   }
 
   @override

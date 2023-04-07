@@ -444,7 +444,7 @@ View(maxHeight, maxWidth, pageoption) {
                       child: SizedBox(
                         height: maxHeight >= 700 ? 250 : 200,
                         child: ContainerDesign(
-                          child: maxWidth < 700
+                          child: maxWidth < 700 && pageoption == 'ls'
                               ? Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
@@ -564,25 +564,21 @@ View(maxHeight, maxWidth, pageoption) {
                                   crossAxisAlignment:
                                       CrossAxisAlignment.stretch,
                                   children: [
-                                    Flexible(
-                                        flex: 1,
-                                        fit: FlexFit.tight,
-                                        child: Container(
-                                          alignment: Alignment.centerLeft,
-                                          child: Image.file(
-                                            File(linkspaceset
-                                                        .alllist[index].image
-                                                        .contains('media') ==
-                                                    true
-                                                ? linkspaceset
-                                                    .alllist[index].image
-                                                    .toString()
-                                                    .substring(6)
-                                                : linkspaceset
-                                                    .alllist[index].image),
-                                            fit: BoxFit.fill,
-                                          ),
-                                        )),
+                                    Container(
+                                      alignment: Alignment.centerLeft,
+                                      width: maxWidth * 0.3,
+                                      child: Image.file(
+                                        File(linkspaceset.alllist[index].image
+                                                    .contains('media') ==
+                                                true
+                                            ? linkspaceset.alllist[index].image
+                                                .toString()
+                                                .substring(6)
+                                            : linkspaceset
+                                                .alllist[index].image),
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
                                     const SizedBox(
                                       width: 10,
                                     ),

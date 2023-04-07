@@ -95,6 +95,9 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
                   for (int i = 0; i < searchNodeall.length; i++) {
                     searchNodeall[i].unfocus();
                   }
+                  if (uiset.showboxlist) {
+                    uiset.changeshowboxtype(false);
+                  }
 
                   navi.drawopen == true && navi.navishow == false
                       ? setState(() {
