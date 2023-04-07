@@ -379,80 +379,90 @@ PreviewSpace(pagecontroller, maxHeight, maxWidth) {
                             return SizedBox(
                               height: 200,
                               child: InfoContainerDesign(
-                                child: SingleChildScrollView(
-                                    child: snapshot.hasError
-                                        ? Column(
-                                            children: [
-                                              SpinKitThreeBounce(
-                                                size: 30,
-                                                itemBuilder:
-                                                    (BuildContext context,
-                                                        int index) {
-                                                  return const DecoratedBox(
-                                                    decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        shape: BoxShape.circle),
-                                                  );
-                                                },
-                                              ),
-                                              const SizedBox(
-                                                height: 10,
-                                              ),
-                                              Text(
-                                                'pagetypeerror'.tr,
-                                                softWrap: true,
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize:
-                                                        contentsmallTextsize()),
-                                              )
-                                            ],
-                                          )
-                                        : Column(
-                                            children: List.generate(
-                                                linkspaceset.boxtypelist.length,
-                                                (index) {
-                                              return linkspaceset
-                                                          .boxtypelist[index]
-                                                          .isavailable ==
-                                                      'open'
-                                                  ? ListTile(
-                                                      onTap: () {
-                                                        linkspaceset
-                                                            .setpageboxtype(
-                                                                linkspaceset
-                                                                    .boxtypelist[
-                                                                        index]
-                                                                    .title);
-                                                        uiset.changeshowboxtype(
-                                                            !uiset.showboxlist);
-                                                      },
-                                                      trailing: const Icon(
-                                                        Ionicons.enter_outline,
-                                                        color: Colors.white,
-                                                      ),
-                                                      title: Text(
-                                                        linkspaceset
+                                child: Scrollbar(
+                                  thickness: 3,
+                                  child: SingleChildScrollView(
+                                      child: snapshot.hasError
+                                          ? Column(
+                                              children: [
+                                                SpinKitThreeBounce(
+                                                  size: 30,
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    return const DecoratedBox(
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.white,
+                                                          shape:
+                                                              BoxShape.circle),
+                                                    );
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(
+                                                  'pagetypeerror'.tr,
+                                                  softWrap: true,
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          contentsmallTextsize()),
+                                                )
+                                              ],
+                                            )
+                                          : Column(
+                                              children: List.generate(
+                                                  linkspaceset.boxtypelist
+                                                      .length, (index) {
+                                                return linkspaceset
                                                             .boxtypelist[index]
-                                                            .title,
-                                                        softWrap: true,
-                                                        textAlign:
-                                                            TextAlign.start,
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize:
-                                                                contentTextsize()),
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      ),
-                                                    )
-                                                  : const SizedBox();
-                                            }),
-                                          )),
+                                                            .isavailable ==
+                                                        'open'
+                                                    ? ListTile(
+                                                        onTap: () {
+                                                          linkspaceset
+                                                              .setpageboxtype(
+                                                                  linkspaceset
+                                                                      .boxtypelist[
+                                                                          index]
+                                                                      .title);
+                                                          uiset.changeshowboxtype(
+                                                              !uiset
+                                                                  .showboxlist);
+                                                        },
+                                                        trailing: const Icon(
+                                                          Ionicons
+                                                              .enter_outline,
+                                                          color: Colors.white,
+                                                        ),
+                                                        title: Text(
+                                                          linkspaceset
+                                                              .boxtypelist[
+                                                                  index]
+                                                              .title,
+                                                          softWrap: true,
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize:
+                                                                  contentTextsize()),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                      )
+                                                    : const SizedBox();
+                                              }),
+                                            )),
+                                ),
                                 color: MyTheme.colorpastelblue,
                                 borderwhere: 'all',
                                 borderok: 'no',

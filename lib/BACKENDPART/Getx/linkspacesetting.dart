@@ -17,7 +17,7 @@ class linkspacesetting extends GetxController {
   String previewpageimgurl = '';
   List<BoxSelection> boxtypelist = [];
   String pageboxtype = '';
-  int selectindex = 0;
+  List<int> getindex = [];
   int boxpreviewnum = 0;
   int pageboxtotalnum = 0;
   String searchurl = '';
@@ -82,8 +82,8 @@ class linkspacesetting extends GetxController {
   ///setindex
   ///
   ///넥스트 박스의 content를 보기위한 인덱싱에 사용된다.
-  void setindex(int i) {
-    selectindex = i;
+  setboxindex(i) {
+    getindex.add(i);
 
     update();
     notifyChildrens();

@@ -103,7 +103,7 @@ class AppBarCustom extends StatelessWidget {
                                               });
                                             },
                                             child: Icon(
-                                              Ionicons.menu,
+                                              Feather.align_left,
                                               size: 30,
                                               color: draw.color_textstatus,
                                             ),
@@ -242,7 +242,7 @@ class AppBarCustom extends StatelessWidget {
                                               });
                                             },
                                             child: Icon(
-                                              Ionicons.menu,
+                                              Feather.align_right,
                                               size: 30,
                                               color: draw.color_textstatus,
                                             ),

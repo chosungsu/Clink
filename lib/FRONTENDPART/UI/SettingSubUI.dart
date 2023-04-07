@@ -221,15 +221,6 @@ testview(maxWidth, maxHeight) {
                           } else if (linkspaceset
                                   .boxtypelist[index].isavailable ==
                               'close') {
-                            if (uiset.showboxlist) {
-                            } else {
-                              linkspaceset.setindex(index);
-                              Snack.snackbars(
-                                  context: context,
-                                  title: '언락된 타입입니다.',
-                                  backgroundcolor: Colors.black,
-                                  bordercolor: draw.backgroundcolor);
-                            }
                             uiset.changeshowboxtype(!uiset.showboxlist);
                           } else {
                             Snack.snackbars(
@@ -241,7 +232,7 @@ testview(maxWidth, maxHeight) {
                         },
                         trailing: Icon(
                           linkspaceset.boxtypelist[index].isavailable == 'open'
-                              ? Ionicons.enter_outline
+                              ? Feather.toggle_right
                               : (linkspaceset.boxtypelist[index].isavailable ==
                                       'close'
                                   ? (uiset.showboxlist == true
@@ -250,12 +241,10 @@ testview(maxWidth, maxHeight) {
                                   : MaterialIcons.fiber_new),
                           color: draw.color_textstatus,
                         ),
-                        subtitle: index == linkspaceset.selectindex
+                        subtitle: linkspaceset.getindex.contains(index) == true
                             ? (uiset.showboxlist == true
                                 ? Text(
-                                    linkspaceset
-                                        .boxtypelist[linkspaceset.selectindex]
-                                        .content,
+                                    linkspaceset.boxtypelist[index].content,
                                     softWrap: true,
                                     maxLines: 5,
                                     textAlign: TextAlign.start,
@@ -273,9 +262,7 @@ testview(maxWidth, maxHeight) {
                                             fit: FlexFit.tight,
                                             child: Text(
                                               linkspaceset
-                                                  .boxtypelist[
-                                                      linkspaceset.selectindex]
-                                                  .content,
+                                                  .boxtypelist[index].content,
                                               softWrap: true,
                                               maxLines: 1,
                                               textAlign: TextAlign.start,
