@@ -20,7 +20,6 @@ import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../Tool/AndroidIOS.dart';
 import '../../Tool/FlushbarStyle.dart';
 import '../../sheets/BottomSheet/AddContent.dart';
-import '../Route/subuiroute.dart';
 
 final uiset = Get.put(uisetting());
 final linkspaceset = Get.put(linkspacesetting());
@@ -343,14 +342,14 @@ PreviewSpace(pagecontroller, maxHeight, maxWidth) {
                 ),
                 GestureDetector(
                     onTap: () {
-                      uiset.changeshowboxtype(!uiset.showboxlist);
+                      uiset.changeshowboxtype(init: false, change: true);
                     },
                     child: SizedBox(
                       height: 50,
                       child: InfoContainerDesign(
                         child: Center(
                             child: Icon(
-                          uiset.showboxlist == false
+                          uiset.showboxlist[0] == false
                               ? Entypo.chevron_small_down
                               : Entypo.chevron_small_up,
                           size: 30,
@@ -365,7 +364,7 @@ PreviewSpace(pagecontroller, maxHeight, maxWidth) {
             );
           }),
           GetBuilder<uisetting>(builder: (_) {
-            return uiset.showboxlist == false
+            return uiset.showboxlist[0] == false
                 ? const SizedBox()
                 : FutureBuilder(
                     future: BoxApiProvider().getTasks(),
@@ -430,9 +429,10 @@ PreviewSpace(pagecontroller, maxHeight, maxWidth) {
                                                                       .boxtypelist[
                                                                           index]
                                                                       .title);
-                                                          uiset.changeshowboxtype(
-                                                              !uiset
-                                                                  .showboxlist);
+                                                          uiset
+                                                              .changeshowboxtype(
+                                                                  init: false,
+                                                                  change: true);
                                                         },
                                                         trailing: const Icon(
                                                           Ionicons

@@ -52,8 +52,10 @@ void AddPageinit() {
   final uiset = Get.put(uisetting());
   final linkspaceset = Get.put(linkspacesetting());
   uiset.searchpagemove = '';
-  uiset.showboxlist = false;
   uiset.isfilledtextfield = true;
+  uiset.showboxlist = List.generate(1, (index) {
+    return false;
+  }, growable: true);
   linkspaceset.shareoption = 'no';
   linkspaceset.pageboxtype = '';
   linkspaceset.previewpageimgurl = '';

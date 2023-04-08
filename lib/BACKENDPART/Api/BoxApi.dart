@@ -8,6 +8,7 @@ import '../Enums/BoxSelection.dart';
 import '../Getx/UserInfo.dart';
 import '../Getx/linkspacesetting.dart';
 import '../Getx/uisetting.dart';
+import '../Locale/Translate.dart';
 
 class BoxApiProvider extends GetxController {
   final peopleadd = Get.put(UserInfo());
@@ -55,12 +56,19 @@ class BoxApiProvider extends GetxController {
           final isavailable = data[i]['isavailable'];
           final content = data[i]['content'];
 
-          linkspaceset.setpageboxtypelist(BoxSelection(
-              title: title, isavailable: isavailable, content: content));
+          fetchTranslating(content).then((value) {
+            trans.clear();
+            transmap = {'ko': value.ko, 'en': value.en};
+            tr1 = transmap[peopleadd.locale!.languageCode];
+            trans.add(tr1);
+          }).whenComplete(() {
+            linkspaceset.setpageboxtypelist(BoxSelection(
+                title: title, isavailable: isavailable, content: trans[0]));
+            linkspaceset.boxtypelist.sort(((a, b) {
+              return a.title.compareTo(b.title);
+            }));
+          });
         }
-        linkspaceset.boxtypelist.sort(((a, b) {
-          return a.title.compareTo(b.title);
-        }));
       } else {}
     } catch (e) {
       print(e);

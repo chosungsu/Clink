@@ -1,6 +1,7 @@
 // ignore_for_file: camel_case_types, non_constant_identifier_names
 
 import 'package:clickbyme/BACKENDPART/Enums/Profile_item.dart';
+import 'package:clickbyme/BACKENDPART/Getx/linkspacesetting.dart';
 import 'package:clickbyme/BACKENDPART/Getx/navibool.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import 'UserInfo.dart';
 class uisetting extends GetxController {
   final peopleadd = Get.put(UserInfo());
   final navi = Get.put(navibool());
+  final linkspaceset = Get.put(linkspacesetting());
   bool loading = false;
   bool sheetloading = false;
   bool canchange = true;
@@ -28,7 +30,7 @@ class uisetting extends GetxController {
   List<String> licenses_title = List.empty(growable: true);
   List<String> licenses_content = List.empty(growable: true);
   int pagenumber = 0;
-  bool showboxlist = false;
+  List<bool> showboxlist = [];
 
   bool showtopbutton = false;
   List updateid = [];
@@ -126,8 +128,25 @@ class uisetting extends GetxController {
   ///changeshowboxtype
   ///
   ///변경 가능 시 아래에 띄워준다.
-  void changeshowboxtype(what) {
-    showboxlist = what;
+  void changeshowboxtype({init = false, change = false, what = false}) {
+    if (init) {
+      if (change) {
+        showboxlist[linkspaceset.clickindex] = what;
+      } else {
+        showboxlist = List.generate(linkspaceset.boxtypelist.length, (index) {
+          return false;
+        }, growable: true);
+      }
+    } else {
+      if (change) {
+        showboxlist[0] = !showboxlist[0];
+      } else {
+        showboxlist = List.generate(1, (index) {
+          return false;
+        }, growable: true);
+      }
+    }
+
     update();
     notifyChildrens();
   }

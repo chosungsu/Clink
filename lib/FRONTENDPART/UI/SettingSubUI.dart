@@ -17,6 +17,7 @@ import '../../BACKENDPART/Getx/navibool.dart';
 import '../../BACKENDPART/Getx/UserInfo.dart';
 import '../../BACKENDPART/Getx/notishow.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
+import '../../BACKENDPART/Locale/Translate.dart';
 import '../../Tool/FlushbarStyle.dart';
 import '../../Tool/MyTheme.dart';
 
@@ -33,7 +34,7 @@ UI(maxWidth, maxHeight) {
     return Padding(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
         child: uiset.profileindex == 0
-            ? AppnotiScreen(maxWidth, maxHeight)
+            ? AppnotiScreen(maxWidth, maxHeight - 20)
             : (uiset.profileindex == 1
                 ? TestScreen(maxWidth, maxHeight - 20)
                 : LicenseScreen(maxWidth, maxHeight)));
@@ -77,8 +78,7 @@ notiview(maxWidth, maxHeight) {
 }
 
 NotInPageScreen(width, height) {
-  return Container(
-    padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+  return SizedBox(
     height: height,
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -103,55 +103,60 @@ NotInPageScreen(width, height) {
 }
 
 view(width, height) {
-  return Container(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-      child: ListView.builder(
-        scrollDirection: Axis.vertical,
-        itemCount: notilist.listappnoti.length,
-        physics: const BouncingScrollPhysics(),
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          return Column(
-            children: [
-              ContainerDesign(
-                  child: SizedBox(
-                    height: 100,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          notilist.listappnoti[index].title,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTextsize(),
-                              color: draw.color_textstatus),
-                        ),
-                        Divider(
-                          height: 3,
-                          color: draw.color_textstatus,
-                          thickness: 1,
-                          indent: 0,
-                          endIndent: 30,
-                        ),
-                        Text(
-                          notilist.listappnoti[index].content,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentsmallTextsize(),
-                              color: draw.color_textstatus),
-                        ),
-                      ],
+  return ListView.builder(
+    scrollDirection: Axis.vertical,
+    itemCount: notilist.listappnoti.length,
+    physics: const ScrollPhysics(),
+    shrinkWrap: true,
+    itemBuilder: (context, index) {
+      //transmap2 = {'ko': _trans2.ko, 'en': _trans2.en};
+      return Column(
+        children: [
+          ContainerDesign(
+              child: SizedBox(
+                height: 100,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      notilist.listappnoti[index].title ?? '',
+                      maxLines: 1,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: contentTextsize(),
+                          color: draw.color_textstatus),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  color: draw.backgroundcolor),
-              const SizedBox(
-                height: 10,
+                    Divider(
+                      height: 3,
+                      color: MyTheme.colorgrey,
+                      thickness: 1,
+                      indent: 0,
+                      endIndent: 0,
+                    ),
+                    Flexible(
+                        fit: FlexFit.tight,
+                        child: SingleChildScrollView(
+                          child: Text(
+                            notilist.listappnoti[index].content ?? '',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: contentsmallTextsize(),
+                                color: draw.color_textstatus),
+                          ),
+                        ))
+                  ],
+                ),
               ),
-            ],
-          );
-        },
-      ));
+              color: draw.backgroundcolor),
+          const SizedBox(
+            height: 10,
+          ),
+        ],
+      );
+    },
+  );
 }
 
 ///TestScreen
@@ -207,110 +212,115 @@ testview(maxWidth, maxHeight) {
                   )
                 ]);
           } else {
-            return Column(
-              children: [
-                GetBuilder<uisetting>(builder: (_) {
-                  return SingleChildScrollView(
-                      child: Column(
-                    children:
-                        List.generate(linkspaceset.boxtypelist.length, (index) {
-                      if (linkspaceset.boxtypelist[index].content != '') {
-                        linkspaceset.setboxindex(index);
-                      }
-                      return ListTile(
-                        onTap: () {
-                          if (linkspaceset.boxtypelist[index].isavailable ==
-                              'open') {
-                          } else if (linkspaceset
-                                  .boxtypelist[index].isavailable ==
-                              'close') {
-                            uiset.changeshowboxtype(!uiset.showboxlist);
-                          } else {
-                            uiset.changeshowboxtype(!uiset.showboxlist);
-                            if (uiset.showboxlist) {
-                              Snack.snackbars(
-                                  context: context,
-                                  title: '새 버전으로 업데이트가 필요합니다!',
-                                  backgroundcolor: Colors.red,
-                                  bordercolor: draw.backgroundcolor);
-                            } else {}
-                          }
-                          linkspaceset.setclickboxindex(index);
-                        },
-                        trailing: Icon(
-                          linkspaceset.boxtypelist[index].isavailable == 'open'
-                              ? Feather.toggle_right
-                              : (linkspaceset.boxtypelist[index].isavailable ==
-                                      'close'
-                                  ? (uiset.showboxlist == true
-                                      ? Entypo.chevron_small_up
-                                      : Ionicons.lock_closed_outline)
-                                  : MaterialIcons.fiber_new),
-                          color: draw.color_textstatus,
-                        ),
-                        subtitle: linkspaceset.getindex.contains(index) == true
-                            ? (uiset.showboxlist == true &&
-                                    linkspaceset.clickindex == index
-                                ? Text(
-                                    linkspaceset.boxtypelist[index].content,
-                                    softWrap: true,
-                                    maxLines: 5,
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                        color: MyTheme.colorgrey,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: contentsmallTextsize()),
-                                    overflow: TextOverflow.ellipsis,
-                                  )
-                                : SizedBox(
-                                    width: maxWidth * 0.6,
-                                    child: Row(
-                                      children: [
-                                        Flexible(
-                                            fit: FlexFit.tight,
-                                            child: Text(
-                                              linkspaceset
-                                                  .boxtypelist[index].content,
-                                              softWrap: true,
-                                              maxLines: 1,
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  color: MyTheme.colorgrey,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize:
-                                                      contentsmallTextsize()),
-                                              overflow: TextOverflow.ellipsis,
-                                            )),
-                                        Text(
-                                          'more',
-                                          softWrap: true,
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                              color: MyTheme.colororigblue,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: contentsmallTextsize()),
-                                          overflow: TextOverflow.ellipsis,
-                                        )
-                                      ],
-                                    ),
-                                  ))
-                            : null,
-                        title: Text(
-                          linkspaceset.boxtypelist[index].title,
-                          softWrap: true,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              color: draw.color_textstatus,
-                              fontWeight: FontWeight.bold,
-                              fontSize: contentTextsize()),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      );
-                    }),
-                  ));
-                }),
-              ],
-            );
+            return GetBuilder<uisetting>(builder: (_) {
+              return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: linkspaceset.boxtypelist.length,
+                  itemBuilder: ((context, index) {
+                    if (linkspaceset.boxtypelist[index].content != '') {
+                      linkspaceset.setboxindex(index);
+                    }
+                    return ListTile(
+                      onTap: () {
+                        linkspaceset.setclickboxindex(index);
+                        if (linkspaceset.boxtypelist[index].isavailable ==
+                            'open') {
+                        } else if (linkspaceset
+                                .boxtypelist[index].isavailable ==
+                            'close') {
+                          uiset.changeshowboxtype(
+                              init: true,
+                              change: true,
+                              what:
+                                  !uiset.showboxlist[linkspaceset.clickindex]);
+                        } else {
+                          uiset.changeshowboxtype(
+                              init: true,
+                              change: true,
+                              what:
+                                  !uiset.showboxlist[linkspaceset.clickindex]);
+                          if (uiset.showboxlist[index] == true) {
+                            Snack.snackbars(
+                                context: context,
+                                title: '미출시된 박스입니다!',
+                                backgroundcolor: Colors.red,
+                                bordercolor: draw.backgroundcolor);
+                          } else {}
+                        }
+                      },
+                      trailing: Icon(
+                        linkspaceset.boxtypelist[index].isavailable == 'open'
+                            ? Feather.toggle_right
+                            : (linkspaceset.boxtypelist[index].isavailable ==
+                                    'close'
+                                ? (uiset.showboxlist[index] == true
+                                    ? Entypo.chevron_small_up
+                                    : Ionicons.lock_closed_outline)
+                                : (uiset.showboxlist[index] == true
+                                    ? Entypo.chevron_small_up
+                                    : MaterialIcons.fiber_new)),
+                        color: draw.color_textstatus,
+                      ),
+                      subtitle: linkspaceset.getindex.contains(index) == true &&
+                              linkspaceset.boxtypelist[index].content != ""
+                          ? (uiset.showboxlist[index] == true
+                              ? Text(
+                                  linkspaceset.boxtypelist[index].content,
+                                  softWrap: true,
+                                  maxLines: 5,
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      color: MyTheme.colorgrey,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: contentsmallTextsize()),
+                                  overflow: TextOverflow.ellipsis,
+                                )
+                              : SizedBox(
+                                  width: maxWidth * 0.6,
+                                  child: Row(
+                                    children: [
+                                      Flexible(
+                                          fit: FlexFit.tight,
+                                          child: Text(
+                                            linkspaceset
+                                                .boxtypelist[index].content,
+                                            softWrap: true,
+                                            maxLines: 1,
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                color: MyTheme.colorgrey,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize:
+                                                    contentsmallTextsize()),
+                                            overflow: TextOverflow.ellipsis,
+                                          )),
+                                      Text(
+                                        'more',
+                                        softWrap: true,
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: MyTheme.colororigblue,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: contentsmallTextsize()),
+                                        overflow: TextOverflow.ellipsis,
+                                      )
+                                    ],
+                                  ),
+                                ))
+                          : null,
+                      title: Text(
+                        linkspaceset.boxtypelist[index].title,
+                        softWrap: true,
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            color: draw.color_textstatus,
+                            fontWeight: FontWeight.bold,
+                            fontSize: contentTextsize()),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    );
+                  }));
+            });
           }
         },
       ));

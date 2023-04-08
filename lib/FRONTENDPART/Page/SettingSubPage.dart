@@ -1,13 +1,15 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:clickbyme/FRONTENDPART/Widget/responsiveWidget.dart';
-import 'package:clickbyme/Tool/BGColor.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import '../../BACKENDPART/Enums/Variables.dart';
+import '../../BACKENDPART/Getx/linkspacesetting.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
+import '../../BACKENDPART/Locale/Translate.dart';
 import '../../Tool/NoBehavior.dart';
 import '../../Tool/AppBarCustom.dart';
 import '../../Tool/TextSize.dart';
@@ -25,12 +27,15 @@ class _SettingSubPageState extends State<SettingSubPage>
     with TickerProviderStateMixin {
   final searchNode = FocusNode();
   final navi = Get.put(navibool());
+  final linkspaceset = Get.put(linkspacesetting());
   final uiset = Get.put(uisetting());
 
   @override
   void initState() {
     super.initState();
-    uiset.showboxlist = false;
+    uiset.showboxlist = List.generate(linkspaceset.boxtypelist.length, (index) {
+      return false;
+    }, growable: true);
   }
 
   @override
@@ -116,8 +121,10 @@ class _SettingSubPageState extends State<SettingSubPage>
                                               child: Column(
                                             children: [
                                               responsivewidget(
-                                                  UI(constraint.maxWidth,
-                                                      constraint.maxHeight),
+                                                  UI(
+                                                    constraint.maxWidth,
+                                                    constraint.maxHeight,
+                                                  ),
                                                   Get.width),
                                             ],
                                           ));
