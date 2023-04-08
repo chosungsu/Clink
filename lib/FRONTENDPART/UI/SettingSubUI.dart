@@ -214,6 +214,9 @@ testview(maxWidth, maxHeight) {
                       child: Column(
                     children:
                         List.generate(linkspaceset.boxtypelist.length, (index) {
+                      if (linkspaceset.boxtypelist[index].content != '') {
+                        linkspaceset.setboxindex(index);
+                      }
                       return ListTile(
                         onTap: () {
                           if (linkspaceset.boxtypelist[index].isavailable ==
@@ -223,12 +226,16 @@ testview(maxWidth, maxHeight) {
                               'close') {
                             uiset.changeshowboxtype(!uiset.showboxlist);
                           } else {
-                            Snack.snackbars(
-                                context: context,
-                                title: '새 버전으로 업데이트가 필요합니다!',
-                                backgroundcolor: Colors.red,
-                                bordercolor: draw.backgroundcolor);
+                            uiset.changeshowboxtype(!uiset.showboxlist);
+                            if (uiset.showboxlist) {
+                              Snack.snackbars(
+                                  context: context,
+                                  title: '새 버전으로 업데이트가 필요합니다!',
+                                  backgroundcolor: Colors.red,
+                                  bordercolor: draw.backgroundcolor);
+                            } else {}
                           }
+                          linkspaceset.setclickboxindex(index);
                         },
                         trailing: Icon(
                           linkspaceset.boxtypelist[index].isavailable == 'open'
@@ -242,7 +249,8 @@ testview(maxWidth, maxHeight) {
                           color: draw.color_textstatus,
                         ),
                         subtitle: linkspaceset.getindex.contains(index) == true
-                            ? (uiset.showboxlist == true
+                            ? (uiset.showboxlist == true &&
+                                    linkspaceset.clickindex == index
                                 ? Text(
                                     linkspaceset.boxtypelist[index].content,
                                     softWrap: true,

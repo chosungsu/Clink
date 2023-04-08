@@ -54,9 +54,7 @@ class BoxApiProvider extends GetxController {
           final title = data[i]['title'];
           final isavailable = data[i]['isavailable'];
           final content = data[i]['content'];
-          if (content != '') {
-            linkspaceset.setboxindex(i);
-          }
+
           linkspaceset.setpageboxtypelist(BoxSelection(
               title: title, isavailable: isavailable, content: content));
         }
