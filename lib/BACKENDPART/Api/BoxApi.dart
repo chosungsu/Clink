@@ -14,31 +14,6 @@ class BoxApiProvider extends GetxController {
   final peopleadd = Get.put(UserInfo());
   final uiset = Get.put(uisetting());
   final linkspaceset = Get.put(linkspacesetting());
-  var res;
-
-  createTasks() async {
-    var url = '$baseurl/boxtype/create';
-    try {
-      await getTasks();
-      if (linkspaceset.boxtypelist.isEmpty) {
-        for (int i = 0; i < boxtypedatamap.length; i++) {
-          res = await http.post(
-            Uri.parse(url),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: jsonEncode(boxtypedatamap[i]),
-          );
-        }
-        await getTasks();
-      }
-    } catch (e) {
-      print(e);
-    }
-
-    update();
-    notifyChildrens();
-  }
 
   getTasks() async {
     var url;
@@ -54,7 +29,7 @@ class BoxApiProvider extends GetxController {
         for (int i = 0; i < data.length; i++) {
           final title = data[i]['title'];
           final isavailable = data[i]['isavailable'];
-          final content = data[i]['content'];
+          final content = data[i]['typing'];
 
           fetchTranslating(content).then((value) {
             trans.clear();

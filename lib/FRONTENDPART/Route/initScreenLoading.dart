@@ -34,7 +34,6 @@ Future initScreen() async {
    * licenselist를 생성함.
    */
   LicenseApiProvider().createTasks();
-  BoxApiProvider().createTasks();
   if (box.read('nick') == '' || box.read('nick') == null) {
     /**
      * createTasks : name, usercode, licenselist를 생성함.
