@@ -15,7 +15,7 @@ class BoxApiProvider extends GetxController {
   final uiset = Get.put(uisetting());
   final linkspaceset = Get.put(linkspacesetting());
 
-  getTasks() async {
+  getTasks(where) async {
     var url;
 
     try {
@@ -31,7 +31,7 @@ class BoxApiProvider extends GetxController {
           final isavailable = data[i]['isavailable'];
           final content = data[i]['typing'];
 
-          fetchTranslating(content).then((value) {
+          await fetchTranslating(content).then((value) {
             trans.clear();
             transmap = {'ko': value.ko, 'en': value.en};
             tr1 = transmap[peopleadd.locale!.languageCode];
@@ -42,6 +42,16 @@ class BoxApiProvider extends GetxController {
             linkspaceset.boxtypelist.sort(((a, b) {
               return a.title.compareTo(b.title);
             }));
+            if (where == 'add') {
+              uiset.showboxlist = List.generate(1, (index) {
+                return false;
+              }, growable: true);
+            } else {
+              uiset.showboxlist =
+                  List.generate(linkspaceset.boxtypelist.length, (index) {
+                return false;
+              }, growable: true);
+            }
           });
         }
       } else {}

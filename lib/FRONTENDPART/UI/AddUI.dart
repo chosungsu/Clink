@@ -367,7 +367,7 @@ PreviewSpace(pagecontroller, maxHeight, maxWidth) {
             return uiset.showboxlist[0] == false
                 ? const SizedBox()
                 : FutureBuilder(
-                    future: BoxApiProvider().getTasks(),
+                    future: BoxApiProvider().getTasks('add'),
                     builder: (context, snapshot) {
                       return Column(
                         children: [

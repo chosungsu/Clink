@@ -33,9 +33,6 @@ class _SettingSubPageState extends State<SettingSubPage>
   @override
   void initState() {
     super.initState();
-    uiset.showboxlist = List.generate(linkspaceset.boxtypelist.length, (index) {
-      return false;
-    }, growable: true);
   }
 
   @override
