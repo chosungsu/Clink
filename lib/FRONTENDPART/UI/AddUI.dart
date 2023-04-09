@@ -371,157 +371,111 @@ PreviewSpace(pagecontroller, maxHeight, maxWidth) {
                       where: 'add',
                     ),
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SpinKitThreeBounce(
-                                size: 30,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return DecoratedBox(
-                                    decoration: BoxDecoration(
-                                        color: MyTheme.colorpastelblue,
-                                        shape: BoxShape.circle),
-                                  );
-                                },
-                              ),
-                            ]);
-                      } else if (snapshot.hasError) {
-                        return Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                AntDesign.frowno,
-                                color: Colors.orange,
-                                size: 30,
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              Text(
-                                'pagetypeerror'.tr,
-                                softWrap: true,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: draw.color_textstatus,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: contentsmallTextsize()),
-                              )
-                            ]);
-                      } else {
-                        uiset.showboxlist = List.generate(1, (index) {
-                          return uiset.showboxlist[0];
-                        }, growable: true);
-                        return Column(
-                          children: [
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            GetBuilder<linkspacesetting>(builder: (_) {
-                              return SizedBox(
-                                height: 200,
-                                child: InfoContainerDesign(
-                                  child: Scrollbar(
-                                    thickness: 3,
-                                    child: SingleChildScrollView(
-                                        child: snapshot.hasError
-                                            ? Column(
-                                                children: [
-                                                  SpinKitThreeBounce(
-                                                    size: 30,
-                                                    itemBuilder:
-                                                        (BuildContext context,
-                                                            int index) {
-                                                      return const DecoratedBox(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                                color: Colors
-                                                                    .white,
-                                                                shape: BoxShape
-                                                                    .circle),
-                                                      );
-                                                    },
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  Text(
-                                                    'pagetypeerror'.tr,
-                                                    softWrap: true,
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize:
-                                                            contentsmallTextsize()),
-                                                  )
-                                                ],
-                                              )
-                                            : Column(
-                                                children: List.generate(
-                                                    linkspaceset.boxtypelist
-                                                        .length, (index) {
-                                                  return linkspaceset
+                      uiset.showboxlist = List.generate(1, (index) {
+                        return uiset.showboxlist[0];
+                      }, growable: true);
+                      return Column(
+                        children: [
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          GetBuilder<linkspacesetting>(builder: (_) {
+                            return SizedBox(
+                              height: 200,
+                              child: InfoContainerDesign(
+                                child: Scrollbar(
+                                  thickness: 3,
+                                  child: SingleChildScrollView(
+                                      child: snapshot.hasError
+                                          ? Column(
+                                              children: [
+                                                SpinKitThreeBounce(
+                                                  size: 30,
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    return const DecoratedBox(
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.white,
+                                                          shape:
+                                                              BoxShape.circle),
+                                                    );
+                                                  },
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(
+                                                  'pagetypeerror'.tr,
+                                                  softWrap: true,
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          contentsmallTextsize()),
+                                                )
+                                              ],
+                                            )
+                                          : Column(
+                                              children: List.generate(
+                                                  linkspaceset.boxtypelist
+                                                      .length, (index) {
+                                                return linkspaceset
+                                                            .boxtypelist[index]
+                                                            .isavailable ==
+                                                        'open'
+                                                    ? ListTile(
+                                                        onTap: () {
+                                                          linkspaceset
+                                                              .setpageboxtype(
+                                                                  linkspaceset
+                                                                      .boxtypelist[
+                                                                          index]
+                                                                      .title);
+                                                          uiset
+                                                              .changeshowboxtype(
+                                                                  init: false,
+                                                                  change: true);
+                                                        },
+                                                        trailing: const Icon(
+                                                          Ionicons
+                                                              .enter_outline,
+                                                          color: Colors.white,
+                                                        ),
+                                                        title: Text(
+                                                          linkspaceset
                                                               .boxtypelist[
                                                                   index]
-                                                              .isavailable ==
-                                                          'open'
-                                                      ? ListTile(
-                                                          onTap: () {
-                                                            linkspaceset
-                                                                .setpageboxtype(
-                                                                    linkspaceset
-                                                                        .boxtypelist[
-                                                                            index]
-                                                                        .title);
-                                                            uiset
-                                                                .changeshowboxtype(
-                                                                    init: false,
-                                                                    change:
-                                                                        true);
-                                                          },
-                                                          trailing: const Icon(
-                                                            Ionicons
-                                                                .enter_outline,
-                                                            color: Colors.white,
-                                                          ),
-                                                          title: Text(
-                                                            linkspaceset
-                                                                .boxtypelist[
-                                                                    index]
-                                                                .title,
-                                                            softWrap: true,
-                                                            textAlign:
-                                                                TextAlign.start,
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize:
-                                                                    contentTextsize()),
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                          ),
-                                                        )
-                                                      : const SizedBox();
-                                                }),
-                                              )),
-                                  ),
-                                  color: MyTheme.colorpastelblue,
-                                  borderwhere: 'all',
-                                  borderok: 'no',
+                                                              .title,
+                                                          softWrap: true,
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize:
+                                                                  contentTextsize()),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                      )
+                                                    : const SizedBox();
+                                              }),
+                                            )),
                                 ),
-                              );
-                            })
-                          ],
-                        );
-                      }
+                                color: MyTheme.colorpastelblue,
+                                borderwhere: 'all',
+                                borderok: 'no',
+                              ),
+                            );
+                          })
+                        ],
+                      );
                     },
                   );
           }),

@@ -52,6 +52,7 @@ void checkForInitialMessage() async {
 void AddPageinit() {
   final uiset = Get.put(uisetting());
   final linkspaceset = Get.put(linkspacesetting());
+  BoxApiProvider().getTasks(where: 'add', reset: true);
   uiset.searchpagemove = '';
   uiset.isfilledtextfield = true;
   linkspaceset.shareoption = 'no';
@@ -59,7 +60,6 @@ void AddPageinit() {
   linkspaceset.previewpageimgurl = '';
   linkspaceset.boxpreviewnum = 0;
   linkspaceset.pageboxtotalnum = linkspaceset.boxpreviewnum + 1;
-  BoxApiProvider().getTasks(where: 'add', reset: true);
 }
 
 ///onWillPop

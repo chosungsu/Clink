@@ -220,10 +220,14 @@ testview(maxWidth, maxHeight) {
                     if (linkspaceset.boxtypelist[index].content != '') {
                       linkspaceset.setboxindex(index);
                     }
-                    uiset.showboxlist =
-                        List.generate(linkspaceset.boxtypelist.length, (index) {
-                      return uiset.showboxlist[index];
-                    }, growable: true);
+                    if (uiset.showboxlist.isEmpty) {
+                    } else {
+                      uiset.showboxlist = List.generate(
+                          linkspaceset.boxtypelist.length, (index) {
+                        return uiset.showboxlist[index];
+                      }, growable: true);
+                    }
+
                     return ListTile(
                       onTap: () {
                         linkspaceset.setclickboxindex(index);
