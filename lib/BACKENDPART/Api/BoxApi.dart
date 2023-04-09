@@ -15,7 +15,7 @@ class BoxApiProvider extends GetxController {
   final uiset = Get.put(uisetting());
   final linkspaceset = Get.put(linkspacesetting());
 
-  getTasks(where) async {
+  getTasks() async {
     var url;
 
     try {
@@ -42,16 +42,6 @@ class BoxApiProvider extends GetxController {
             linkspaceset.boxtypelist.sort(((a, b) {
               return a.title.compareTo(b.title);
             }));
-            if (where == 'add') {
-              uiset.showboxlist = List.generate(1, (index) {
-                return false;
-              }, growable: true);
-            } else {
-              uiset.showboxlist =
-                  List.generate(linkspaceset.boxtypelist.length, (index) {
-                return false;
-              }, growable: true);
-            }
           });
         }
       } else {}
