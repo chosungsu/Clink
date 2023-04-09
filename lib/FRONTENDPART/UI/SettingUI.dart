@@ -203,16 +203,18 @@ Opt_body(index, searchnode, controller) {
                               uiset.profilescreen[index].subtitles[index2]
                                   .toString()
                                   .tr,
+                              maxLines: 3,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: contentTextsize(),
                                   color: navi.color_textstatus),
+                              overflow: TextOverflow.fade,
                             ),
                           ),
                           index == 0
                               ? SizedBox(
                                   height: 30,
-                                  width: 200,
+                                  width: 150,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
@@ -254,7 +256,7 @@ Opt_body(index, searchnode, controller) {
                                                                 borderRadius:
                                                                     BorderRadius
                                                                         .circular(
-                                                                            15.0),
+                                                                            0.0),
                                                                 border: Border.all(
                                                                     color: navi
                                                                         .color_textstatus,

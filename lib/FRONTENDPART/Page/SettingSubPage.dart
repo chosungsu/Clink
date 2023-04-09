@@ -5,6 +5,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import '../../BACKENDPART/Api/BoxApi.dart';
 import '../../BACKENDPART/Enums/Variables.dart';
 import '../../BACKENDPART/Getx/linkspacesetting.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
@@ -114,6 +115,8 @@ class _SettingSubPageState extends State<SettingSubPage>
                                       behavior: NoBehavior(),
                                       child: LayoutBuilder(
                                         builder: ((context, constraint) {
+                                          BoxApiProvider().getTasks(
+                                              where: 'settingsub', reset: true);
                                           return SingleChildScrollView(
                                               child: Column(
                                             children: [

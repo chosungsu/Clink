@@ -15,6 +15,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import '../../BACKENDPART/Api/BoxApi.dart';
 import '../../BACKENDPART/Enums/PushNotification.dart';
 import '../../Tool/AndroidIOS.dart';
 import '../../Tool/FlushbarStyle.dart';
@@ -58,6 +59,7 @@ void AddPageinit() {
   linkspaceset.previewpageimgurl = '';
   linkspaceset.boxpreviewnum = 0;
   linkspaceset.pageboxtotalnum = linkspaceset.boxpreviewnum + 1;
+  BoxApiProvider().getTasks(where: 'add', reset: true);
 }
 
 ///onWillPop

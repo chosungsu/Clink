@@ -18,7 +18,7 @@ class Languages extends Translations {
           'upload': '업로드',
           'pagetype': '타입',
           'pagetypeerror':
-              '서버에서 타입리스트를 불러오는데 실패하였습니다! 재부팅 시에도 동일한 오류가 발생시 문의바랍니다!',
+              '서버에서 데이터를 불러오는데 실패하였습니다! 재부팅 시에도 동일한 오류가 발생시 문의바랍니다!',
           'pagetitle': '제목',
           'pagetitlehint': '이곳에 입력해주세요',
           'pagetitlenothing': '제목란이 비어있어요!',
