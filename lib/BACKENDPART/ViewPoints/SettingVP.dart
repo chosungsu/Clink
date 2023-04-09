@@ -202,10 +202,10 @@ Widgets_tocompany(context, controller, searchnode) {
             });
           },
           child: ListTile(
-            leading: Image.asset(
-              'assets/images/instagram.png',
-              width: 30,
-              height: 30,
+            leading: Icon(
+              AntDesign.instagram,
+              size: 30,
+              color: Colors.blue.shade400,
             ),
             title: Text('광고문의',
                 style: TextStyle(

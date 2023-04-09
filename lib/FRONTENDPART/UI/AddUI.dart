@@ -293,165 +293,145 @@ Form2(context, searchnode, pagecontroller, controller, maxHeight, maxWidth) {
 }
 
 PreviewSpace(pagecontroller, maxHeight, maxWidth) {
-  return SizedBox(
-    height: maxHeight,
-    child: SingleChildScrollView(
-      child: Column(
-        children: [
-          GetBuilder<uisetting>(builder: (_) {
-            return Row(
+  return GetBuilder<uisetting>(builder: (_) {
+    return SizedBox(
+      height: maxHeight,
+      child: uiset.showboxlist.isEmpty
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Flexible(
-                    fit: FlexFit.tight,
-                    child: SizedBox(
-                      height: 50,
-                      child: InfoContainerDesign(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'pagetype'.tr,
-                                softWrap: true,
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: contentsmallTextsize()),
-                              ),
-                              GetBuilder<linkspacesetting>(builder: (_) {
-                                return Text(
-                                  linkspaceset.pageboxtype == ''
-                                      ? 'nothing'
-                                      : linkspaceset.pageboxtype,
-                                  softWrap: true,
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: contentsmallTextsize()),
-                                );
-                              }),
-                            ],
-                          ),
-                          color: MyTheme.colorpastelpurple,
-                          borderwhere: 'left',
-                          borderok: 'no'),
-                    )),
-                const SizedBox(
-                  width: 5,
-                ),
-                GestureDetector(
-                    onTap: () {
-                      uiset.changeshowboxtype(init: false, change: true);
+                  SpinKitThreeBounce(
+                    size: 30,
+                    itemBuilder: (BuildContext context, int index) {
+                      return DecoratedBox(
+                        decoration: BoxDecoration(
+                            color: MyTheme.colorpastelblue,
+                            shape: BoxShape.circle),
+                      );
                     },
-                    child: SizedBox(
-                      height: 50,
-                      child: InfoContainerDesign(
-                        child: Center(
-                            child: Icon(
-                          uiset.showboxlist[0] == false
-                              ? Entypo.chevron_small_down
-                              : Entypo.chevron_small_up,
-                          size: 30,
-                          color: Colors.white,
-                        )),
-                        color: MyTheme.colorpastelblue,
-                        borderwhere: 'right',
-                        borderok: 'no',
-                      ),
-                    )),
-              ],
-            );
-          }),
-          GetBuilder<uisetting>(builder: (_) {
-            return uiset.showboxlist[0] == false
-                ? const SizedBox()
-                : FutureBuilder(
-                    future: BoxApiProvider().getTasks(
-                      where: 'add',
-                    ),
-                    builder: (context, snapshot) {
-                      uiset.showboxlist = List.generate(1, (index) {
-                        return uiset.showboxlist[0];
-                      }, growable: true);
-                      return Column(
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          GetBuilder<linkspacesetting>(builder: (_) {
-                            return SizedBox(
-                              height: 200,
+                  ),
+                ])
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  GetBuilder<uisetting>(builder: (_) {
+                    return Row(
+                      children: [
+                        Flexible(
+                            fit: FlexFit.tight,
+                            child: SizedBox(
+                              height: 50,
                               child: InfoContainerDesign(
-                                child: Scrollbar(
-                                  thickness: 3,
-                                  child: SingleChildScrollView(
-                                      child: snapshot.hasError
-                                          ? Column(
-                                              children: [
-                                                SpinKitThreeBounce(
-                                                  size: 30,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    return const DecoratedBox(
-                                                      decoration: BoxDecoration(
-                                                          color: Colors.white,
-                                                          shape:
-                                                              BoxShape.circle),
-                                                    );
-                                                  },
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Text(
-                                                  'pagetypeerror'.tr,
-                                                  softWrap: true,
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize:
-                                                          contentsmallTextsize()),
-                                                )
-                                              ],
-                                            )
-                                          : Column(
-                                              children: List.generate(
-                                                  linkspaceset.boxtypelist
-                                                      .length, (index) {
-                                                return linkspaceset
-                                                            .boxtypelist[index]
-                                                            .isavailable ==
-                                                        'open'
-                                                    ? ListTile(
-                                                        onTap: () {
-                                                          linkspaceset
-                                                              .setpageboxtype(
-                                                                  linkspaceset
-                                                                      .boxtypelist[
-                                                                          index]
-                                                                      .title);
-                                                          uiset
-                                                              .changeshowboxtype(
-                                                                  init: false,
-                                                                  change: true);
-                                                        },
-                                                        trailing: const Icon(
-                                                          Ionicons
-                                                              .enter_outline,
-                                                          color: Colors.white,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'pagetype'.tr,
+                                        softWrap: true,
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: contentsmallTextsize()),
+                                      ),
+                                      GetBuilder<linkspacesetting>(
+                                          builder: (_) {
+                                        return Text(
+                                          linkspaceset.pageboxtype == ''
+                                              ? 'nothing'
+                                              : linkspaceset.pageboxtype,
+                                          softWrap: true,
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: contentsmallTextsize()),
+                                        );
+                                      }),
+                                    ],
+                                  ),
+                                  color: MyTheme.colorpastelpurple,
+                                  borderwhere: 'left',
+                                  borderok: 'no'),
+                            )),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        GestureDetector(
+                            onTap: () {
+                              uiset.changeshowboxtype(
+                                  init: false, change: true);
+                            },
+                            child: SizedBox(
+                              height: 50,
+                              child: InfoContainerDesign(
+                                child: Center(
+                                    child: Icon(
+                                  uiset.showboxlist[0] == false
+                                      ? Entypo.chevron_small_down
+                                      : Entypo.chevron_small_up,
+                                  size: 30,
+                                  color: Colors.white,
+                                )),
+                                color: MyTheme.colorpastelblue,
+                                borderwhere: 'right',
+                                borderok: 'no',
+                              ),
+                            )),
+                      ],
+                    );
+                  }),
+                  GetBuilder<uisetting>(builder: (_) {
+                    return uiset.showboxlist[0] == false
+                        ? const SizedBox()
+                        : FutureBuilder(
+                            future: BoxApiProvider().getTasks(
+                              where: 'add',
+                            ),
+                            builder: (context, snapshot) {
+                              uiset.showboxlist = List.generate(1, (index) {
+                                return uiset.showboxlist[0];
+                              }, growable: true);
+                              return Column(
+                                children: [
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  GetBuilder<linkspacesetting>(builder: (_) {
+                                    return SizedBox(
+                                      height: 200,
+                                      child: InfoContainerDesign(
+                                        child: Scrollbar(
+                                          thickness: 3,
+                                          child: SingleChildScrollView(
+                                              child: snapshot.hasError
+                                                  ? Column(
+                                                      children: [
+                                                        SpinKitThreeBounce(
+                                                          size: 30,
+                                                          itemBuilder:
+                                                              (BuildContext
+                                                                      context,
+                                                                  int index) {
+                                                            return const DecoratedBox(
+                                                              decoration: BoxDecoration(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  shape: BoxShape
+                                                                      .circle),
+                                                            );
+                                                          },
                                                         ),
-                                                        title: Text(
-                                                          linkspaceset
-                                                              .boxtypelist[
-                                                                  index]
-                                                              .title,
+                                                        const SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Text(
+                                                          'pagetypeerror'.tr,
                                                           softWrap: true,
                                                           textAlign:
-                                                              TextAlign.start,
+                                                              TextAlign.center,
                                                           style: TextStyle(
                                                               color:
                                                                   Colors.white,
@@ -459,180 +439,235 @@ PreviewSpace(pagecontroller, maxHeight, maxWidth) {
                                                                   FontWeight
                                                                       .bold,
                                                               fontSize:
-                                                                  contentTextsize()),
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                        ),
-                                                      )
-                                                    : const SizedBox();
-                                              }),
-                                            )),
+                                                                  contentsmallTextsize()),
+                                                        )
+                                                      ],
+                                                    )
+                                                  : Column(
+                                                      children: List.generate(
+                                                          linkspaceset
+                                                              .boxtypelist
+                                                              .length, (index) {
+                                                        return linkspaceset
+                                                                    .boxtypelist[
+                                                                        index]
+                                                                    .isavailable ==
+                                                                'open'
+                                                            ? ListTile(
+                                                                onTap: () {
+                                                                  linkspaceset.setpageboxtype(linkspaceset
+                                                                      .boxtypelist[
+                                                                          index]
+                                                                      .title);
+                                                                  uiset.changeshowboxtype(
+                                                                      init:
+                                                                          false,
+                                                                      change:
+                                                                          true);
+                                                                },
+                                                                trailing:
+                                                                    const Icon(
+                                                                  Ionicons
+                                                                      .enter_outline,
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                                title: Text(
+                                                                  linkspaceset
+                                                                      .boxtypelist[
+                                                                          index]
+                                                                      .title,
+                                                                  softWrap:
+                                                                      true,
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .start,
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          contentTextsize()),
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                ),
+                                                              )
+                                                            : const SizedBox();
+                                                      }),
+                                                    )),
+                                        ),
+                                        color: MyTheme.colorpastelblue,
+                                        borderwhere: 'all',
+                                        borderok: 'no',
+                                      ),
+                                    );
+                                  })
+                                ],
+                              );
+                            },
+                          );
+                  }),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    height: Get.height > 800 ? 600 : 400,
+                    child: ContainerDesign(
+                      child: StatefulBuilder(
+                        builder: (context, setState) {
+                          return PageView(
+                            controller: pagecontroller[1],
+                            scrollDirection: Axis.horizontal,
+                            onPageChanged: (int pageIndex) {
+                              linkspaceset.boxpreviewnumset(pageIndex);
+                            },
+                            children: List.generate(
+                                linkspaceset.pageboxtotalnum, (index) {
+                              return SizedBox(
+                                width: maxWidth - 40,
+                                height: Get.height > 800 ? 600 : 400,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: const [
+                                    Icon(
+                                      AntDesign.minus,
+                                      size: 30,
+                                      color: Colors.black,
+                                    )
+                                  ],
                                 ),
-                                color: MyTheme.colorpastelblue,
-                                borderwhere: 'all',
-                                borderok: 'no',
-                              ),
-                            );
-                          })
-                        ],
-                      );
-                    },
-                  );
-          }),
-          const SizedBox(
-            height: 20,
-          ),
-          SizedBox(
-            height: Get.height > 800 ? 600 : 400,
-            child: ContainerDesign(
-              child: StatefulBuilder(
-                builder: (context, setState) {
-                  return PageView(
-                    controller: pagecontroller[1],
-                    scrollDirection: Axis.horizontal,
-                    onPageChanged: (int pageIndex) {
-                      linkspaceset.boxpreviewnumset(pageIndex);
-                    },
-                    children:
-                        List.generate(linkspaceset.pageboxtotalnum, (index) {
-                      return SizedBox(
-                        width: maxWidth - 40,
-                        height: Get.height > 800 ? 600 : 400,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
-                            Icon(
-                              AntDesign.minus,
-                              size: 30,
-                              color: Colors.black,
-                            )
-                          ],
-                        ),
-                      );
-                    }),
-                  );
-                },
-              ),
-              color: draw.backgroundcolor,
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
-            children: [
-              SizedBox(
-                height: 50,
-                child: GestureDetector(
-                  onTap: () {
-                    linkspaceset
-                        .setpagetotalviewnum(linkspaceset.pageboxtotalnum - 1);
-                  },
-                  child: InfoContainerDesign(
-                      child: const Center(
-                          child: Icon(
-                        AntDesign.minus,
-                        size: 30,
-                        color: Colors.white,
-                      )),
-                      color: MyTheme.colorpastelred,
-                      borderwhere: 'left',
-                      borderok: 'no'),
-                ),
-              ),
-              const SizedBox(
-                width: 5,
-              ),
-              Flexible(
-                  fit: FlexFit.tight,
-                  child: SizedBox(
-                    height: 50,
-                    child: InfoContainerDesign(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                linkspaceset.boxpreviewnumset('minus');
-                                pagecontroller[1].animateToPage(
-                                  linkspaceset.boxpreviewnum,
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.easeInOut,
-                                );
-                              },
-                              child: const Center(
-                                  child: Icon(
-                                Entypo.chevron_small_left,
-                                size: 30,
-                                color: Colors.white,
-                              )),
-                            ),
-                            GetBuilder<linkspacesetting>(builder: (_) {
-                              return Text(
-                                '${linkspaceset.boxpreviewnum + 1}/${linkspaceset.pageboxtotalnum}',
-                                softWrap: true,
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: contentsmallTextsize()),
                               );
                             }),
-                            GestureDetector(
-                              onTap: () {
-                                linkspaceset.boxpreviewnumset('plus');
-                                pagecontroller[1].animateToPage(
-                                  linkspaceset.boxpreviewnum,
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.easeInOut,
-                                );
-                              },
+                          );
+                        },
+                      ),
+                      color: draw.backgroundcolor,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        height: 50,
+                        child: GestureDetector(
+                          onTap: () {
+                            linkspaceset.setpagetotalviewnum(
+                                linkspaceset.pageboxtotalnum - 1);
+                          },
+                          child: InfoContainerDesign(
                               child: const Center(
                                   child: Icon(
-                                Entypo.chevron_small_right,
+                                AntDesign.minus,
                                 size: 30,
                                 color: Colors.white,
                               )),
-                            )
-                          ],
+                              color: MyTheme.colorpastelred,
+                              borderwhere: 'left',
+                              borderok: 'no'),
                         ),
-                        color: MyTheme.colorpastelpurple,
-                        borderwhere: 'nothing',
-                        borderok: 'no'),
-                  )),
-              const SizedBox(
-                width: 5,
-              ),
-              SizedBox(
-                height: 50,
-                child: GestureDetector(
-                  onTap: () {
-                    linkspaceset
-                        .setpagetotalviewnum(linkspaceset.pageboxtotalnum + 1);
-                  },
-                  child: InfoContainerDesign(
-                    child: const Center(
-                        child: Icon(
-                      Ionicons.add,
-                      size: 30,
-                      color: Colors.white,
-                    )),
-                    color: MyTheme.colorpastelblue,
-                    borderwhere: 'right',
-                    borderok: 'no',
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Flexible(
+                          fit: FlexFit.tight,
+                          child: SizedBox(
+                            height: 50,
+                            child: InfoContainerDesign(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        linkspaceset.boxpreviewnumset('minus');
+                                        pagecontroller[1].animateToPage(
+                                          linkspaceset.boxpreviewnum,
+                                          duration:
+                                              const Duration(milliseconds: 300),
+                                          curve: Curves.easeInOut,
+                                        );
+                                      },
+                                      child: const Center(
+                                          child: Icon(
+                                        Entypo.chevron_small_left,
+                                        size: 30,
+                                        color: Colors.white,
+                                      )),
+                                    ),
+                                    GetBuilder<linkspacesetting>(builder: (_) {
+                                      return Text(
+                                        '${linkspaceset.boxpreviewnum + 1}/${linkspaceset.pageboxtotalnum}',
+                                        softWrap: true,
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: contentsmallTextsize()),
+                                      );
+                                    }),
+                                    GestureDetector(
+                                      onTap: () {
+                                        linkspaceset.boxpreviewnumset('plus');
+                                        pagecontroller[1].animateToPage(
+                                          linkspaceset.boxpreviewnum,
+                                          duration:
+                                              const Duration(milliseconds: 300),
+                                          curve: Curves.easeInOut,
+                                        );
+                                      },
+                                      child: const Center(
+                                          child: Icon(
+                                        Entypo.chevron_small_right,
+                                        size: 30,
+                                        color: Colors.white,
+                                      )),
+                                    )
+                                  ],
+                                ),
+                                color: MyTheme.colorpastelpurple,
+                                borderwhere: 'nothing',
+                                borderok: 'no'),
+                          )),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      SizedBox(
+                        height: 50,
+                        child: GestureDetector(
+                          onTap: () {
+                            linkspaceset.setpagetotalviewnum(
+                                linkspaceset.pageboxtotalnum + 1);
+                          },
+                          child: InfoContainerDesign(
+                            child: const Center(
+                                child: Icon(
+                              Ionicons.add,
+                              size: 30,
+                              color: Colors.white,
+                            )),
+                            color: MyTheme.colorpastelblue,
+                            borderwhere: 'right',
+                            borderok: 'no',
+                          ),
+                        ),
+                      )
+                    ],
                   ),
-                ),
-              )
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-        ],
-      ),
-    ),
-  );
+                  const SizedBox(
+                    height: 20,
+                  ),
+                ],
+              ),
+            ),
+    );
+  });
 }
 
 Upload1(context, textcontroller, pagecontroller, maxHeight, maxWidth) {
