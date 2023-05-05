@@ -3,8 +3,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
+import '../../BACKENDPART/Getx/navibool.dart';
+
 responsivewidget(widget, width) {
-  double ratio = Get.height / Get.width;
+  final navi = Get.put(navibool());
+  double ratio = navi.size.height / navi.size.width;
   return ratio > 1 && width < 1000
       ? SizedBox(
           width: width,

@@ -6,11 +6,9 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../BACKENDPART/Api/BoxApi.dart';
-import '../../BACKENDPART/Enums/Variables.dart';
 import '../../BACKENDPART/Getx/linkspacesetting.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
-import '../../BACKENDPART/Locale/Translate.dart';
 import '../../Tool/NoBehavior.dart';
 import '../../Tool/AppBarCustom.dart';
 import '../../Tool/TextSize.dart';
@@ -34,11 +32,6 @@ class _SettingSubPageState extends State<SettingSubPage>
   @override
   void initState() {
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   @override
@@ -73,8 +66,8 @@ class _SettingSubPageState extends State<SettingSubPage>
                       : null;
                 },
                 child: SizedBox(
-                  height: Get.height,
-                  width: Get.width,
+                  height: navi.size.height,
+                  width: navi.size.width,
                   child: Container(
                       color: navi.backgroundcolor,
                       child: Row(
@@ -107,30 +100,29 @@ class _SettingSubPageState extends State<SettingSubPage>
                                   righticonname: Icons.person_outline,
                                 );
                               }),
+                              const SizedBox(
+                                height: 20,
+                              ),
                               Flexible(
                                 fit: FlexFit.tight,
-                                child: SizedBox(
-                                  width: Get.width,
-                                  child: ScrollConfiguration(
-                                      behavior: NoBehavior(),
-                                      child: LayoutBuilder(
-                                        builder: ((context, constraint) {
-                                          BoxApiProvider().getTasks(
-                                              where: 'settingsub', reset: true);
-                                          return SingleChildScrollView(
-                                              child: Column(
-                                            children: [
-                                              responsivewidget(
-                                                  UI(
-                                                    constraint.maxWidth,
-                                                    constraint.maxHeight,
-                                                  ),
-                                                  Get.width),
-                                            ],
-                                          ));
-                                        }),
-                                      )),
-                                ),
+                                child: ScrollConfiguration(
+                                    behavior: NoBehavior(),
+                                    child: LayoutBuilder(
+                                      builder: ((context, constraint) {
+                                        BoxApiProvider().getTasks(
+                                            where: 'settingsub', reset: true);
+                                        return SingleChildScrollView(
+                                            child: Column(
+                                          children: [
+                                            responsivewidget(
+                                                UI(
+                                                  navi.size.width,
+                                                ),
+                                                navi.size.width),
+                                          ],
+                                        ));
+                                      }),
+                                    )),
                               ),
                             ],
                           ),

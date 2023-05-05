@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../Tool/MyTheme.dart';
 import '../../Tool/pickimage.dart';
 import '../../sheets/BottomSheet/AddContentWithBtn.dart';
 import '../Enums/Variables.dart';
@@ -205,7 +206,7 @@ Widgets_tocompany(context, controller, searchnode) {
             leading: Icon(
               AntDesign.instagram,
               size: 30,
-              color: Colors.blue.shade400,
+              color: MyTheme.colorpastelpurple,
             ),
             title: Text('광고문의',
                 style: TextStyle(
@@ -239,7 +240,7 @@ Widgets_tocompany(context, controller, searchnode) {
             leading: Icon(
               Icons.forward_to_inbox,
               size: 30,
-              color: Colors.blue.shade400,
+              color: MyTheme.colorpastelpurple,
             ),
             title: Text('오류신고',
                 style: TextStyle(

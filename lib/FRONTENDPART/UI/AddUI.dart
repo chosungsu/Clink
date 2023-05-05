@@ -29,8 +29,7 @@ final draw = Get.put(navibool());
 ///UI
 ///
 ///AddPage의 UI
-UI(controller, searchnode, pagecontroller, scrollcontroller, maxWidth,
-    maxHeight) {
+UI(controller, searchnode, pagecontroller, scrollcontroller, maxWidth) {
   return GetBuilder<linkspacesetting>(builder: (_) {
     return SingleChildScrollView(
         controller: scrollcontroller,
@@ -43,14 +42,14 @@ UI(controller, searchnode, pagecontroller, scrollcontroller, maxWidth,
                 children: [
                   uiset.addpagecontroll == 0
                       ? Responsivelayout(
-                          PageUI0(context, maxWidth - 40, maxHeight, searchnode,
+                          PageUI0(context, maxWidth - 40, searchnode,
                               controller, pagecontroller),
-                          PageUI1(context, maxWidth - 40, maxHeight, searchnode,
+                          PageUI1(context, maxWidth - 40, searchnode,
                               controller, pagecontroller))
                       : Responsivelayout(
-                          PageUI2(context, maxWidth - 40, maxHeight, searchnode,
+                          PageUI2(context, maxWidth - 40, searchnode,
                               controller, pagecontroller),
-                          PageUI3(context, maxWidth - 40, maxHeight, searchnode,
+                          PageUI3(context, maxWidth - 40, searchnode,
                               controller, pagecontroller))
                 ],
               ));
@@ -58,75 +57,89 @@ UI(controller, searchnode, pagecontroller, scrollcontroller, maxWidth,
   });
 }
 
-PageUI0(context, maxWidth, maxHeight, searchnode, controller, pagecontroller) {
-  return Row(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      StepView(context, maxWidth, maxHeight, 'ls', pagecontroller),
-      const SizedBox(
-        width: 20,
-      ),
-      Flexible(
-          fit: FlexFit.tight,
-          child: View1(context, maxWidth - 120, maxHeight, searchnode,
-              controller, pagecontroller, 'ls'))
-    ],
+PageUI0(context, maxWidth, searchnode, controller, pagecontroller) {
+  return SizedBox(
+      height: navi.size.height - 90,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          StepView(context, maxWidth, 'ls', pagecontroller),
+          const SizedBox(
+            width: 20,
+          ),
+          Flexible(
+              fit: FlexFit.tight,
+              child: View1(context, maxWidth - 120, searchnode, controller,
+                  pagecontroller, 'ls'))
+        ],
+      ));
+}
+
+PageUI1(context, maxWidth, searchnode, controller, pagecontroller) {
+  return SizedBox(
+    height: navi.size.height - 130,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        StepView(context, maxWidth, 'pr', pagecontroller),
+        const SizedBox(
+          height: 20,
+        ),
+        Flexible(
+            fit: FlexFit.tight,
+            child: View1(context, maxWidth, searchnode, controller,
+                pagecontroller, 'pr'))
+      ],
+    ),
   );
 }
 
-PageUI1(context, maxWidth, maxHeight, searchnode, controller, pagecontroller) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      StepView(context, maxWidth, maxHeight, 'pr', pagecontroller),
-      const SizedBox(
-        height: 20,
-      ),
-      View1(context, maxWidth, maxHeight - 70, searchnode, controller,
-          pagecontroller, 'pr')
-    ],
-  );
+PageUI2(context, maxWidth, searchnode, controller, pagecontroller) {
+  return SizedBox(
+      height: navi.size.height - 90,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          StepView(context, maxWidth, 'ls', pagecontroller),
+          const SizedBox(
+            width: 20,
+          ),
+          Flexible(
+              fit: FlexFit.tight,
+              child: View2(context, maxWidth - 120, searchnode, controller,
+                  pagecontroller, 'ls'))
+        ],
+      ));
 }
 
-PageUI2(context, maxWidth, maxHeight, searchnode, controller, pagecontroller) {
-  return Row(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      StepView(context, maxWidth, maxHeight, 'ls', pagecontroller),
-      const SizedBox(
-        width: 20,
-      ),
-      Flexible(
-          fit: FlexFit.tight,
-          child: View2(context, maxWidth - 120, maxHeight, searchnode,
-              controller, pagecontroller, 'ls'))
-    ],
-  );
-}
-
-PageUI3(context, maxWidth, maxHeight, searchnode, controller, pagecontroller) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      StepView(context, maxWidth, maxHeight, 'pr', pagecontroller),
-      const SizedBox(
-        height: 20,
-      ),
-      View2(context, maxWidth, maxHeight - 70, searchnode, controller,
-          pagecontroller, 'pr')
-    ],
+PageUI3(context, maxWidth, searchnode, controller, pagecontroller) {
+  return SizedBox(
+    height: navi.size.height - 130,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        StepView(context, maxWidth, 'pr', pagecontroller),
+        const SizedBox(
+          height: 20,
+        ),
+        Flexible(
+            fit: FlexFit.tight,
+            child: View2(context, maxWidth, searchnode, controller,
+                pagecontroller, 'pr'))
+      ],
+    ),
   );
 }
 
 ///View
 ///
 ///ProfilePage의 기본UI
-StepView(context, maxWidth, maxHeight, pageoption, pagecontroller) {
+StepView(context, maxWidth, pageoption, pagecontroller) {
   return pageoption == 'ls'
       ? GetBuilder<linkspacesetting>(
           builder: (_) {
             return SizedBox(
-              height: maxHeight,
+              height: 300,
               width: 100,
               child: ListView.builder(
                   physics: const ScrollPhysics(),
@@ -227,11 +240,9 @@ StepView(context, maxWidth, maxHeight, pageoption, pagecontroller) {
 ///View
 ///
 ///AddPage의 기본UI
-View1(context, maxWidth, maxHeight, searchnode, controller, pagecontroller,
-    pageoption) {
+View1(context, maxWidth, searchnode, controller, pagecontroller, pageoption) {
   return SizedBox(
       width: maxWidth,
-      height: maxHeight,
       child: PageView(
         controller: pagecontroller[0],
         scrollDirection: Axis.horizontal,
@@ -240,7 +251,7 @@ View1(context, maxWidth, maxHeight, searchnode, controller, pagecontroller,
         },
         children: [
           Form1(context, searchnode, controller),
-          Upload1(context, controller, pagecontroller, maxHeight, maxWidth)
+          Upload1(context, controller, pagecontroller, maxWidth)
         ],
       ));
 }
@@ -248,11 +259,9 @@ View1(context, maxWidth, maxHeight, searchnode, controller, pagecontroller,
 ///View
 ///
 ///AddPage의 기본UI
-View2(context, maxWidth, maxHeight, searchnode, controller, pagecontroller,
-    pageoption) {
+View2(context, maxWidth, searchnode, controller, pagecontroller, pageoption) {
   return SizedBox(
       width: maxWidth,
-      height: maxHeight,
       child: PageView(
         controller: pagecontroller[0],
         scrollDirection: Axis.horizontal,
@@ -260,9 +269,8 @@ View2(context, maxWidth, maxHeight, searchnode, controller, pagecontroller,
           linkspaceset.setpageviewnum(pageIndex);
         },
         children: [
-          Form2(context, searchnode, pagecontroller, controller, maxHeight,
-              maxWidth),
-          Upload2(context, controller, pagecontroller, maxHeight, maxWidth)
+          Form2(context, searchnode, pagecontroller, controller, maxWidth),
+          Upload2(context, controller, pagecontroller, maxWidth)
         ],
       ));
 }
@@ -279,23 +287,21 @@ Form1(context, searchnode, controller) {
   ));
 }
 
-Form2(context, searchnode, pagecontroller, controller, maxHeight, maxWidth) {
+Form2(context, searchnode, pagecontroller, controller, maxWidth) {
   return SingleChildScrollView(
       child: SizedBox(
-    height: maxHeight,
     child: Column(
       children: [
-        PreviewSpace(pagecontroller, maxHeight, maxWidth),
+        PreviewSpace(pagecontroller, maxWidth),
         //MakeUrlSpace(searchnode[1], controller[1], 'box'),
       ],
     ),
   ));
 }
 
-PreviewSpace(pagecontroller, maxHeight, maxWidth) {
+PreviewSpace(pagecontroller, maxWidth) {
   return GetBuilder<uisetting>(builder: (_) {
     return SizedBox(
-      height: maxHeight,
       child: uiset.showboxlist.isEmpty
           ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -670,12 +676,11 @@ PreviewSpace(pagecontroller, maxHeight, maxWidth) {
   });
 }
 
-Upload1(context, textcontroller, pagecontroller, maxHeight, maxWidth) {
+Upload1(context, textcontroller, pagecontroller, maxWidth) {
   return SingleChildScrollView(
     child: Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: SizedBox(
-        height: maxHeight,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -855,12 +860,11 @@ Upload1(context, textcontroller, pagecontroller, maxHeight, maxWidth) {
   );
 }
 
-Upload2(context, textcontroller, pagecontroller, maxHeight, maxWidth) {
+Upload2(context, textcontroller, pagecontroller, maxWidth) {
   return SingleChildScrollView(
     child: Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: SizedBox(
-        height: maxHeight,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,

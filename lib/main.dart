@@ -120,6 +120,10 @@ class _SplashPageState extends State<SplashPage> {
             draw.statusbarcolor == 0 ? Brightness.dark : Brightness.light,
         statusBarIconBrightness:
             draw.statusbarcolor == 0 ? Brightness.dark : Brightness.light));
+    /**
+    * setpagesize : app의 크기를 지정해줌.
+    */
+    navi.size = MediaQuery.of(context).size;
     return GetBuilder<navibool>(builder: (_) {
       return GetBuilder<uisetting>(
         builder: (_) {
@@ -137,7 +141,7 @@ class _SplashPageState extends State<SplashPage> {
                                   color: draw.backgroundcolor,
                                   dismissible: false,
                                 ),
-                                FirstView(constraint.maxHeight),
+                                FirstView(navi.size.height),
                               ],
                             )
                           : pages[uiset.pagenumber]);

@@ -54,11 +54,17 @@ class _SettingPageState extends State<SettingPage>
                 navi.statusbarcolor == 0 ? Brightness.dark : Brightness.light,
             statusBarIconBrightness:
                 navi.statusbarcolor == 0 ? Brightness.dark : Brightness.light));
+        /**
+        * setpagesize : app의 크기를 지정해줌.
+        */
+        navi.size = MediaQuery.of(context).size;
         return Scaffold(
             backgroundColor: navi.backgroundcolor,
             bottomNavigationBar: uiset.loading
                 ? const SizedBox()
-                : (Get.width < 1000 ? const BottomScreen() : const SizedBox()),
+                : (navi.size.width < 1000
+                    ? const BottomScreen()
+                    : const SizedBox()),
             body: GetBuilder<navibool>(
                 builder: (_) => buildtypewidget(context, ProfileBody())));
       },
@@ -83,89 +89,93 @@ class _SettingPageState extends State<SettingPage>
                         })
                       : null;
                 },
-                child: SizedBox(
-                  height: Get.height,
-                  width: Get.width,
-                  child: Container(
-                      color: navi.backgroundcolor,
-                      child: GetBuilder<navibool>(
-                        builder: (_) {
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              navi.navi == 0 &&
-                                      navi.navishow == true &&
-                                      Get.width > 1000
-                                  ? (navi.settinginsidemap.containsKey(0) ==
-                                          false
-                                      ? const SizedBox()
-                                      : innertype())
-                                  : const SizedBox(),
-                              Column(
-                                children: [
-                                  GetBuilder<uisetting>(builder: (_) {
-                                    return AppBarCustom(
-                                      title: Text(
-                                        'settingpagetitle'.tr,
-                                        maxLines: 1,
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: mainTitleTextsize(),
-                                            color: navi.color_textstatus),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      lefticon: false,
-                                      lefticonname: Icons.add,
-                                      righticon: true,
-                                      doubleicon: false,
-                                      righticonname: Octicons.person,
-                                      textcontroller: _controller,
-                                      searchnode: searchNode,
-                                    );
-                                  }),
-                                  Flexible(
-                                      fit: FlexFit.tight,
-                                      child: responsivewidget(
-                                        SizedBox(
-                                          child: ScrollConfiguration(
-                                              behavior: NoBehavior(),
-                                              child: LayoutBuilder(
-                                                builder:
-                                                    ((context, constraint) {
-                                                  return SingleChildScrollView(
-                                                      child: Column(
-                                                    children: [
-                                                      UI(
-                                                          _controller,
-                                                          searchNode,
-                                                          scrollController,
-                                                          constraint.maxWidth,
-                                                          constraint.maxHeight),
-                                                    ],
-                                                  ));
-                                                }),
-                                              )),
-                                        ),
+                child: GetBuilder<uisetting>(
+                  builder: (_) {
+                    return Container(
+                        color: navi.backgroundcolor,
+                        height: navi.size.height,
+                        width: navi.size.width,
+                        child: GetBuilder<navibool>(
+                          builder: (_) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                navi.navi == 0 &&
                                         navi.navishow == true &&
-                                                Get.width > 1000
-                                            ? Get.width - 120
-                                            : Get.width,
-                                      )),
-                                ],
-                              ),
-                              navi.navi == 1 &&
-                                      navi.navishow == true &&
-                                      Get.width > 1000
-                                  ? (navi.settinginsidemap.containsKey(0) ==
-                                          false
-                                      ? const SizedBox()
-                                      : innertype())
-                                  : const SizedBox(),
-                            ],
-                          );
-                        },
-                      )),
+                                        navi.size.width > 1000
+                                    ? (navi.settinginsidemap.containsKey(0) ==
+                                            false
+                                        ? const SizedBox()
+                                        : innertype())
+                                    : const SizedBox(),
+                                Column(
+                                  children: [
+                                    GetBuilder<uisetting>(builder: (_) {
+                                      return AppBarCustom(
+                                        title: Text(
+                                          'settingpagetitle'.tr,
+                                          maxLines: 1,
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: mainTitleTextsize(),
+                                              color: navi.color_textstatus),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        lefticon: false,
+                                        lefticonname: Icons.add,
+                                        righticon: true,
+                                        doubleicon: false,
+                                        righticonname: Octicons.person,
+                                        textcontroller: _controller,
+                                        searchnode: searchNode,
+                                      );
+                                    }),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Flexible(
+                                        fit: FlexFit.tight,
+                                        child: responsivewidget(
+                                          SizedBox(
+                                            child: ScrollConfiguration(
+                                                behavior: NoBehavior(),
+                                                child: LayoutBuilder(
+                                                  builder:
+                                                      ((context, constraint) {
+                                                    return SingleChildScrollView(
+                                                        child: Column(
+                                                      children: [
+                                                        UI(
+                                                            _controller,
+                                                            searchNode,
+                                                            scrollController,
+                                                            navi.size.width),
+                                                      ],
+                                                    ));
+                                                  }),
+                                                )),
+                                          ),
+                                          navi.navishow == true &&
+                                                  navi.size.width > 1000
+                                              ? navi.size.width - 120
+                                              : navi.size.width,
+                                        )),
+                                  ],
+                                ),
+                                navi.navi == 1 &&
+                                        navi.navishow == true &&
+                                        navi.size.width > 1000
+                                    ? (navi.settinginsidemap.containsKey(0) ==
+                                            false
+                                        ? const SizedBox()
+                                        : innertype())
+                                    : const SizedBox(),
+                              ],
+                            );
+                          },
+                        ));
+                  },
                 ),
               ),
             ));

@@ -60,7 +60,7 @@ class AppBarCustom extends StatelessWidget {
           builder: (_) => SafeArea(
               child: responsivewidget(
                   SizedBox(
-                      height: 60,
+                      height: 50,
                       child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 5, bottom: 5),
@@ -72,7 +72,7 @@ class AppBarCustom extends StatelessWidget {
                                 navinumlist.contains(uiset.pagenumber) &&
                                         draw.navi == 0 &&
                                         draw.navishow == false &&
-                                        Get.width > 1000 &&
+                                        draw.size.width > 1000 &&
                                         draw.settinginsidemap.containsKey(0) ==
                                             true
                                     ? draw.drawopen == true ||
@@ -89,7 +89,7 @@ class AppBarCustom extends StatelessWidget {
                                             },
                                             child: Icon(
                                               Feather.chevron_left,
-                                              size: 30,
+                                              size: 25,
                                               color: draw.color_textstatus,
                                             ),
                                           )
@@ -104,7 +104,7 @@ class AppBarCustom extends StatelessWidget {
                                             },
                                             child: Icon(
                                               Feather.align_left,
-                                              size: 30,
+                                              size: 25,
                                               color: draw.color_textstatus,
                                             ),
                                           )
@@ -112,7 +112,7 @@ class AppBarCustom extends StatelessWidget {
                                 navinumlist.contains(uiset.pagenumber) &&
                                         draw.navi == 0 &&
                                         draw.navishow == false &&
-                                        Get.width > 1000 &&
+                                        draw.size.width > 1000 &&
                                         draw.settinginsidemap.containsKey(0) ==
                                             true
                                     ? const SizedBox(
@@ -131,7 +131,7 @@ class AppBarCustom extends StatelessWidget {
                                                     },
                                                     child: Icon(
                                                       lefticonname,
-                                                      size: 30,
+                                                      size: 25,
                                                       color:
                                                           draw.color_textstatus,
                                                     ),
@@ -158,7 +158,7 @@ class AppBarCustom extends StatelessWidget {
                                                             child: Icon(
                                                               Ionicons
                                                                   .add_outline,
-                                                              size: 30,
+                                                              size: 25,
                                                               color: draw
                                                                   .color_textstatus,
                                                             ),
@@ -185,7 +185,7 @@ class AppBarCustom extends StatelessWidget {
                                                     },
                                                     child: Icon(
                                                       righticonname,
-                                                      size: 30,
+                                                      size: 25,
                                                       color: righticonname ==
                                                               Icons.star
                                                           ? Colors.yellow
@@ -201,7 +201,7 @@ class AppBarCustom extends StatelessWidget {
                                 navinumlist.contains(uiset.pagenumber) &&
                                         draw.navi == 1 &&
                                         draw.navishow == false &&
-                                        Get.width > 1000 &&
+                                        draw.size.width > 1000 &&
                                         draw.settinginsidemap.containsKey(0) ==
                                             true
                                     ? const SizedBox(
@@ -211,7 +211,7 @@ class AppBarCustom extends StatelessWidget {
                                 navinumlist.contains(uiset.pagenumber) &&
                                         draw.navi == 1 &&
                                         draw.navishow == false &&
-                                        Get.width > 1000 &&
+                                        draw.size.width > 1000 &&
                                         draw.settinginsidemap.containsKey(0) ==
                                             true
                                     ? draw.drawopen == true ||
@@ -228,7 +228,7 @@ class AppBarCustom extends StatelessWidget {
                                             },
                                             child: Icon(
                                               Feather.chevron_right,
-                                              size: 30,
+                                              size: 25,
                                               color: draw.color_textstatus,
                                             ),
                                           )
@@ -243,7 +243,7 @@ class AppBarCustom extends StatelessWidget {
                                             },
                                             child: Icon(
                                               Feather.align_right,
-                                              size: 30,
+                                              size: 25,
                                               color: draw.color_textstatus,
                                             ),
                                           )
@@ -252,10 +252,10 @@ class AppBarCustom extends StatelessWidget {
                             ),
                           ))),
                   draw.navishow == true &&
-                          Get.width > 1000 &&
+                          draw.size.width > 1000 &&
                           draw.settinginsidemap.containsKey(0) == true
-                      ? Get.width - 120
-                      : Get.width)));
+                      ? draw.size.width - 120
+                      : draw.size.width)));
     }));
   }
 

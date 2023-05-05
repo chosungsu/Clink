@@ -18,6 +18,7 @@ class navibool extends GetxController {
   int navi = Hive.box('user_setting').get('which_menu_pick') ?? 0;
   int statusbarcolor = 0;
   int textsize = 0;
+  Size size = Get.size;
   Color backgroundcolor = MyTheme.colorWhite;
   Color color_textstatus = MyTheme.colorblack;
 

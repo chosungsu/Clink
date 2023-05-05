@@ -66,11 +66,17 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                 navi.statusbarcolor == 0 ? Brightness.dark : Brightness.light,
             statusBarIconBrightness:
                 navi.statusbarcolor == 0 ? Brightness.dark : Brightness.light));
+        /**
+        * setpagesize : app의 크기를 지정해줌.
+        */
+        navi.size = MediaQuery.of(context).size;
         return Scaffold(
             backgroundColor: navi.backgroundcolor,
             bottomNavigationBar: uiset.loading
                 ? const SizedBox()
-                : (Get.width < 1000 ? const BottomScreen() : const SizedBox()),
+                : (navi.size.width < 1000
+                    ? const BottomScreen()
+                    : const SizedBox()),
             body: GetBuilder<navibool>(
                 builder: (_) => buildtypewidget(context, MainBody())));
       },
@@ -96,106 +102,92 @@ class _MYPageState extends State<MYPage> with TickerProviderStateMixin {
                           })
                         : null;
                   },
-                  child: SizedBox(
-                    height: Get.height,
-                    width: Get.width,
-                    child: GetBuilder<uisetting>(
-                      builder: (_) {
-                        return Container(
-                            color: navi.backgroundcolor,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                navi.navi == 0 &&
-                                        navi.navishow == true &&
-                                        Get.width > 1000
-                                    ? innertype()
-                                    : const SizedBox(),
-                                Column(
-                                  children: [
-                                    GetBuilder<notishow>(builder: (_) {
-                                      return AppBarCustom(
-                                        title: uiset.changesearchbar == true
-                                            ? SearchBox(
-                                                textcontroller, searchNode)
-                                            : Text(
-                                                'Pinset',
-                                                maxLines: 1,
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize:
-                                                        mainTitleTextsize(),
-                                                    color:
-                                                        navi.color_textstatus),
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                        lefticon: false,
-                                        righticon: true,
-                                        doubleicon: true,
-                                        lefticonname: Ionicons.add_outline,
-                                        righticonname:
-                                            uiset.changesearchbar == true
-                                                ? Ionicons.close
-                                                : Ionicons.search,
-                                        textcontroller: textcontroller,
-                                        searchnode: searchNode,
-                                      );
-                                    }),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    Flexible(
+                  child: GetBuilder<uisetting>(
+                    builder: (_) {
+                      return Container(
+                          height: navi.size.height,
+                          width: navi.size.width,
+                          color: navi.backgroundcolor,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              navi.navi == 0 &&
+                                      navi.navishow == true &&
+                                      navi.size.width > 1000
+                                  ? innertype()
+                                  : const SizedBox(),
+                              Column(
+                                children: [
+                                  GetBuilder<notishow>(builder: (_) {
+                                    return AppBarCustom(
+                                      title: uiset.changesearchbar == true
+                                          ? SearchBox(
+                                              textcontroller, searchNode)
+                                          : Text(
+                                              'Pinset',
+                                              maxLines: 1,
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: mainTitleTextsize(),
+                                                  color: navi.color_textstatus),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                      lefticon: false,
+                                      righticon: true,
+                                      doubleicon: true,
+                                      lefticonname: Ionicons.add_outline,
+                                      righticonname:
+                                          uiset.changesearchbar == true
+                                              ? Ionicons.close
+                                              : Ionicons.search,
+                                      textcontroller: textcontroller,
+                                      searchnode: searchNode,
+                                    );
+                                  }),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Flexible(
                                       fit: FlexFit.tight,
-                                      child: SizedBox(
-                                        width: navi.navishow == true &&
-                                                Get.width > 1000
-                                            ? Get.width - 120
-                                            : Get.width,
-                                        child: ScrollConfiguration(
-                                            behavior: NoBehavior(),
-                                            child: LayoutBuilder(
-                                              builder: ((context, constraint) {
-                                                return Column(
-                                                  children: [
-                                                    responsivewidget(
-                                                      UI(
-                                                          context,
-                                                          uiset
-                                                              .pagelist[uiset
-                                                                  .mypagelistindex]
-                                                              .id,
-                                                          textcontroller,
-                                                          searchNode,
-                                                          navi.navishow ==
-                                                                      true &&
-                                                                  Get.width >
-                                                                      1000
-                                                              ? constraint
-                                                                      .maxWidth -
-                                                                  120
-                                                              : constraint
-                                                                  .maxWidth,
-                                                          constraint.maxHeight),
-                                                      Get.width,
-                                                    ),
-                                                  ],
-                                                );
-                                              }),
-                                            )),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                navi.navi == 1 &&
-                                        navi.navishow == true &&
-                                        Get.width > 1000
-                                    ? innertype()
-                                    : const SizedBox(),
-                              ],
-                            ));
-                      },
-                    ),
+                                      child: ScrollConfiguration(
+                                        behavior: NoBehavior(),
+                                        child: LayoutBuilder(
+                                          builder: ((context, constraint) {
+                                            return Column(
+                                              children: [
+                                                responsivewidget(
+                                                  UI(
+                                                      context,
+                                                      uiset
+                                                          .pagelist[uiset
+                                                              .mypagelistindex]
+                                                          .id,
+                                                      textcontroller,
+                                                      searchNode,
+                                                      navi.navishow == true &&
+                                                              navi.size.width >
+                                                                  1000
+                                                          ? navi.size.width -
+                                                              120
+                                                          : navi.size.width),
+                                                  navi.size.width,
+                                                ),
+                                              ],
+                                            );
+                                          }),
+                                        ),
+                                      ))
+                                ],
+                              ),
+                              navi.navi == 1 &&
+                                      navi.navishow == true &&
+                                      Get.width > 1000
+                                  ? innertype()
+                                  : const SizedBox(),
+                            ],
+                          ));
+                    },
                   ),
                 ),
               ));

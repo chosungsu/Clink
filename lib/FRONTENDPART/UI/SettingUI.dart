@@ -28,7 +28,7 @@ final box = GetStorage();
 ///UI
 ///
 ///SettingPage의 UI
-UI(controller, searchnode, scrollcontroller, maxWidth, maxHeight) {
+UI(controller, searchnode, scrollcontroller, maxWidth) {
   return GetBuilder<uisetting>(builder: (_) {
     uiset.setprofilespace();
     return SingleChildScrollView(
@@ -40,11 +40,7 @@ UI(controller, searchnode, scrollcontroller, maxWidth, maxHeight) {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  OptionChoice(
-                      context, maxWidth, maxHeight, searchnode, controller),
+                  OptionChoice(context, maxWidth, searchnode, controller),
                   const SizedBox(
                     height: 50,
                   ),
@@ -58,7 +54,7 @@ UI(controller, searchnode, scrollcontroller, maxWidth, maxHeight) {
 ///
 ///ProfilePage의 기본UI
 ///각종 옵션들을 Opt_body에서 보여줌.
-OptionChoice(context, maxWidth, maxHeight, searchnode, controller) {
+OptionChoice(context, maxWidth, searchnode, controller) {
   return GestureDetector(
     onTap: () {
       FocusManager.instance.primaryFocus?.unfocus();

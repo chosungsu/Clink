@@ -1,7 +1,6 @@
 // ignore_for_file: body_might_complete_normally_nullable, non_constant_identifier_names, unused_local_variable
 
 import 'dart:async';
-import 'package:clickbyme/BACKENDPART/Api/BoxApi.dart';
 import 'package:clickbyme/BACKENDPART/Api/LicenseApi.dart';
 import 'package:clickbyme/BACKENDPART/Api/LoginApi.dart';
 import 'package:clickbyme/BACKENDPART/Getx/navibool.dart';
@@ -26,6 +25,8 @@ Future initScreen() async {
   * setappbox : app의 색상을 지정해줌.
   */
   navi.setappbox();
+  uiset.settingmobile();
+
   /**
   * fetchTasks : user 정보를 백엔드에서 불러옴.
   */

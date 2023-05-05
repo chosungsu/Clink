@@ -72,11 +72,17 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
         pageController[0] = PageController(
             initialPage:
                 linkspaceset.pageviewnum == 0 ? 0 : linkspaceset.pageviewnum);
+        /**
+        * setpagesize : app의 크기를 지정해줌.
+        */
+        navi.size = MediaQuery.of(context).size;
         return Scaffold(
             backgroundColor: navi.backgroundcolor,
             bottomNavigationBar: uiset.loading
                 ? const SizedBox()
-                : (Get.width < 1000 ? const BottomScreen() : const SizedBox()),
+                : (navi.size.width < 1000
+                    ? const BottomScreen()
+                    : const SizedBox()),
             body: GetBuilder<navibool>(
                 builder: (_) => buildtypewidget(context, AddBody())));
       },
@@ -108,26 +114,24 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
                         })
                       : null;
                 },
-                child: SizedBox(
-                  height: Get.height,
-                  width: Get.width,
-                  child: Container(
-                      color: navi.backgroundcolor,
-                      child: GetBuilder<navibool>(
-                        builder: (_) {
-                          return Row(
-                            children: [
-                              navi.navi == 0 &&
-                                      navi.navishow == true &&
-                                      Get.width > 1000
-                                  ? (navi.settinginsidemap.containsKey(0) ==
-                                          false
-                                      ? const SizedBox()
-                                      : innertype())
-                                  : const SizedBox(),
-                              Column(
-                                children: [
-                                  GetBuilder<uisetting>(builder: (_) {
+                child: Container(
+                    height: navi.size.height,
+                    width: navi.size.width,
+                    color: navi.backgroundcolor,
+                    child: GetBuilder<uisetting>(
+                      builder: (_) {
+                        return Row(
+                          children: [
+                            navi.navi == 0 &&
+                                    navi.navishow == true &&
+                                    navi.size.width > 1000
+                                ? (navi.settinginsidemap.containsKey(0) == false
+                                    ? const SizedBox()
+                                    : innertype())
+                                : const SizedBox(),
+                            Column(
+                              children: [
+                                /*GetBuilder<uisetting>(builder: (_) {
                                     return AppBarCustom(
                                         title: Text(
                                           '',
@@ -144,58 +148,49 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
                                         righticon: false,
                                         doubleicon: false,
                                         righticonname: Feather.check_circle);
-                                  }),
-                                  Flexible(
-                                    fit: FlexFit.tight,
-                                    child: SizedBox(
-                                      width: navi.navishow == true &&
-                                              Get.width > 1000
-                                          ? Get.width - 120
-                                          : Get.width,
-                                      child: ScrollConfiguration(
-                                          behavior: NoBehavior(),
-                                          child: LayoutBuilder(
-                                            builder: ((context, constraint) {
-                                              return Column(
-                                                children: [
-                                                  responsivewidget(
-                                                      UI(
-                                                          controllersall,
-                                                          searchNodeall,
-                                                          pageController,
-                                                          scrollController,
-                                                          navi.navishow ==
-                                                                      true &&
-                                                                  Get.width >
-                                                                      1000
-                                                              ? constraint
-                                                                      .maxWidth -
-                                                                  120
-                                                              : constraint
-                                                                  .maxWidth,
-                                                          constraint.maxHeight),
-                                                      Get.width),
-                                                ],
-                                              );
-                                            }),
-                                          )),
-                                    ),
+                                  }),*/
+                                Flexible(
+                                  fit: FlexFit.tight,
+                                  child: SizedBox(
+                                    child: ScrollConfiguration(
+                                        behavior: NoBehavior(),
+                                        child: LayoutBuilder(
+                                          builder: ((context, constraint) {
+                                            return Column(
+                                              children: [
+                                                responsivewidget(
+                                                    UI(
+                                                        controllersall,
+                                                        searchNodeall,
+                                                        pageController,
+                                                        scrollController,
+                                                        navi.navishow == true &&
+                                                                navi.size
+                                                                        .width >
+                                                                    1000
+                                                            ? navi.size.width -
+                                                                120
+                                                            : navi.size.width),
+                                                    navi.size.width),
+                                              ],
+                                            );
+                                          }),
+                                        )),
                                   ),
-                                ],
-                              ),
-                              navi.navi == 1 &&
-                                      navi.navishow == true &&
-                                      Get.width > 1000
-                                  ? (navi.settinginsidemap.containsKey(0) ==
-                                          false
-                                      ? const SizedBox()
-                                      : innertype())
-                                  : const SizedBox(),
-                            ],
-                          );
-                        },
-                      )),
-                ),
+                                ),
+                              ],
+                            ),
+                            navi.navi == 1 &&
+                                    navi.navishow == true &&
+                                    navi.size.width > 1000
+                                ? (navi.settinginsidemap.containsKey(0) == false
+                                    ? const SizedBox()
+                                    : innertype())
+                                : const SizedBox(),
+                          ],
+                        );
+                      },
+                    )),
               ),
             ));
   }

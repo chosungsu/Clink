@@ -1,5 +1,7 @@
 // ignore_for_file: camel_case_types, non_constant_identifier_names
 
+import 'dart:io';
+
 import 'package:clickbyme/BACKENDPART/Enums/Profile_item.dart';
 import 'package:clickbyme/BACKENDPART/Getx/linkspacesetting.dart';
 import 'package:clickbyme/BACKENDPART/Getx/navibool.dart';
@@ -16,6 +18,7 @@ class uisetting extends GetxController {
   final peopleadd = Get.put(UserInfo());
   final navi = Get.put(navibool());
   final linkspaceset = Get.put(linkspacesetting());
+  bool ismobile = false;
   bool loading = false;
   bool sheetloading = false;
   bool canchange = true;
@@ -56,6 +59,16 @@ class uisetting extends GetxController {
     navi.color_textstatus = MyTheme.colorblack;
     navi.textsize = 0;
     navi.navi = 0;
+
+    update();
+    notifyChildrens();
+  }
+
+  ///settingmobile
+  ///
+  ///UI를 확인하는데 사용된다.
+  void settingmobile() {
+    ismobile = Platform.isAndroid || Platform.isIOS;
 
     update();
     notifyChildrens();
