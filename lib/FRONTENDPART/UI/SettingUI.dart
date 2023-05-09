@@ -4,7 +4,8 @@ import 'package:clickbyme/BACKENDPART/ViewPoints/SettingVP.dart';
 import 'package:clickbyme/FRONTENDPART/Route/subuiroute.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
-import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
+import 'package:boxplatform/sheet/BottomSheet/AddContent.dart';
+import 'package:boxplatform/sheet/BottomSheet/AddContentWithBtn.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
@@ -17,7 +18,6 @@ import '../../../Tool/TextSize.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
 import '../../BACKENDPART/Getx/UserInfo.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
-import '../../sheets/BottomSheet/AddContentWithBtn.dart';
 
 final uiset = Get.put(uisetting());
 final linkspaceset = Get.put(linkspacesetting());

@@ -1,5 +1,6 @@
 // ignore_for_file: unused_local_variable, non_constant_identifier_names, file_names
 
+import 'package:clickbyme/BACKENDPART/Getx/navibool.dart';
 import 'package:clickbyme/Tool/AndroidIOS.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,8 +9,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../Tool/MyTheme.dart';
 import '../../Tool/pickimage.dart';
-import '../../sheets/BottomSheet/AddContentWithBtn.dart';
-import '../Enums/Variables.dart';
+import 'package:boxplatform/sheet/BottomSheet/AddContentWithBtn.dart';
 import '../../Tool/FlushbarStyle.dart';
 import '../Getx/UserInfo.dart';
 import '../Getx/uisetting.dart';
@@ -21,6 +21,7 @@ import '../../Tool/ContainerDesign.dart';
 
 final peopleadd = Get.put(UserInfo());
 final uiset = Get.put(uisetting());
+final draw = Get.put(navibool());
 
 Widgets_personchange(context, controller, searchnode, section) {
   Widget title, content, btn;

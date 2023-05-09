@@ -2,7 +2,6 @@
 import 'dart:math';
 import 'package:clickbyme/BACKENDPART/Enums/BoxSelection.dart';
 import 'package:clickbyme/BACKENDPART/Enums/Event.dart';
-import 'package:clickbyme/FRONTENDPART/Page/AddPage.dart';
 import 'package:clickbyme/FRONTENDPART/Page/SettingPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../FRONTENDPART/Page/AddPage.dart';
 import '../../FRONTENDPART/Page/MYPage.dart';
 import '../Getx/UserInfo.dart';
 import '../Getx/linkspacesetting.dart';
@@ -34,6 +34,7 @@ var useremail = Hive.box('user_info').get('email') ?? '';
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 List pages = [
   const MYPage(),
+  //const MemoPage(),
   const AddPage(),
   const SettingPage(),
 ];

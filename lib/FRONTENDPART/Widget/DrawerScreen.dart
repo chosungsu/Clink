@@ -6,12 +6,12 @@ import 'package:clickbyme/Tool/MyTheme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
-import '../../BACKENDPART/Enums/Variables.dart';
 import '../../BACKENDPART/Getx/linkspacesetting.dart';
 import '../../BACKENDPART/Getx/navibool.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import '../../sheets/BSContents/appbarplusbtn.dart';
+import 'package:boxplatform/sheet/BSContents/appbarplusbtn.dart';
+import 'package:boxplatform/sheet/BSContents/appbarpersonbtn.dart';
 
 class DrawerScreen extends StatefulWidget {
   const DrawerScreen({

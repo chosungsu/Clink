@@ -1,21 +1,18 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:clickbyme/BACKENDPART/Getx/linkspacesetting.dart';
+import 'package:clickbyme/BACKENDPART/Getx/navibool.dart';
+import 'package:clickbyme/BACKENDPART/Getx/uisetting.dart';
 import 'package:clickbyme/FRONTENDPART/Route/subuiroute.dart';
 import 'package:clickbyme/FRONTENDPART/UI/AddUI.dart';
+import 'package:clickbyme/FRONTENDPART/Widget/BottomScreen.dart';
+import 'package:clickbyme/FRONTENDPART/Widget/buildTypeWidget.dart';
+import 'package:clickbyme/FRONTENDPART/Widget/responsiveWidget.dart';
+import 'package:clickbyme/Tool/NoBehavior.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import '../../BACKENDPART/Getx/linkspacesetting.dart';
-import '../../BACKENDPART/Getx/navibool.dart';
-import '../../BACKENDPART/Getx/uisetting.dart';
-import '../../Tool/NoBehavior.dart';
-import '../../Tool/AppBarCustom.dart';
-import '../../Tool/TextSize.dart';
-import '../Widget/BottomScreen.dart';
-import '../Widget/buildTypeWidget.dart';
-import '../Widget/responsiveWidget.dart';
 
 class AddPage extends StatefulWidget {
   const AddPage({Key? key}) : super(key: key);
@@ -28,8 +25,8 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
   List<PageController> pageController = [];
   List<TextEditingController> controllersall = [];
   List<FocusNode> searchNodeall = [];
-  final navi = Get.put(navibool());
   final uiset = Get.put(uisetting());
+  final navi = Get.put(navibool());
   final linkspaceset = Get.put(linkspacesetting());
   int count = 0;
 
@@ -37,7 +34,7 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     AddPageinit();
-    uiset.addpagecontroll == 0 ? count = 3 : count = 4;
+    uisetting().addpagecontroll == 0 ? count = 3 : count = 4;
     for (int i = 0; i < count; i++) {
       controllersall.insert(i, TextEditingController());
       searchNodeall.insert(i, FocusNode());

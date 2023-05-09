@@ -4,7 +4,8 @@ import 'dart:async';
 import 'dart:io';
 import 'package:clickbyme/BACKENDPART/Enums/Variables.dart';
 import 'package:clickbyme/FRONTENDPART/Page/SettingSubPage.dart';
-import 'package:clickbyme/sheets/BottomSheet/AddContent.dart';
+import 'package:boxplatform/sheet/BSContents/appbarpersonbtn.dart';
+import 'package:boxplatform/sheet/BottomSheet/AddContent.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -24,7 +25,6 @@ import '../../BACKENDPART/Getx/navibool.dart';
 import '../../BACKENDPART/Getx/notishow.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../Tool/TextSize.dart';
-import '../../sheets/BSContents/appbarpersonbtn.dart';
 
 ///checkForInitialMessage
 ///

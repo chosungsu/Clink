@@ -5,7 +5,8 @@ import 'package:clickbyme/BACKENDPART/Api/BoxApi.dart';
 import 'package:clickbyme/BACKENDPART/Enums/Variables.dart';
 import 'package:clickbyme/Tool/ContainerDesign.dart';
 import 'package:clickbyme/Tool/MyTheme.dart';
-import 'package:clickbyme/sheets/BSContents/appbarplusbtn.dart';
+import 'package:boxplatform/sheet/BSContents/appbarplusbtn.dart';
+import 'package:boxplatform/sheet/BottomSheet/AddContent.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -19,7 +20,6 @@ import '../../BACKENDPART/Getx/UserInfo.dart';
 import '../../BACKENDPART/Getx/uisetting.dart';
 import '../../Tool/AndroidIOS.dart';
 import '../../Tool/FlushbarStyle.dart';
-import '../../sheets/BottomSheet/AddContent.dart';
 
 final uiset = Get.put(uisetting());
 final linkspaceset = Get.put(linkspacesetting());

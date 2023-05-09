@@ -1,13 +1,8 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:get/get.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-
-import '../../FRONTENDPART/Route/subuiroute.dart';
-import '../../FRONTENDPART/UI/DayContentHome.dart';
-import '../../FRONTENDPART/UI/DayNoteHome.dart';
 
 class NotificationApi {
   NotificationApi();
